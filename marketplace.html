@@ -283,6 +283,46 @@
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
 <script>
+
+// ── Precargar pedido desde calculadores ──
+window.addEventListener("DOMContentLoaded", function() {
+  const datos = sessionStorage.getItem("pedido_precargado");
+  if (!datos) return;
+  
+  try {
+    const items = JSON.parse(datos);
+    sessionStorage.removeItem("pedido_precargado");
+    
+    // Limpiar el contenedor de items
+    const container = document.getElementById("items-container");
+    container.innerHTML = "";
+    
+    // Agregar cada item
+    items.forEach(item => {
+      const row = document.createElement("div");
+      row.className = "item-row";
+      row.innerHTML = \`
+        <input type="text" placeholder="Material..." value="\${item.mat}">
+        <input type="number" placeholder="Cant." value="\${item.cant}" min="1">
+        <input type="text" placeholder="Unidad" value="\${item.u}">
+        <button class="btn-remove" onclick="removeItem(this)">×</button>
+      \`;
+      container.appendChild(row);
+    });
+
+    // Mostrar banner informativo
+    const banner = document.createElement("div");
+    banner.style = "background:#e6f4ea;border:1px solid #1a7f3c;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#1a7f3c;font-weight:500;";
+    banner.textContent = "✅ " + items.length + " materiales cargados desde el calculador. Completá tus datos y enviá el pedido.";
+    
+    // Ir directo al paso 2 mostrando el banner
+    showSubVista("cliente-paso2");
+    const card = document.querySelector("#cliente-paso2 .card");
+    card.insertBefore(banner, card.firstChild);
+    
+  } catch(e) { console.error(e); }
+});
+
 // ── Estado de la app ──
 let pedidos = [
   {
