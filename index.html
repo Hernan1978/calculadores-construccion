@@ -52,6 +52,8 @@
 <header>
   <h1>Calculadores de materiales</h1>
   <p>Calculá lo que necesitás y pedí cotización al corralón más cercano</p>
+  </div>
+  <a href="marketplace.html" style="padding:7px 14px;border-radius:7px;border:1px solid #555;background:transparent;color:#ccc;font-size:12px;cursor:pointer;text-decoration:none;transition:all .15s;" onmouseover="this.style.background='#fff';this.style.color='#1a1a1a'" onmouseout="this.style.background='transparent';this.style.color='#ccc'">Ir al marketplace →</a>
 </header>
 <main>
 
@@ -954,6 +956,25 @@ function pedirMateriales(btn) {
   // Guardar en sessionStorage y redirigir
   sessionStorage.setItem("pedido_precargado", JSON.stringify(items));
   window.location.href = "marketplace.html";
+}
+
+
+function pedirMateriales(btn) {
+  const panel = btn.closest('.mat-panel');
+  const titulo = panel.querySelector('h2').textContent.trim();
+  const cards = panel.querySelectorAll('.result-card');
+  const items = [];
+  cards.forEach(card => {
+    const label = card.querySelector('.r-label').textContent.trim();
+    const value = card.querySelector('.r-value').textContent.trim();
+    const unit  = card.querySelector('.r-unit').textContent.trim();
+    if (label !== 'Superficie' && label !== 'Volumen' && value !== '0' && value !== '0.0' && value !== '0.00') {
+      items.push({ mat: titulo + ' — ' + label, cant: value.replace(/\./g,'').replace(/,/g,'.'), u: unit });
+    }
+  });
+  if (items.length === 0) { alert('Ingresá los datos del calculador primero.'); return; }
+  sessionStorage.setItem('pedido_precargado', JSON.stringify(items));
+  window.location.href = 'marketplace.html';
 }
 
 </script>
