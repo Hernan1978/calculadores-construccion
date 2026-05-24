@@ -11,25 +11,25 @@
   header h1 { font-size: 1.4rem; font-weight: 600; }
   header p { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
   main { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
- 
+
   /* CATEGORÍAS */
   .cat-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
   .cat-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 13px; cursor: pointer; transition: all .15s; font-weight: 500; }
   .cat-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
   .cat-btn:hover:not(.active) { background: #f0f0ea; }
- 
+
   /* MATERIALES dentro de categoría */
   .mat-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; padding: 10px; background: #f0f0ea; border-radius: 8px; }
   .mat-btn { padding: 6px 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
   .mat-btn.active { background: #444; color: #fff; border-color: #444; }
   .mat-btn:hover:not(.active) { background: #e8e8e2; }
- 
+
   .cat-panel { display: none; }
   .cat-panel.active { display: block; }
   .mat-panel { display: none; background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; }
   .mat-panel.active { display: block; }
   .mat-panel h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; color: #1a1a1a; }
- 
+
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   @media(max-width:520px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
@@ -54,7 +54,7 @@
   <p>Calculá lo que necesitás y pedí cotización al corralón más cercano</p>
 </header>
 <main>
- 
+
   <!-- CATEGORÍAS -->
   <div class="cat-tabs">
     <button class="cat-btn active" onclick="showCat('estructura', this)">🏗 Estructura</button>
@@ -64,7 +64,7 @@
     <button class="cat-btn" onclick="showCat('instalaciones', this)">🔌 Instalaciones</button>
     <button class="cat-btn" onclick="showCat('ferreteria', this)">🔩 Ferretería</button>
   </div>
- 
+
   <!-- ===== ESTRUCTURA ===== -->
   <div id="cat-estructura" class="cat-panel active">
     <div class="mat-tabs">
@@ -91,7 +91,7 @@
       </div>
       <div class="results" id="res-hormigon"></div>
       <p class="tip">Mezcla H-20: 1 parte cemento, 2 arena, 3 piedra. Bolsas 50 kg. +10% desperdicio.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-hierros" class="mat-panel">
       <h2>Hierros</h2>
@@ -112,7 +112,7 @@
       </div>
       <div class="results" id="res-hierros"></div>
       <p class="tip">Barras de 12 m estándar. Peso en kg para calcular flete. +10% desperdicio por cortes y empalmes.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-mallas" class="mat-panel">
       <h2>Mallas de hierro</h2>
@@ -127,7 +127,7 @@
       <div class="field"><label>Superficie a cubrir (m²)</label><input type="number" id="ma-sup" value="20" min="1" oninput="calcMallas()"></div>
       <div class="results" id="res-mallas"></div>
       <p class="tip">Panel estándar 6x2.40 m = 14.4 m². Se agrega 15% por solapas y desperdicios.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-cascote" class="mat-panel">
       <h2>Cascote / Relleno</h2>
@@ -138,7 +138,7 @@
       </div>
       <div class="results" id="res-cascote"></div>
       <p class="tip">Cascote suelto. 1 m³ ≈ 1.4 toneladas. Bolsas de 25 kg o a granel.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-desencofrante" class="mat-panel">
       <h2>Desencofrante</h2>
@@ -152,10 +152,10 @@
       <div class="field"><label>Superficie de encofrado (m²)</label><input type="number" id="de-sup" value="20" min="1" oninput="calcDesencofrante()"></div>
       <div class="results" id="res-desencofrante"></div>
       <p class="tip">Rendimiento aprox. 15-20 m² por litro según porosidad del encofrado.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
- 
+
   <!-- ===== MAMPOSTERÍA ===== -->
   <div id="cat-mamposteria" class="cat-panel">
     <div class="mat-tabs">
@@ -184,7 +184,7 @@
       <div class="field"><label>Aberturas a descontar (m²)</label><input type="number" id="l-aberturas" value="0" min="0" step="0.1" oninput="calcLadrillos()"></div>
       <div class="results" id="res-ladrillos"></div>
       <p class="tip">+10% desperdicio por cortes y roturas. Cemento y arena para asentado incluidos.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-cemento" class="mat-panel">
       <h2>Cemento Portland</h2>
@@ -199,7 +199,7 @@
       <div class="field"><label>Superficie (m²)</label><input type="number" id="c-sup" value="20" min="1" oninput="calcCemento()"></div>
       <div class="results" id="res-cemento"></div>
       <p class="tip">Bolsas 50 kg. Arena en m³. +10% desperdicio.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-cal" class="mat-panel">
       <h2>Cal hidráulica</h2>
@@ -213,7 +213,7 @@
       <div class="field"><label>Superficie (m²)</label><input type="number" id="cal-sup" value="20" min="1" oninput="calcCal()"></div>
       <div class="results" id="res-cal"></div>
       <p class="tip">Bolsas de 25 kg. Para revoque fino: mezcla 1 parte cal, 3 arena fina.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-cemalbañileria" class="mat-panel">
       <h2>Cemento de albañilería</h2>
@@ -227,7 +227,7 @@
       <div class="field"><label>Superficie (m²)</label><input type="number" id="ca2-sup" value="20" min="1" oninput="calcCemAlb()"></div>
       <div class="results" id="res-cemalbañileria"></div>
       <p class="tip">Bolsas de 40 kg. Ya contiene cal — no requiere mezcla adicional.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-ceresita" class="mat-panel">
       <h2>Ceresita (hidrófugo)</h2>
@@ -240,7 +240,7 @@
       <div class="field"><label>Superficie (m²)</label><input type="number" id="cer2-sup" value="20" min="1" oninput="calcCeresita()"></div>
       <div class="results" id="res-ceresita"></div>
       <p class="tip">Como aditivo: 1 litro por cada 5 litros de agua. Como pintura: 2 manos.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-tacuru" class="mat-panel">
       <h2>Tacurú (impermeabilizante)</h2>
@@ -254,7 +254,7 @@
       <div class="field"><label>Superficie (m²)</label><input type="number" id="tac-sup" value="20" min="1" oninput="calcTacuru()"></div>
       <div class="results" id="res-tacuru"></div>
       <p class="tip">2 manos mínimo. Rendimiento aprox. 1 kg/m² por mano.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-arena" class="mat-panel">
       <h2>Arena / Piedra</h2>
@@ -270,10 +270,10 @@
       <div class="field"><label>Volumen necesario (m³)</label><input type="number" id="ar-vol" value="2" min="0.5" step="0.5" oninput="calcArena()"></div>
       <div class="results" id="res-arena"></div>
       <p class="tip">Bolsas de 25 kg o a granel. 1 m³ ≈ 1.4 toneladas de arena / 1.5 t de piedra.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
- 
+
   <!-- ===== TERMINACIÓN ===== -->
   <div id="cat-terminacion" class="cat-panel">
     <div class="mat-tabs">
@@ -305,7 +305,7 @@
       </div>
       <div class="results" id="res-ceramico"></div>
       <p class="tip">Adhesivo 5 kg/m². Pastina 0.5 kg/m².</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-pintura" class="mat-panel">
       <h2>Pintura</h2>
@@ -330,7 +330,7 @@
       </div>
       <div class="results" id="res-pintura"></div>
       <p class="tip">+10% desperdicio. En superficies porosas el rendimiento puede ser menor.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-revoque" class="mat-panel">
       <h2>Revoque fino</h2>
@@ -344,7 +344,7 @@
       </div>
       <div class="results" id="res-revoque"></div>
       <p class="tip">Espesor 5-8 mm. Bolsas de 40 kg (yeso) o 25 kg (cal).</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-carpeta" class="mat-panel">
       <h2>Carpeta niveladora</h2>
@@ -360,10 +360,10 @@
       </div>
       <div class="results" id="res-carpeta"></div>
       <p class="tip">Mezcla 1:3 cemento/arena. +10% desperdicio.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
- 
+
   <!-- ===== SECO ===== -->
   <div id="cat-seco" class="cat-panel">
     <div class="mat-tabs">
@@ -386,7 +386,7 @@
       </div>
       <div class="results" id="res-durlock"></div>
       <p class="tip">Placa 1.20x2.40 m. +10% desperdicio.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-steel" class="mat-panel">
       <h2>Steel Framing</h2>
@@ -403,7 +403,7 @@
       </div>
       <div class="results" id="res-steel"></div>
       <p class="tip">Separación entre montantes: 40 cm. Perfiles de 3 m. +10% desperdicio.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-cielorraso" class="mat-panel">
       <h2>Cielorraso tradicional</h2>
@@ -420,10 +420,10 @@
       </div>
       <div class="results" id="res-cielorraso"></div>
       <p class="tip">+10% desperdicio. Bultos de yeso 40 kg.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
- 
+
   <!-- ===== INSTALACIONES ===== -->
   <div id="cat-instalaciones" class="cat-panel">
     <div class="mat-tabs">
@@ -453,7 +453,7 @@
       </div>
       <div class="results" id="res-cañeria"></div>
       <p class="tip">Barras de 3 m. +15% desperdicio.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-cables" class="mat-panel">
       <h2>Cables eléctricos</h2>
@@ -472,7 +472,7 @@
       </div>
       <div class="results" id="res-cables"></div>
       <p class="tip">Cable bicolor (fase + neutro). +20% desperdicio para instalaciones en pared. Rollo de 100 m.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-cañosluz" class="mat-panel">
       <h2>Caños de luz (conduit)</h2>
@@ -489,10 +489,10 @@
       </div>
       <div class="results" id="res-cañosluz"></div>
       <p class="tip">Barras de 3 m. +15% desperdicio. Incluye cajas de paso estimadas.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
- 
+
   <!-- ===== FERRETERÍA ===== -->
   <div id="cat-ferreteria" class="cat-panel">
     <div class="mat-tabs">
@@ -513,7 +513,7 @@
       <div class="field"><label>Superficie o metros lineales a clavar (m²/ml)</label><input type="number" id="clav-cant" value="20" min="1" oninput="calcClavos()"></div>
       <div class="results" id="res-clavos"></div>
       <p class="tip">Bolsas de 1 kg o 5 kg. Estimación: 8-12 clavos por m² según trabajo.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-tornillos" class="mat-panel">
       <h2>Tornillos</h2>
@@ -528,7 +528,7 @@
       <div class="field"><label>Cantidad de placas o metros cuadrados</label><input type="number" id="torn-cant" value="10" min="1" oninput="calcTornillos()"></div>
       <div class="results" id="res-tornillos"></div>
       <p class="tip">Cajas de 100 o 200 unidades. Estimación según tipo de trabajo.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
     <div id="mat-madera" class="mat-panel">
       <h2>Madera</h2>
@@ -552,13 +552,13 @@
       </div>
       <div class="results" id="res-madera"></div>
       <p class="tip">Tabla estándar 3 m. Fenólico 1.22x2.44 m. +15% desperdicio por cortes.</p>
-      <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
- 
+
 </main>
 <footer>Calculadores de construcción — próximamente conectado al marketplace de corralones</footer>
- 
+
 <script>
 function showCat(id, btn) {
   document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('active'));
@@ -566,7 +566,7 @@ function showCat(id, btn) {
   document.getElementById('cat-' + id).classList.add('active');
   btn.classList.add('active');
 }
- 
+
 function showMat(cat, id, btn) {
   const catEl = document.getElementById('cat-' + cat);
   catEl.querySelectorAll('.mat-panel').forEach(p => p.classList.remove('active'));
@@ -574,13 +574,13 @@ function showMat(cat, id, btn) {
   document.getElementById('mat-' + id).classList.add('active');
   btn.classList.add('active');
 }
- 
+
 function renderResults(id, items) {
   document.getElementById(id).innerHTML = items.map(i =>
     `<div class="result-card"><div class="r-label">${i.label}</div><div class="r-value">${i.value}</div><div class="r-unit">${i.unit}</div></div>`
   ).join('');
 }
- 
+
 function calcHormigon() {
   const largo = parseFloat(document.getElementById('h-largo').value)||0;
   const ancho = parseFloat(document.getElementById('h-ancho').value)||0;
@@ -594,7 +594,7 @@ function calcHormigon() {
     {label:'Agua aprox.', value: Math.ceil(vol*140), unit:'litros'},
   ]);
 }
- 
+
 function calcHierros() {
   const metros = parseFloat(document.getElementById('hi-metros').value)||0;
   const barrasN = parseFloat(document.getElementById('hi-barras-n').value)||0;
@@ -608,7 +608,7 @@ function calcHierros() {
     {label:'Peso total', value: pesoKg, unit:'kg'},
   ]);
 }
- 
+
 function calcMallas() {
   const sup = parseFloat(document.getElementById('ma-sup').value)||0;
   const supCon = sup * 1.15;
@@ -619,7 +619,7 @@ function calcMallas() {
     {label:'Paneles 6x2.4m', value: paneles, unit:'unidades'},
   ]);
 }
- 
+
 function calcCascote() {
   const largo = parseFloat(document.getElementById('cas-largo').value)||0;
   const ancho = parseFloat(document.getElementById('cas-ancho').value)||0;
@@ -632,7 +632,7 @@ function calcCascote() {
     {label:'Bolsas 25 kg', value: bolsas, unit:'unidades'},
   ]);
 }
- 
+
 function calcDesencofrante() {
   const sup = parseFloat(document.getElementById('de-sup').value)||0;
   const litros = Math.ceil(sup / 15 * 1.10);
@@ -642,7 +642,7 @@ function calcDesencofrante() {
     {label:'Bidones 5L', value: Math.ceil(litros/5), unit:'unidades'},
   ]);
 }
- 
+
 function calcLadrillos() {
   const ancho = parseFloat(document.getElementById('l-ancho').value)||0;
   const alto = parseFloat(document.getElementById('l-alto').value)||0;
@@ -656,7 +656,7 @@ function calcLadrillos() {
     {label:'Arena', value: (sup*0.03*1.10).toFixed(2), unit:'m³'},
   ]);
 }
- 
+
 function calcCemento() {
   const sup = parseFloat(document.getElementById('c-sup').value)||0;
   const tipo = document.getElementById('c-tipo').value;
@@ -669,7 +669,7 @@ function calcCemento() {
   if(bCal) items.push({label:'Cal',value:bCal,unit:'bolsas 25 kg'});
   renderResults('res-cemento', items);
 }
- 
+
 function calcCal() {
   const sup = parseFloat(document.getElementById('cal-sup').value)||0;
   const tipo = document.getElementById('cal-tipo').value;
@@ -682,7 +682,7 @@ function calcCal() {
     {label:'Cal hidráulica', value: bolsas, unit:'bolsas 25 kg'},
   ]);
 }
- 
+
 function calcCemAlb() {
   const sup = parseFloat(document.getElementById('ca2-sup').value)||0;
   const tipo = document.getElementById('ca2-tipo').value;
@@ -696,7 +696,7 @@ function calcCemAlb() {
     {label:'Arena', value: arena, unit:'m³'},
   ]);
 }
- 
+
 function calcCeresita() {
   const sup = parseFloat(document.getElementById('cer2-sup').value)||0;
   const tipo = document.getElementById('cer2-tipo').value;
@@ -709,7 +709,7 @@ function calcCeresita() {
     {label:'Bidones 5L', value: Math.ceil(litros/5), unit:'unidades'},
   ]);
 }
- 
+
 function calcTacuru() {
   const sup = parseFloat(document.getElementById('tac-sup').value)||0;
   const kg = Math.ceil(sup * 2 * 1.10);
@@ -719,7 +719,7 @@ function calcTacuru() {
     {label:'Bolsas 25 kg', value: Math.ceil(kg/25), unit:'unidades'},
   ]);
 }
- 
+
 function calcArena() {
   const vol = parseFloat(document.getElementById('ar-vol').value)||0;
   const tipo = document.getElementById('ar-tipo').value;
@@ -732,7 +732,7 @@ function calcArena() {
     {label:'Bolsas 25 kg', value: bolsas, unit:'unidades (si no es a granel)'},
   ]);
 }
- 
+
 function calcCeramico() {
   const sup = parseFloat(document.getElementById('cer-sup').value)||0;
   const tam = parseFloat(document.getElementById('cer-tam').value);
@@ -745,7 +745,7 @@ function calcCeramico() {
     {label:'Pastina', value: Math.ceil(sup*0.5), unit:'kg'},
   ]);
 }
- 
+
 function calcPintura() {
   const sup = parseFloat(document.getElementById('p-sup').value)||0;
   const manos = parseFloat(document.getElementById('p-manos').value);
@@ -758,7 +758,7 @@ function calcPintura() {
     {label:'Latas x 4L', value: Math.ceil((litros%20)/4), unit:'unidades'},
   ]);
 }
- 
+
 function calcRevoque() {
   const sup = parseFloat(document.getElementById('rev-sup').value)||0;
   const tipo = document.getElementById('rev-tipo').value;
@@ -771,7 +771,7 @@ function calcRevoque() {
   }
   renderResults('res-revoque', items);
 }
- 
+
 function calcCarpeta() {
   const sup = parseFloat(document.getElementById('carp-sup').value)||0;
   const esp = parseFloat(document.getElementById('carp-esp').value)/100;
@@ -782,7 +782,7 @@ function calcCarpeta() {
     {label:'Arena', value: (vol*0.75).toFixed(2), unit:'m³'},
   ]);
 }
- 
+
 function calcDurlock() {
   const ancho = parseFloat(document.getElementById('d-ancho').value)||0;
   const alto = parseFloat(document.getElementById('d-alto').value)||0;
@@ -798,7 +798,7 @@ function calcDurlock() {
     {label:'Masilla', value: Math.ceil(sup*lados*0.3), unit:'kg'},
   ]);
 }
- 
+
 function calcSteel() {
   const largo = parseFloat(document.getElementById('sf-largo').value)||0;
   const alto = parseFloat(document.getElementById('sf-alto').value)||0;
@@ -815,7 +815,7 @@ function calcSteel() {
   if(tipo!=='techo') items.push({label:'Placas OSB', value: Math.ceil(sup/(1.20*2.40)*1.10), unit:'unidades'});
   renderResults('res-steel', items);
 }
- 
+
 function calcCielorraso() {
   const largo = parseFloat(document.getElementById('ci-largo').value)||0;
   const ancho = parseFloat(document.getElementById('ci-ancho').value)||0;
@@ -834,7 +834,7 @@ function calcCielorraso() {
   }
   renderResults('res-cielorraso', items);
 }
- 
+
 function calcCañeria() {
   const metros = parseFloat(document.getElementById('ca-metros').value)||0;
   const bocas = parseFloat(document.getElementById('ca-bocas').value)||0;
@@ -847,7 +847,7 @@ function calcCañeria() {
     {label:'Uniones', value: Math.ceil(metrosCon/6), unit:'unidades'},
   ]);
 }
- 
+
 function calcCables() {
   const metros = parseFloat(document.getElementById('cab-metros').value)||0;
   const bocas = parseFloat(document.getElementById('cab-bocas').value)||0;
@@ -860,7 +860,7 @@ function calcCables() {
     {label:'Llaves/tomac.', value: bocas, unit:'unidades'},
   ]);
 }
- 
+
 function calcCañosLuz() {
   const metros = parseFloat(document.getElementById('cl-metros').value)||0;
   const bocas = parseFloat(document.getElementById('cl-bocas').value)||0;
@@ -873,7 +873,7 @@ function calcCañosLuz() {
     {label:'Cajas de paso', value: Math.ceil(bocas/3), unit:'unidades'},
   ]);
 }
- 
+
 function calcClavos() {
   const cant = parseFloat(document.getElementById('clav-cant').value)||0;
   const unidades = Math.ceil(cant * 10 * 1.10);
@@ -884,7 +884,7 @@ function calcClavos() {
     {label:'Bolsas 5 kg', value: Math.ceil(bolsas1kg/5), unit:'unidades'},
   ]);
 }
- 
+
 function calcTornillos() {
   const cant = parseFloat(document.getElementById('torn-cant').value)||0;
   const tipo = document.getElementById('torn-tipo').value;
@@ -900,7 +900,7 @@ function calcTornillos() {
     {label:'Cajas x 200u', value: Math.ceil(total/200), unit:'cajas'},
   ]);
 }
- 
+
 function calcMadera() {
   const sup = parseFloat(document.getElementById('mad-sup').value)||0;
   const tipo = document.getElementById('mad-tipo').value;
@@ -919,7 +919,7 @@ function calcMadera() {
   items.push({label:'Sup. a comprar', value: supReal.toFixed(1), unit:'m²'});
   renderResults('res-madera', items);
 }
- 
+
 // Inicializar todos
 calcHormigon(); calcHierros(); calcMallas(); calcCascote(); calcDesencofrante();
 calcLadrillos(); calcCemento(); calcCal(); calcCemAlb(); calcCeresita(); calcTacuru(); calcArena();
@@ -927,6 +927,35 @@ calcCeramico(); calcPintura(); calcRevoque(); calcCarpeta();
 calcDurlock(); calcSteel(); calcCielorraso();
 calcCañeria(); calcCables(); calcCañosLuz();
 calcClavos(); calcTornillos(); calcMadera();
+
+function pedirMateriales(btn) {
+  // Encontrar el panel activo que contiene este botón
+  const panel = btn.closest(".mat-panel");
+  const titulo = panel.querySelector("h2").textContent.trim();
+  
+  // Leer los result-cards del panel
+  const cards = panel.querySelectorAll(".result-card");
+  const items = [];
+  cards.forEach(card => {
+    const label = card.querySelector(".r-label").textContent.trim();
+    const value = card.querySelector(".r-value").textContent.trim();
+    const unit  = card.querySelector(".r-unit").textContent.trim();
+    // Saltar "Superficie" y "Volumen" solos, incluir todo lo demás
+    if (label !== "Superficie" && label !== "Volumen" && value !== "0" && value !== "0.0") {
+      items.push({ mat: label + " (" + titulo + ")", cant: value, u: unit });
+    }
+  });
+
+  if (items.length === 0) {
+    alert("Ingresá los datos del calculador primero.");
+    return;
+  }
+
+  // Guardar en sessionStorage y redirigir
+  sessionStorage.setItem("pedido_precargado", JSON.stringify(items));
+  window.location.href = "marketplace.html";
+}
+
 </script>
 </body>
 </html>
