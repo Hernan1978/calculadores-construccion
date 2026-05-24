@@ -11,25 +11,25 @@
   header h1 { font-size: 1.4rem; font-weight: 600; }
   header p { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
   main { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
-
+ 
   /* CATEGORÍAS */
   .cat-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
   .cat-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 13px; cursor: pointer; transition: all .15s; font-weight: 500; }
   .cat-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
   .cat-btn:hover:not(.active) { background: #f0f0ea; }
-
+ 
   /* MATERIALES dentro de categoría */
   .mat-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; padding: 10px; background: #f0f0ea; border-radius: 8px; }
   .mat-btn { padding: 6px 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
   .mat-btn.active { background: #444; color: #fff; border-color: #444; }
   .mat-btn:hover:not(.active) { background: #e8e8e2; }
-
+ 
   .cat-panel { display: none; }
   .cat-panel.active { display: block; }
   .mat-panel { display: none; background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; }
   .mat-panel.active { display: block; }
   .mat-panel h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; color: #1a1a1a; }
-
+ 
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   @media(max-width:520px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
@@ -54,7 +54,7 @@
   <p>Calculá lo que necesitás y pedí cotización al corralón más cercano</p>
 </header>
 <main>
-
+ 
   <!-- CATEGORÍAS -->
   <div class="cat-tabs">
     <button class="cat-btn active" onclick="showCat('estructura', this)">🏗 Estructura</button>
@@ -64,7 +64,7 @@
     <button class="cat-btn" onclick="showCat('instalaciones', this)">🔌 Instalaciones</button>
     <button class="cat-btn" onclick="showCat('ferreteria', this)">🔩 Ferretería</button>
   </div>
-
+ 
   <!-- ===== ESTRUCTURA ===== -->
   <div id="cat-estructura" class="cat-panel active">
     <div class="mat-tabs">
@@ -155,7 +155,7 @@
       <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
     </div>
   </div>
-
+ 
   <!-- ===== MAMPOSTERÍA ===== -->
   <div id="cat-mamposteria" class="cat-panel">
     <div class="mat-tabs">
@@ -273,7 +273,7 @@
       <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
     </div>
   </div>
-
+ 
   <!-- ===== TERMINACIÓN ===== -->
   <div id="cat-terminacion" class="cat-panel">
     <div class="mat-tabs">
@@ -363,7 +363,7 @@
       <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
     </div>
   </div>
-
+ 
   <!-- ===== SECO ===== -->
   <div id="cat-seco" class="cat-panel">
     <div class="mat-tabs">
@@ -423,7 +423,7 @@
       <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
     </div>
   </div>
-
+ 
   <!-- ===== INSTALACIONES ===== -->
   <div id="cat-instalaciones" class="cat-panel">
     <div class="mat-tabs">
@@ -492,7 +492,7 @@
       <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
     </div>
   </div>
-
+ 
   <!-- ===== FERRETERÍA ===== -->
   <div id="cat-ferreteria" class="cat-panel">
     <div class="mat-tabs">
@@ -555,10 +555,10 @@
       <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
     </div>
   </div>
-
+ 
 </main>
 <footer>Calculadores de construcción — próximamente conectado al marketplace de corralones</footer>
-
+ 
 <script>
 function showCat(id, btn) {
   document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('active'));
@@ -566,7 +566,7 @@ function showCat(id, btn) {
   document.getElementById('cat-' + id).classList.add('active');
   btn.classList.add('active');
 }
-
+ 
 function showMat(cat, id, btn) {
   const catEl = document.getElementById('cat-' + cat);
   catEl.querySelectorAll('.mat-panel').forEach(p => p.classList.remove('active'));
@@ -574,13 +574,13 @@ function showMat(cat, id, btn) {
   document.getElementById('mat-' + id).classList.add('active');
   btn.classList.add('active');
 }
-
+ 
 function renderResults(id, items) {
   document.getElementById(id).innerHTML = items.map(i =>
     `<div class="result-card"><div class="r-label">${i.label}</div><div class="r-value">${i.value}</div><div class="r-unit">${i.unit}</div></div>`
   ).join('');
 }
-
+ 
 function calcHormigon() {
   const largo = parseFloat(document.getElementById('h-largo').value)||0;
   const ancho = parseFloat(document.getElementById('h-ancho').value)||0;
@@ -594,7 +594,7 @@ function calcHormigon() {
     {label:'Agua aprox.', value: Math.ceil(vol*140), unit:'litros'},
   ]);
 }
-
+ 
 function calcHierros() {
   const metros = parseFloat(document.getElementById('hi-metros').value)||0;
   const barrasN = parseFloat(document.getElementById('hi-barras-n').value)||0;
@@ -608,7 +608,7 @@ function calcHierros() {
     {label:'Peso total', value: pesoKg, unit:'kg'},
   ]);
 }
-
+ 
 function calcMallas() {
   const sup = parseFloat(document.getElementById('ma-sup').value)||0;
   const supCon = sup * 1.15;
@@ -619,7 +619,7 @@ function calcMallas() {
     {label:'Paneles 6x2.4m', value: paneles, unit:'unidades'},
   ]);
 }
-
+ 
 function calcCascote() {
   const largo = parseFloat(document.getElementById('cas-largo').value)||0;
   const ancho = parseFloat(document.getElementById('cas-ancho').value)||0;
@@ -632,7 +632,7 @@ function calcCascote() {
     {label:'Bolsas 25 kg', value: bolsas, unit:'unidades'},
   ]);
 }
-
+ 
 function calcDesencofrante() {
   const sup = parseFloat(document.getElementById('de-sup').value)||0;
   const litros = Math.ceil(sup / 15 * 1.10);
@@ -642,7 +642,7 @@ function calcDesencofrante() {
     {label:'Bidones 5L', value: Math.ceil(litros/5), unit:'unidades'},
   ]);
 }
-
+ 
 function calcLadrillos() {
   const ancho = parseFloat(document.getElementById('l-ancho').value)||0;
   const alto = parseFloat(document.getElementById('l-alto').value)||0;
@@ -656,7 +656,7 @@ function calcLadrillos() {
     {label:'Arena', value: (sup*0.03*1.10).toFixed(2), unit:'m³'},
   ]);
 }
-
+ 
 function calcCemento() {
   const sup = parseFloat(document.getElementById('c-sup').value)||0;
   const tipo = document.getElementById('c-tipo').value;
@@ -669,7 +669,7 @@ function calcCemento() {
   if(bCal) items.push({label:'Cal',value:bCal,unit:'bolsas 25 kg'});
   renderResults('res-cemento', items);
 }
-
+ 
 function calcCal() {
   const sup = parseFloat(document.getElementById('cal-sup').value)||0;
   const tipo = document.getElementById('cal-tipo').value;
@@ -682,7 +682,7 @@ function calcCal() {
     {label:'Cal hidráulica', value: bolsas, unit:'bolsas 25 kg'},
   ]);
 }
-
+ 
 function calcCemAlb() {
   const sup = parseFloat(document.getElementById('ca2-sup').value)||0;
   const tipo = document.getElementById('ca2-tipo').value;
@@ -696,7 +696,7 @@ function calcCemAlb() {
     {label:'Arena', value: arena, unit:'m³'},
   ]);
 }
-
+ 
 function calcCeresita() {
   const sup = parseFloat(document.getElementById('cer2-sup').value)||0;
   const tipo = document.getElementById('cer2-tipo').value;
@@ -709,7 +709,7 @@ function calcCeresita() {
     {label:'Bidones 5L', value: Math.ceil(litros/5), unit:'unidades'},
   ]);
 }
-
+ 
 function calcTacuru() {
   const sup = parseFloat(document.getElementById('tac-sup').value)||0;
   const kg = Math.ceil(sup * 2 * 1.10);
@@ -719,7 +719,7 @@ function calcTacuru() {
     {label:'Bolsas 25 kg', value: Math.ceil(kg/25), unit:'unidades'},
   ]);
 }
-
+ 
 function calcArena() {
   const vol = parseFloat(document.getElementById('ar-vol').value)||0;
   const tipo = document.getElementById('ar-tipo').value;
@@ -732,7 +732,7 @@ function calcArena() {
     {label:'Bolsas 25 kg', value: bolsas, unit:'unidades (si no es a granel)'},
   ]);
 }
-
+ 
 function calcCeramico() {
   const sup = parseFloat(document.getElementById('cer-sup').value)||0;
   const tam = parseFloat(document.getElementById('cer-tam').value);
@@ -745,7 +745,7 @@ function calcCeramico() {
     {label:'Pastina', value: Math.ceil(sup*0.5), unit:'kg'},
   ]);
 }
-
+ 
 function calcPintura() {
   const sup = parseFloat(document.getElementById('p-sup').value)||0;
   const manos = parseFloat(document.getElementById('p-manos').value);
@@ -758,7 +758,7 @@ function calcPintura() {
     {label:'Latas x 4L', value: Math.ceil((litros%20)/4), unit:'unidades'},
   ]);
 }
-
+ 
 function calcRevoque() {
   const sup = parseFloat(document.getElementById('rev-sup').value)||0;
   const tipo = document.getElementById('rev-tipo').value;
@@ -771,7 +771,7 @@ function calcRevoque() {
   }
   renderResults('res-revoque', items);
 }
-
+ 
 function calcCarpeta() {
   const sup = parseFloat(document.getElementById('carp-sup').value)||0;
   const esp = parseFloat(document.getElementById('carp-esp').value)/100;
@@ -782,7 +782,7 @@ function calcCarpeta() {
     {label:'Arena', value: (vol*0.75).toFixed(2), unit:'m³'},
   ]);
 }
-
+ 
 function calcDurlock() {
   const ancho = parseFloat(document.getElementById('d-ancho').value)||0;
   const alto = parseFloat(document.getElementById('d-alto').value)||0;
@@ -798,7 +798,7 @@ function calcDurlock() {
     {label:'Masilla', value: Math.ceil(sup*lados*0.3), unit:'kg'},
   ]);
 }
-
+ 
 function calcSteel() {
   const largo = parseFloat(document.getElementById('sf-largo').value)||0;
   const alto = parseFloat(document.getElementById('sf-alto').value)||0;
@@ -815,7 +815,7 @@ function calcSteel() {
   if(tipo!=='techo') items.push({label:'Placas OSB', value: Math.ceil(sup/(1.20*2.40)*1.10), unit:'unidades'});
   renderResults('res-steel', items);
 }
-
+ 
 function calcCielorraso() {
   const largo = parseFloat(document.getElementById('ci-largo').value)||0;
   const ancho = parseFloat(document.getElementById('ci-ancho').value)||0;
@@ -834,7 +834,7 @@ function calcCielorraso() {
   }
   renderResults('res-cielorraso', items);
 }
-
+ 
 function calcCañeria() {
   const metros = parseFloat(document.getElementById('ca-metros').value)||0;
   const bocas = parseFloat(document.getElementById('ca-bocas').value)||0;
@@ -847,7 +847,7 @@ function calcCañeria() {
     {label:'Uniones', value: Math.ceil(metrosCon/6), unit:'unidades'},
   ]);
 }
-
+ 
 function calcCables() {
   const metros = parseFloat(document.getElementById('cab-metros').value)||0;
   const bocas = parseFloat(document.getElementById('cab-bocas').value)||0;
@@ -860,7 +860,7 @@ function calcCables() {
     {label:'Llaves/tomac.', value: bocas, unit:'unidades'},
   ]);
 }
-
+ 
 function calcCañosLuz() {
   const metros = parseFloat(document.getElementById('cl-metros').value)||0;
   const bocas = parseFloat(document.getElementById('cl-bocas').value)||0;
@@ -873,7 +873,7 @@ function calcCañosLuz() {
     {label:'Cajas de paso', value: Math.ceil(bocas/3), unit:'unidades'},
   ]);
 }
-
+ 
 function calcClavos() {
   const cant = parseFloat(document.getElementById('clav-cant').value)||0;
   const unidades = Math.ceil(cant * 10 * 1.10);
@@ -884,7 +884,7 @@ function calcClavos() {
     {label:'Bolsas 5 kg', value: Math.ceil(bolsas1kg/5), unit:'unidades'},
   ]);
 }
-
+ 
 function calcTornillos() {
   const cant = parseFloat(document.getElementById('torn-cant').value)||0;
   const tipo = document.getElementById('torn-tipo').value;
@@ -900,7 +900,7 @@ function calcTornillos() {
     {label:'Cajas x 200u', value: Math.ceil(total/200), unit:'cajas'},
   ]);
 }
-
+ 
 function calcMadera() {
   const sup = parseFloat(document.getElementById('mad-sup').value)||0;
   const tipo = document.getElementById('mad-tipo').value;
@@ -919,7 +919,7 @@ function calcMadera() {
   items.push({label:'Sup. a comprar', value: supReal.toFixed(1), unit:'m²'});
   renderResults('res-madera', items);
 }
-
+ 
 // Inicializar todos
 calcHormigon(); calcHierros(); calcMallas(); calcCascote(); calcDesencofrante();
 calcLadrillos(); calcCemento(); calcCal(); calcCemAlb(); calcCeresita(); calcTacuru(); calcArena();
