@@ -3,40 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marketplace de Materiales</title>
+<title>Materiales Ya — Pedí cotización a corralones de tu zona</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
 
-  header { background: #1a1a1a; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  header { background: #1a1a1a; color: #fff; padding: 1.2rem 2rem; }
   header h1 { font-size: 1.3rem; font-weight: 600; }
   header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
-  .header-btns { display: flex; gap: 8px; }
-  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #444; background: transparent; color: #fff; font-size: 12px; cursor: pointer; transition: all .15s; }
-  .hbtn.active, .hbtn:hover { background: #fff; color: #1a1a1a; }
 
-  main { max-width: 780px; margin: 2rem auto; padding: 0 1rem; }
+  main { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
 
-  /* VISTAS */
-  .vista { display: none; }
-  .vista.active { display: block; }
+  /* STEPS */
+  .steps { display: flex; margin-bottom: 2rem; }
+  .step { flex: 1; text-align: center; position: relative; }
+  .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e0e0d8; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
+  .step.active .step-circle { background: #1a1a1a; color: #fff; }
+  .step.done .step-circle { background: #2d7a4f; color: #fff; }
+  .step-label { font-size: 11px; color: #888; }
+  .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
+  .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #e0e0d8; z-index: 0; }
+  .step:last-child::after { display: none; }
 
   /* CARDS */
   .card { background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; margin-bottom: 1rem; }
   .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; }
-  .card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.75rem; color: #444; }
 
-  /* STEPS */
-  .steps { display: flex; gap: 0; margin-bottom: 2rem; }
-  .step { flex: 1; text-align: center; position: relative; }
-  .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e0e0d8; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; transition: all .3s; }
-  .step.active .step-circle { background: #1a1a1a; color: #fff; }
-  .step.done .step-circle { background: #4caf50; color: #fff; }
-  .step-label { font-size: 11px; color: #888; }
-  .step.active .step-label { color: #1a1a1a; font-weight: 500; }
-  .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #e0e0d8; z-index: 0; }
-  .step:last-child::after { display: none; }
-  .step-circle { z-index: 1; position: relative; }
+  /* VISTA */
+  .paso { display: none; }
+  .paso.active { display: block; }
 
   /* FORM */
   .field { margin-bottom: 1rem; }
@@ -46,339 +41,234 @@
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
 
-  /* ITEMS DE PEDIDO */
-  .item-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px; }
-  @media(max-width:520px) { .item-row { grid-template-columns: 1fr 1fr; } }
-  .item-row input, .item-row select { padding: 8px 10px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; width: 100%; background: #fafafa; }
-  .btn-remove { background: none; border: none; color: #ccc; font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 5px; }
+  /* CATÁLOGO */
+  .cat-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .cat-tab { padding: 5px 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
+  .cat-tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .mat-lista { display: none; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .mat-lista.active { display: flex; }
+  .mat-chip { padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #f9f9f5; color: #444; font-size: 12px; cursor: pointer; transition: all .15s; }
+  .mat-chip:hover { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
+
+  /* ITEMS */
+  .item-row { display: grid; grid-template-columns: 2fr 80px 90px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
+  @media(max-width:480px) { .item-row { grid-template-columns: 1fr 70px 32px; } }
+  .item-row input { padding: 8px 10px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; width: 100%; background: #fafafa; outline: none; }
+  .item-row input:focus { border-color: #1a1a1a; background: #fff; }
+  .btn-remove { background: none; border: none; color: #ccc; font-size: 20px; cursor: pointer; border-radius: 5px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
   .btn-remove:hover { color: #e53e3e; background: #fff0f0; }
-  .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 8px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 4px; transition: all .15s; }
-  .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; }
+  .btn-add-item { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 8px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 4px; transition: all .15s; }
+  .btn-add-item:hover { border-color: #1a1a1a; color: #1a1a1a; }
 
   /* BOTONES */
   .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a1a1a; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
   .btn-primary:hover { opacity: .85; }
-  .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
+  .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; margin-top: 8px; transition: all .15s; }
   .btn-secondary:hover { background: #f5f5f0; }
-  .btn-small { padding: 7px 14px; border-radius: 7px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
-  .btn-small:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-  .btn-success { background: #1a7f3c; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; }
 
-  /* COTIZACIONES */
-  .cotizacion-card { border: 1px solid #e0e0d8; border-radius: 10px; padding: 1rem; margin-bottom: 10px; transition: all .2s; }
-  .cotizacion-card:hover { border-color: #1a1a1a; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-  .cotizacion-card.ganador { border-color: #1a7f3c; background: #f0fff4; }
-  .cot-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-  .cot-nombre { font-weight: 600; font-size: 14px; }
-  .cot-precio { font-size: 20px; font-weight: 700; color: #1a1a1a; }
-  .cot-detalle { font-size: 12px; color: #888; margin-top: 4px; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
-  .badge-green { background: #e6f4ea; color: #1a7f3c; }
-  .badge-yellow { background: #fef9e7; color: #b7791f; }
-  .badge-gray { background: #f0f0ea; color: #666; }
+  /* CONFIRMACIÓN */
+  .confirm-box { text-align: center; padding: 2.5rem 1rem; }
+  .confirm-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
+  .codigo-pedido { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #f5f5f0; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
+  .resumen-items { text-align: left; background: #f9f9f5; border-radius: 8px; padding: 12px 16px; margin-bottom: 1.5rem; }
+  .resumen-items li { font-size: 13px; color: #444; padding: 4px 0; border-bottom: 1px solid #eee; list-style: none; }
+  .resumen-items li:last-child { border-bottom: none; }
+  .btn-whatsapp { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; border: none; background: #25d366; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; }
 
-  /* PANEL CORRALÓN */
-  .pedido-card { border: 1px solid #e0e0d8; border-radius: 10px; padding: 1rem; margin-bottom: 10px; }
-  .pedido-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .pedido-id { font-size: 12px; color: #888; }
-  .pedido-zona { font-size: 13px; font-weight: 500; }
-  .items-list { background: #f9f9f5; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
-  .items-list li { font-size: 13px; color: #444; padding: 3px 0; list-style: none; border-bottom: 1px solid #eee; }
-  .items-list li:last-child { border-bottom: none; }
-  .cot-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; }
-  .cot-form input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; }
-
-  /* SUCCESS */
-  .success-box { text-align: center; padding: 2rem 1rem; }
-  .success-icon { font-size: 3rem; margin-bottom: 1rem; }
-  .success-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; }
-  .success-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
-  .codigo { font-family: monospace; font-size: 1.4rem; font-weight: 700; background: #f5f5f0; padding: 10px 20px; border-radius: 8px; display: inline-block; letter-spacing: 2px; }
-
+  /* BANNER */
+  .banner-verde { background: #e6f4ea; border: 1px solid #2d7a4f; border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: #2d7a4f; font-weight: 500; }
+  .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.25rem 0; }
   .tip { font-size: 12px; color: #888; background: #f9f9f5; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #ddd; margin-top: 1rem; }
-  .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1rem 0; }
+
   footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
 </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>🏗 Materiales Ya</h1>
-    <p>Cotizá en varios corralones de tu zona</p>
-  </div>
-  <div class="header-btns">
-    <button class="hbtn active" onclick="setVista('cliente', this)">Soy cliente</button>
-    <button class="hbtn" onclick="setVista('corralonn', this)">Soy corralón</button>
-  </div>
+  <h1>🏗 Materiales Ya</h1>
+  <p>Pedí cotización a varios corralones de tu zona</p>
 </header>
 
 <main>
 
-  <!-- ===== VISTA CLIENTE ===== -->
-  <div id="vista-cliente" class="vista active">
-
-    <!-- STEP 1: DATOS -->
-    <div id="cliente-paso1" class="vista active">
-      <div class="steps">
-        <div class="step active"><div class="step-circle">1</div><div class="step-label">Tus datos</div></div>
-        <div class="step"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
-        <div class="step"><div class="step-circle">3</div><div class="step-label">Cotizaciones</div></div>
+  <!-- PASO 1: DATOS -->
+  <div id="paso1" class="paso active">
+    <div class="steps">
+      <div class="step active" id="s1"><div class="step-circle">1</div><div class="step-label">Tus datos</div></div>
+      <div class="step" id="s2"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
+      <div class="step" id="s3"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
+    </div>
+    <div class="card">
+      <h2>¿Dónde entregamos?</h2>
+      <div class="grid-2">
+        <div class="field"><label>Tu nombre</label><input type="text" id="cli-nombre" placeholder="Juan García"></div>
+        <div class="field"><label>Teléfono / WhatsApp</label><input type="tel" id="cli-tel" placeholder="11 1234-5678"></div>
       </div>
-      <div class="card">
-        <h2>¿Dónde entregamos?</h2>
-        <div class="grid-2">
-          <div class="field"><label>Tu nombre</label><input type="text" id="cli-nombre" placeholder="Juan García"></div>
-          <div class="field"><label>Teléfono / WhatsApp</label><input type="tel" id="cli-tel" placeholder="11 1234-5678"></div>
-        </div>
+      <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. San Martín 450, piso 2"></div>
+      <div class="grid-2">
         <div class="field"><label>Barrio / Zona</label>
-          <select id="cli-zona">
-            <option value="">Seleccioná tu zona...</option>
-            <option>Centro</option><option>Norte</option><option>Sur</option><option>Este</option><option>Oeste</option>
-          </select>
+          <input type="text" id="cli-zona" placeholder="Ej: Palermo, Villa Urquiza...">
         </div>
-        <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. Corrientes 1234"></div>
         <div class="field"><label>¿Cuándo necesitás los materiales?</label>
           <select id="cli-urgencia">
-            <option value="urgente">Lo antes posible (24-48hs)</option>
-            <option value="semana">Esta semana</option>
-            <option value="quincena">Esta quincena</option>
-            <option value="mes">Este mes</option>
+            <option value="Lo antes posible (24-48hs)">Lo antes posible (24-48hs)</option>
+            <option value="Esta semana">Esta semana</option>
+            <option value="Esta quincena">Esta quincena</option>
+            <option value="Este mes">Este mes</option>
           </select>
         </div>
-        <button class="btn-primary" onclick="irPaso2()">Continuar → Cargar pedido</button>
       </div>
+      <button class="btn-primary" onclick="irPaso2()">Continuar → Cargar pedido</button>
     </div>
-
-    <!-- STEP 2: PEDIDO -->
-    <div id="cliente-paso2" class="vista">
-      <div class="steps">
-        <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
-        <div class="step active"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
-        <div class="step"><div class="step-circle">3</div><div class="step-label">Cotizaciones</div></div>
-      </div>
-      <div class="card">
-        <h2>¿Qué materiales necesitás?</h2>
-        <h3>Agregar desde catálogo</h3>
-        <div class="grid-2" style="margin-bottom:1rem">
-          <div class="field" style="margin:0">
-            <select id="cat-material">
-              <option value="">Seleccioná un material...</option>
-              <optgroup label="Mampostería">
-                <option>Ladrillo común</option><option>Ladrillo hueco 8cm</option><option>Ladrillo hueco 12cm</option>
-                <option>Cemento Portland 50kg</option><option>Cal hidráulica 25kg</option>
-                <option>Cemento de albañilería 40kg</option><option>Arena gruesa (m³)</option>
-                <option>Arena fina (m³)</option><option>Piedra partida (m³)</option>
-                <option>Ceresita 5L</option><option>Tacurú 25kg</option>
-              </optgroup>
-              <optgroup label="Estructura">
-                <option>Hierro Ø8mm (barra 12m)</option><option>Hierro Ø10mm (barra 12m)</option>
-                <option>Hierro Ø12mm (barra 12m)</option><option>Malla Q188</option><option>Malla Q257</option>
-                <option>Cascote (m³)</option><option>Desencofrante 5L</option>
-              </optgroup>
-              <optgroup label="Terminación">
-                <option>Cerámico 60x60</option><option>Porcelanato 60x60</option>
-                <option>Adhesivo para cerámica 25kg</option><option>Pastina 5kg</option>
-                <option>Pintura látex interior 20L</option><option>Pintura látex exterior 20L</option>
-                <option>Impermeabilizante 20L</option>
-              </optgroup>
-              <optgroup label="Seco">
-                <option>Placa Durlock 12.5mm</option><option>Perfil montante 70mm</option>
-                <option>Perfil solera 70mm</option><option>Tornillos Durlock x100</option><option>Masilla 30kg</option>
-              </optgroup>
-              <optgroup label="Instalaciones">
-                <option>Caño PVC presión 1/2"</option><option>Caño PVC presión 3/4"</option>
-                <option>Cable 1.5mm² (rollo 100m)</option><option>Cable 2.5mm² (rollo 100m)</option>
-                <option>Caño conduit PVC 16mm</option>
-              </optgroup>
-              <optgroup label="Ferretería">
-                <option>Clavos 50mm (1kg)</option><option>Clavos 75mm (1kg)</option>
-                <option>Tornillos madera 4x40 x100</option><option>Tabla madera 3m</option>
-                <option>Fenólico 18mm 1.22x2.44m</option>
-              </optgroup>
-            </select>
-          </div>
-          <button class="btn-small" style="height:38px;margin-top:auto" onclick="agregarDelCatalogo()">+ Agregar</button>
-        </div>
-
-        <hr class="divider">
-        <h3>Lista de materiales</h3>
-        <div id="items-container">
-          <div class="item-row">
-            <input type="text" placeholder="Material..." value="">
-            <input type="number" placeholder="Cant." value="1" min="1">
-            <input type="text" placeholder="Unidad" value="unidades">
-            <button class="btn-remove" onclick="removeItem(this)">×</button>
-          </div>
-        </div>
-        <button class="btn-add" onclick="addItem()">+ Agregar material manualmente</button>
-
-        <hr class="divider">
-        <div class="field"><label>Observaciones (opcional)</label><textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta, tengo rampa de acceso..."></textarea></div>
-
-        <button class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
-        <button class="btn-secondary" onclick="volverPaso1()">← Volver</button>
-      </div>
-    </div>
-
-    <!-- STEP 3: COTIZACIONES -->
-    <div id="cliente-paso3" class="vista">
-      <div class="steps">
-        <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
-        <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tu pedido</div></div>
-        <div class="step active"><div class="step-circle">3</div><div class="step-label">Cotizaciones</div></div>
-      </div>
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-          <div>
-            <h2 style="margin:0">Cotizaciones recibidas</h2>
-            <p style="font-size:12px;color:#888;margin-top:4px">Pedido <span id="codigo-pedido" style="font-weight:600"></span></p>
-          </div>
-          <span class="badge badge-yellow" id="estado-pedido">Esperando...</span>
-        </div>
-        <div id="cotizaciones-lista"></div>
-        <p class="tip">Los corralones recibieron tu pedido y están cotizando. Esto puede tardar entre 30 min y 2 horas. Te avisamos por WhatsApp cuando lleguen las respuestas.</p>
-      </div>
-    </div>
-
   </div>
 
-  <!-- ===== VISTA CORRALÓN ===== -->
-  <div id="vista-corralonn" class="vista">
+  <!-- PASO 2: PEDIDO -->
+  <div id="paso2" class="paso">
+    <div class="steps">
+      <div class="step done" id="s1b"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
+      <div class="step active" id="s2b"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
+      <div class="step" id="s3b"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
+    </div>
+    <div class="card">
+      <div id="banner-calculador" class="banner-verde" style="display:none"></div>
+      <h2>¿Qué materiales necesitás?</h2>
 
-    <!-- LOGIN CORRALÓN -->
-    <div id="corralonn-login" class="vista active">
-      <div class="card" style="max-width:400px;margin:0 auto">
-        <h2>Panel del corralón</h2>
-        <div class="field"><label>Nombre del corralón</label><input type="text" id="cor-nombre" placeholder="Corralón San Martín"></div>
-        <div class="field"><label>Zona de cobertura</label>
-          <select id="cor-zona">
-            <option value="">Seleccioná tu zona...</option>
-            <option>Centro</option><option>Norte</option><option>Sur</option><option>Este</option><option>Oeste</option>
-          </select>
-        </div>
-        <div class="field"><label>WhatsApp del corralón</label><input type="tel" id="cor-tel" placeholder="11 1234-5678"></div>
-        <button class="btn-primary" onclick="entrarCorralon()">Entrar al panel →</button>
-        <p class="tip" style="margin-top:1rem">¿Todavía no estás registrado? Escribinos por WhatsApp y te damos de alta gratis.</p>
+      <!-- CATÁLOGO -->
+      <div id="catalogo-container">
+        <p style="font-size:12px;color:#666;margin-bottom:8px;font-weight:500">Seleccioná del catálogo</p>
+        <div class="cat-tabs" id="cat-tabs"></div>
+        <div id="mat-listas"></div>
+      </div>
+
+      <hr class="divider">
+      <p style="font-size:12px;color:#666;margin-bottom:10px;font-weight:500">Lista de materiales</p>
+      <div id="items-container"></div>
+      <button class="btn-add-item" onclick="addItem()">+ Agregar manualmente</button>
+
+      <hr class="divider">
+      <div class="field"><label>Observaciones (opcional)</label>
+        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito factura, tengo rampa de acceso, entregar en planta alta..."></textarea>
+      </div>
+
+      <button class="btn-primary" onclick="irPaso3()">Enviar pedido →</button>
+      <button class="btn-secondary" onclick="volverPaso1()">← Volver</button>
+    </div>
+  </div>
+
+  <!-- PASO 3: CONFIRMACIÓN -->
+  <div id="paso3" class="paso">
+    <div class="steps">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tu pedido</div></div>
+      <div class="step active"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
+    </div>
+    <div class="card">
+      <div class="confirm-box">
+        <div class="confirm-icon">✅</div>
+        <h2>¡Pedido enviado!</h2>
+        <div class="codigo-pedido" id="codigo-display"></div>
+        <p>Tu pedido fue enviado a los corralones de tu zona.<br>Te contactarán por WhatsApp con sus cotizaciones.</p>
+        <ul class="resumen-items" id="resumen-items"></ul>
+        <a id="btn-wsp" class="btn-whatsapp" href="#" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.523 5.847L.057 23.57a.5.5 0 00.611.611l5.723-1.466A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.806 9.806 0 01-5.034-1.388l-.36-.214-3.733.957.974-3.734-.235-.374A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
+          Compartir por WhatsApp
+        </a>
+        <br><br>
+        <button class="btn-secondary" onclick="nuevoPedido()" style="width:auto;padding:10px 20px">Hacer otro pedido</button>
       </div>
     </div>
-
-    <!-- PANEL CORRALÓN -->
-    <div id="corralonn-panel" class="vista">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-          <div>
-            <h2 style="margin:0" id="cor-nombre-panel"></h2>
-            <p style="font-size:12px;color:#888;margin-top:2px">Pedidos nuevos en tu zona</p>
-          </div>
-          <button class="btn-small" onclick="salirCorralon()">Salir</button>
-        </div>
-        <div id="pedidos-lista"></div>
-      </div>
-    </div>
-
   </div>
 
 </main>
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
 <script>
+// ── Catálogo desde JSON ──
+let catalogo = [];
 
-// ── Precargar pedido desde calculadores ──
-window.addEventListener("DOMContentLoaded", function() {
-  const datos = sessionStorage.getItem("pedido_precargado");
-  if (!datos) return;
-  
+async function cargarCatalogo() {
   try {
-    const items = JSON.parse(datos);
-    sessionStorage.removeItem("pedido_precargado");
-    
-    // Limpiar el contenedor de items
-    const container = document.getElementById("items-container");
-    container.innerHTML = "";
-    
-    // Agregar cada item
-    items.forEach(item => {
-      const row = document.createElement("div");
-      row.className = "item-row";
-      row.innerHTML = \`
-        <input type="text" placeholder="Material..." value="\${item.mat}">
-        <input type="number" placeholder="Cant." value="\${item.cant}" min="1">
-        <input type="text" placeholder="Unidad" value="\${item.u}">
-        <button class="btn-remove" onclick="removeItem(this)">×</button>
-      \`;
-      container.appendChild(row);
-    });
-
-    // Mostrar banner informativo
-    const banner = document.createElement("div");
-    banner.style = "background:#e6f4ea;border:1px solid #1a7f3c;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#1a7f3c;font-weight:500;";
-    banner.textContent = "✅ " + items.length + " materiales cargados desde el calculador. Completá tus datos y enviá el pedido.";
-    
-    // Ir directo al paso 2 mostrando el banner
-    showSubVista("cliente-paso2");
-    const card = document.querySelector("#cliente-paso2 .card");
-    card.insertBefore(banner, card.firstChild);
-    
-  } catch(e) { console.error(e); }
-});
-
-// ── Estado de la app ──
-let pedidos = [
-  {
-    id: 'PED-001', zona: 'Centro', nombre: 'Carlos Rodríguez', tel: '11 5555-1234',
-    urgencia: 'Esta semana', dir: 'Av. San Martín 450',
-    items: [{mat:'Cemento Portland 50kg',cant:10,u:'bolsas'},{mat:'Arena gruesa',cant:2,u:'m³'},{mat:'Ladrillo común',cant:500,u:'unidades'}],
-    obs: 'Necesito factura',
-    cotizaciones: [
-      {corralonn:'Corralón El Constructor', precio:185000, entrega:'24hs', notas:'Precio incluye IVA', tel:'11 4444-1111'},
-      {corralonn:'Materiales San Martín', precio:172500, entrega:'48hs', notas:'Sin costo de envío', tel:'11 4444-2222'},
-    ]
-  },
-  {
-    id: 'PED-002', zona: 'Norte', nombre: 'María López', tel: '11 6666-5678',
-    urgencia: 'Lo antes posible', dir: 'Calle Mitre 123',
-    items: [{mat:'Placa Durlock 12.5mm',cant:20,u:'unidades'},{mat:'Perfil montante 70mm',cant:40,u:'unidades'},{mat:'Tornillos Durlock x100',cant:5,u:'cajas'}],
-    obs: '',
-    cotizaciones: []
+    const resp = await fetch('materiales.json');
+    const data = await resp.json();
+    catalogo = data.categorias;
+    renderCatalogo();
+  } catch(e) {
+    // Fallback si no encuentra el JSON (local)
+    catalogo = [
+      { nombre: 'Mampostería', icono: '🧱', materiales: [
+        {nombre:'Ladrillo común', unidad:'unidades'},{nombre:'Cemento Portland 50kg', unidad:'bolsas'},
+        {nombre:'Cal hidráulica 25kg', unidad:'bolsas'},{nombre:'Arena gruesa', unidad:'m³'},
+        {nombre:'Piedra partida', unidad:'m³'}
+      ]},
+      { nombre: 'Estructura', icono: '🏗', materiales: [
+        {nombre:'Hierro Ø10mm barra 12m', unidad:'barras'},{nombre:'Malla Q188', unidad:'paneles'},
+        {nombre:'Cascote', unidad:'m³'}
+      ]},
+      { nombre: 'Terminación', icono: '🎨', materiales: [
+        {nombre:'Cerámico 60x60', unidad:'m²'},{nombre:'Pintura látex interior 20L', unidad:'latas'},
+        {nombre:'Adhesivo cerámica 25kg', unidad:'bolsas'}
+      ]}
+    ];
+    renderCatalogo();
   }
-];
-
-let pedidoActual = null;
-let nombreCorralon = '';
-
-// ── Navegación ──
-function setVista(id, btn) {
-  document.querySelectorAll('.vista[id^="vista-"]').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.hbtn').forEach(b => b.classList.remove('active'));
-  document.getElementById('vista-' + id).classList.add('active');
-  btn.classList.add('active');
 }
 
-function showSubVista(id) {
-  const parent = document.getElementById(id).closest('.vista[id^="vista-"]');
-  parent.querySelectorAll(':scope > .vista').forEach(v => v.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function renderCatalogo() {
+  const tabs = document.getElementById('cat-tabs');
+  const listas = document.getElementById('mat-listas');
+  tabs.innerHTML = '';
+  listas.innerHTML = '';
+
+  catalogo.forEach((cat, i) => {
+    const tab = document.createElement('button');
+    tab.className = 'cat-tab' + (i===0?' active':'');
+    tab.textContent = cat.icono + ' ' + cat.nombre;
+    tab.onclick = () => {
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.mat-lista').forEach(l => l.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('lista-' + i).classList.add('active');
+    };
+    tabs.appendChild(tab);
+
+    const lista = document.createElement('div');
+    lista.className = 'mat-lista' + (i===0?' active':'');
+    lista.id = 'lista-' + i;
+    cat.materiales.forEach(mat => {
+      const chip = document.createElement('button');
+      chip.className = 'mat-chip';
+      chip.textContent = mat.nombre;
+      chip.onclick = () => agregarMaterial(mat.nombre, mat.unidad);
+      lista.appendChild(chip);
+    });
+    listas.appendChild(lista);
+  });
 }
 
-// ── CLIENTE: pasos ──
-function irPaso2() {
-  const nombre = document.getElementById('cli-nombre').value.trim();
-  const zona = document.getElementById('cli-zona').value;
-  if (!nombre || !zona) { alert('Completá tu nombre y zona para continuar.'); return; }
-  showSubVista('cliente-paso2');
+function agregarMaterial(nombre, unidad) {
+  const container = document.getElementById('items-container');
+  // Si hay fila vacía, usarla
+  for (let row of container.querySelectorAll('.item-row')) {
+    if (!row.querySelector('input').value) {
+      row.querySelector('input').value = nombre;
+      row.querySelectorAll('input')[2].value = unidad;
+      return;
+    }
+  }
+  addItem(nombre, '1', unidad);
 }
 
-function volverPaso1() { showSubVista('cliente-paso1'); }
-
-function addItem() {
+function addItem(mat='', cant='1', u='unidades') {
   const container = document.getElementById('items-container');
   const row = document.createElement('div');
   row.className = 'item-row';
   row.innerHTML = `
-    <input type="text" placeholder="Material...">
-    <input type="number" placeholder="Cant." value="1" min="1">
-    <input type="text" placeholder="Unidad" value="unidades">
+    <input type="text" placeholder="Material..." value="${mat}">
+    <input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center">
+    <input type="text" placeholder="Unidad" value="${u}">
     <button class="btn-remove" onclick="removeItem(this)">×</button>
   `;
   container.appendChild(row);
@@ -389,163 +279,101 @@ function removeItem(btn) {
   if (rows.length > 1) btn.closest('.item-row').remove();
 }
 
-function agregarDelCatalogo() {
-  const sel = document.getElementById('cat-material');
-  const mat = sel.value;
-  if (!mat) return;
-  const container = document.getElementById('items-container');
-  const rows = container.querySelectorAll('.item-row');
-  // Si hay una fila vacía, usarla
-  for (let row of rows) {
-    const inp = row.querySelector('input');
-    if (!inp.value) { inp.value = mat; sel.value = ''; return; }
-  }
-  // Agregar nueva fila
-  const row = document.createElement('div');
-  row.className = 'item-row';
-  row.innerHTML = `
-    <input type="text" placeholder="Material..." value="${mat}">
-    <input type="number" placeholder="Cant." value="1" min="1">
-    <input type="text" placeholder="Unidad" value="unidades">
-    <button class="btn-remove" onclick="removeItem(this)">×</button>
-  `;
-  container.appendChild(row);
-  sel.value = '';
+// ── Navegación ──
+function irPaso2() {
+  const nombre = document.getElementById('cli-nombre').value.trim();
+  const tel = document.getElementById('cli-tel').value.trim();
+  if (!nombre || !tel) { alert('Completá tu nombre y teléfono para continuar.'); return; }
+  document.getElementById('paso1').classList.remove('active');
+  document.getElementById('paso2').classList.add('active');
+  // Agregar fila vacía si no hay items
+  if (!document.querySelector('.item-row')) addItem();
 }
 
-function enviarPedido() {
+function volverPaso1() {
+  document.getElementById('paso2').classList.remove('active');
+  document.getElementById('paso1').classList.add('active');
+}
+
+function irPaso3() {
   const rows = document.querySelectorAll('.item-row');
-  const items = [];
-  rows.forEach(row => {
-    const inputs = row.querySelectorAll('input');
-    const mat = inputs[0].value.trim();
-    const cant = inputs[1].value;
-    const u = inputs[2].value.trim();
-    if (mat) items.push({mat, cant, u});
-  });
+  const items = getItems();
   if (items.length === 0) { alert('Agregá al menos un material al pedido.'); return; }
 
-  const codigo = 'PED-' + String(pedidos.length + 1).padStart(3, '0');
-  const nuevo = {
-    id: codigo,
-    zona: document.getElementById('cli-zona').value,
-    nombre: document.getElementById('cli-nombre').value,
-    tel: document.getElementById('cli-tel').value,
-    urgencia: document.getElementById('cli-urgencia').value,
-    dir: document.getElementById('cli-dir').value,
-    items, obs: document.getElementById('cli-obs').value,
-    cotizaciones: []
-  };
-  pedidos.push(nuevo);
-  pedidoActual = nuevo;
+  const codigo = 'PED-' + Date.now().toString().slice(-6);
+  document.getElementById('codigo-display').textContent = codigo;
 
-  document.getElementById('codigo-pedido').textContent = codigo;
-  document.getElementById('estado-pedido').textContent = 'Esperando cotizaciones';
-  renderCotizaciones([]);
-  showSubVista('cliente-paso3');
+  // Resumen
+  const lista = document.getElementById('resumen-items');
+  lista.innerHTML = items.map(i => `<li>• ${i.mat} — ${i.cant} ${i.u}</li>`).join('');
 
-  // Simular llegada de cotizaciones después de 3 segundos (demo)
-  setTimeout(() => simularCotizaciones(nuevo), 3000);
+  // WhatsApp
+  const nombre = document.getElementById('cli-nombre').value;
+  const tel = document.getElementById('cli-tel').value;
+  const dir = document.getElementById('cli-dir').value;
+  const zona = document.getElementById('cli-zona').value;
+  const urgencia = document.getElementById('cli-urgencia').value;
+  const obs = document.getElementById('cli-obs').value;
+
+  const itemsTxt = items.map(i => `  • ${i.mat}: ${i.cant} ${i.u}`).join('\n');
+  const msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n` +
+    `👤 *Cliente:* ${nombre}\n📞 *Tel:* ${tel}\n📍 *Zona:* ${zona}\n🏠 *Dirección:* ${dir}\n⏰ *Urgencia:* ${urgencia}\n\n` +
+    `📦 *Materiales:*\n${itemsTxt}` +
+    (obs ? `\n\n📝 *Obs:* ${obs}` : '') +
+    `\n\n_Pedido enviado desde Materiales Ya_`;
+
+  // Número de WhatsApp del negocio — CAMBIAR por el tuyo
+  const tuNumero = '5491100000000';
+  document.getElementById('btn-wsp').href = `https://wa.me/${tuNumero}?text=${encodeURIComponent(msg)}`;
+
+  document.getElementById('paso2').classList.remove('active');
+  document.getElementById('paso3').classList.add('active');
 }
 
-function simularCotizaciones(pedido) {
-  pedido.cotizaciones = [
-    {corralonn:'Corralón El Constructor', precio:142000, entrega:'24hs', notas:'Precio final con IVA', tel:'11 4444-1111'},
-    {corralonn:'Materiales del Barrio', precio:138500, entrega:'48hs', notas:'Envío sin cargo zona centro', tel:'11 4444-2222'},
-    {corralonn:'Corralón San José', precio:155000, entrega:'Hoy', notas:'Stock completo disponible', tel:'11 4444-3333'},
-  ];
-  document.getElementById('estado-pedido').className = 'badge badge-green';
-  document.getElementById('estado-pedido').textContent = '3 cotizaciones recibidas';
-  renderCotizaciones(pedido.cotizaciones);
+function getItems() {
+  const items = [];
+  document.querySelectorAll('.item-row').forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const mat = inputs[0].value.trim();
+    const cant = inputs[1].value || '1';
+    const u = inputs[2].value.trim() || 'unidades';
+    if (mat) items.push({mat, cant, u});
+  });
+  return items;
 }
 
-function renderCotizaciones(cots) {
-  const lista = document.getElementById('cotizaciones-lista');
-  if (cots.length === 0) {
-    lista.innerHTML = '<div style="text-align:center;padding:2rem;color:#aaa;font-size:14px">⏳ Esperando respuestas de los corralones...</div>';
-    return;
+function nuevoPedido() {
+  document.getElementById('paso3').classList.remove('active');
+  document.getElementById('paso1').classList.add('active');
+  document.getElementById('items-container').innerHTML = '';
+  document.getElementById('cli-obs').value = '';
+  addItem();
+}
+
+// ── Precargar desde calculadores ──
+window.addEventListener('DOMContentLoaded', async function() {
+  await cargarCatalogo();
+
+  const datos = sessionStorage.getItem('pedido_precargado');
+  if (!datos) { addItem(); return; }
+
+  try {
+    const items = JSON.parse(datos);
+    sessionStorage.removeItem('pedido_precargado');
+
+    items.forEach(item => addItem(item.mat, item.cant, item.u));
+
+    const banner = document.getElementById('banner-calculador');
+    banner.style.display = 'block';
+    banner.textContent = '✅ ' + items.length + ' materiales cargados desde el calculador. Completá tus datos y enviá el pedido.';
+
+    // Ir directo al paso 2 si hay nombre guardado, si no mostrar paso 1
+    document.getElementById('paso1').classList.remove('active');
+    document.getElementById('paso2').classList.add('active');
+  } catch(e) {
+    addItem();
   }
-  const sorted = [...cots].sort((a,b) => a.precio - b.precio);
-  lista.innerHTML = sorted.map((c, i) => `
-    <div class="cotizacion-card ${i===0?'ganador':''}">
-      <div class="cot-header">
-        <div>
-          <div class="cot-nombre">${c.corralonn} ${i===0?'<span class="badge badge-green">Mejor precio</span>':''}</div>
-          <div class="cot-detalle">Entrega: ${c.entrega} · ${c.notas}</div>
-        </div>
-        <div style="text-align:right">
-          <div class="cot-precio">$${c.precio.toLocaleString('es-AR')}</div>
-          <div class="cot-detalle">total estimado</div>
-        </div>
-      </div>
-      <button class="btn-success" onclick="elegirCorralon('${c.corralonn}','${c.tel}')">Elegir este corralón →</button>
-    </div>
-  `).join('');
-}
-
-function elegirCorralon(nombre, tel) {
-  const msg = encodeURIComponent(`Hola! Soy ${document.getElementById('cli-nombre').value}, quiero confirmar mi pedido ${document.getElementById('codigo-pedido').textContent} con ${nombre}.`);
-  window.open(`https://wa.me/54${tel.replace(/\D/g,'')}?text=${msg}`, '_blank');
-}
-
-// ── CORRALÓN ──
-function entrarCorralon() {
-  const nombre = document.getElementById('cor-nombre').value.trim();
-  const zona = document.getElementById('cor-zona').value;
-  if (!nombre || !zona) { alert('Completá el nombre y zona del corralón.'); return; }
-  nombreCorralon = nombre;
-  document.getElementById('cor-nombre-panel').textContent = nombre;
-  renderPedidos(zona);
-  showSubVista('corralonn-panel');
-}
-
-function salirCorralon() { showSubVista('corralonn-login'); }
-
-function renderPedidos(zona) {
-  const lista = document.getElementById('pedidos-lista');
-  const pedidosZona = pedidos.filter(p => p.zona === zona || zona === 'Centro');
-  if (pedidosZona.length === 0) {
-    lista.innerHTML = '<p style="text-align:center;color:#aaa;padding:2rem;font-size:14px">No hay pedidos nuevos en tu zona.</p>';
-    return;
-  }
-  lista.innerHTML = pedidosZona.map(p => `
-    <div class="pedido-card">
-      <div class="pedido-header">
-        <div>
-          <div class="pedido-zona">📍 ${p.zona} — ${p.dir || 'Sin dirección'}</div>
-          <div class="pedido-id">${p.id} · ${p.urgencia}</div>
-        </div>
-        <span class="badge ${p.cotizaciones.length>0?'badge-green':'badge-yellow'}">${p.cotizaciones.length>0?'Cotizado':'Sin cotizar'}</span>
-      </div>
-      <ul class="items-list">
-        ${p.items.map(i => `<li>• ${i.mat} — ${i.cant} ${i.u}</li>`).join('')}
-        ${p.obs ? `<li style="color:#888;font-style:italic">Obs: ${p.obs}</li>` : ''}
-      </ul>
-      <div class="cot-form">
-        <div><label style="font-size:11px;color:#666;display:block;margin-bottom:4px">Tu precio total ($)</label>
-          <input type="number" id="precio-${p.id}" placeholder="Ej: 145000"></div>
-        <div><label style="font-size:11px;color:#666;display:block;margin-bottom:4px">Entrega estimada</label>
-          <input type="text" id="entrega-${p.id}" placeholder="Ej: 24hs"></div>
-        <button class="btn-success" onclick="enviarCotizacion('${p.id}')">Cotizar</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function enviarCotizacion(pedidoId) {
-  const precio = document.getElementById('precio-' + pedidoId).value;
-  const entrega = document.getElementById('entrega-' + pedidoId).value;
-  if (!precio || !entrega) { alert('Completá precio y entrega estimada.'); return; }
-  const pedido = pedidos.find(p => p.id === pedidoId);
-  if (pedido) {
-    pedido.cotizaciones.push({
-      corralonn: nombreCorralon, precio: parseFloat(precio),
-      entrega, notas: '', tel: document.getElementById('cor-tel').value || '11 0000-0000'
-    });
-    alert(`✅ Cotización enviada para ${pedidoId}. El cliente recibirá tu oferta.`);
-    renderPedidos(document.getElementById('cor-zona').value);
-  }
-}
+});
 </script>
 </body>
 </html>
