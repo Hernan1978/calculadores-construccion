@@ -3,23 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Materiales Ya — Pedí cotización a corralones de tu zona</title>
+<title>Materiales Ya — Pedí cotización a corralones</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
 
-  header { background: #1a1a1a; color: #fff; padding: 1.2rem 2rem; }
+  header { background: #1a1a1a; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 1.3rem; font-weight: 600; }
   header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
+  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #555; color: #ccc; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
+  .hbtn:hover { background: #fff; color: #1a1a1a; border-color: #fff; }
 
-  main { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+  main { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
 
   /* STEPS */
   .steps { display: flex; margin-bottom: 2rem; }
   .step { flex: 1; text-align: center; position: relative; }
   .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e0e0d8; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
   .step.active .step-circle { background: #1a1a1a; color: #fff; }
-  .step.done .step-circle { background: #2d7a4f; color: #fff; }
+  .step.done .step-circle { background: #2d8a4e; color: #fff; }
   .step-label { font-size: 11px; color: #888; }
   .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
   .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #e0e0d8; z-index: 0; }
@@ -28,10 +30,7 @@
   /* CARDS */
   .card { background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; margin-bottom: 1rem; }
   .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; }
-
-  /* VISTA */
-  .paso { display: none; }
-  .paso.active { display: block; }
+  .card h3 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; color: #555; text-transform: uppercase; letter-spacing: .05em; }
 
   /* FORM */
   .field { margin-bottom: 1rem; }
@@ -41,46 +40,53 @@
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
 
-  /* CATÁLOGO */
-  .cat-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-  .cat-tab { padding: 5px 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
-  .cat-tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-  .mat-lista { display: none; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-  .mat-lista.active { display: flex; }
-  .mat-chip { padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #f9f9f5; color: #444; font-size: 12px; cursor: pointer; transition: all .15s; }
-  .mat-chip:hover { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
+  /* CATÁLOGO DOS NIVELES */
+  .cat-nivel1 { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .cat-nivel2 { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; min-height: 30px; }
+  .pill-cat { padding: 6px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 13px; color: #444; cursor: pointer; transition: all .15s; font-weight: 500; }
+  .pill-cat.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .pill-sub { padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #f5f5f0; font-size: 12px; color: #555; cursor: pointer; transition: all .15s; }
+  .pill-sub.active { background: #444; color: #fff; border-color: #444; }
+  .pill-sub:hover:not(.active) { border-color: #999; background: #fff; }
+  .mats-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; min-height: 36px; padding: 8px; background: #f9f9f5; border-radius: 8px; border: 1px solid #eee; }
+  .pill-mat { padding: 5px 12px; border-radius: 6px; border: 1px solid #e0e0d8; background: #fff; font-size: 12px; color: #333; cursor: pointer; transition: all .15s; }
+  .pill-mat:hover { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
 
   /* ITEMS */
-  .item-row { display: grid; grid-template-columns: 2fr 80px 90px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
-  @media(max-width:480px) { .item-row { grid-template-columns: 1fr 70px 32px; } }
-  .item-row input { padding: 8px 10px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; width: 100%; background: #fafafa; outline: none; }
+  .item-header { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; margin-bottom: 4px; padding: 0 2px; }
+  .item-header span { font-size: 11px; color: #aaa; }
+  .item-row { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
+  @media(max-width:480px) { .item-row, .item-header { grid-template-columns: 1fr 55px 75px 28px; } }
+  .item-row input { padding: 7px 10px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; width: 100%; background: #fafafa; outline: none; }
   .item-row input:focus { border-color: #1a1a1a; background: #fff; }
-  .btn-remove { background: none; border: none; color: #ccc; font-size: 20px; cursor: pointer; border-radius: 5px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+  .btn-remove { background: none; border: none; color: #ddd; font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 5px; line-height: 1; }
   .btn-remove:hover { color: #e53e3e; background: #fff0f0; }
-  .btn-add-item { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 8px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 4px; transition: all .15s; }
-  .btn-add-item:hover { border-color: #1a1a1a; color: #1a1a1a; }
+  .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all .15s; }
+  .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f9f9f5; }
 
   /* BOTONES */
   .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a1a1a; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
   .btn-primary:hover { opacity: .85; }
-  .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; margin-top: 8px; transition: all .15s; }
+  .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
   .btn-secondary:hover { background: #f5f5f0; }
 
-  /* CONFIRMACIÓN */
-  .confirm-box { text-align: center; padding: 2.5rem 1rem; }
-  .confirm-icon { font-size: 3.5rem; margin-bottom: 1rem; }
-  .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; }
-  .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
-  .codigo-pedido { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #f5f5f0; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
-  .resumen-items { text-align: left; background: #f9f9f5; border-radius: 8px; padding: 12px 16px; margin-bottom: 1.5rem; }
-  .resumen-items li { font-size: 13px; color: #444; padding: 4px 0; border-bottom: 1px solid #eee; list-style: none; }
-  .resumen-items li:last-child { border-bottom: none; }
-  .btn-whatsapp { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; border: none; background: #25d366; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; }
-
   /* BANNER */
-  .banner-verde { background: #e6f4ea; border: 1px solid #2d7a4f; border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: #2d7a4f; font-weight: 500; }
-  .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.25rem 0; }
+  .banner-verde { background: #e6f4ea; border: 1px solid #2d8a4e; border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: #2d8a4e; font-weight: 500; }
+
+  /* CONFIRMACIÓN */
+  .confirm-box { text-align: center; padding: 2rem 1rem; }
+  .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
+  .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
+  .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #f5f5f0; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
+  .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; }
+  .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
+
+  .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
   .tip { font-size: 12px; color: #888; background: #f9f9f5; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #ddd; margin-top: 1rem; }
+
+  .paso { display: none; }
+  .paso.active { display: block; }
 
   footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
 </style>
@@ -88,8 +94,11 @@
 <body>
 
 <header>
-  <h1>🏗 Materiales Ya</h1>
-  <p>Pedí cotización a varios corralones de tu zona</p>
+  <div>
+    <h1>🏗 Materiales Ya</h1>
+    <p>Cotizá en varios corralones de tu zona</p>
+  </div>
+  <a href="index.html" class="hbtn">← Calculadores</a>
 </header>
 
 <main>
@@ -97,29 +106,30 @@
   <!-- PASO 1: DATOS -->
   <div id="paso1" class="paso active">
     <div class="steps">
-      <div class="step active" id="s1"><div class="step-circle">1</div><div class="step-label">Tus datos</div></div>
-      <div class="step" id="s2"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
-      <div class="step" id="s3"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
+      <div class="step active"><div class="step-circle">1</div><div class="step-label">Tus datos</div></div>
+      <div class="step"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
     </div>
     <div class="card">
       <h2>¿Dónde entregamos?</h2>
       <div class="grid-2">
         <div class="field"><label>Tu nombre</label><input type="text" id="cli-nombre" placeholder="Juan García"></div>
-        <div class="field"><label>Teléfono / WhatsApp</label><input type="tel" id="cli-tel" placeholder="11 1234-5678"></div>
+        <div class="field"><label>WhatsApp</label><input type="tel" id="cli-tel" placeholder="11 1234-5678"></div>
       </div>
-      <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. San Martín 450, piso 2"></div>
-      <div class="grid-2">
-        <div class="field"><label>Barrio / Zona</label>
-          <input type="text" id="cli-zona" placeholder="Ej: Palermo, Villa Urquiza...">
-        </div>
-        <div class="field"><label>¿Cuándo necesitás los materiales?</label>
-          <select id="cli-urgencia">
-            <option value="Lo antes posible (24-48hs)">Lo antes posible (24-48hs)</option>
-            <option value="Esta semana">Esta semana</option>
-            <option value="Esta quincena">Esta quincena</option>
-            <option value="Este mes">Este mes</option>
-          </select>
-        </div>
+      <div class="field"><label>Barrio / Zona</label>
+        <select id="cli-zona">
+          <option value="">Seleccioná tu zona...</option>
+          <option>Centro</option><option>Norte</option><option>Sur</option><option>Este</option><option>Oeste</option>
+        </select>
+      </div>
+      <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. Corrientes 1234"></div>
+      <div class="field"><label>¿Cuándo necesitás los materiales?</label>
+        <select id="cli-urgencia">
+          <option value="urgente">Lo antes posible (24-48hs)</option>
+          <option value="semana">Esta semana</option>
+          <option value="quincena">Esta quincena</option>
+          <option value="mes">Este mes</option>
+        </select>
       </div>
       <button class="btn-primary" onclick="irPaso2()">Continuar → Cargar pedido</button>
     </div>
@@ -128,33 +138,33 @@
   <!-- PASO 2: PEDIDO -->
   <div id="paso2" class="paso">
     <div class="steps">
-      <div class="step done" id="s1b"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
-      <div class="step active" id="s2b"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
-      <div class="step" id="s3b"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
+      <div class="step active"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
     </div>
     <div class="card">
-      <div id="banner-calculador" class="banner-verde" style="display:none"></div>
       <h2>¿Qué materiales necesitás?</h2>
+      <div id="banner-calculador"></div>
 
-      <!-- CATÁLOGO -->
-      <div id="catalogo-container">
-        <p style="font-size:12px;color:#666;margin-bottom:8px;font-weight:500">Seleccioná del catálogo</p>
-        <div class="cat-tabs" id="cat-tabs"></div>
-        <div id="mat-listas"></div>
-      </div>
+      <h3>Agregar desde catálogo</h3>
+      <div class="cat-nivel1" id="cats-nivel1"></div>
+      <div class="cat-nivel2" id="cats-nivel2"></div>
+      <div class="mats-grid" id="mats-grid"><span style="color:#bbb;font-size:12px;padding:4px">Seleccioná una categoría para ver los materiales</span></div>
 
       <hr class="divider">
-      <p style="font-size:12px;color:#666;margin-bottom:10px;font-weight:500">Lista de materiales</p>
+      <h3>Lista de materiales</h3>
+      <div class="item-header">
+        <span>Material</span><span>Cantidad</span><span>Unidad</span><span></span>
+      </div>
       <div id="items-container"></div>
-      <button class="btn-add-item" onclick="addItem()">+ Agregar manualmente</button>
+      <button class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
 
       <hr class="divider">
       <div class="field"><label>Observaciones (opcional)</label>
-        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito factura, tengo rampa de acceso, entregar en planta alta..."></textarea>
+        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta, tengo acceso por rampa..."></textarea>
       </div>
-
-      <button class="btn-primary" onclick="irPaso3()">Enviar pedido →</button>
-      <button class="btn-secondary" onclick="volverPaso1()">← Volver</button>
+      <button class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
+      <button class="btn-secondary" onclick="irPaso1()">← Volver</button>
     </div>
   </div>
 
@@ -169,15 +179,10 @@
       <div class="confirm-box">
         <div class="confirm-icon">✅</div>
         <h2>¡Pedido enviado!</h2>
-        <div class="codigo-pedido" id="codigo-display"></div>
-        <p>Tu pedido fue enviado a los corralones de tu zona.<br>Te contactarán por WhatsApp con sus cotizaciones.</p>
-        <ul class="resumen-items" id="resumen-items"></ul>
-        <a id="btn-wsp" class="btn-whatsapp" href="#" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.523 5.847L.057 23.57a.5.5 0 00.611.611l5.723-1.466A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.806 9.806 0 01-5.034-1.388l-.36-.214-3.733.957.974-3.734-.235-.374A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
-          Compartir por WhatsApp
-        </a>
-        <br><br>
-        <button class="btn-secondary" onclick="nuevoPedido()" style="width:auto;padding:10px 20px">Hacer otro pedido</button>
+        <div class="codigo" id="codigo-pedido"></div>
+        <p>Tu pedido fue enviado a los corralones de tu zona.<br>Te van a contactar por WhatsApp con sus cotizaciones.<br><strong>Guardá el código para hacer el seguimiento.</strong></p>
+        <a id="btn-wsp" href="#" class="btn-whatsapp" target="_blank">📲 Confirmar por WhatsApp</a>
+        <button class="btn-nuevo" onclick="nuevoPedido()">Hacer otro pedido</button>
       </div>
     </div>
   </div>
@@ -186,82 +191,77 @@
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
 <script>
-// ── Catálogo desde JSON ──
-let catalogo = [];
+let catalogoData = [];
+let catActivaIdx = 0;
+let subActivaIdx = 0;
 
+// ── Cargar catálogo ──
 async function cargarCatalogo() {
   try {
-    const resp = await fetch('materiales.json');
-    const data = await resp.json();
-    catalogo = data.categorias;
-    renderCatalogo();
+    const res = await fetch('materiales.json');
+    const data = await res.json();
+    catalogoData = data.categorias;
   } catch(e) {
-    // Fallback si no encuentra el JSON (local)
-    catalogo = [
-      { nombre: 'Mampostería', icono: '🧱', materiales: [
-        {nombre:'Ladrillo común', unidad:'unidades'},{nombre:'Cemento Portland 50kg', unidad:'bolsas'},
-        {nombre:'Cal hidráulica 25kg', unidad:'bolsas'},{nombre:'Arena gruesa', unidad:'m³'},
-        {nombre:'Piedra partida', unidad:'m³'}
-      ]},
-      { nombre: 'Estructura', icono: '🏗', materiales: [
-        {nombre:'Hierro Ø10mm barra 12m', unidad:'barras'},{nombre:'Malla Q188', unidad:'paneles'},
-        {nombre:'Cascote', unidad:'m³'}
-      ]},
-      { nombre: 'Terminación', icono: '🎨', materiales: [
-        {nombre:'Cerámico 60x60', unidad:'m²'},{nombre:'Pintura látex interior 20L', unidad:'latas'},
-        {nombre:'Adhesivo cerámica 25kg', unidad:'bolsas'}
-      ]}
-    ];
-    renderCatalogo();
+    catalogoData = [{
+      nombre:'General', icono:'📦',
+      subcategorias:[{
+        nombre:'Materiales',
+        materiales:[
+          {nombre:'Cemento Portland 50kg', unidad:'bolsas'},
+          {nombre:'Arena gruesa', unidad:'m³'},
+          {nombre:'Ladrillo común', unidad:'unidades'},
+        ]
+      }]
+    }];
   }
+  renderNivel1();
+  selectCat(0);
 }
 
-function renderCatalogo() {
-  const tabs = document.getElementById('cat-tabs');
-  const listas = document.getElementById('mat-listas');
-  tabs.innerHTML = '';
-  listas.innerHTML = '';
+function renderNivel1() {
+  document.getElementById('cats-nivel1').innerHTML = catalogoData.map((c,i) =>
+    `<button class="pill-cat ${i===0?'active':''}" onclick="selectCat(${i},this)">${c.icono} ${c.nombre}</button>`
+  ).join('');
+}
 
-  catalogo.forEach((cat, i) => {
-    const tab = document.createElement('button');
-    tab.className = 'cat-tab' + (i===0?' active':'');
-    tab.textContent = cat.icono + ' ' + cat.nombre;
-    tab.onclick = () => {
-      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.mat-lista').forEach(l => l.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('lista-' + i).classList.add('active');
-    };
-    tabs.appendChild(tab);
+function selectCat(idx, btn) {
+  catActivaIdx = idx;
+  subActivaIdx = 0;
+  document.querySelectorAll('.pill-cat').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else document.querySelectorAll('.pill-cat')[idx]?.classList.add('active');
 
-    const lista = document.createElement('div');
-    lista.className = 'mat-lista' + (i===0?' active':'');
-    lista.id = 'lista-' + i;
-    cat.materiales.forEach(mat => {
-      const chip = document.createElement('button');
-      chip.className = 'mat-chip';
-      chip.textContent = mat.nombre;
-      chip.onclick = () => agregarMaterial(mat.nombre, mat.unidad);
-      lista.appendChild(chip);
-    });
-    listas.appendChild(lista);
-  });
+  const subs = catalogoData[idx].subcategorias;
+  document.getElementById('cats-nivel2').innerHTML = subs.map((s,i) =>
+    `<button class="pill-sub ${i===0?'active':''}" onclick="selectSub(${i},this)">${s.nombre}</button>`
+  ).join('');
+  renderMats(0);
+}
+
+function selectSub(idx, btn) {
+  subActivaIdx = idx;
+  document.querySelectorAll('.pill-sub').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMats(idx);
+}
+
+function renderMats(idx) {
+  const mats = catalogoData[catActivaIdx]?.subcategorias[idx]?.materiales || [];
+  document.getElementById('mats-grid').innerHTML = mats.length
+    ? mats.map(m => `<button class="pill-mat" onclick="agregarMaterial('${m.nombre.replace(/'/g,"\\'").replace(/"/g,'&quot;')}','${m.unidad}')">${m.nombre}</button>`).join('')
+    : '<span style="color:#bbb;font-size:12px;padding:4px">Sin materiales en esta categoría</span>';
 }
 
 function agregarMaterial(nombre, unidad) {
   const container = document.getElementById('items-container');
-  // Si hay fila vacía, usarla
-  for (let row of container.querySelectorAll('.item-row')) {
-    if (!row.querySelector('input').value) {
-      row.querySelector('input').value = nombre;
-      row.querySelectorAll('input')[2].value = unidad;
-      return;
-    }
+  for(let row of container.querySelectorAll('.item-row')) {
+    const inp = row.querySelectorAll('input');
+    if(!inp[0].value.trim()) { inp[0].value=nombre; inp[2].value=unidad; return; }
   }
-  addItem(nombre, '1', unidad);
+  addItem(nombre,'1',unidad);
 }
 
-function addItem(mat='', cant='1', u='unidades') {
+function addItem(mat='',cant='1',u='unidades') {
   const container = document.getElementById('items-container');
   const row = document.createElement('div');
   row.className = 'item-row';
@@ -276,103 +276,89 @@ function addItem(mat='', cant='1', u='unidades') {
 
 function removeItem(btn) {
   const rows = document.querySelectorAll('.item-row');
-  if (rows.length > 1) btn.closest('.item-row').remove();
+  if(rows.length > 1) btn.closest('.item-row').remove();
+  else {
+    const inputs = btn.closest('.item-row').querySelectorAll('input');
+    inputs[0].value=''; inputs[1].value='1'; inputs[2].value='unidades';
+  }
 }
 
 // ── Navegación ──
-function irPaso2() {
-  const nombre = document.getElementById('cli-nombre').value.trim();
-  const tel = document.getElementById('cli-tel').value.trim();
-  if (!nombre || !tel) { alert('Completá tu nombre y teléfono para continuar.'); return; }
-  document.getElementById('paso1').classList.remove('active');
-  document.getElementById('paso2').classList.add('active');
-  // Agregar fila vacía si no hay items
-  if (!document.querySelector('.item-row')) addItem();
-}
-
-function volverPaso1() {
-  document.getElementById('paso2').classList.remove('active');
+function irPaso1() {
+  document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
   document.getElementById('paso1').classList.add('active');
 }
 
-function irPaso3() {
+function irPaso2() {
+  if(!document.getElementById('cli-nombre').value.trim()) { alert('Ingresá tu nombre para continuar.'); return; }
+  if(!document.getElementById('cli-zona').value) { alert('Seleccioná tu zona para continuar.'); return; }
+  document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
+  document.getElementById('paso2').classList.add('active');
+}
+
+function enviarPedido() {
   const rows = document.querySelectorAll('.item-row');
-  const items = getItems();
-  if (items.length === 0) { alert('Agregá al menos un material al pedido.'); return; }
+  const items = [];
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const mat = inputs[0].value.trim();
+    if(mat) items.push({mat, cant: inputs[1].value||'1', u: inputs[2].value.trim()||'unidades'});
+  });
+  if(items.length === 0) { alert('Agregá al menos un material al pedido.'); return; }
 
-  const codigo = 'PED-' + Date.now().toString().slice(-6);
-  document.getElementById('codigo-display').textContent = codigo;
+  const codigo = 'MAT-' + Date.now().toString().slice(-6);
+  document.getElementById('codigo-pedido').textContent = codigo;
 
-  // Resumen
-  const lista = document.getElementById('resumen-items');
-  lista.innerHTML = items.map(i => `<li>• ${i.mat} — ${i.cant} ${i.u}</li>`).join('');
-
-  // WhatsApp
   const nombre = document.getElementById('cli-nombre').value;
   const tel = document.getElementById('cli-tel').value;
-  const dir = document.getElementById('cli-dir').value;
   const zona = document.getElementById('cli-zona').value;
-  const urgencia = document.getElementById('cli-urgencia').value;
+  const dir = document.getElementById('cli-dir').value;
+  const urgSel = document.getElementById('cli-urgencia');
+  const urgencia = urgSel.options[urgSel.selectedIndex].text;
   const obs = document.getElementById('cli-obs').value;
 
-  const itemsTxt = items.map(i => `  • ${i.mat}: ${i.cant} ${i.u}`).join('\n');
-  const msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n` +
-    `👤 *Cliente:* ${nombre}\n📞 *Tel:* ${tel}\n📍 *Zona:* ${zona}\n🏠 *Dirección:* ${dir}\n⏰ *Urgencia:* ${urgencia}\n\n` +
-    `📦 *Materiales:*\n${itemsTxt}` +
-    (obs ? `\n\n📝 *Obs:* ${obs}` : '') +
-    `\n\n_Pedido enviado desde Materiales Ya_`;
+  let msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n`;
+  msg += `👤 *Cliente:* ${nombre}\n`;
+  if(tel) msg += `📱 *WhatsApp:* ${tel}\n`;
+  msg += `📍 *Zona:* ${zona}${dir?' — '+dir:''}\n`;
+  msg += `⏰ *Urgencia:* ${urgencia}\n\n`;
+  msg += `📦 *Materiales:*\n`;
+  items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
+  if(obs) msg += `\n📝 *Obs:* ${obs}`;
+  msg += `\n\n_Pedido desde Materiales Ya_`;
 
-  // Número de WhatsApp del negocio — CAMBIAR por el tuyo
-  const tuNumero = '5491100000000';
-  document.getElementById('btn-wsp').href = `https://wa.me/${tuNumero}?text=${encodeURIComponent(msg)}`;
+  // ⚠️ Reemplazá este número por el tuyo: 549 + número sin 0 ni 15
+  const ADMIN_WS = '5491112345678';
+  document.getElementById('btn-wsp').href = `https://wa.me/${ADMIN_WS}?text=${encodeURIComponent(msg)}`;
 
-  document.getElementById('paso2').classList.remove('active');
+  document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
   document.getElementById('paso3').classList.add('active');
 }
 
-function getItems() {
-  const items = [];
-  document.querySelectorAll('.item-row').forEach(row => {
-    const inputs = row.querySelectorAll('input');
-    const mat = inputs[0].value.trim();
-    const cant = inputs[1].value || '1';
-    const u = inputs[2].value.trim() || 'unidades';
-    if (mat) items.push({mat, cant, u});
-  });
-  return items;
-}
-
 function nuevoPedido() {
-  document.getElementById('paso3').classList.remove('active');
-  document.getElementById('paso1').classList.add('active');
-  document.getElementById('items-container').innerHTML = '';
-  document.getElementById('cli-obs').value = '';
+  ['cli-nombre','cli-tel','cli-dir','cli-obs'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('cli-zona').value='';
+  document.getElementById('items-container').innerHTML='';
+  document.getElementById('banner-calculador').innerHTML='';
   addItem();
+  irPaso1();
 }
 
 // ── Precargar desde calculadores ──
-window.addEventListener('DOMContentLoaded', async function() {
-  await cargarCatalogo();
+window.addEventListener('DOMContentLoaded', function() {
+  cargarCatalogo();
+  addItem();
 
   const datos = sessionStorage.getItem('pedido_precargado');
-  if (!datos) { addItem(); return; }
-
+  if(!datos) return;
   try {
     const items = JSON.parse(datos);
     sessionStorage.removeItem('pedido_precargado');
-
+    document.getElementById('items-container').innerHTML = '';
     items.forEach(item => addItem(item.mat, item.cant, item.u));
-
-    const banner = document.getElementById('banner-calculador');
-    banner.style.display = 'block';
-    banner.textContent = '✅ ' + items.length + ' materiales cargados desde el calculador. Completá tus datos y enviá el pedido.';
-
-    // Ir directo al paso 2 si hay nombre guardado, si no mostrar paso 1
-    document.getElementById('paso1').classList.remove('active');
-    document.getElementById('paso2').classList.add('active');
-  } catch(e) {
-    addItem();
-  }
+    document.getElementById('banner-calculador').innerHTML =
+      `<div class="banner-verde">✅ ${items.length} material${items.length>1?'es':''} cargado${items.length>1?'s':''} desde el calculador. Completá tus datos y enviá el pedido.</div>`;
+  } catch(e) { console.error(e); }
 });
 </script>
 </body>
