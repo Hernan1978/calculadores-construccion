@@ -3,28 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadores de materiales de construcción</title>
+<title>Calculadores de materiales — Materiales Ya</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
 
-  header { background: #1a1a1a; color: #fff; padding: 1.5rem 2rem; }
-  header h1 { font-size: 1.4rem; font-weight: 600; }
-  header p { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
+  header { background: #1a1a1a; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 1.3rem; font-weight: 600; }
+  header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
+  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #555; color: #ccc; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
+  .hbtn:hover { background: #fff; color: #1a1a1a; border-color: #fff; }
 
-  main { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+  main { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
 
-  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .tab { padding: 8px 16px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 13px; cursor: pointer; transition: all .15s; }
-  .tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; font-weight: 500; }
-  .tab:hover:not(.active) { background: #f0f0ea; }
+  /* CATEGORÍAS NIVEL 1 */
+  .fase-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .fase-tab { padding: 7px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .fase-tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .fase-tab:hover:not(.active) { background: #f0f0ea; border-color: #bbb; }
 
-  .panel { display: none; background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; }
-  .panel.active { display: block; }
-  .panel h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; color: #1a1a1a; }
+  /* TABS DE CALCULADORES DENTRO DE CADA FASE */
+  .calc-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e8e8e0; }
+  .calc-tab { padding: 6px 14px; border-radius: 7px; border: 1px solid #e0e0d8; background: #fafaf7; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
+  .calc-tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; font-weight: 500; }
+  .calc-tab:hover:not(.active) { background: #f0f0ea; }
+
+  .fase-panel { display: none; background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; }
+  .fase-panel.active { display: block; }
+  .fase-panel > h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #1a1a1a; }
+
+  .calc-panel { display: none; }
+  .calc-panel.active { display: block; }
+  .calc-panel h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; color: #444; }
 
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media(max-width:480px) { .grid-2 { grid-template-columns: 1fr; } }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media(max-width:520px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
 
   .field { margin-bottom: 1rem; }
   .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
@@ -34,20 +48,22 @@
   }
   .field input:focus, .field select:focus { border-color: #1a1a1a; background: #fff; }
 
-  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 1.5rem; }
+  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 1.25rem; }
   .result-card { background: #f5f5f0; border-radius: 8px; padding: 12px 14px; }
   .result-card .r-label { font-size: 11px; color: #888; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
-  .result-card .r-value { font-size: 24px; font-weight: 600; color: #1a1a1a; line-height: 1.1; }
+  .result-card .r-value { font-size: 22px; font-weight: 700; color: #1a1a1a; line-height: 1.1; }
   .result-card .r-unit { font-size: 11px; color: #888; margin-top: 2px; }
 
-  .tip { font-size: 12px; color: #888; margin-top: 1rem; background: #f9f9f5; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #ddd; }
+  .tip { font-size: 12px; color: #888; margin-top: 1rem; background: #f9f9f5; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #ddd; line-height: 1.5; }
 
   .btn-pedir {
-    margin-top: 1.5rem; width: 100%; padding: 12px; border-radius: 8px;
+    margin-top: 1.25rem; width: 100%; padding: 12px; border-radius: 8px;
     border: 1px solid #1a1a1a; background: #1a1a1a; color: #fff;
     font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s;
   }
   .btn-pedir:hover { opacity: .85; }
+
+  .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.25rem 0; }
 
   footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
 </style>
@@ -55,132 +71,587 @@
 <body>
 
 <header>
-  <h1>Calculadores de materiales</h1>
-  <p>Calculá lo que necesitás y pedí cotización al corralón más cercano</p>
+  <div>
+    <h1>🧮 Calculadores de materiales</h1>
+    <p>Calculá exactamente lo que necesitás para tu obra</p>
+  </div>
+  <a href="index.html" class="hbtn">← Inicio</a>
 </header>
 
 <main>
-  <div class="tabs">
-    <button class="tab active" onclick="showPanel('ladrillos', this)">Ladrillos</button>
-    <button class="tab" onclick="showPanel('cemento', this)">Cemento y arena</button>
-    <button class="tab" onclick="showPanel('durlock', this)">Durlock</button>
-    <button class="tab" onclick="showPanel('pintura', this)">Pintura</button>
-    <button class="tab" onclick="showPanel('ceramico', this)">Cerámico</button>
+
+  <!-- TABS DE FASES -->
+  <div class="fase-tabs">
+    <button class="fase-tab active" onclick="showFase('preliminares', this)">⛏️ Preliminares</button>
+    <button class="fase-tab" onclick="showFase('obragruesa', this)">🏗 Obra Gruesa</button>
+    <button class="fase-tab" onclick="showFase('instalaciones', this)">⚡ Instalaciones</button>
+    <button class="fase-tab" onclick="showFase('revoques', this)">🪣 Revoques</button>
+    <button class="fase-tab" onclick="showFase('revestimientos', this)">🔲 Revestimientos</button>
+    <button class="fase-tab" onclick="showFase('carpinteria', this)">🚪 Carpintería</button>
+    <button class="fase-tab" onclick="showFase('herreria', this)">🔧 Herrería</button>
+    <button class="fase-tab" onclick="showFase('terminaciones', this)">🪟 Terminaciones</button>
   </div>
 
-  <div id="panel-ladrillos" class="panel active">
-    <h2>Calculador de ladrillos</h2>
-    <div class="grid-2">
-      <div class="field"><label>Ancho de pared (m)</label><input type="number" id="l-ancho" value="5" min="0.1" step="0.1" oninput="calcLadrillos()"></div>
-      <div class="field"><label>Alto de pared (m)</label><input type="number" id="l-alto" value="2.5" min="0.1" step="0.1" oninput="calcLadrillos()"></div>
+  <!-- ═══════════════════════════════ PRELIMINARES ═══════════════════════════════ -->
+  <div id="fase-preliminares" class="fase-panel active">
+    <h2>⛏️ Trabajos Preliminares</h2>
+    <div class="calc-tabs">
+      <button class="calc-tab active" onclick="showCalc('fase-preliminares','limpieza', this)">Limpieza / Demolición</button>
+      <button class="calc-tab" onclick="showCalc('fase-preliminares','nivelacion', this)">Nivelación</button>
     </div>
-    <div class="field"><label>Tipo de ladrillo</label>
-      <select id="l-tipo" onchange="calcLadrillos()">
-        <option value="60">Ladrillo común (6x12x25 cm) — 60 u/m²</option>
-        <option value="45">Ladrillo hueco 8cm — 45 u/m²</option>
-        <option value="16">Ladrillo hueco 12cm — 16 u/m²</option>
-        <option value="12">Ladrillo portante 18cm — 12 u/m²</option>
-      </select>
+
+    <div id="calc-limpieza" class="calc-panel active">
+      <h3>Estimación de escombros y demolición</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie a demoler (m²)</label><input type="number" id="dem-sup" value="20" min="1" oninput="calcDemolicion()"></div>
+        <div class="field"><label>Tipo de estructura</label>
+          <select id="dem-tipo" onchange="calcDemolicion()">
+            <option value="0.3">Pared de yeso / tabique liviano</option>
+            <option value="0.8" selected>Mampostería ladrillo hueco</option>
+            <option value="1.5">Mampostería ladrillo común</option>
+            <option value="2.5">Hormigón / losa</option>
+          </select>
+        </div>
+      </div>
+      <div id="res-demolicion" class="results"></div>
+      <p class="tip">Estimación orientativa de volumen de escombros. El retiro en volquetes de 4m³ depende del acceso y distancia al punto de disposición.</p>
     </div>
-    <div class="field"><label>Aberturas a descontar (m²)</label><input type="number" id="l-aberturas" value="0" min="0" step="0.1" oninput="calcLadrillos()"></div>
-    <div class="results" id="res-ladrillos"></div>
-    <p class="tip">Se agrega 10% de desperdicio por cortes y roturas. Cemento y arena calculados para el asentado.</p>
-    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+
+    <div id="calc-nivelacion" class="calc-panel">
+      <h3>Replanteo y nivelación de terreno</h3>
+      <div class="grid-2">
+        <div class="field"><label>Frente del terreno (m)</label><input type="number" id="niv-frente" value="10" min="1" oninput="calcNivelacion()"></div>
+        <div class="field"><label>Fondo del terreno (m)</label><input type="number" id="niv-fondo" value="25" min="1" oninput="calcNivelacion()"></div>
+      </div>
+      <div class="field"><label>Espesor de relleno / nivelación (cm)</label><input type="number" id="niv-esp" value="10" min="1" max="100" oninput="calcNivelacion()"></div>
+      <div id="res-nivelacion" class="results"></div>
+      <p class="tip">La tosca se usa para relleno general. Si el terreno tiene desnivel, puede necesitar movimiento de tierra adicional.</p>
+    </div>
   </div>
 
-  <div id="panel-cemento" class="panel">
-    <h2>Calculador de cemento y arena</h2>
-    <div class="field"><label>Tipo de trabajo</label>
-      <select id="c-tipo" onchange="calcCemento()">
-        <option value="revoque">Revoque grueso (1.5 cm espesor)</option>
-        <option value="contrapiso">Contrapiso (8 cm espesor)</option>
-        <option value="pegado">Pegado de ladrillos</option>
-        <option value="carpeta">Carpeta niveladora (3 cm)</option>
-      </select>
+  <!-- ═══════════════════════════════ OBRA GRUESA ═══════════════════════════════ -->
+  <div id="fase-obragruesa" class="fase-panel">
+    <h2>🏗 Obra Gruesa</h2>
+    <div class="calc-tabs">
+      <button class="calc-tab active" onclick="showCalc('fase-obragruesa','ladrillos', this)">Ladrillos</button>
+      <button class="calc-tab" onclick="showCalc('fase-obragruesa','hormigon', this)">Hormigón</button>
+      <button class="calc-tab" onclick="showCalc('fase-obragruesa','hierros', this)">Hierros / Malla</button>
+      <button class="calc-tab" onclick="showCalc('fase-obragruesa','techo', this)">Techo / Cubierta</button>
     </div>
-    <div class="field"><label>Superficie (m²)</label><input type="number" id="c-sup" value="20" min="1" oninput="calcCemento()"></div>
-    <div class="results" id="res-cemento"></div>
-    <p class="tip">Bolsas de 50 kg. Arena en m³. Se agrega 10% de desperdicio.</p>
-    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
-  </div>
 
-  <div id="panel-durlock" class="panel">
-    <h2>Calculador de Durlock</h2>
-    <div class="field"><label>Tipo de trabajo</label>
-      <select id="d-tipo" onchange="calcDurlock()">
-        <option value="pared">Pared simple (1 placa por lado)</option>
-        <option value="cielorraso">Cielorraso</option>
-        <option value="doble">Pared doble (2 placas por lado)</option>
-      </select>
-    </div>
-    <div class="grid-2">
-      <div class="field"><label>Ancho (m)</label><input type="number" id="d-ancho" value="4" min="0.1" step="0.1" oninput="calcDurlock()"></div>
-      <div class="field"><label>Alto (m)</label><input type="number" id="d-alto" value="2.5" min="0.1" step="0.1" oninput="calcDurlock()"></div>
-    </div>
-    <div class="results" id="res-durlock"></div>
-    <p class="tip">Placa estándar 1.20 x 2.40 m. Se agrega 10% de desperdicio en todos los materiales.</p>
-    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
-  </div>
-
-  <div id="panel-pintura" class="panel">
-    <h2>Calculador de pintura</h2>
-    <div class="grid-2">
-      <div class="field"><label>Superficie (m²)</label><input type="number" id="p-sup" value="30" min="1" oninput="calcPintura()"></div>
-      <div class="field"><label>Cantidad de manos</label>
-        <select id="p-manos" onchange="calcPintura()">
-          <option value="1">1 mano</option>
-          <option value="2" selected>2 manos</option>
-          <option value="3">3 manos</option>
+    <div id="calc-ladrillos" class="calc-panel active">
+      <h3>Calculador de ladrillos y mezcla</h3>
+      <div class="grid-2">
+        <div class="field"><label>Ancho de pared (m)</label><input type="number" id="l-ancho" value="5" min="0.1" step="0.1" oninput="calcLadrillos()"></div>
+        <div class="field"><label>Alto de pared (m)</label><input type="number" id="l-alto" value="2.5" min="0.1" step="0.1" oninput="calcLadrillos()"></div>
+      </div>
+      <div class="field"><label>Tipo de ladrillo</label>
+        <select id="l-tipo" onchange="calcLadrillos()">
+          <option value="60">Ladrillo común (6x12x25 cm) — 60 u/m²</option>
+          <option value="45">Ladrillo hueco 8cm — 45 u/m²</option>
+          <option value="16">Ladrillo hueco 12cm — 16 u/m²</option>
+          <option value="12">Ladrillo portante 18cm — 12 u/m²</option>
         </select>
       </div>
+      <div class="field"><label>Aberturas a descontar (m²)</label><input type="number" id="l-aberturas" value="0" min="0" step="0.1" oninput="calcLadrillos()"></div>
+      <div id="res-ladrillos" class="results"></div>
+      <p class="tip">+10% de desperdicio incluido. Cemento y arena calculados para el asentado con mezcla 1:4 (cemento:arena).</p>
     </div>
-    <div class="field"><label>Tipo de pintura</label>
-      <select id="p-tipo" onchange="calcPintura()">
-        <option value="10">Látex interior — 10 m²/litro</option>
-        <option value="8">Látex exterior — 8 m²/litro</option>
-        <option value="6">Impermeabilizante — 6 m²/litro</option>
-        <option value="12">Esmalte sintético — 12 m²/litro</option>
-      </select>
+
+    <div id="calc-hormigon" class="calc-panel">
+      <h3>Calculador de hormigón / contrapiso</h3>
+      <div class="field"><label>Tipo de trabajo</label>
+        <select id="h-tipo" onchange="calcHormigon()">
+          <option value="losa_8">Losa nervurada — 8 cm espesor</option>
+          <option value="losa_12">Losa maciza — 12 cm espesor</option>
+          <option value="contrapiso_8">Contrapiso — 8 cm espesor</option>
+          <option value="columna">Columna de hormigón</option>
+          <option value="viga">Viga / encadenado</option>
+          <option value="fundacion">Fundación / zapata</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Superficie / largo (m² o m)</label><input type="number" id="h-sup" value="30" min="1" oninput="calcHormigon()"></div>
+        <div class="field" id="h-sec-field" style="display:none"><label>Sección (m² — para columna/viga)</label><input type="number" id="h-sec" value="0.09" min="0.01" step="0.01" oninput="calcHormigon()"></div>
+      </div>
+      <div id="res-hormigon" class="results"></div>
+      <p class="tip">Mezcla H-21 (1:2:3 — cemento:arena:piedra). El agua de amasado no se incluye. Pedí hormigón elaborado para obras grandes: sale más barato y tiene mejor control de calidad.</p>
     </div>
-    <div class="results" id="res-pintura"></div>
-    <p class="tip">Rendimiento por mano sobre superficie lisa. En superficies muy porosas puede consumir más.</p>
-    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+
+    <div id="calc-hierros" class="calc-panel">
+      <h3>Calculador de hierros y mallas</h3>
+      <div class="field"><label>Tipo de elemento</label>
+        <select id="fe-tipo" onchange="calcHierros()">
+          <option value="losa_q188">Losa con malla Q188</option>
+          <option value="losa_q257">Losa con malla Q257</option>
+          <option value="losa_q335">Losa con malla Q335</option>
+          <option value="viga_10">Viga con hierro Ø10mm</option>
+          <option value="viga_12">Viga con hierro Ø12mm</option>
+          <option value="columna_12">Columna con hierro Ø12mm</option>
+          <option value="columna_16">Columna con hierro Ø16mm</option>
+          <option value="estribos">Estribos Ø6mm solamente</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Superficie / largo (m² o m)</label><input type="number" id="fe-sup" value="20" min="1" oninput="calcHierros()"></div>
+        <div class="field"><label>Cantidad de elementos</label><input type="number" id="fe-cant" value="1" min="1" oninput="calcHierros()"></div>
+      </div>
+      <div id="res-hierros" class="results"></div>
+      <p class="tip">Incluye 10% por empalmes y desperdicios. Las barras vienen de 12m. Consultá los planos estructurales para las cantidades exactas.</p>
+    </div>
+
+    <div id="calc-techo" class="calc-panel">
+      <h3>Calculador de techo / cubierta</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie de techo (m²)</label><input type="number" id="t-sup" value="40" min="1" oninput="calcTecho()"></div>
+        <div class="field"><label>Tipo de cubierta</label>
+          <select id="t-tipo" onchange="calcTecho()">
+            <option value="chapa">Chapa zinc / galvanizada 1x3m</option>
+            <option value="chapa_color">Chapa prepintada color 1x3m</option>
+            <option value="membrana">Membrana asfáltica (techo plano)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Pendiente del techo</label>
+        <select id="t-pendiente" onchange="calcTecho()">
+          <option value="1.10">Plana (0-5%) — factor 1.00</option>
+          <option value="1.12" selected>Baja (5-15%) — factor 1.12</option>
+          <option value="1.18">Media (15-30%) — factor 1.18</option>
+          <option value="1.25">Alta (30%+) — factor 1.25</option>
+        </select>
+      </div>
+      <div id="res-techo" class="results"></div>
+      <p class="tip">Chapa: se superponen 10cm entre chapas. Membrana: se superponen 15cm en uniones. Siempre agregar cumbrera, ganchos y tornillos.</p>
+    </div>
   </div>
 
-  <div id="panel-ceramico" class="panel">
-    <h2>Calculador de cerámico / porcelanato</h2>
-    <div class="grid-2">
-      <div class="field"><label>Superficie a cubrir (m²)</label><input type="number" id="cer-sup" value="15" min="1" oninput="calcCeramico()"></div>
+  <!-- ═══════════════════════════════ INSTALACIONES ═══════════════════════════════ -->
+  <div id="fase-instalaciones" class="fase-panel">
+    <h2>⚡ Instalaciones</h2>
+    <div class="calc-tabs">
+      <button class="calc-tab active" onclick="showCalc('fase-instalaciones','electrico', this)">Eléctrico</button>
+      <button class="calc-tab" onclick="showCalc('fase-instalaciones','agua', this)">Agua / Sanitario</button>
+      <button class="calc-tab" onclick="showCalc('fase-instalaciones','gas', this)">Gas</button>
+      <button class="calc-tab" onclick="showCalc('fase-instalaciones','aireac', this)">Aire Acondicionado</button>
+    </div>
+
+    <div id="calc-electrico" class="calc-panel active">
+      <h3>Calculador de instalación eléctrica</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie del local (m²)</label><input type="number" id="elec-sup" value="60" min="10" oninput="calcElectrico()"></div>
+        <div class="field"><label>Tipo de vivienda</label>
+          <select id="elec-tipo" onchange="calcElectrico()">
+            <option value="basica">Básica (1 circuito por ambiente)</option>
+            <option value="comoda" selected>Cómoda (2 circuitos por ambiente)</option>
+            <option value="completa">Completa (3+ circuitos, domótica)</option>
+          </select>
+        </div>
+      </div>
+      <div id="res-electrico" class="results"></div>
+      <p class="tip">Estimación para cableado y cañería empotrada. No incluye artefactos (luminarias, tomacorrientes) ni el tablero. Consultá con un electricista matriculado.</p>
+    </div>
+
+    <div id="calc-agua" class="calc-panel">
+      <h3>Calculador de instalación sanitaria</h3>
+      <div class="grid-2">
+        <div class="field"><label>Cantidad de baños</label><input type="number" id="ag-banios" value="2" min="1" max="10" oninput="calcAgua()"></div>
+        <div class="field"><label>Cantidad de cocinas / lavaderos</label><input type="number" id="ag-cocinas" value="1" min="0" max="5" oninput="calcAgua()"></div>
+      </div>
+      <div class="field"><label>Distancia al tanque / medidor (m)</label><input type="number" id="ag-dist" value="15" min="5" oninput="calcAgua()"></div>
+      <div id="res-agua" class="results"></div>
+      <p class="tip">Caños en polipropileno para agua fría y caliente. Desagüe en PVC. Estimación para una planta. Consultá con un plomero matriculado.</p>
+    </div>
+
+    <div id="calc-gas" class="calc-panel">
+      <h3>Calculador de instalación de gas</h3>
+      <div class="grid-2">
+        <div class="field"><label>Cantidad de artefactos a gas</label><input type="number" id="gas-art" value="3" min="1" max="15" oninput="calcGas()"></div>
+        <div class="field"><label>Tipo de cañería</label>
+          <select id="gas-tipo" onchange="calcGas()">
+            <option value="cobre">Cobre soldado (interior)</option>
+            <option value="galvanizado">Galvanizado roscado (exterior/subterráneo)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Metros lineales estimados de cañería</label><input type="number" id="gas-metros" value="20" min="5" oninput="calcGas()"></div>
+      <div id="res-gas" class="results"></div>
+      <p class="tip">La instalación de gas requiere habilitación por gasista matriculado. Incluye 15% extra por uniones, codos y derivaciones.</p>
+    </div>
+
+    <div id="calc-aireac" class="calc-panel">
+      <h3>Calculador de frigorías para aire acondicionado</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie del ambiente (m²)</label><input type="number" id="aa-sup" value="25" min="5" oninput="calcAireAc()"></div>
+        <div class="field"><label>Altura del techo (m)</label>
+          <select id="aa-alto" onchange="calcAireAc()">
+            <option value="2.4">2.40 m (estándar)</option>
+            <option value="2.7">2.70 m</option>
+            <option value="3.0">3.00 m</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Orientación / exposición solar</label>
+        <select id="aa-orient" onchange="calcAireAc()">
+          <option value="1.0">Norte o sombra permanente</option>
+          <option value="1.1" selected>Este u Oeste (sol media jornada)</option>
+          <option value="1.2">Sur con vidrios grandes</option>
+          <option value="1.3">Oeste con sol directo intenso</option>
+        </select>
+      </div>
+      <div id="res-aireac" class="results"></div>
+      <p class="tip">Regla general: 600 frigorías por m² en zona templada. Se ajusta por altura, orientación y tipo de aislación. Modelo recomendado para uso doméstico.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ REVOQUES ═══════════════════════════════ -->
+  <div id="fase-revoques" class="fase-panel">
+    <h2>🪣 Revoques y Contrapisos</h2>
+    <div class="calc-tabs">
+      <button class="calc-tab active" onclick="showCalc('fase-revoques','revoque', this)">Revoque</button>
+      <button class="calc-tab" onclick="showCalc('fase-revoques','contrapiso', this)">Contrapiso</button>
+      <button class="calc-tab" onclick="showCalc('fase-revoques','yeso', this)">Yeso</button>
+      <button class="calc-tab" onclick="showCalc('fase-revoques','carpeta', this)">Carpeta niveladora</button>
+    </div>
+
+    <div id="calc-revoque" class="calc-panel active">
+      <h3>Calculador de revoque</h3>
+      <div class="field"><label>Tipo de revoque</label>
+        <select id="rev-tipo" onchange="calcRevoque()">
+          <option value="grueso_ext">Revoque grueso exterior (1.5cm)</option>
+          <option value="grueso_int">Revoque grueso interior (1.2cm)</option>
+          <option value="fino">Revoque fino / enlucido (3mm)</option>
+          <option value="proyectable">Revoque proyectable (15mm)</option>
+        </select>
+      </div>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="rev-sup" value="30" min="1" oninput="calcRevoque()"></div>
+      <div id="res-revoque" class="results"></div>
+      <p class="tip">+10% de desperdicio incluido. Para interiores se puede usar yeso proyectable en lugar de revoque, es más rápido.</p>
+    </div>
+
+    <div id="calc-contrapiso" class="calc-panel">
+      <h3>Calculador de contrapiso</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie (m²)</label><input type="number" id="cp-sup" value="40" min="1" oninput="calcContrapiso()"></div>
+        <div class="field"><label>Espesor (cm)</label>
+          <select id="cp-esp" onchange="calcContrapiso()">
+            <option value="6">6 cm (interior sobre losa)</option>
+            <option value="8" selected>8 cm (estándar planta baja)</option>
+            <option value="10">10 cm (planta baja con cascote)</option>
+            <option value="12">12 cm (carga pesada)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>¿Incluye cascote de relleno?</label>
+        <select id="cp-cascote" onchange="calcContrapiso()">
+          <option value="no">No, solo hormigón pobre</option>
+          <option value="si">Sí, 50% cascote + 50% hormigón</option>
+        </select>
+      </div>
+      <div id="res-contrapiso" class="results"></div>
+      <p class="tip">El cascote puede ser de demolición y reduce el costo significativamente. Poner membrana de polietileno antes del hormigón en planta baja.</p>
+    </div>
+
+    <div id="calc-yeso" class="calc-panel">
+      <h3>Calculador de yeso</h3>
+      <div class="field"><label>Tipo de aplicación</label>
+        <select id="yes-tipo" onchange="calcYeso()">
+          <option value="cielorraso">Cielorraso proyectado (10mm)</option>
+          <option value="pared">Pared revocada con yeso fino (5mm)</option>
+          <option value="enlucido">Enlucido / terminación (3mm)</option>
+        </select>
+      </div>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="yes-sup" value="25" min="1" oninput="calcYeso()"></div>
+      <div id="res-yeso" class="results"></div>
+      <p class="tip">Bolsas de 40 kg. El yeso fragua rápido: mezclar de a poco y usar en 20-30 minutos. Para cielorrasos usar yeso proyectable para mejor terminación.</p>
+    </div>
+
+    <div id="calc-carpeta" class="calc-panel">
+      <h3>Calculador de carpeta niveladora</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie (m²)</label><input type="number" id="carp-sup" value="30" min="1" oninput="calcCarpeta()"></div>
+        <div class="field"><label>Espesor promedio (cm)</label>
+          <select id="carp-esp" onchange="calcCarpeta()">
+            <option value="2">2 cm (nivelación mínima)</option>
+            <option value="3" selected>3 cm (estándar)</option>
+            <option value="5">5 cm (desnivel importante)</option>
+          </select>
+        </div>
+      </div>
+      <div id="res-carpeta" class="results"></div>
+      <p class="tip">Se aplica sobre el contrapiso antes del cerámico. Si el desnivel supera 3cm, usar cascote + contrapiso es más económico.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ REVESTIMIENTOS ═══════════════════════════════ -->
+  <div id="fase-revestimientos" class="fase-panel">
+    <h2>🔲 Revestimientos y Solados</h2>
+    <div class="calc-tabs">
+      <button class="calc-tab active" onclick="showCalc('fase-revestimientos','ceramico', this)">Cerámico / Porcelanato</button>
+      <button class="calc-tab" onclick="showCalc('fase-revestimientos','pintura', this)">Pintura</button>
+      <button class="calc-tab" onclick="showCalc('fase-revestimientos','flotante', this)">Piso flotante</button>
+      <button class="calc-tab" onclick="showCalc('fase-revestimientos','pastina', this)">Pastina</button>
+    </div>
+
+    <div id="calc-ceramico" class="calc-panel active">
+      <h3>Calculador de cerámico / porcelanato</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie a cubrir (m²)</label><input type="number" id="cer-sup" value="15" min="1" oninput="calcCeramico()"></div>
+        <div class="field"><label>Tamaño de la pieza</label>
+          <select id="cer-tam" onchange="calcCeramico()">
+            <option value="0.04">20x20 cm</option>
+            <option value="0.09">30x30 cm</option>
+            <option value="0.16">40x40 cm</option>
+            <option value="0.36" selected>60x60 cm</option>
+            <option value="0.64">80x80 cm</option>
+            <option value="0.72">60x120 cm</option>
+            <option value="1.00">100x100 cm</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Tipo de colocación</label>
+        <select id="cer-col" onchange="calcCeramico()">
+          <option value="0.10">Junta corrida — 10% desperdicio</option>
+          <option value="0.15">Diagonal — 15% desperdicio</option>
+          <option value="0.20">Espina de pescado — 20% desperdicio</option>
+          <option value="0.12">Juntas al tresbolillo — 12% desperdicio</option>
+        </select>
+      </div>
+      <div id="res-ceramico" class="results"></div>
+      <p class="tip">Adhesivo: 5 kg/m² (porcelanato gran formato usa adhesivo flexible). Pastina: 0.5 kg/m² con junta de 3mm. El desperdicio varía según habilidad del colocador.</p>
+    </div>
+
+    <div id="calc-pintura" class="calc-panel">
+      <h3>Calculador de pintura</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie (m²)</label><input type="number" id="p-sup" value="30" min="1" oninput="calcPintura()"></div>
+        <div class="field"><label>Cantidad de manos</label>
+          <select id="p-manos" onchange="calcPintura()">
+            <option value="1">1 mano (repaso)</option>
+            <option value="2" selected>2 manos (estándar)</option>
+            <option value="3">3 manos (color oscuro / cambio de color)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Tipo de pintura</label>
+        <select id="p-tipo" onchange="calcPintura()">
+          <option value="10">Látex interior — 10 m²/litro</option>
+          <option value="8">Látex exterior — 8 m²/litro</option>
+          <option value="6">Impermeabilizante — 6 m²/litro</option>
+          <option value="12">Esmalte sintético — 12 m²/litro</option>
+          <option value="7">Pintura de caucho — 7 m²/litro</option>
+          <option value="9">Esmalte al agua — 9 m²/litro</option>
+        </select>
+      </div>
+      <div id="res-pintura" class="results"></div>
+      <p class="tip">Sobre pared porosa el rendimiento baja un 20%. Siempre aplicar fijador / imprimación antes de pintar en paredes nuevas.</p>
+    </div>
+
+    <div id="calc-flotante" class="calc-panel">
+      <h3>Calculador de piso flotante</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie a cubrir (m²)</label><input type="number" id="fl-sup" value="20" min="1" oninput="calcFlotante()"></div>
+        <div class="field"><label>Tipo de instalación</label>
+          <select id="fl-tipo" onchange="calcFlotante()">
+            <option value="0.10">Recto (filas paralelas) — 10%</option>
+            <option value="0.15" selected>A escuadra / 45° — 15%</option>
+            <option value="0.20">Espiga / herringbone — 20%</option>
+          </select>
+        </div>
+      </div>
+      <div id="res-flotante" class="results"></div>
+      <p class="tip">Incluye underliner acústico 3mm (1 m² por m²). Dejar 10mm de dilatación en paredes y puertas. Zócalos calculados por perímetro estimado.</p>
+    </div>
+
+    <div id="calc-pastina" class="calc-panel">
+      <h3>Calculador de pastina</h3>
+      <div class="grid-2">
+        <div class="field"><label>Superficie (m²)</label><input type="number" id="pas-sup" value="15" min="1" oninput="calcPastina()"></div>
+        <div class="field"><label>Tamaño de la junta (mm)</label>
+          <select id="pas-junta" onchange="calcPastina()">
+            <option value="0.3">1.5 mm (rectificado, sin junta)</option>
+            <option value="0.5" selected>3 mm (estándar)</option>
+            <option value="0.8">5 mm (rústico / exterior)</option>
+            <option value="1.2">8 mm (mosaico / piezas chicas)</option>
+          </select>
+        </div>
+      </div>
       <div class="field"><label>Tamaño de la pieza</label>
-        <select id="cer-tam" onchange="calcCeramico()">
-          <option value="0.09">20x20 cm</option>
-          <option value="0.16">40x40 cm</option>
-          <option value="0.36" selected>60x60 cm</option>
-          <option value="0.64">80x80 cm</option>
-          <option value="1.00">100x100 cm</option>
+        <select id="pas-tam" onchange="calcPastina()">
+          <option value="20">20x20 cm</option>
+          <option value="30">30x30 cm</option>
+          <option value="40">40x40 cm</option>
+          <option value="60" selected>60x60 cm</option>
+          <option value="80">80x80 cm</option>
         </select>
       </div>
+      <div id="res-pastina" class="results"></div>
+      <p class="tip">La pastina epoxi es más resistente pero costosa — ideal para locales comerciales, piletas o áreas con químicos. Para uso doméstico, la pastina cementicia es suficiente.</p>
     </div>
-    <div class="field"><label>Tipo de colocación</label>
-      <select id="cer-col" onchange="calcCeramico()">
-        <option value="0.10">Junta corrida — 10% desperdicio</option>
-        <option value="0.15">Diagonal — 15% desperdicio</option>
-        <option value="0.20">Espina de pescado — 20% desperdicio</option>
-      </select>
-    </div>
-    <div class="results" id="res-ceramico"></div>
-    <p class="tip">Adhesivo: 5 kg por m². Pastina: 0.5 kg por m². Desperdicio según tipo de colocación.</p>
-    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
   </div>
-</main>
 
-<footer>Calculadores de construcción — próximamente conectado al marketplace de corralones</footer>
+  <!-- ═══════════════════════════════ CARPINTERÍA ═══════════════════════════════ -->
+  <div id="fase-carpinteria" class="fase-panel">
+    <h2>🚪 Carpintería</h2>
+    <div class="calc-tabs">
+      <button class="calc-tab active" onclick="showCalc('fase-carpinteria','puertas', this)">Puertas y Ventanas</button>
+      <button class="calc-tab" onclick="showCalc('fase-carpinteria','placard', this)">Placares / Muebles</button>
+    </div>
+
+    <div id="calc-puertas" class="calc-panel active">
+      <h3>Resumen de aberturas</h3>
+      <div class="grid-3">
+        <div class="field"><label>Puertas interiores</label><input type="number" id="ab-pint" value="3" min="0" oninput="calcAberturas()"></div>
+        <div class="field"><label>Puertas exteriores</label><input type="number" id="ab-pext" value="1" min="0" oninput="calcAberturas()"></div>
+        <div class="field"><label>Ventanas</label><input type="number" id="ab-vent" value="4" min="0" oninput="calcAberturas()"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Puertas ventana / balcón</label><input type="number" id="ab-pv" value="1" min="0" oninput="calcAberturas()"></div>
+        <div class="field"><label>Portones</label><input type="number" id="ab-port" value="1" min="0" oninput="calcAberturas()"></div>
+      </div>
+      <div id="res-aberturas" class="results"></div>
+      <p class="tip">Estimación de accesorios y fijaciones. Cada abertura necesita: premarco, silicona, espuma poliuretano y tornillos. Las cerraduras y manijas se cotizan aparte.</p>
+    </div>
+
+    <div id="calc-placard" class="calc-panel">
+      <h3>Calculador de placard / mueble a medida</h3>
+      <div class="grid-2">
+        <div class="field"><label>Ancho total (m)</label><input type="number" id="pl-ancho" value="3" min="0.5" step="0.1" oninput="calcPlacard()"></div>
+        <div class="field"><label>Alto (m)</label><input type="number" id="pl-alto" value="2.4" min="0.5" step="0.1" oninput="calcPlacard()"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Profundidad (m)</label><input type="number" id="pl-prof" value="0.6" min="0.3" step="0.1" oninput="calcPlacard()"></div>
+        <div class="field"><label>Tipo de material</label>
+          <select id="pl-tipo" onchange="calcPlacard()">
+            <option value="18">Melamínico 18mm</option>
+            <option value="25">Melamínico 25mm (más rígido)</option>
+            <option value="15">MDF 15mm (para pintar)</option>
+          </select>
+        </div>
+      </div>
+      <div id="res-placard" class="results"></div>
+      <p class="tip">Los tableros melamínicos son 1.83x2.44m. Incluye 15% de desperdicios por cortes. No incluye puertas corredizas ni accesorios de interior.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ HERRERÍA ═══════════════════════════════ -->
+  <div id="fase-herreria" class="fase-panel">
+    <h2>🔧 Herrería</h2>
+    <div class="calc-tabs">
+      <button class="calc-tab active" onclick="showCalc('fase-herreria','baranda', this)">Barandas</button>
+      <button class="calc-tab" onclick="showCalc('fase-herreria','reja', this)">Rejas</button>
+    </div>
+
+    <div id="calc-baranda" class="calc-panel active">
+      <h3>Calculador de baranda / pasamano</h3>
+      <div class="grid-2">
+        <div class="field"><label>Metros lineales de baranda</label><input type="number" id="bar-metros" value="10" min="1" oninput="calcBaranda()"></div>
+        <div class="field"><label>Altura de la baranda (m)</label>
+          <select id="bar-alto" onchange="calcBaranda()">
+            <option value="0.9">0.90 m (estándar interior)</option>
+            <option value="1.1">1.10 m (escalera exterior / balcón)</option>
+            <option value="1.2">1.20 m (terraza / uso público)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Tipo de baranda</label>
+        <select id="bar-tipo" onchange="calcBaranda()">
+          <option value="caño">Caño redondo (montante + horizontal)</option>
+          <option value="tubo_vidrio">Caño con vidrio templado</option>
+          <option value="hierro_forjado">Hierro forjado decorativo</option>
+        </select>
+      </div>
+      <div id="res-baranda" class="results"></div>
+      <p class="tip">Los montantes van cada 1m. Pintura anticorrosiva + esmalte incluida en el cálculo de terminación. El vidrio templado se cotiza aparte.</p>
+    </div>
+
+    <div id="calc-reja" class="calc-panel">
+      <h3>Calculador de rejas</h3>
+      <div class="grid-2">
+        <div class="field"><label>Ancho (m)</label><input type="number" id="rej-ancho" value="1.2" min="0.3" step="0.1" oninput="calcReja()"></div>
+        <div class="field"><label>Alto (m)</label><input type="number" id="rej-alto" value="1.2" min="0.3" step="0.1" oninput="calcReja()"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Cantidad de rejas</label><input type="number" id="rej-cant" value="2" min="1" oninput="calcReja()"></div>
+        <div class="field"><label>Tipo de reja</label>
+          <select id="rej-tipo" onchange="calcReja()">
+            <option value="simple">Barrotes simples Ø3/4\"</option>
+            <option value="doble">Doble barrote (más segura)</option>
+            <option value="artistica">Artística con flores / decoración</option>
+          </select>
+        </div>
+      </div>
+      <div id="res-reja" class="results"></div>
+      <p class="tip">Incluye hierro para marco y barrotes. Pintura anticorrosiva + esmalte. Los pesos son aproximados y sirven para estimar el costo de material.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ TERMINACIONES ═══════════════════════════════ -->
+  <div id="fase-terminaciones" class="fase-panel">
+    <h2>🪟 Vidriería y Terminaciones</h2>
+    <div class="calc-tabs">
+      <button class="calc-tab active" onclick="showCalc('fase-terminaciones','vidrio', this)">Vidrios y Espejos</button>
+      <button class="calc-tab" onclick="showCalc('fase-terminaciones','durlock', this)">Durlock / Seco</button>
+    </div>
+
+    <div id="calc-vidrio" class="calc-panel active">
+      <h3>Calculador de vidrio / espejo</h3>
+      <div class="grid-2">
+        <div class="field"><label>Ancho (m)</label><input type="number" id="vid-ancho" value="1.2" min="0.1" step="0.1" oninput="calcVidrio()"></div>
+        <div class="field"><label>Alto (m)</label><input type="number" id="vid-alto" value="1.0" min="0.1" step="0.1" oninput="calcVidrio()"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Cantidad de paños</label><input type="number" id="vid-cant" value="3" min="1" oninput="calcVidrio()"></div>
+        <div class="field"><label>Tipo</label>
+          <select id="vid-tipo" onchange="calcVidrio()">
+            <option value="flotado4">Vidrio flotado 4mm</option>
+            <option value="flotado6">Vidrio flotado 6mm</option>
+            <option value="templado6">Vidrio templado 6mm</option>
+            <option value="templado8">Vidrio templado 8mm</option>
+            <option value="dh">Doble hermético 4/6/4mm</option>
+            <option value="espejo3">Espejo 3mm</option>
+            <option value="espejo4">Espejo 4mm</option>
+          </select>
+        </div>
+      </div>
+      <div id="res-vidrio" class="results"></div>
+      <p class="tip">El vidrio templado no se puede cortar en obra, pedir medidas exactas al vidriero. El doble hermético mejora aislación térmica y acústica significativamente.</p>
+    </div>
+
+    <div id="calc-durlock" class="calc-panel">
+      <h3>Calculador de Durlock</h3>
+      <div class="field"><label>Tipo de trabajo</label>
+        <select id="d-tipo" onchange="calcDurlock()">
+          <option value="pared">Pared simple (1 placa por lado)</option>
+          <option value="cielorraso">Cielorraso</option>
+          <option value="doble">Pared doble (2 placas por lado)</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Ancho / largo (m)</label><input type="number" id="d-ancho" value="4" min="0.1" step="0.1" oninput="calcDurlock()"></div>
+        <div class="field"><label>Alto (m)</label><input type="number" id="d-alto" value="2.5" min="0.1" step="0.1" oninput="calcDurlock()"></div>
+      </div>
+      <div id="res-durlock" class="results"></div>
+      <p class="tip">Placa estándar 1.20×2.40 m. +10% de desperdicio en todos los materiales. Para ambientes húmedos usar placa RH (verde).</p>
+    </div>
+  </div>
+
+</main>
+<footer>Materiales Ya — Calculadores de construcción</footer>
 
 <script>
-function showPanel(id, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
+// ── Navegación de fases y calculadores ──
+function showFase(id, btn) {
+  document.querySelectorAll('.fase-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.fase-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('fase-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function showCalc(faseId, calcId, btn) {
+  const fase = document.getElementById(faseId);
+  fase.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+  fase.querySelectorAll('.calc-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('calc-' + calcId).classList.add('active');
   btn.classList.add('active');
 }
 
@@ -190,6 +661,33 @@ function renderResults(id, items) {
   ).join('');
 }
 
+// ── PRELIMINARES ──
+function calcDemolicion() {
+  const sup = parseFloat(document.getElementById('dem-sup').value) || 0;
+  const factor = parseFloat(document.getElementById('dem-tipo').value);
+  const m3 = (sup * factor).toFixed(1);
+  const volquetes = Math.ceil(m3 / 4);
+  renderResults('res-demolicion', [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Escombros', value: m3, unit: 'm³ aprox.' },
+    { label: 'Volquetes 4m³', value: volquetes, unit: 'unidades' },
+  ]);
+}
+
+function calcNivelacion() {
+  const frente = parseFloat(document.getElementById('niv-frente').value) || 0;
+  const fondo = parseFloat(document.getElementById('niv-fondo').value) || 0;
+  const esp = (parseFloat(document.getElementById('niv-esp').value) || 0) / 100;
+  const sup = frente * fondo;
+  const m3 = (sup * esp * 1.2).toFixed(1);
+  renderResults('res-nivelacion', [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Tosca / relleno', value: m3, unit: 'm³' },
+    { label: 'Hilo de obra', value: Math.ceil((frente + fondo) * 2 / 100), unit: 'rollos 100m' },
+  ]);
+}
+
+// ── OBRA GRUESA ──
 function calcLadrillos() {
   const ancho = parseFloat(document.getElementById('l-ancho').value) || 0;
   const alto = parseFloat(document.getElementById('l-alto').value) || 0;
@@ -197,50 +695,258 @@ function calcLadrillos() {
   const porM2 = parseFloat(document.getElementById('l-tipo').value);
   const sup = Math.max(0, ancho * alto - aberturas);
   const ladrillos = Math.ceil(sup * porM2 * 1.10);
-  const cemento = Math.ceil(sup * 0.15);
+  const cemento = Math.ceil(sup * 0.15 * 1.1);
+  const cal = Math.ceil(sup * 0.05 * 1.1);
   const arena = (sup * 0.03 * 1.10).toFixed(2);
   renderResults('res-ladrillos', [
     { label: 'Superficie neta', value: sup.toFixed(1), unit: 'm²' },
     { label: 'Ladrillos', value: ladrillos.toLocaleString('es-AR'), unit: 'unidades' },
-    { label: 'Cemento', value: cemento, unit: 'bolsas 50 kg' },
+    { label: 'Cemento', value: cemento, unit: 'bolsas 50kg' },
+    { label: 'Cal', value: cal, unit: 'bolsas 25kg' },
     { label: 'Arena', value: arena, unit: 'm³' },
   ]);
 }
 
-function calcCemento() {
-  const sup = parseFloat(document.getElementById('c-sup').value) || 0;
-  const tipo = document.getElementById('c-tipo').value;
-  let bCemento, mArena, bCal = 0;
-  if (tipo === 'revoque')    { bCemento = Math.ceil(sup * 0.12 * 1.1); mArena = (sup * 0.025 * 1.1).toFixed(2); bCal = Math.ceil(sup * 0.05); }
-  if (tipo === 'contrapiso') { bCemento = Math.ceil(sup * 0.5 * 1.1);  mArena = (sup * 0.08 * 1.1).toFixed(2);  }
-  if (tipo === 'pegado')     { bCemento = Math.ceil(sup * 0.15 * 1.1); mArena = (sup * 0.03 * 1.1).toFixed(2);  bCal = Math.ceil(sup * 0.05); }
-  if (tipo === 'carpeta')    { bCemento = Math.ceil(sup * 0.25 * 1.1); mArena = (sup * 0.04 * 1.1).toFixed(2);  }
-  const items = [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Cemento', value: bCemento, unit: 'bolsas 50 kg' },
-    { label: 'Arena', value: mArena, unit: 'm³' },
-  ];
-  if (bCal) items.push({ label: 'Cal hidráulica', value: bCal, unit: 'bolsas 25 kg' });
-  renderResults('res-cemento', items);
+function calcHormigon() {
+  const tipo = document.getElementById('h-tipo').value;
+  const sup = parseFloat(document.getElementById('h-sup').value) || 0;
+  const sec = parseFloat(document.getElementById('h-sec').value) || 0.09;
+  const secField = document.getElementById('h-sec-field');
+
+  const usaSec = tipo === 'columna' || tipo === 'viga' || tipo === 'fundacion';
+  secField.style.display = usaSec ? 'block' : 'none';
+
+  const espesores = { losa_8: 0.08, losa_12: 0.12, contrapiso_8: 0.08 };
+  let m3;
+  if (usaSec) {
+    m3 = sup * sec * 1.1;
+  } else {
+    m3 = sup * espesores[tipo] * 1.1;
+  }
+  m3 = parseFloat(m3.toFixed(2));
+
+  const cemento = Math.ceil(m3 * 6.5);
+  const arena   = (m3 * 0.55).toFixed(2);
+  const piedra  = (m3 * 0.85).toFixed(2);
+
+  renderResults('res-hormigon', [
+    { label: 'm³ hormigón', value: m3, unit: 'm³' },
+    { label: 'Cemento', value: cemento, unit: 'bolsas 50kg' },
+    { label: 'Arena', value: arena, unit: 'm³' },
+    { label: 'Piedra', value: piedra, unit: 'm³' },
+  ]);
 }
 
-function calcDurlock() {
-  const ancho = parseFloat(document.getElementById('d-ancho').value) || 0;
-  const alto = parseFloat(document.getElementById('d-alto').value) || 0;
-  const tipo = document.getElementById('d-tipo').value;
-  const sup = ancho * alto;
-  const placaM2 = 1.20 * 2.40;
-  const lados = tipo === 'cielorraso' ? 1 : (tipo === 'doble' ? 4 : 2);
-  const placas = Math.ceil((sup * lados / placaM2) * 1.10);
-  const perfiles = Math.ceil((ancho / 0.40) * alto * (tipo === 'doble' ? 2 : 1) * 1.10);
-  const tornillos = placas * 25;
-  const masilla = Math.ceil(sup * lados * 0.3);
-  renderResults('res-durlock', [
-    { label: 'Superficie', value: sup.toFixed(1), unit: 'm²' },
-    { label: 'Placas', value: placas, unit: 'unidades' },
-    { label: 'Perfiles', value: perfiles, unit: 'unidades' },
-    { label: 'Tornillos', value: tornillos.toLocaleString('es-AR'), unit: 'unidades' },
-    { label: 'Masilla', value: masilla, unit: 'kg' },
+function calcHierros() {
+  const tipo = document.getElementById('fe-tipo').value;
+  const sup = parseFloat(document.getElementById('fe-sup').value) || 0;
+  const cant = parseFloat(document.getElementById('fe-cant').value) || 1;
+
+  let resultado = [];
+
+  if (tipo.startsWith('losa_')) {
+    const mallaMap = { losa_q188: 'Q188', losa_q257: 'Q257', losa_q335: 'Q335' };
+    const nombre = mallaMap[tipo];
+    const paneles = Math.ceil((sup * cant * 1.10) / 2.4);
+    resultado = [
+      { label: 'Superficie', value: (sup*cant).toFixed(0), unit: 'm²' },
+      { label: `Malla ${nombre}`, value: paneles, unit: 'paneles (2.4x6m)' },
+    ];
+  } else {
+    const kgM = { viga_10: 0.617, viga_12: 0.888, columna_12: 3.55, columna_16: 6.31, estribos: 0.222 };
+    const kg = sup * cant * kgM[tipo] * 1.10;
+    const barras12 = tipo.startsWith('columna') || tipo.startsWith('viga')
+      ? Math.ceil((sup * cant * 1.10) / 12)
+      : Math.ceil((sup * cant * 4 * 1.10) / 12);
+    resultado = [
+      { label: 'kg de hierro', value: kg.toFixed(0), unit: 'kg' },
+      { label: 'Barras 12m', value: barras12, unit: 'unidades' },
+    ];
+    if (tipo !== 'estribos') {
+      const estribos = Math.ceil(sup * cant / 0.2);
+      resultado.push({ label: 'Estribos Ø6', value: estribos, unit: 'unidades' });
+    }
+  }
+  renderResults('res-hierros', resultado);
+}
+
+function calcTecho() {
+  const sup = parseFloat(document.getElementById('t-sup').value) || 0;
+  const tipo = document.getElementById('t-tipo').value;
+  const pend = parseFloat(document.getElementById('t-pendiente').value);
+
+  if (tipo === 'membrana') {
+    const supReal = sup * 1.05;
+    const rollos = Math.ceil(supReal / 10 * 1.15);
+    const imprimacion = Math.ceil(supReal / 25);
+    renderResults('res-techo', [
+      { label: 'Superficie real', value: supReal.toFixed(0), unit: 'm²' },
+      { label: 'Membrana 4mm', value: rollos, unit: 'rollos 10m' },
+      { label: 'Imprimación', value: imprimacion, unit: 'latas 4L' },
+    ]);
+  } else {
+    const supReal = sup * pend;
+    const chapas = Math.ceil(supReal / 2.7);
+    const ganchos = Math.ceil(chapas * 4);
+    const cumbreras = Math.ceil(sup / 10);
+    renderResults('res-techo', [
+      { label: 'Superficie real', value: supReal.toFixed(0), unit: 'm²' },
+      { label: 'Chapas 1x3m', value: chapas, unit: 'unidades' },
+      { label: 'Ganchos J', value: ganchos, unit: 'unidades' },
+      { label: 'Cumbreras', value: cumbreras, unit: 'unidades' },
+    ]);
+  }
+}
+
+// ── INSTALACIONES ──
+function calcElectrico() {
+  const sup = parseFloat(document.getElementById('elec-sup').value) || 0;
+  const tipo = document.getElementById('elec-tipo').value;
+  const factores = { basica: 6, comoda: 10, completa: 16 };
+  const f = factores[tipo];
+  const m_cable15 = Math.ceil(sup * f * 0.4);
+  const m_cable25 = Math.ceil(sup * f * 0.6);
+  const m_conduit = Math.ceil((m_cable15 + m_cable25) * 0.35);
+  const cajas = Math.ceil(sup * 0.5);
+  renderResults('res-electrico', [
+    { label: 'Cable 1.5mm²', value: m_cable15, unit: 'm lineales' },
+    { label: 'Cable 2.5mm²', value: m_cable25, unit: 'm lineales' },
+    { label: 'Conduit 20mm', value: m_conduit, unit: 'm lineales' },
+    { label: 'Cajas PVC', value: cajas, unit: 'unidades' },
+  ]);
+}
+
+function calcAgua() {
+  const banios = parseInt(document.getElementById('ag-banios').value) || 0;
+  const cocinas = parseInt(document.getElementById('ag-cocinas').value) || 0;
+  const dist = parseFloat(document.getElementById('ag-dist').value) || 0;
+  const puntos = banios * 4 + cocinas * 3;
+  const m_pp = Math.ceil(puntos * 4 + dist * 2);
+  const m_desague = Math.ceil(puntos * 3 + dist);
+  const llaves = banios * 2 + cocinas + 2;
+  renderResults('res-agua', [
+    { label: 'Puntos de agua', value: puntos, unit: 'puntos' },
+    { label: 'Caño poliprop.', value: m_pp, unit: 'm lineales' },
+    { label: 'Caño PVC Ø110', value: m_desague, unit: 'm lineales' },
+    { label: 'Llaves de paso', value: llaves, unit: 'unidades' },
+  ]);
+}
+
+function calcGas() {
+  const art = parseInt(document.getElementById('gas-art').value) || 0;
+  const metros = parseFloat(document.getElementById('gas-metros').value) || 0;
+  const tipo = document.getElementById('gas-tipo').value;
+  const m_total = Math.ceil(metros * 1.15);
+  const barras = Math.ceil(m_total / 3);
+  const llaves = art + 1;
+  renderResults('res-gas', [
+    { label: 'Artefactos', value: art, unit: 'puntos' },
+    { label: tipo === 'cobre' ? 'Caño cobre 1/2"' : 'Caño galv. 3/4"', value: barras, unit: 'barras 3m' },
+    { label: 'Llaves esfera', value: llaves, unit: 'unidades' },
+    { label: 'Metros totales', value: m_total, unit: 'm lineales' },
+  ]);
+}
+
+function calcAireAc() {
+  const sup = parseFloat(document.getElementById('aa-sup').value) || 0;
+  const alto = parseFloat(document.getElementById('aa-alto').value);
+  const orient = parseFloat(document.getElementById('aa-orient').value);
+  const frigorias = Math.ceil(sup * 600 * (alto / 2.4) * orient);
+  let modelo = '';
+  if (frigorias <= 2200) modelo = '2200 (muy chico)';
+  else if (frigorias <= 3000) modelo = '3000 frigorías';
+  else if (frigorias <= 4000) modelo = '3500 / 4000 frigorías';
+  else if (frigorias <= 5000) modelo = '5000 frigorías';
+  else if (frigorias <= 6000) modelo = '6000 frigorías';
+  else modelo = '+ de 6000 (consultar)';
+  renderResults('res-aireac', [
+    { label: 'Frigorías necesarias', value: frigorias.toLocaleString('es-AR'), unit: 'kcal/h' },
+    { label: 'Modelo sugerido', value: modelo, unit: '' },
+    { label: 'Cañería cobre', value: '1', unit: 'rollo 3m' },
+  ]);
+}
+
+// ── REVOQUES ──
+function calcRevoque() {
+  const sup = parseFloat(document.getElementById('rev-sup').value) || 0;
+  const tipo = document.getElementById('rev-tipo').value;
+  let cemento = 0, cal = 0, arena = 0, yeso = 0;
+  if (tipo === 'grueso_ext') { cemento = Math.ceil(sup * 0.15 * 1.1); cal = Math.ceil(sup * 0.06 * 1.1); arena = (sup * 0.025 * 1.1).toFixed(2); }
+  if (tipo === 'grueso_int') { cemento = Math.ceil(sup * 0.10 * 1.1); cal = Math.ceil(sup * 0.08 * 1.1); arena = (sup * 0.020 * 1.1).toFixed(2); }
+  if (tipo === 'fino')       { yeso = Math.ceil(sup * 0.012 * 1.1 * 25); cal = Math.ceil(sup * 0.04 * 1.1); }
+  if (tipo === 'proyectable'){ cemento = Math.ceil(sup * 0.20 * 1.1); arena = (sup * 0.030 * 1.1).toFixed(2); }
+
+  const items = [{ label: 'Superficie', value: sup.toFixed(0), unit: 'm²' }];
+  if (cemento) items.push({ label: 'Cemento alba.', value: cemento, unit: 'bolsas 40kg' });
+  if (cal) items.push({ label: 'Cal', value: cal, unit: 'bolsas 25kg' });
+  if (arena) items.push({ label: 'Arena fina', value: arena, unit: 'm³' });
+  if (yeso) items.push({ label: 'Yeso', value: yeso, unit: 'kg' });
+  renderResults('res-revoque', items);
+}
+
+function calcContrapiso() {
+  const sup = parseFloat(document.getElementById('cp-sup').value) || 0;
+  const esp = parseFloat(document.getElementById('cp-esp').value) / 100;
+  const conCascote = document.getElementById('cp-cascote').value === 'si';
+  let m3Hormigon = sup * esp * (conCascote ? 0.5 : 1.0) * 1.05;
+  const cascote = conCascote ? (sup * esp * 0.5 * 1.1).toFixed(2) : 0;
+  const cemento = Math.ceil(m3Hormigon * 5.5);
+  const arena = (m3Hormigon * 0.55).toFixed(2);
+  const polietileno = Math.ceil(sup * 1.15 / 50);
+  const items = [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Cemento', value: cemento, unit: 'bolsas 50kg' },
+    { label: 'Arena gruesa', value: arena, unit: 'm³' },
+    { label: 'Polietileno', value: polietileno, unit: 'rollos 50m²' },
+  ];
+  if (conCascote) items.push({ label: 'Cascote', value: cascote, unit: 'm³' });
+  renderResults('res-contrapiso', items);
+}
+
+function calcYeso() {
+  const sup = parseFloat(document.getElementById('yes-sup').value) || 0;
+  const tipo = document.getElementById('yes-tipo').value;
+  const espesores = { cielorraso: 0.010, pared: 0.005, enlucido: 0.003 };
+  const esp = espesores[tipo];
+  const kgYeso = Math.ceil(sup * esp * 1000 * 1.10);
+  const bolsas = Math.ceil(kgYeso / 40);
+  renderResults('res-yeso', [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Yeso total', value: kgYeso.toLocaleString('es-AR'), unit: 'kg' },
+    { label: 'Bolsas 40kg', value: bolsas, unit: 'unidades' },
+  ]);
+}
+
+function calcCarpeta() {
+  const sup = parseFloat(document.getElementById('carp-sup').value) || 0;
+  const esp = parseFloat(document.getElementById('carp-esp').value) / 100;
+  const cemento = Math.ceil(sup * esp * 500 * 1.1);
+  const bolsasCem = Math.ceil(cemento / 50);
+  const arena = (sup * esp * 0.7 * 1.1).toFixed(2);
+  const aditivo = Math.ceil(sup * 0.3);
+  renderResults('res-carpeta', [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Cemento', value: bolsasCem, unit: 'bolsas 50kg' },
+    { label: 'Arena fina', value: arena, unit: 'm³' },
+    { label: 'Aditivo adher.', value: aditivo, unit: 'litros' },
+  ]);
+}
+
+// ── REVESTIMIENTOS ──
+function calcCeramico() {
+  const sup = parseFloat(document.getElementById('cer-sup').value) || 0;
+  const tamPieza = parseFloat(document.getElementById('cer-tam').value);
+  const desp = parseFloat(document.getElementById('cer-col').value);
+  const supTotal = sup * (1 + desp);
+  const piezas = Math.ceil(supTotal / tamPieza);
+  const adhesivo = Math.ceil(sup * 5 * 1.1);
+  const bolsasAdh = Math.ceil(adhesivo / 25);
+  const pastina = Math.ceil(sup * 0.5 * 1.1);
+  renderResults('res-ceramico', [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Piezas', value: piezas.toLocaleString('es-AR'), unit: 'unidades' },
+    { label: 'Adhesivo', value: bolsasAdh, unit: 'bolsas 25kg' },
+    { label: 'Pastina', value: pastina, unit: 'kg' },
   ]);
 }
 
@@ -260,27 +966,151 @@ function calcPintura() {
   ]);
 }
 
-function calcCeramico() {
-  const sup = parseFloat(document.getElementById('cer-sup').value) || 0;
-  const tamPieza = parseFloat(document.getElementById('cer-tam').value);
-  const desp = parseFloat(document.getElementById('cer-col').value);
-  const supTotal = sup * (1 + desp);
-  const piezas = Math.ceil(supTotal / tamPieza);
-  const adhesivo = Math.ceil(sup * 5);
-  const pastina = Math.ceil(sup * 0.5);
-  renderResults('res-ceramico', [
+function calcFlotante() {
+  const sup = parseFloat(document.getElementById('fl-sup').value) || 0;
+  const desp = parseFloat(document.getElementById('fl-tipo').value);
+  const supTotal = (sup * (1 + desp)).toFixed(1);
+  const underliner = Math.ceil(sup * 1.05);
+  const zocalos = Math.ceil(Math.sqrt(sup) * 4 * 1.15 / 2.5);
+  renderResults('res-flotante', [
     { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Piezas', value: piezas.toLocaleString('es-AR'), unit: 'unidades' },
-    { label: 'Adhesivo', value: adhesivo, unit: 'kg' },
-    { label: 'Pastina', value: pastina, unit: 'kg' },
+    { label: 'Piso flotante', value: supTotal, unit: 'm² a comprar' },
+    { label: 'Underliner', value: underliner, unit: 'm²' },
+    { label: 'Zócalos 2.5m', value: zocalos, unit: 'unidades (est.)' },
   ]);
 }
 
-calcLadrillos();
-calcCemento();
-calcDurlock();
-calcPintura();
-calcCeramico();
+function calcPastina() {
+  const sup = parseFloat(document.getElementById('pas-sup').value) || 0;
+  const junta = parseFloat(document.getElementById('pas-junta').value);
+  const tam = parseFloat(document.getElementById('pas-tam').value) / 100;
+  const kg = sup * junta * (1/tam) * 1.7 * 1.10;
+  const bolsas = Math.ceil(kg / 5);
+  renderResults('res-pastina', [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Pastina total', value: kg.toFixed(1), unit: 'kg' },
+    { label: 'Bolsas 5kg', value: bolsas, unit: 'unidades' },
+  ]);
+}
+
+// ── CARPINTERÍA ──
+function calcAberturas() {
+  const pint = parseInt(document.getElementById('ab-pint').value) || 0;
+  const pext = parseInt(document.getElementById('ab-pext').value) || 0;
+  const vent = parseInt(document.getElementById('ab-vent').value) || 0;
+  const pv   = parseInt(document.getElementById('ab-pv').value) || 0;
+  const port = parseInt(document.getElementById('ab-port').value) || 0;
+  const total = pint + pext + vent + pv + port;
+  const silicona = Math.ceil(total * 1.5);
+  const espuma = total;
+  const bisagras = (pint + pext) * 2;
+  renderResults('res-aberturas', [
+    { label: 'Total aberturas', value: total, unit: 'unidades' },
+    { label: 'Silicona 300ml', value: silicona, unit: 'unidades' },
+    { label: 'Espuma poliu.', value: espuma, unit: 'unidades 750ml' },
+    { label: 'Bisagras 3"', value: bisagras, unit: 'pares' },
+  ]);
+}
+
+function calcPlacard() {
+  const ancho = parseFloat(document.getElementById('pl-ancho').value) || 0;
+  const alto  = parseFloat(document.getElementById('pl-alto').value) || 0;
+  const prof  = parseFloat(document.getElementById('pl-prof').value) || 0;
+  const esp   = parseInt(document.getElementById('pl-tipo').value);
+  const areaTab = 1.83 * 2.44;
+  const supNecesaria = (ancho * alto * 2 + ancho * prof * 2 + alto * prof * 2) * 1.15;
+  const tableros = Math.ceil(supNecesaria / areaTab);
+  const canto = Math.ceil(supNecesaria / 50) + 1;
+  const bisagras = Math.ceil(ancho / 0.6) * 2;
+  renderResults('res-placard', [
+    { label: 'Superficie total', value: supNecesaria.toFixed(1), unit: 'm²' },
+    { label: `Tableros ${esp}mm`, value: tableros, unit: 'unidades' },
+    { label: 'Canto 22mm', value: canto, unit: 'rollos 50m' },
+    { label: 'Bisagras', value: bisagras, unit: 'pares' },
+  ]);
+}
+
+// ── HERRERÍA ──
+function calcBaranda() {
+  const metros = parseFloat(document.getElementById('bar-metros').value) || 0;
+  const alto = parseFloat(document.getElementById('bar-alto').value);
+  const tipo = document.getElementById('bar-tipo').value;
+  const montantes = Math.ceil(metros / 1.0) + 1;
+  let barras6m = 0;
+  if (tipo === 'caño') {
+    barras6m = Math.ceil((metros + montantes * alto) / 6 * 1.15);
+  } else if (tipo === 'hierro_forjado') {
+    barras6m = Math.ceil((metros * 3 + montantes * alto) / 6 * 1.20);
+  }
+  const anticorrosivo = Math.ceil(metros * alto * 0.15);
+  renderResults('res-baranda', [
+    { label: 'Metros lineales', value: metros.toFixed(0), unit: 'm' },
+    { label: 'Montantes', value: montantes, unit: 'unidades' },
+    { label: 'Caño / barras 6m', value: barras6m, unit: 'unidades' },
+    { label: 'Anticorrosivo', value: anticorrosivo, unit: 'latas 4L' },
+  ]);
+}
+
+function calcReja() {
+  const ancho = parseFloat(document.getElementById('rej-ancho').value) || 0;
+  const alto  = parseFloat(document.getElementById('rej-alto').value) || 0;
+  const cant  = parseInt(document.getElementById('rej-cant').value) || 1;
+  const tipo  = document.getElementById('rej-tipo').value;
+  const sup = ancho * alto * cant;
+  const factorKg = tipo === 'simple' ? 12 : tipo === 'doble' ? 20 : 15;
+  const kg = Math.ceil(sup * factorKg * 1.10);
+  const anticorrosivo = Math.ceil(sup * cant * 0.15);
+  renderResults('res-reja', [
+    { label: 'Superficie total', value: sup.toFixed(1), unit: 'm²' },
+    { label: 'Hierro aprox.', value: kg, unit: 'kg' },
+    { label: 'Anticorrosivo', value: anticorrosivo, unit: 'latas 4L' },
+    { label: 'Electrodos', value: Math.ceil(kg/15), unit: 'cajas x25' },
+  ]);
+}
+
+// ── TERMINACIONES ──
+function calcVidrio() {
+  const ancho = parseFloat(document.getElementById('vid-ancho').value) || 0;
+  const alto  = parseFloat(document.getElementById('vid-alto').value) || 0;
+  const cant  = parseInt(document.getElementById('vid-cant').value) || 1;
+  const m2Total = (ancho * alto * cant).toFixed(2);
+  const silicona = Math.ceil(ancho * cant * 2 + alto * cant * 2);
+  renderResults('res-vidrio', [
+    { label: 'Superficie total', value: m2Total, unit: 'm²' },
+    { label: 'Cantidad de paños', value: cant, unit: 'unidades' },
+    { label: 'Silicona 300ml', value: Math.ceil(silicona / 8), unit: 'unidades' },
+  ]);
+}
+
+function calcDurlock() {
+  const ancho = parseFloat(document.getElementById('d-ancho').value) || 0;
+  const alto  = parseFloat(document.getElementById('d-alto').value) || 0;
+  const tipo  = document.getElementById('d-tipo').value;
+  const sup = ancho * alto;
+  const placaM2 = 1.20 * 2.40;
+  const lados = tipo === 'cielorraso' ? 1 : (tipo === 'doble' ? 4 : 2);
+  const placas   = Math.ceil((sup * lados / placaM2) * 1.10);
+  const perfiles = Math.ceil((ancho / 0.40) * alto * (tipo === 'doble' ? 2 : 1) * 1.10);
+  const tornillos = placas * 25;
+  const masilla   = Math.ceil(sup * lados * 0.3);
+  renderResults('res-durlock', [
+    { label: 'Superficie', value: sup.toFixed(1), unit: 'm²' },
+    { label: 'Placas 1.2x2.4', value: placas, unit: 'unidades' },
+    { label: 'Perfiles', value: perfiles, unit: 'unidades' },
+    { label: 'Tornillos', value: tornillos.toLocaleString('es-AR'), unit: 'unidades' },
+    { label: 'Masilla', value: masilla, unit: 'kg' },
+  ]);
+}
+
+// ── Init: ejecutar todos los calculadores al cargar ──
+calcDemolicion(); calcNivelacion();
+calcLadrillos(); calcHormigon(); calcHierros(); calcTecho();
+calcElectrico(); calcAgua(); calcGas(); calcAireAc();
+calcRevoque(); calcContrapiso(); calcYeso(); calcCarpeta();
+calcCeramico(); calcPintura(); calcFlotante(); calcPastina();
+calcAberturas(); calcPlacard();
+calcBaranda(); calcReja();
+calcVidrio(); calcDurlock();
 </script>
 </body>
 </html>
