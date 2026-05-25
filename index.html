@@ -590,7 +590,7 @@ function calcHormigon() {
   const vol = largo * ancho * alto * 1.10;
   renderResults('res-hormigon', [
     {label:'Volumen', value: vol.toFixed(2), unit:'m³'},
-    {label:'Cemento', value: Math.ceil(vol*7), unit:'bolsas 25 kg'},
+    {label:'Cemento', value: Math.ceil(vol*14), unit:'bolsas 25 kg'},
     {label:'Arena', value: (vol*0.42).toFixed(2), unit:'m³'},
     {label:'Piedra', value: (vol*0.83).toFixed(2), unit:'m³'},
     {label:'Agua aprox.', value: Math.ceil(vol*140), unit:'litros'},
