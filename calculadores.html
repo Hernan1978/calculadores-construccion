@@ -1,156 +1,286 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materiales Ya — Todo para tu obra</title>
-    <meta name="description" content="Calculá materiales, pedí cotización a corralones de tu zona y leé guías de construcción.">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadores de materiales de construcción</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+
+  header { background: #1a1a1a; color: #fff; padding: 1.5rem 2rem; }
+  header h1 { font-size: 1.4rem; font-weight: 600; }
+  header p { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
+
+  main { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .tab { padding: 8px 16px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 13px; cursor: pointer; transition: all .15s; }
+  .tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; font-weight: 500; }
+  .tab:hover:not(.active) { background: #f0f0ea; }
+
+  .panel { display: none; background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; }
+  .panel.active { display: block; }
+  .panel h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; color: #1a1a1a; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:480px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+  .field input, .field select {
+    width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px;
+    font-size: 14px; color: #1a1a1a; background: #fafafa; outline: none; transition: border .15s;
+  }
+  .field input:focus, .field select:focus { border-color: #1a1a1a; background: #fff; }
+
+  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 1.5rem; }
+  .result-card { background: #f5f5f0; border-radius: 8px; padding: 12px 14px; }
+  .result-card .r-label { font-size: 11px; color: #888; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+  .result-card .r-value { font-size: 24px; font-weight: 600; color: #1a1a1a; line-height: 1.1; }
+  .result-card .r-unit { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .tip { font-size: 12px; color: #888; margin-top: 1rem; background: #f9f9f5; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #ddd; }
+
+  .btn-pedir {
+    margin-top: 1.5rem; width: 100%; padding: 12px; border-radius: 8px;
+    border: 1px solid #1a1a1a; background: #1a1a1a; color: #fff;
+    font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s;
+  }
+  .btn-pedir:hover { opacity: .85; }
+
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
+</style>
 </head>
 <body>
 
-    <!-- HEADER CONSISTENTE -->
-    <header>
-        <a href="index.html" class="logo">Materiales<span>Ya</span></a>
-        
-        <nav class="nav-links" id="navLinks">
-            <a href="index.html" class="hbtn active">Inicio</a>
-            <a href="home.html" class="hbtn">Home</a>
-            <a href="revista.html" class="hbtn">Revista</a>
-            <a href="marketplace.html" class="hbtn">Marketplace</a>
-        </nav>
-        
-        <button class="menu-toggle" id="menuToggle">☰</button>
-    </header>
+<header>
+  <h1>Calculadores de materiales</h1>
+  <p>Calculá lo que necesitás y pedí cotización al corralón más cercano</p>
+</header>
 
-    <!-- HERO -->
-    <div class="hero">
-        <div class="hero-content">
-            <div class="hero-badge">🏗 Plataforma de materiales de construcción</div>
-            <h1>Todo para tu obra<br><span>en un solo lugar</span></h1>
-            <p>Calculá los materiales que necesitás, pedí cotización a corralones de tu zona y aprendé con guías y fotos.</p>
-            <div class="hero-btns">
-                <a href="marketplace.html" class="btn-hero-primary">Pedir materiales →</a>
-                <a href="index.html" class="btn-hero-secondary">Ver calculadores</a>
-            </div>
-        </div>
+<main>
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('ladrillos', this)">Ladrillos</button>
+    <button class="tab" onclick="showPanel('cemento', this)">Cemento y arena</button>
+    <button class="tab" onclick="showPanel('durlock', this)">Durlock</button>
+    <button class="tab" onclick="showPanel('pintura', this)">Pintura</button>
+    <button class="tab" onclick="showPanel('ceramico', this)">Cerámico</button>
+  </div>
+
+  <div id="panel-ladrillos" class="panel active">
+    <h2>Calculador de ladrillos</h2>
+    <div class="grid-2">
+      <div class="field"><label>Ancho de pared (m)</label><input type="number" id="l-ancho" value="5" min="0.1" step="0.1" oninput="calcLadrillos()"></div>
+      <div class="field"><label>Alto de pared (m)</label><input type="number" id="l-alto" value="2.5" min="0.1" step="0.1" oninput="calcLadrillos()"></div>
     </div>
-
-    <!-- STATS -->
-    <div class="stats">
-        <div class="stats-inner">
-            <div><div class="stat-value">24</div><div class="stat-label">Calculadores</div></div>
-            <div><div class="stat-value">120+</div><div class="stat-label">Materiales</div></div>
-            <div><div class="stat-value">6</div><div class="stat-label">Artículos</div></div>
-            <div><div class="stat-value">100%</div><div class="stat-label">Gratis</div></div>
-        </div>
+    <div class="field"><label>Tipo de ladrillo</label>
+      <select id="l-tipo" onchange="calcLadrillos()">
+        <option value="60">Ladrillo común (6x12x25 cm) — 60 u/m²</option>
+        <option value="45">Ladrillo hueco 8cm — 45 u/m²</option>
+        <option value="16">Ladrillo hueco 12cm — 16 u/m²</option>
+        <option value="12">Ladrillo portante 18cm — 12 u/m²</option>
+      </select>
     </div>
+    <div class="field"><label>Aberturas a descontar (m²)</label><input type="number" id="l-aberturas" value="0" min="0" step="0.1" oninput="calcLadrillos()"></div>
+    <div class="results" id="res-ladrillos"></div>
+    <p class="tip">Se agrega 10% de desperdicio por cortes y roturas. Cemento y arena calculados para el asentado.</p>
+    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+  </div>
 
-    <main>
-        <div style="max-width: 960px; margin: 3rem auto; padding: 0 1rem;">
-            
-            <!-- TRES SECCIONES -->
-            <div style="margin-bottom:1rem">
-                <div class="section-title">¿Qué podés hacer acá?</div>
-                <div class="section-sub">Tres herramientas pensadas para facilitar tu obra</div>
-            </div>
+  <div id="panel-cemento" class="panel">
+    <h2>Calculador de cemento y arena</h2>
+    <div class="field"><label>Tipo de trabajo</label>
+      <select id="c-tipo" onchange="calcCemento()">
+        <option value="revoque">Revoque grueso (1.5 cm espesor)</option>
+        <option value="contrapiso">Contrapiso (8 cm espesor)</option>
+        <option value="pegado">Pegado de ladrillos</option>
+        <option value="carpeta">Carpeta niveladora (3 cm)</option>
+      </select>
+    </div>
+    <div class="field"><label>Superficie (m²)</label><input type="number" id="c-sup" value="20" min="1" oninput="calcCemento()"></div>
+    <div class="results" id="res-cemento"></div>
+    <p class="tip">Bolsas de 50 kg. Arena en m³. Se agrega 10% de desperdicio.</p>
+    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+  </div>
 
-            <div class="cards-main">
-                <a href="index.html" class="card-main">
-                    <div class="card-main-img bg1">🧮</div>
-                    <div class="card-main-body">
-                        <div class="card-main-tag">Herramienta</div>
-                        <div class="card-main-titulo">Calculadores de materiales</div>
-                        <div class="card-main-desc">24 calculadores para saber exactamente cuánto material necesitás.</div>
-                        <div class="card-main-link">Abrir calculadores →</div>
-                    </div>
-                </a>
-                <a href="marketplace.html" class="card-main">
-                    <div class="card-main-img bg2">🏗</div>
-                    <div class="card-main-body">
-                        <div class="card-main-tag">Marketplace</div>
-                        <div class="card-main-titulo">Pedí cotización a corralones</div>
-                        <div class="card-main-desc">Cargá tu lista y recibí cotizaciones de corralones cercanos.</div>
-                        <div class="card-main-link">Pedir materiales →</div>
-                    </div>
-                </a>
-                <a href="revista.html" class="card-main">
-                    <div class="card-main-img bg3">📰</div>
-                    <div class="card-main-body">
-                        <div class="card-main-tag">Revista</div>
-                        <div class="card-main-titulo">Guías y consejos</div>
-                        <div class="card-main-desc">Artículos útiles con fotos y recomendaciones.</div>
-                        <div class="card-main-link">Leer artículos →</div>
-                    </div>
-                </a>
-            </div>
+  <div id="panel-durlock" class="panel">
+    <h2>Calculador de Durlock</h2>
+    <div class="field"><label>Tipo de trabajo</label>
+      <select id="d-tipo" onchange="calcDurlock()">
+        <option value="pared">Pared simple (1 placa por lado)</option>
+        <option value="cielorraso">Cielorraso</option>
+        <option value="doble">Pared doble (2 placas por lado)</option>
+      </select>
+    </div>
+    <div class="grid-2">
+      <div class="field"><label>Ancho (m)</label><input type="number" id="d-ancho" value="4" min="0.1" step="0.1" oninput="calcDurlock()"></div>
+      <div class="field"><label>Alto (m)</label><input type="number" id="d-alto" value="2.5" min="0.1" step="0.1" oninput="calcDurlock()"></div>
+    </div>
+    <div class="results" id="res-durlock"></div>
+    <p class="tip">Placa estándar 1.20 x 2.40 m. Se agrega 10% de desperdicio en todos los materiales.</p>
+    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+  </div>
 
-            <!-- CÓMO FUNCIONA -->
-            <div class="como-funciona">
-                <h2>¿Cómo funciona?</h2>
-                <div class="pasos">
-                    <div class="paso">
-                        <div class="paso-num">1</div>
-                        <div class="paso-titulo">Calculá</div>
-                        <div class="paso-desc">Usá los calculadores para saber exactamente cuánto material necesitás.</div>
-                    </div>
-                    <div class="paso">
-                        <div class="paso-num">2</div>
-                        <div class="paso-titulo">Pedí cotización</div>
-                        <div class="paso-desc">Cargá tu lista. Tu pedido llega a los corralones de tu zona.</div>
-                    </div>
-                    <div class="paso">
-                        <div class="paso-num">3</div>
-                        <div class="paso-titulo">Comparás</div>
-                        <div class="paso-desc">Recibís las cotizaciones y elegís la mejor opción.</div>
-                    </div>
-                    <div class="paso">
-                        <div class="paso-num">4</div>
-                        <div class="paso-titulo">Comprás</div>
-                        <div class="paso-desc">Confirmás y coordinás la entrega.</div>
-                    </div>
-                </div>
-            </div>
+  <div id="panel-pintura" class="panel">
+    <h2>Calculador de pintura</h2>
+    <div class="grid-2">
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="p-sup" value="30" min="1" oninput="calcPintura()"></div>
+      <div class="field"><label>Cantidad de manos</label>
+        <select id="p-manos" onchange="calcPintura()">
+          <option value="1">1 mano</option>
+          <option value="2" selected>2 manos</option>
+          <option value="3">3 manos</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Tipo de pintura</label>
+      <select id="p-tipo" onchange="calcPintura()">
+        <option value="10">Látex interior — 10 m²/litro</option>
+        <option value="8">Látex exterior — 8 m²/litro</option>
+        <option value="6">Impermeabilizante — 6 m²/litro</option>
+        <option value="12">Esmalte sintético — 12 m²/litro</option>
+      </select>
+    </div>
+    <div class="results" id="res-pintura"></div>
+    <p class="tip">Rendimiento por mano sobre superficie lisa. En superficies muy porosas puede consumir más.</p>
+    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+  </div>
 
-            <!-- CTA FINAL -->
-            <div class="cta-final">
-                <h2>¿Listo para empezar?</h2>
-                <p>Calculá tus materiales y pedí cotización. Es gratis y rápido.</p>
-                <div class="cta-btns">
-                    <a href="marketplace.html" class="btn-cta-w">Pedir materiales ahora →</a>
-                    <a href="index.html" class="btn-cta-o">Ver calculadores</a>
-                </div>
-            </div>
-        </div>
-    </main>
+  <div id="panel-ceramico" class="panel">
+    <h2>Calculador de cerámico / porcelanato</h2>
+    <div class="grid-2">
+      <div class="field"><label>Superficie a cubrir (m²)</label><input type="number" id="cer-sup" value="15" min="1" oninput="calcCeramico()"></div>
+      <div class="field"><label>Tamaño de la pieza</label>
+        <select id="cer-tam" onchange="calcCeramico()">
+          <option value="0.09">20x20 cm</option>
+          <option value="0.16">40x40 cm</option>
+          <option value="0.36" selected>60x60 cm</option>
+          <option value="0.64">80x80 cm</option>
+          <option value="1.00">100x100 cm</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Tipo de colocación</label>
+      <select id="cer-col" onchange="calcCeramico()">
+        <option value="0.10">Junta corrida — 10% desperdicio</option>
+        <option value="0.15">Diagonal — 15% desperdicio</option>
+        <option value="0.20">Espina de pescado — 20% desperdicio</option>
+      </select>
+    </div>
+    <div class="results" id="res-ceramico"></div>
+    <p class="tip">Adhesivo: 5 kg por m². Pastina: 0.5 kg por m². Desperdicio según tipo de colocación.</p>
+    <button class="btn-pedir" onclick="alert('Próximamente: pedido directo al corralón')">Pedir estos materiales al corralón →</button>
+  </div>
+</main>
 
-    <footer>
-        <p>© 2025 Materiales Ya</p>
-        <p style="margin-top:8px">
-            <a href="index.html">Calculadores</a>
-            <a href="marketplace.html">Marketplace</a>
-            <a href="revista.html">Revista</a>
-        </p>
-    </footer>
+<footer>Calculadores de construcción — próximamente conectado al marketplace de corralones</footer>
 
-    <script>
-        // Menú móvil
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
+<script>
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
 
-        if (menuToggle && navLinks) {
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                menuToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
-            });
-        }
+function renderResults(id, items) {
+  document.getElementById(id).innerHTML = items.map(i =>
+    `<div class="result-card"><div class="r-label">${i.label}</div><div class="r-value">${i.value}</div><div class="r-unit">${i.unit}</div></div>`
+  ).join('');
+}
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuToggle.textContent = '☰';
-            });
-        });
-    </script>
+function calcLadrillos() {
+  const ancho = parseFloat(document.getElementById('l-ancho').value) || 0;
+  const alto = parseFloat(document.getElementById('l-alto').value) || 0;
+  const aberturas = parseFloat(document.getElementById('l-aberturas').value) || 0;
+  const porM2 = parseFloat(document.getElementById('l-tipo').value);
+  const sup = Math.max(0, ancho * alto - aberturas);
+  const ladrillos = Math.ceil(sup * porM2 * 1.10);
+  const cemento = Math.ceil(sup * 0.15);
+  const arena = (sup * 0.03 * 1.10).toFixed(2);
+  renderResults('res-ladrillos', [
+    { label: 'Superficie neta', value: sup.toFixed(1), unit: 'm²' },
+    { label: 'Ladrillos', value: ladrillos.toLocaleString('es-AR'), unit: 'unidades' },
+    { label: 'Cemento', value: cemento, unit: 'bolsas 50 kg' },
+    { label: 'Arena', value: arena, unit: 'm³' },
+  ]);
+}
+
+function calcCemento() {
+  const sup = parseFloat(document.getElementById('c-sup').value) || 0;
+  const tipo = document.getElementById('c-tipo').value;
+  let bCemento, mArena, bCal = 0;
+  if (tipo === 'revoque')    { bCemento = Math.ceil(sup * 0.12 * 1.1); mArena = (sup * 0.025 * 1.1).toFixed(2); bCal = Math.ceil(sup * 0.05); }
+  if (tipo === 'contrapiso') { bCemento = Math.ceil(sup * 0.5 * 1.1);  mArena = (sup * 0.08 * 1.1).toFixed(2);  }
+  if (tipo === 'pegado')     { bCemento = Math.ceil(sup * 0.15 * 1.1); mArena = (sup * 0.03 * 1.1).toFixed(2);  bCal = Math.ceil(sup * 0.05); }
+  if (tipo === 'carpeta')    { bCemento = Math.ceil(sup * 0.25 * 1.1); mArena = (sup * 0.04 * 1.1).toFixed(2);  }
+  const items = [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Cemento', value: bCemento, unit: 'bolsas 50 kg' },
+    { label: 'Arena', value: mArena, unit: 'm³' },
+  ];
+  if (bCal) items.push({ label: 'Cal hidráulica', value: bCal, unit: 'bolsas 25 kg' });
+  renderResults('res-cemento', items);
+}
+
+function calcDurlock() {
+  const ancho = parseFloat(document.getElementById('d-ancho').value) || 0;
+  const alto = parseFloat(document.getElementById('d-alto').value) || 0;
+  const tipo = document.getElementById('d-tipo').value;
+  const sup = ancho * alto;
+  const placaM2 = 1.20 * 2.40;
+  const lados = tipo === 'cielorraso' ? 1 : (tipo === 'doble' ? 4 : 2);
+  const placas = Math.ceil((sup * lados / placaM2) * 1.10);
+  const perfiles = Math.ceil((ancho / 0.40) * alto * (tipo === 'doble' ? 2 : 1) * 1.10);
+  const tornillos = placas * 25;
+  const masilla = Math.ceil(sup * lados * 0.3);
+  renderResults('res-durlock', [
+    { label: 'Superficie', value: sup.toFixed(1), unit: 'm²' },
+    { label: 'Placas', value: placas, unit: 'unidades' },
+    { label: 'Perfiles', value: perfiles, unit: 'unidades' },
+    { label: 'Tornillos', value: tornillos.toLocaleString('es-AR'), unit: 'unidades' },
+    { label: 'Masilla', value: masilla, unit: 'kg' },
+  ]);
+}
+
+function calcPintura() {
+  const sup = parseFloat(document.getElementById('p-sup').value) || 0;
+  const manos = parseFloat(document.getElementById('p-manos').value);
+  const rend = parseFloat(document.getElementById('p-tipo').value);
+  const litros = Math.ceil((sup * manos / rend) * 1.10);
+  const latas20 = Math.floor(litros / 20);
+  const resto = litros - latas20 * 20;
+  const latas4 = Math.ceil(resto / 4);
+  renderResults('res-pintura', [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Litros totales', value: litros, unit: 'litros' },
+    { label: 'Latas x 20L', value: latas20, unit: 'unidades' },
+    { label: 'Latas x 4L', value: latas4, unit: 'unidades' },
+  ]);
+}
+
+function calcCeramico() {
+  const sup = parseFloat(document.getElementById('cer-sup').value) || 0;
+  const tamPieza = parseFloat(document.getElementById('cer-tam').value);
+  const desp = parseFloat(document.getElementById('cer-col').value);
+  const supTotal = sup * (1 + desp);
+  const piezas = Math.ceil(supTotal / tamPieza);
+  const adhesivo = Math.ceil(sup * 5);
+  const pastina = Math.ceil(sup * 0.5);
+  renderResults('res-ceramico', [
+    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
+    { label: 'Piezas', value: piezas.toLocaleString('es-AR'), unit: 'unidades' },
+    { label: 'Adhesivo', value: adhesivo, unit: 'kg' },
+    { label: 'Pastina', value: pastina, unit: 'kg' },
+  ]);
+}
+
+calcLadrillos();
+calcCemento();
+calcDurlock();
+calcPintura();
+calcCeramico();
+</script>
 </body>
 </html>
