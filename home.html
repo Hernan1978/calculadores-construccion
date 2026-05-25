@@ -1,100 +1,241 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Calculadoras de Construcción</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materiales Ya — Todo para tu obra</title>
+<meta name="description" content="Calculá materiales, pedí cotización a corralones de tu zona y leé guías de construcción. Todo en un solo lugar.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+
+  /* NAV */
+  nav { background: #1a1a1a; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
+  nav .logo span { color: #aaa; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
+  .nav-links { display: flex; gap: 8px; }
+  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #444; color: #ccc; font-size: 12px; text-decoration: none; transition: all .15s; }
+  .nav-link:hover { background: #fff; color: #1a1a1a; border-color: #fff; }
+  @media(max-width:520px) { .nav-links { display: none; } }
+
+  /* HERO */
+  .hero { background: #1a1a1a; color: #fff; padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 50%, #2a2a2a 0%, #1a1a1a 70%); }
+  .hero-content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+  .hero-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; border: 1px solid #444; color: #aaa; font-size: 12px; margin-bottom: 1.5rem; }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 span { color: #aaa; }
+  .hero p { font-size: 1.05rem; color: #aaa; margin-bottom: 2rem; line-height: 1.6; }
+  .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-hero-primary { padding: 13px 28px; border-radius: 8px; background: #fff; color: #1a1a1a; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity .15s; }
+  .btn-hero-primary:hover { opacity: .9; }
+  .btn-hero-secondary { padding: 13px 28px; border-radius: 8px; border: 1px solid #444; color: #ccc; font-size: 14px; text-decoration: none; transition: all .15s; }
+  .btn-hero-secondary:hover { border-color: #fff; color: #fff; }
+
+  /* STATS */
+  .stats { background: #fff; border-bottom: 1px solid #e0e0d8; padding: 1.5rem 2rem; }
+  .stats-inner { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; text-align: center; }
+  .stat-value { font-size: 1.8rem; font-weight: 700; color: #1a1a1a; }
+  .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+
+  /* SECCIONES */
+  main { max-width: 960px; margin: 3rem auto; padding: 0 1rem; }
+  .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; }
+  .section-sub { font-size: 14px; color: #666; margin-bottom: 2rem; }
+
+  /* CARDS PRINCIPALES */
+  .cards-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+  .card-main { background: #fff; border-radius: 16px; border: 1px solid #e0e0d8; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; }
+  .card-main:hover { box-shadow: 0 8px 30px rgba(0,0,0,.08); transform: translateY(-3px); }
+  .card-main-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+  .card-main-img.bg1 { background: linear-gradient(135deg, #1a1a1a, #333); }
+  .card-main-img.bg2 { background: linear-gradient(135deg, #2d4a1a, #3d6a25); }
+  .card-main-img.bg3 { background: linear-gradient(135deg, #1a2d4a, #253d6a); }
+  .card-main-body { padding: 1.5rem; }
+  .card-main-tag { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .card-main-titulo { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .card-main-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
+  .card-main-link { font-size: 13px; font-weight: 600; color: #1a1a1a; display: flex; align-items: center; gap: 4px; }
+
+  /* CÓMO FUNCIONA */
+  .como-funciona { background: #fff; border-radius: 16px; border: 1px solid #e0e0d8; padding: 2rem; margin-bottom: 4rem; }
+  .como-funciona h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+  .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+  .paso { text-align: center; }
+  .paso-num { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+  .paso-titulo { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .paso-desc { font-size: 12px; color: #888; line-height: 1.5; }
+
+  /* ARTÍCULOS RECIENTES */
+  .articulos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 4rem; }
+  .art-card { background: #fff; border-radius: 10px; border: 1px solid #e0e0d8; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow .2s; }
+  .art-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+  .art-card-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: #f5f5f0; overflow: hidden; }
+  .art-card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .art-card-body { padding: .875rem; }
+  .art-card-cat { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+  .art-card-titulo { font-size: 13px; font-weight: 600; line-height: 1.3; }
+
+  /* CTA FINAL */
+  .cta-final { background: #1a1a1a; color: #fff; border-radius: 16px; padding: 3rem 2rem; text-align: center; margin-bottom: 3rem; }
+  .cta-final h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: .75rem; }
+  .cta-final p { font-size: 14px; color: #aaa; margin-bottom: 1.5rem; }
+  .cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-cta-w { padding: 12px 24px; border-radius: 8px; background: #fff; color: #1a1a1a; font-size: 14px; font-weight: 600; text-decoration: none; }
+  .btn-cta-o { padding: 12px 24px; border-radius: 8px; border: 1px solid #444; color: #ccc; font-size: 14px; text-decoration: none; }
+  .btn-cta-o:hover { border-color: #fff; color: #fff; }
+
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
+  footer a { color: #888; text-decoration: none; margin: 0 8px; }
+  footer a:hover { color: #1a1a1a; }
+</style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <a href="index.html" class="logo">Calculadoras<span>Construcción</span></a>
-        
-        <nav class="nav-links" id="navLinks">
-            <a href="index.html" class="hbtn">Inicio</a>
-            <a href="home.html" class="hbtn active">Home</a>
-            <a href="revista.html" class="hbtn">Revista</a>
-            <a href="marketplace.html" class="hbtn">Marketplace</a>
-        </nav>
-        
-        <button class="menu-toggle" id="menuToggle">☰</button>
-    </header>
+<nav>
+  <a href="home.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Calculadores</a>
+    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
+    <a href="revista.html" class="nav-link">Revista</a>
+  </div>
+</nav>
 
-    <!-- HERO -->
-    <section class="hero">
-        <h2>Calculadoras de Construcción</h2>
-        <p>La herramienta más práctica para calcular materiales de obra de forma rápida y precisa.</p>
-        <a href="index.html" class="btn-leer" style="font-size: 1.15rem; padding: 16px 36px; margin-top: 20px;">
-            Empezar a Calcular Ahora →
-        </a>
-    </section>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🏗 Plataforma de materiales de construcción</div>
+    <h1>Todo para tu obra<br><span>en un solo lugar</span></h1>
+    <p>Calculá los materiales que necesitás, pedí cotización a corralones de tu zona y aprendé con guías y fotos.</p>
+    <div class="hero-btns">
+      <a href="marketplace.html" class="btn-hero-primary">Pedir materiales →</a>
+      <a href="index.html" class="btn-hero-secondary">Ver calculadores</a>
+    </div>
+  </div>
+</div>
 
-    <main>
-        <div style="max-width: 1100px; margin: 3rem auto; padding: 0 5%;">
-            <h2 style="text-align:center; margin-bottom: 2.5rem; color: var(--primary);">¿Qué podés hacer en esta web?</h2>
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div><div class="stat-value">24</div><div class="stat-label">Calculadores</div></div>
+    <div><div class="stat-value">120+</div><div class="stat-label">Materiales en catálogo</div></div>
+    <div><div class="stat-value">6</div><div class="stat-label">Artículos publicados</div></div>
+    <div><div class="stat-value">100%</div><div class="stat-label">Gratis para clientes</div></div>
+  </div>
+</div>
 
-            <div class="grid-articulos">
-                <!-- Card 1 -->
-                <div class="articulo">
-                    <div class="art-img" style="background:#dbeafe; font-size: 4rem; display:flex; align-items:center; justify-content:center;">📐</div>
-                    <div class="art-body">
-                        <div class="art-cat">CALCULADORAS</div>
-                        <div class="art-titulo">Calculá materiales exactos</div>
-                        <div class="art-desc">Hormigón, ladrillos, hierros, pintura, durlock, instalaciones y más.</div>
-                        <a href="index.html" class="btn-leer">Ir a las Calculadoras</a>
-                    </div>
-                </div>
+<main>
 
-                <!-- Card 2 -->
-                <div class="articulo">
-                    <div class="art-img" style="background:#fef3c7; font-size: 4rem; display:flex; align-items:center; justify-content:center;">📰</div>
-                    <div class="art-body">
-                        <div class="art-cat">REVISTA</div>
-                        <div class="art-titulo">Consejos y guías útiles</div>
-                        <div class="art-desc">Artículos técnicos, trucos y recomendaciones para tu obra.</div>
-                        <a href="revista.html" class="btn-leer">Ir a la Revista</a>
-                    </div>
-                </div>
+  <!-- TRES SECCIONES -->
+  <div style="margin-bottom:1rem">
+    <div class="section-title">¿Qué podés hacer acá?</div>
+    <div class="section-sub">Tres herramientas pensadas para facilitar tu obra</div>
+  </div>
 
-                <!-- Card 3 -->
-                <div class="articulo">
-                    <div class="art-img" style="background:#ecfdf5; font-size: 4rem; display:flex; align-items:center; justify-content:center;">🛒</div>
-                    <div class="art-body">
-                        <div class="art-cat">MARKETPLACE</div>
-                        <div class="art-titulo">Pedí materiales</div>
-                        <div class="art-desc">Conecta tus cálculos directamente con corralones.</div>
-                        <a href="marketplace.html" class="btn-leer">Ir al Marketplace</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+  <div class="cards-main">
+    <a href="index.html" class="card-main">
+      <div class="card-main-img bg1">🧮</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Herramienta</div>
+        <div class="card-main-titulo">Calculadores de materiales</div>
+        <div class="card-main-desc">24 calculadores para saber exactamente cuánto material necesitás: ladrillos, cemento, hormigón, hierros, Durlock, pintura y más.</div>
+        <div class="card-main-link">Abrir calculadores →</div>
+      </div>
+    </a>
+    <a href="marketplace.html" class="card-main">
+      <div class="card-main-img bg2">🏗</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Marketplace</div>
+        <div class="card-main-titulo">Pedí cotización a corralones</div>
+        <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
+        <div class="card-main-link">Pedir materiales →</div>
+      </div>
+    </a>
+    <a href="revista.html" class="card-main">
+      <div class="card-main-img bg3">📰</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Revista</div>
+        <div class="card-main-titulo">Guías y fotos de materiales</div>
+        <div class="card-main-desc">Artículos con fotos explicando cómo usar cada material, diferencias entre productos y consejos para no gastar de más.</div>
+        <div class="card-main-link">Leer artículos →</div>
+      </div>
+    </a>
+  </div>
 
-    <footer>
-        Calculadores de construcción — próximamente conectado al marketplace de corralones
-    </footer>
+  <!-- CÓMO FUNCIONA -->
+  <div class="como-funciona">
+    <h2>¿Cómo funciona?</h2>
+    <div class="pasos">
+      <div class="paso">
+        <div class="paso-num">1</div>
+        <div class="paso-titulo">Calculá</div>
+        <div class="paso-desc">Usá los calculadores para saber exactamente cuánto material necesitás sin desperdiciar.</div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">2</div>
+        <div class="paso-titulo">Pedí cotización</div>
+        <div class="paso-desc">Cargá tu lista de materiales. Tu pedido llega a los corralones de tu zona.</div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">3</div>
+        <div class="paso-titulo">Comparás</div>
+        <div class="paso-desc">Recibís las cotizaciones por WhatsApp y elegís el corralón que más te conviene.</div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">4</div>
+        <div class="paso-titulo">Comprás</div>
+        <div class="paso-desc">Confirmás con el corralón elegido y coordinás entrega o retiro. Sin complicaciones.</div>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        // Menú móvil
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
+  <!-- ARTÍCULOS RECIENTES -->
+  <div style="margin-bottom:1rem">
+    <div class="section-title">Últimos artículos</div>
+    <div class="section-sub">Guías y consejos para tu obra</div>
+  </div>
+  <div class="articulos-grid">
+    <a href="revista.html" class="art-card">
+      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Ladrillos" onerror="this.parentElement.innerHTML='🧱'"></div>
+      <div class="art-card-body"><div class="art-card-cat">Obra Gruesa</div><div class="art-card-titulo">Ladrillos: tipos y cuándo usar cada uno</div></div>
+    </a>
+    <a href="revista.html" class="art-card">
+      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80" alt="Cemento" onerror="this.parentElement.innerHTML='🏗'"></div>
+      <div class="art-card-body"><div class="art-card-cat">Obra Gruesa</div><div class="art-card-titulo">Cemento: diferencias entre Portland, albañilería y premezclado</div></div>
+    </a>
+    <a href="revista.html" class="art-card">
+      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=400&q=80" alt="Membrana" onerror="this.parentElement.innerHTML='🎨'"></div>
+      <div class="art-card-body"><div class="art-card-cat">Obra Fina</div><div class="art-card-titulo">Membrana asfáltica: cómo colocarla correctamente</div></div>
+    </a>
+    <a href="revista.html" class="art-card">
+      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1533158326339-7f3cf2404354?w=400&q=80" alt="Consejos" onerror="this.parentElement.innerHTML='💡'"></div>
+      <div class="art-card-body"><div class="art-card-cat">Consejos</div><div class="art-card-titulo">10 errores comunes al comprar materiales de construcción</div></div>
+    </a>
+  </div>
+  <div style="text-align:center;margin-bottom:4rem">
+    <a href="revista.html" style="padding:10px 24px;border-radius:8px;border:1px solid #ddd;background:#fff;color:#555;font-size:14px;text-decoration:none;">Ver todos los artículos →</a>
+  </div>
 
-        if (menuToggle && navLinks) {
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                menuToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
-            });
-        }
+  <!-- CTA FINAL -->
+  <div class="cta-final">
+    <h2>¿Listo para empezar?</h2>
+    <p>Calculá tus materiales y pedí cotización a los corralones de tu zona. Es gratis.</p>
+    <div class="cta-btns">
+      <a href="marketplace.html" class="btn-cta-w">Pedir materiales ahora →</a>
+      <a href="index.html" class="btn-cta-o">Ver calculadores</a>
+    </div>
+  </div>
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuToggle.textContent = '☰';
-            });
-        });
-    </script>
+</main>
+
+<footer>
+  <p>© 2025 Materiales Ya</p>
+  <p style="margin-top:8px">
+    <a href="index.html">Calculadores</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="revista.html">Revista</a>
+  </p>
+</footer>
 
 </body>
 </html>
