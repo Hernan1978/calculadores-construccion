@@ -5,67 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadores de materiales — Materiales Ya</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+  :root {
+    --azul-oscuro:  #1a2744;
+    --azul-medio:   #1e3a6e;
+    --azul-claro:   #1a4a8a;
+    --azul-accent:  #90afd4;
+    --azul-borde:   #2e5a9a;
+    --azul-texto:   #b0c8e8;
+    --bg:           #eef2f7;
+    --bg-card:      #fff;
+    --bg-result:    #dce8f5;
+    --borde-card:   #d0dcea;
+    --texto-muted:  #6a85a8;
+  }
 
-  header { background: #1a1a1a; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--azul-oscuro); min-height: 100vh; }
+
+  header { background: var(--azul-oscuro); color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 1.3rem; font-weight: 600; }
-  header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
-  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #555; color: #ccc; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
-  .hbtn:hover { background: #fff; color: #1a1a1a; border-color: #fff; }
+  header p { font-size: 0.8rem; color: var(--azul-accent); margin-top: 2px; }
+  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid var(--azul-borde); color: var(--azul-accent); font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
+  .hbtn:hover { background: #fff; color: var(--azul-oscuro); border-color: #fff; }
 
   main { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
 
   /* CATEGORÍAS NIVEL 1 */
   .fase-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
-  .fase-tab { padding: 7px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .15s; white-space: nowrap; }
-  .fase-tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-  .fase-tab:hover:not(.active) { background: #f0f0ea; border-color: #bbb; }
+  .fase-tab { padding: 7px 14px; border-radius: 20px; border: 1px solid var(--borde-card); background: var(--bg-card); color: #4a6080; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .fase-tab.active { background: var(--azul-oscuro); color: #fff; border-color: var(--azul-oscuro); }
+  .fase-tab:hover:not(.active) { background: #dce8f5; border-color: var(--azul-accent); }
 
-  /* TABS DE CALCULADORES DENTRO DE CADA FASE */
-  .calc-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e8e8e0; }
-  .calc-tab { padding: 6px 14px; border-radius: 7px; border: 1px solid #e0e0d8; background: #fafaf7; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
-  .calc-tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; font-weight: 500; }
-  .calc-tab:hover:not(.active) { background: #f0f0ea; }
+  /* TABS DE CALCULADORES */
+  .calc-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--borde-card); }
+  .calc-tab { padding: 6px 14px; border-radius: 7px; border: 1px solid var(--borde-card); background: #f0f5fb; color: #4a6080; font-size: 12px; cursor: pointer; transition: all .15s; }
+  .calc-tab.active { background: var(--azul-medio); color: #fff; border-color: var(--azul-medio); font-weight: 500; }
+  .calc-tab:hover:not(.active) { background: #dce8f5; border-color: var(--azul-accent); }
 
-  .fase-panel { display: none; background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; }
+  .fase-panel { display: none; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--borde-card); padding: 1.5rem; }
   .fase-panel.active { display: block; }
-  .fase-panel > h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: #1a1a1a; }
+  .fase-panel > h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--azul-oscuro); }
 
   .calc-panel { display: none; }
   .calc-panel.active { display: block; }
-  .calc-panel h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; color: #444; }
+  .calc-panel h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; color: var(--azul-medio); }
 
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   @media(max-width:520px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
 
   .field { margin-bottom: 1rem; }
-  .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+  .field label { display: block; font-size: 12px; color: var(--texto-muted); margin-bottom: 5px; font-weight: 500; }
   .field input, .field select {
-    width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px;
-    font-size: 14px; color: #1a1a1a; background: #fafafa; outline: none; transition: border .15s;
+    width: 100%; padding: 9px 12px; border: 1px solid var(--borde-card); border-radius: 8px;
+    font-size: 14px; color: var(--azul-oscuro); background: #f8fafd; outline: none; transition: border .15s;
   }
-  .field input:focus, .field select:focus { border-color: #1a1a1a; background: #fff; }
+  .field input:focus, .field select:focus { border-color: var(--azul-claro); background: #fff; }
 
   .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 1.25rem; }
-  .result-card { background: #f5f5f0; border-radius: 8px; padding: 12px 14px; }
-  .result-card .r-label { font-size: 11px; color: #888; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
-  .result-card .r-value { font-size: 22px; font-weight: 700; color: #1a1a1a; line-height: 1.1; }
-  .result-card .r-unit { font-size: 11px; color: #888; margin-top: 2px; }
+  .result-card { background: var(--bg-result); border-radius: 8px; padding: 12px 14px; border: 1px solid #b8d0ea; }
+  .result-card .r-label { font-size: 11px; color: var(--texto-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+  .result-card .r-value { font-size: 22px; font-weight: 700; color: var(--azul-oscuro); line-height: 1.1; }
+  .result-card .r-unit { font-size: 11px; color: var(--texto-muted); margin-top: 2px; }
 
-  .tip { font-size: 12px; color: #888; margin-top: 1rem; background: #f9f9f5; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #ddd; line-height: 1.5; }
+  .tip { font-size: 12px; color: var(--texto-muted); margin-top: 1rem; background: #edf3fb; border-radius: 8px; padding: 8px 12px; border-left: 3px solid var(--azul-accent); line-height: 1.5; }
 
   .btn-pedir {
-    margin-top: 1.25rem; width: 100%; padding: 12px; border-radius: 8px;
-    border: 1px solid #1a1a1a; background: #1a1a1a; color: #fff;
-    font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s;
+    margin-top: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 12px; border-radius: 8px; text-decoration: none;
+    border: none; background: #25d366; color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .15s;
   }
-  .btn-pedir:hover { opacity: .85; }
+  .btn-pedir:hover { opacity: .88; }
 
-  .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.25rem 0; }
+  .divider { border: none; border-top: 1px solid #dce8f5; margin: 1.25rem 0; }
 
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--texto-muted); }
 </style>
 </head>
 <body>
