@@ -985,7 +985,36 @@ function pedirMateriales(btn) {
   sessionStorage.setItem('pedido_precargado', JSON.stringify(items));
   window.location.href = 'marketplace.html';
 }
+    <!-- Aquí va todo tu contenido (main, footer, etc.) -->
 
+    <script>
+        // Menú móvil
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                
+                if (navLinks.classList.contains('active')) {
+                    menuToggle.textContent = '✕';
+                } else {
+                    menuToggle.textContent = '☰';
+                }
+            });
+        }
+
+        // Cerrar menú al hacer clic en un enlace
+        const links = document.querySelectorAll('.nav-links a');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            });
+        });
+    </script>
+</body>
+</html>
 </script>
 </body>
 </html>
