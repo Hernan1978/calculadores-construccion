@@ -1,165 +1,430 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revista - Calculadoras Construcción</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revista de Construcción — Materiales Ya</title>
+<meta name="description" content="Guías, fotos y consejos sobre materiales de construcción. Aprendé cómo usar cada material y pedí cotización en tu corralón más cercano.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; }
+
+  header { background: #1a1a1a; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  header h1 { font-size: 1.3rem; font-weight: 600; }
+  header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
+  .nav-links { display: flex; gap: 8px; }
+  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #555; color: #ccc; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
+  .hbtn:hover { background: #fff; color: #1a1a1a; border-color: #fff; }
+
+  /* HERO */
+  .hero { background: #1a1a1a; color: #fff; padding: 3rem 2rem; text-align: center; }
+  .hero h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: .75rem; }
+  .hero p { font-size: 1rem; color: #aaa; max-width: 500px; margin: 0 auto 1.5rem; }
+
+  /* FILTROS */
+  main { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+  .filtros { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2rem; }
+  .filtro { padding: 7px 16px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 13px; color: #555; cursor: pointer; transition: all .15s; }
+  .filtro.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .filtro:hover:not(.active) { background: #f0f0ea; }
+
+  /* GRID ARTÍCULOS */
+  .grid-articulos { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+
+  /* CARD ARTÍCULO */
+  .articulo { background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; overflow: hidden; transition: box-shadow .2s, transform .2s; cursor: pointer; }
+  .articulo:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); transform: translateY(-2px); }
+  .art-img { width: 100%; height: 180px; object-fit: cover; background: #e8e8e0; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+  .art-img img { width: 100%; height: 100%; object-fit: cover; }
+  .art-body { padding: 1rem; }
+  .art-cat { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .art-titulo { font-size: 1rem; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+  .art-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
+  .art-footer { display: flex; justify-content: space-between; align-items: center; }
+  .art-tag { font-size: 11px; color: #888; }
+  .btn-leer { padding: 6px 14px; border-radius: 6px; border: 1px solid #1a1a1a; background: transparent; color: #1a1a1a; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .15s; text-decoration: none; }
+  .btn-leer:hover { background: #1a1a1a; color: #fff; }
+
+  /* MODAL ARTÍCULO */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 100; overflow-y: auto; padding: 2rem 1rem; }
+  .modal-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
+  .modal { background: #fff; border-radius: 16px; max-width: 680px; width: 100%; padding: 2rem; position: relative; margin: auto; }
+  .modal-close { position: absolute; top: 1rem; right: 1rem; background: #f5f5f0; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 18px; cursor: pointer; color: #666; display: flex; align-items: center; justify-content: center; }
+  .modal-close:hover { background: #e0e0d8; }
+  .modal-img { width: 100%; height: 240px; object-fit: cover; border-radius: 10px; margin-bottom: 1.5rem; background: #e8e8e0; display: flex; align-items: center; justify-content: center; font-size: 4rem; overflow: hidden; }
+  .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-cat { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .modal h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; line-height: 1.3; }
+  .modal-body { font-size: 14px; color: #444; line-height: 1.8; }
+  .modal-body h3 { font-size: 1rem; font-weight: 600; margin: 1.2rem 0 .5rem; color: #1a1a1a; }
+  .modal-body ul { padding-left: 1.2rem; margin: .5rem 0; }
+  .modal-body li { margin-bottom: 4px; }
+  .modal-body p { margin-bottom: .75rem; }
+  .modal-cta { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #f0f0ea; display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-pedir-modal { flex: 1; padding: 11px; border-radius: 8px; background: #1a1a1a; color: #fff; border: none; font-size: 14px; font-weight: 500; cursor: pointer; text-align: center; text-decoration: none; display: block; }
+  .btn-calc-modal { flex: 1; padding: 11px; border-radius: 8px; background: #fff; color: #1a1a1a; border: 1px solid #ddd; font-size: 14px; cursor: pointer; text-align: center; text-decoration: none; display: block; }
+
+  /* AGREGAR ARTÍCULO (admin) */
+  .btn-nuevo-art { position: fixed; bottom: 2rem; right: 2rem; background: #1a1a1a; color: #fff; border: none; border-radius: 50%; width: 52px; height: 52px; font-size: 24px; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,.2); z-index: 50; transition: transform .2s; }
+  .btn-nuevo-art:hover { transform: scale(1.1); }
+
+  /* FORM NUEVO ARTÍCULO */
+  .form-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; overflow-y: auto; padding: 2rem 1rem; }
+  .form-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
+  .form-card { background: #fff; border-radius: 16px; max-width: 600px; width: 100%; padding: 2rem; margin: auto; }
+  .form-card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+  .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; color: #1a1a1a; background: #fafafa; outline: none; resize: vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a1a1a; background: #fff; }
+  .form-btns { display: flex; gap: 8px; margin-top: 1rem; }
+  .btn-guardar { flex: 1; padding: 11px; border-radius: 8px; background: #1a1a1a; color: #fff; border: none; font-size: 14px; font-weight: 500; cursor: pointer; }
+  .btn-cancelar { flex: 1; padding: 11px; border-radius: 8px; background: #fff; color: #555; border: 1px solid #ddd; font-size: 14px; cursor: pointer; }
+
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; margin-top: 3rem; }
+</style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <a href="index.html" class="logo">Calculadoras<span>Construcción</span></a>
-        
-        <nav class="nav-links" id="navLinks">
-            <a href="index.html" class="hbtn">Inicio</a>
-            <a href="home.html" class="hbtn">Home</a>
-            <a href="revista.html" class="hbtn active">Revista</a>
-            <a href="marketplace.html" class="hbtn">Marketplace</a>
-        </nav>
-        
-        <button class="menu-toggle" id="menuToggle">☰</button>
-    </header>
+<header>
+  <div>
+    <h1>📰 Revista de Construcción</h1>
+    <p>Guías, fotos y consejos sobre materiales</p>
+  </div>
+  <div class="nav-links">
+    <a href="index.html" class="hbtn">Calculadores</a>
+    <a href="marketplace.html" class="hbtn">Pedir materiales</a>
+  </div>
+</header>
 
-    <!-- HERO REVISTA -->
-    <section class="hero">
-        <h2>Revista de Construcción</h2>
-        <p>Artículos, guías y consejos útiles para profesionales y aficionados de la construcción.</p>
-    </section>
+<main>
+  <div class="filtros" id="filtros">
+    <button class="filtro active" onclick="filtrar('todos', this)">Todos</button>
+    <button class="filtro" onclick="filtrar('Obra Gruesa', this)">🏗 Obra Gruesa</button>
+    <button class="filtro" onclick="filtrar('Obra Fina', this)">🔧 Obra Fina</button>
+    <button class="filtro" onclick="filtrar('Ferretería', this)">🔩 Ferretería</button>
+    <button class="filtro" onclick="filtrar('Consejos', this)">💡 Consejos</button>
+  </div>
 
-    <main>
-        <!-- FILTROS -->
-        <div class="filtros" id="filtros">
-            <div class="filtro active" data-categoria="todos">Todos</div>
-            <div class="filtro" data-categoria="construccion">Construcción</div>
-            <div class="filtro" data-categoria="materiales">Materiales</div>
-            <div class="filtro" data-categoria="legal">Aspectos Legales</div>
-            <div class="filtro" data-categoria="consejos">Consejos Prácticos</div>
-        </div>
+  <div class="grid-articulos" id="grid-articulos"></div>
+</main>
 
-        <!-- GRID DE ARTÍCULOS -->
-        <div class="grid-articulos" id="articulosGrid">
-            <!-- Los artículos se generan con JavaScript -->
-        </div>
-    </main>
-
-    <!-- MODAL -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal">
-            <button class="modal-close" id="modalClose">✕</button>
-            <img id="modalImg" class="modal-img" src="" alt="">
-            <div class="modal-cat" id="modalCat"></div>
-            <h2 id="modalTitulo"></h2>
-            <div class="modal-body" id="modalBody"></div>
-        </div>
+<!-- MODAL LECTURA -->
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarModal(event)">
+  <div class="modal" id="modal-content">
+    <button class="modal-close" onclick="cerrarModalBtn()">×</button>
+    <div class="modal-img" id="modal-img"></div>
+    <div class="modal-cat" id="modal-cat"></div>
+    <h2 id="modal-titulo"></h2>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-cta">
+      <a href="marketplace.html" class="btn-pedir-modal">Pedir estos materiales →</a>
+      <a href="index.html" class="btn-calc-modal">Ir a los calculadores</a>
     </div>
+  </div>
+</div>
 
-    <footer>
-        <p>&copy; 2026 CalculadorasConstrucción - Todos los derechos reservados</p>
-    </footer>
+<!-- BOTÓN AGREGAR (admin) -->
+<button class="btn-nuevo-art" onclick="abrirFormNuevo()" title="Agregar artículo">+</button>
 
-    <script>
-        // Datos de ejemplo de artículos
-        const articulos = [
-            {
-                id: 1,
-                titulo: "Cómo calcular correctamente el hormigón para una losa",
-                categoria: "construccion",
-                descripcion: "Guía completa con fórmulas actualizadas y ejemplos prácticos para evitar errores comunes.",
-                imagen: "https://picsum.photos/id/1015/600/400",
-                contenido: "El cálculo del hormigón es una de las partes más importantes en cualquier obra. En este artículo te explicamos paso a paso cómo hacerlo correctamente..."
-            },
-            {
-                id: 2,
-                titulo: "Los mejores materiales para impermeabilización 2026",
-                categoria: "materiales",
-                descripcion: "Análisis comparativo de las membranas, pinturas y aditivos más efectivos del mercado.",
-                imagen: "https://picsum.photos/id/201/600/400",
-                contenido: "La impermeabilización es clave para la durabilidad de cualquier construcción..."
-            },
-            {
-                id: 3,
-                titulo: "Guía de trámites municipales para construir una casa",
-                categoria: "legal",
-                descripcion: "Todo lo que necesitás saber sobre permisos, planos y aprobaciones.",
-                imagen: "https://picsum.photos/id/237/600/400",
-                contenido: "Construir sin los permisos correctos puede traerte muchos problemas..."
-            },
-            {
-                id: 4,
-                titulo: "10 consejos para ahorrar dinero en una obra",
-                categoria: "consejos",
-                descripcion: "Estrategias probadas para reducir costos sin comprometer la calidad.",
-                imagen: "https://picsum.photos/id/180/600/400",
-                contenido: "El control de gastos es fundamental en cualquier proyecto de construcción..."
-            },
-            {
-                id: 5,
-                titulo: "Cómo elegir la mejor arena para construcción",
-                categoria: "materiales",
-                descripcion: "Diferencias entre arena gruesa, fina y lavada. Cuál usar según el tipo de obra.",
-                imagen: "https://picsum.photos/id/133/600/400",
-                contenido: "La calidad de la arena influye directamente en la resistencia del hormigón..."
-            }
-        ];
+<!-- FORM NUEVO ARTÍCULO -->
+<div class="form-overlay" id="form-overlay">
+  <div class="form-card">
+    <h2>➕ Nuevo artículo</h2>
+    <div class="field"><label>Título</label><input type="text" id="f-titulo" placeholder="Ej: Cómo usar la membrana asfáltica"></div>
+    <div class="field"><label>Categoría</label>
+      <select id="f-cat">
+        <option>Obra Gruesa</option>
+        <option>Obra Fina</option>
+        <option>Ferretería</option>
+        <option>Consejos</option>
+      </select>
+    </div>
+    <div class="field"><label>Descripción corta (se ve en la tarjeta)</label>
+      <textarea id="f-desc" rows="2" placeholder="Breve descripción del artículo..."></textarea>
+    </div>
+    <div class="field"><label>Contenido completo</label>
+      <textarea id="f-contenido" rows="6" placeholder="Escribí el artículo acá. Podés usar saltos de línea para separar párrafos."></textarea>
+    </div>
+    <div class="field"><label>URL de la foto (opcional)</label>
+      <input type="text" id="f-foto" placeholder="https://... o dejá vacío para usar emoji">
+    </div>
+    <div class="field"><label>Emoji (si no tenés foto)</label>
+      <input type="text" id="f-emoji" placeholder="🧱" value="🏗">
+    </div>
+    <div class="field"><label>Tags (separados por coma)</label>
+      <input type="text" id="f-tags" placeholder="cemento, revoque, humedad">
+    </div>
+    <div class="form-btns">
+      <button class="btn-guardar" onclick="guardarArticulo()">Guardar artículo</button>
+      <button class="btn-cancelar" onclick="cerrarForm()">Cancelar</button>
+    </div>
+  </div>
+</div>
 
-        // Función para renderizar artículos
-        function renderArticulos(filtro = "todos") {
-            const grid = document.getElementById('articulosGrid');
-            grid.innerHTML = '';
+<footer>Materiales Ya — Revista de Construcción</footer>
 
-            const filtrados = filtro === "todos" 
-                ? articulos 
-                : articulos.filter(a => a.categoria === filtro);
+<script>
+// ── Artículos de ejemplo (se agregan los nuevos acá) ──
+let articulos = [
+  {
+    id: 1, cat: 'Obra Gruesa', emoji: '🧱',
+    foto: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+    titulo: 'Ladrillos: tipos y cuándo usar cada uno',
+    desc: 'No todos los ladrillos son iguales. Conocé las diferencias entre ladrillo común, hueco y portante para elegir el correcto.',
+    tags: 'ladrillos, mampostería, estructura',
+    contenido: `
+      <p>Elegir el ladrillo correcto puede hacer la diferencia entre una pared que dura décadas y una que da problemas. Acá te explicamos los tipos más comunes.</p>
+      <h3>Ladrillo común</h3>
+      <p>Es el ladrillo macizo de toda la vida. Se usa principalmente en fundaciones, zócalos y donde se necesita resistencia al peso. No es ideal para paredes interiores porque es más pesado y difícil de trabajar.</p>
+      <h3>Ladrillo hueco</h3>
+      <p>El más usado en construcción residencial. Tiene perforaciones que lo hacen más liviano y con mejor aislación térmica. El de 8cm se usa para tabiques y divisiones internas. El de 12cm y 18cm para paredes exteriores.</p>
+      <h3>Ladrillo portante</h3>
+      <p>Diseñado para soportar cargas estructurales. Se usa cuando la pared necesita reemplazar o complementar columnas y vigas. Más resistente que el hueco pero también más caro.</p>
+      <h3>¿Cuántos necesito?</h3>
+      <ul>
+        <li>Ladrillo común: ~60 unidades por m²</li>
+        <li>Ladrillo hueco 8cm: ~45 unidades por m²</li>
+        <li>Ladrillo hueco 12cm: ~16 unidades por m²</li>
+        <li>Ladrillo portante 18cm: ~12 unidades por m²</li>
+      </ul>
+      <p>Siempre comprá un 10% más para cubrir roturas y desperdicios.</p>
+    `
+  },
+  {
+    id: 2, cat: 'Obra Gruesa', emoji: '🏗',
+    foto: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80',
+    titulo: 'Cemento: diferencias entre Portland, albañilería y premezclado',
+    desc: 'Tres tipos de cemento, tres usos distintos. Entendé cuál necesitás antes de ir al corralón.',
+    tags: 'cemento, aglomerantes, mezcla',
+    contenido: `
+      <p>El cemento es el aglomerante más usado en construcción, pero no todos sirven para lo mismo.</p>
+      <h3>Cemento Portland</h3>
+      <p>El más resistente. Se usa en hormigón estructural, contrapisos, columnas y vigas. Se mezcla con arena y piedra en proporciones específicas. Bolsas de 50 kg.</p>
+      <h3>Cemento de albañilería</h3>
+      <p>Ya viene con cal incorporada. Ideal para juntas de ladrillos, revoques exteriores y trabajos generales. Más fácil de trabajar que el Portland puro. Bolsas de 40 kg.</p>
+      <h3>Hormigón o mortero premezclado</h3>
+      <p>Solo hay que agregar agua. Perfecto para reparaciones chicas, anclajes y trabajos donde no vale la pena mezclar. Más caro por kg pero ahorra tiempo.</p>
+      <h3>Regla práctica</h3>
+      <ul>
+        <li>Estructura y fundaciones → Portland</li>
+        <li>Mampostería y revoques → Albañilería</li>
+        <li>Reparaciones y anclajes → Premezclado</li>
+      </ul>
+    `
+  },
+  {
+    id: 3, cat: 'Obra Fina', emoji: '🎨',
+    foto: 'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=600&q=80',
+    titulo: 'Membrana asfáltica: cómo colocarla correctamente',
+    desc: 'La membrana mal colocada es la principal causa de humedad en techos. Aprendé el proceso paso a paso.',
+    tags: 'membrana, techo, humedad, impermeabilización',
+    contenido: `
+      <p>La membrana asfáltica es la solución más usada para impermeabilizar techos en Argentina. Bien colocada puede durar 15-20 años.</p>
+      <h3>Tipos de membrana</h3>
+      <ul>
+        <li><strong>Membrana 4mm:</strong> uso general en techos planos</li>
+        <li><strong>Membrana con aluminio:</strong> refleja el calor, ideal para climas cálidos</li>
+        <li><strong>Membrana poliéster:</strong> mayor resistencia al desgarro</li>
+      </ul>
+      <h3>Preparación de la superficie</h3>
+      <p>La losa debe estar limpia, seca y sin polvo. Si hay grietas, sellarlas con mortero antes. La superficie debe tener pendiente mínima del 1% hacia los desagües.</p>
+      <h3>Proceso de colocación</h3>
+      <ul>
+        <li>Aplicar imprimación asfáltica y dejar secar 2 horas</li>
+        <li>Desenrollar la membrana sin tensión</li>
+        <li>Soldar con soplete de izquierda a derecha</li>
+        <li>Solapar mínimo 10cm en uniones</li>
+        <li>Prestar especial atención a bordes y canaletas</li>
+      </ul>
+      <h3>Error más común</h3>
+      <p>No soldar bien los bordes y esquinas. El 80% de las filtraciones empiezan ahí.</p>
+    `
+  },
+  {
+    id: 4, cat: 'Obra Fina', emoji: '📐',
+    foto: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80',
+    titulo: 'Durlock: guía completa para paredes y cielorrasos',
+    desc: 'Desde elegir el tipo de placa hasta los detalles de terminación. Todo lo que necesitás saber sobre construcción en seco.',
+    tags: 'durlock, seco, pared, cielorraso',
+    contenido: `
+      <p>La construcción en seco con Durlock ganó terreno en Argentina por su rapidez y versatilidad. Una pared de Durlock se puede levantar en un día.</p>
+      <h3>Tipos de placa</h3>
+      <ul>
+        <li><strong>Estándar (gris):</strong> uso interior general</li>
+        <li><strong>RH — Resistente a la humedad (verde):</strong> baños y cocinas</li>
+        <li><strong>RF — Resistente al fuego (rosa):</strong> cerca de calderas o cocinas</li>
+      </ul>
+      <h3>Estructura metálica</h3>
+      <p>Los perfiles montantes van cada 40cm para placas de 12.5mm. Las soleras van en piso y techo. Para pared simple se usan 2 caras de placa (una por lado).</p>
+      <h3>Materiales por m²</h3>
+      <ul>
+        <li>1 placa 1.20x2.40m cubre 2.88 m²</li>
+        <li>Tornillos: ~25 por placa</li>
+        <li>Masilla: 300g por m²</li>
+        <li>Perfil cada 40cm de largo</li>
+      </ul>
+      <h3>Terminación</h3>
+      <p>Masilla en juntas y tornillos, cinta de papel, segunda mano de masilla, lijado y listo para pintar. Con imprimación queda perfecto.</p>
+    `
+  },
+  {
+    id: 5, cat: 'Consejos', emoji: '💡',
+    foto: 'https://images.unsplash.com/photo-1533158326339-7f3cf2404354?w=600&q=80',
+    titulo: '10 errores comunes al comprar materiales de construcción',
+    desc: 'Calculá mal, comprés de más o de menos, o elegís el material equivocado. Estos son los errores más frecuentes y cómo evitarlos.',
+    tags: 'consejos, compras, presupuesto',
+    contenido: `
+      <h3>1. No calcular el desperdicio</h3>
+      <p>Siempre sumá un 10-15% extra. Los cortes, roturas y errores siempre aparecen.</p>
+      <h3>2. Comprar cemento con mucha anticipación</h3>
+      <p>El cemento tiene fecha de vencimiento. Si lo comprás meses antes puede fraguar dentro de la bolsa.</p>
+      <h3>3. Confundir tipo de ladrillo</h3>
+      <p>El ladrillo hueco no reemplaza al portante en paredes estructurales. Consultá con el profesional antes.</p>
+      <h3>4. No pedir factura</h3>
+      <p>Sin factura no tenés respaldo si el material viene defectuoso o las medidas no son las indicadas.</p>
+      <h3>5. No comparar precios</h3>
+      <p>El mismo material puede variar 20-30% entre corralones. Usar un marketplace como este te ahorra dinero.</p>
+      <h3>6. Comprar la pintura sin imprimación</h3>
+      <p>Sin imprimación la pintura no adhiere bien y dura la mitad.</p>
+      <h3>7. Mezclar cementos de distinta marca</h3>
+      <p>Puede generar incompatibilidades en el fraguado. Usá siempre la misma marca en un trabajo.</p>
+      <h3>8. No revisar el hierro al recibirlo</h3>
+      <p>Verificá el diámetro con calibre y que las barras estén derechas. Una barra torcida es difícil de usar.</p>
+      <h3>9. Subestimar el flete</h3>
+      <p>La arena y la piedra son pesadas. El costo del flete puede ser el 15-20% del material.</p>
+      <h3>10. No pedir cotización a varios corralones</h3>
+      <p>La diferencia de precio entre el más caro y el más barato puede ser significativa en una obra grande.</p>
+    `
+  },
+  {
+    id: 6, cat: 'Ferretería', emoji: '🔩',
+    foto: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=600&q=80',
+    titulo: 'Hierros de construcción: diámetros y usos',
+    desc: 'Del Ø6 al Ø25: qué hierro va en cada parte de la estructura y cómo calcularlo.',
+    tags: 'hierro, estructura, hormigón armado',
+    contenido: `
+      <p>El hierro de construcción es fundamental en cualquier estructura de hormigón armado. Conocer qué diámetro usar en cada caso es clave para la resistencia.</p>
+      <h3>Guía de diámetros</h3>
+      <ul>
+        <li><strong>Ø4.2 y Ø6mm:</strong> estribos y zunchos en columnas</li>
+        <li><strong>Ø8mm:</strong> losas livianas y mallas</li>
+        <li><strong>Ø10mm:</strong> vigas secundarias y losas estándar</li>
+        <li><strong>Ø12mm:</strong> vigas principales y columnas chicas</li>
+        <li><strong>Ø16 y Ø20mm:</strong> columnas y vigas estructurales</li>
+        <li><strong>Ø25mm:</strong> fundaciones y estructuras de gran carga</li>
+      </ul>
+      <h3>Mallas electrosoldadas</h3>
+      <p>Son la alternativa más rápida para losas. La Q188 es la más usada en losas residenciales. Se coloca en 1/3 superior del espesor de la losa.</p>
+      <h3>Cómo calcular</h3>
+      <p>Las barras vienen en 12m de largo. Sumá los metros lineales necesarios, dividí por 12 y agregá 10% por empalmes y desperdicios.</p>
+      <h3>Consejo de almacenamiento</h3>
+      <p>Guardá el hierro bajo techo o con lona. La oxidación superficial no afecta la resistencia, pero la corrosión profunda sí.</p>
+    `
+  }
+];
 
-            filtrados.forEach(art => {
-                const card = document.createElement('div');
-                card.className = 'articulo';
-                card.innerHTML = `
-                    <div class="art-img">
-                        <img src="${art.imagen}" alt="${art.titulo}">
-                    </div>
-                    <div class="art-body">
-                        <div class="art-cat">${art.categoria.toUpperCase()}</div>
-                        <div class="art-titulo">${art.titulo}</div>
-                        <div class="art-desc">${art.descripcion}</div>
-                        <div class="art-footer">
-                            <span class="art-tag">Leer más →</span>
-                        </div>
-                    </div>
-                `;
-                card.addEventListener('click', () => abrirModal(art));
-                grid.appendChild(card);
-            });
-        }
+let artFiltrados = [...articulos];
+let artEditar = null;
 
-        // Modal
-        function abrirModal(art) {
-            document.getElementById('modalImg').src = art.imagen;
-            document.getElementById('modalCat').textContent = art.categoria.toUpperCase();
-            document.getElementById('modalTitulo').textContent = art.titulo;
-            document.getElementById('modalBody').innerHTML = `<p>${art.contenido}</p><p>Este es un contenido ampliado del artículo...</p>`;
-            document.getElementById('modalOverlay').classList.add('active');
-        }
+// ── Render ──
+function renderGrid(lista) {
+  const grid = document.getElementById('grid-articulos');
+  if(lista.length === 0) {
+    grid.innerHTML = '<p style="color:#aaa;font-size:14px;grid-column:1/-1;text-align:center;padding:3rem">No hay artículos en esta categoría todavía.</p>';
+    return;
+  }
+  grid.innerHTML = lista.map(a => `
+    <div class="articulo" onclick="abrirArticulo(${a.id})">
+      <div class="art-img">
+        ${a.foto ? `<img src="${a.foto}" alt="${a.titulo}" onerror="this.parentElement.innerHTML='${a.emoji}'">` : a.emoji}
+      </div>
+      <div class="art-body">
+        <div class="art-cat">${a.cat}</div>
+        <div class="art-titulo">${a.titulo}</div>
+        <div class="art-desc">${a.desc}</div>
+        <div class="art-footer">
+          <span class="art-tag">${a.tags.split(',')[0].trim()}</span>
+          <span class="btn-leer">Leer más →</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
 
-        // Event listeners
-        document.getElementById('modalClose').addEventListener('click', () => {
-            document.getElementById('modalOverlay').classList.remove('active');
-        });
+function filtrar(cat, btn) {
+  document.querySelectorAll('.filtro').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  artFiltrados = cat === 'todos' ? [...articulos] : articulos.filter(a => a.cat === cat);
+  renderGrid(artFiltrados);
+}
 
-        // Filtros
-        document.querySelectorAll('.filtro').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filtro').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                renderArticulos(btn.dataset.categoria);
-            });
-        });
+// ── Modal ──
+function abrirArticulo(id) {
+  const a = articulos.find(x => x.id === id);
+  if(!a) return;
+  document.getElementById('modal-img').innerHTML = a.foto
+    ? `<img src="${a.foto}" alt="${a.titulo}" onerror="this.parentElement.innerHTML='${a.emoji}'">`
+    : a.emoji;
+  document.getElementById('modal-cat').textContent = a.cat;
+  document.getElementById('modal-titulo').textContent = a.titulo;
+  document.getElementById('modal-body').innerHTML = a.contenido;
+  document.getElementById('modal-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
 
-        // Inicializar
-        renderArticulos();
-    </script>
+function cerrarModal(e) {
+  if(e.target === document.getElementById('modal-overlay')) cerrarModalBtn();
+}
+function cerrarModalBtn() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
 
+// ── Form nuevo artículo ──
+function abrirFormNuevo() {
+  artEditar = null;
+  ['f-titulo','f-desc','f-contenido','f-foto','f-tags'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-emoji').value = '🏗';
+  document.getElementById('form-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarForm() {
+  document.getElementById('form-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function guardarArticulo() {
+  const titulo = document.getElementById('f-titulo').value.trim();
+  const desc = document.getElementById('f-desc').value.trim();
+  const contenido = document.getElementById('f-contenido').value.trim();
+  if(!titulo || !desc || !contenido) { alert('Completá título, descripción y contenido.'); return; }
+
+  const nuevo = {
+    id: Date.now(),
+    cat: document.getElementById('f-cat').value,
+    emoji: document.getElementById('f-emoji').value || '🏗',
+    foto: document.getElementById('f-foto').value.trim(),
+    titulo,
+    desc,
+    tags: document.getElementById('f-tags').value.trim(),
+    contenido: contenido.split('\n').map(p => p.trim()).filter(Boolean).map(p => `<p>${p}</p>`).join('')
+  };
+
+  articulos.unshift(nuevo);
+  artFiltrados = [...articulos];
+  document.querySelector('.filtro.active')?.click() || renderGrid(articulos);
+  cerrarForm();
+
+  // Mostrar el JSON para copiar al archivo
+  const json = JSON.stringify({articulos}, null, 2);
+  console.log('Nuevo artículo agregado. Para guardar permanentemente, copiá este JSON:', json);
+  alert(`✅ Artículo "${titulo}" agregado. Recordá que para que sea permanente debés guardar el archivo.`);
+}
+
+// ── Init ──
+renderGrid(articulos);
+</script>
 </body>
 </html>
