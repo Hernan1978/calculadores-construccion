@@ -1,102 +1,250 @@
 {
   "categorias": [
     {
-      "nombre": "Mampostería",
-      "icono": "🧱",
-      "materiales": [
-        {"nombre": "Ladrillo común", "unidad": "unidades"},
-        {"nombre": "Ladrillo hueco 8cm", "unidad": "unidades"},
-        {"nombre": "Ladrillo hueco 12cm", "unidad": "unidades"},
-        {"nombre": "Cemento Portland 50kg", "unidad": "bolsas"},
-        {"nombre": "Cal hidráulica 25kg", "unidad": "bolsas"},
-        {"nombre": "Cemento de albañilería 40kg", "unidad": "bolsas"},
-        {"nombre": "Arena gruesa", "unidad": "m³"},
-        {"nombre": "Arena fina", "unidad": "m³"},
-        {"nombre": "Piedra partida 6/10", "unidad": "m³"},
-        {"nombre": "Piedra partida 10/20", "unidad": "m³"},
-        {"nombre": "Ceresita 5L", "unidad": "unidades"},
-        {"nombre": "Tacurú 25kg", "unidad": "bolsas"}
-      ]
-    },
-    {
-      "nombre": "Estructura",
+      "nombre": "Obra Gruesa",
       "icono": "🏗",
-      "materiales": [
-        {"nombre": "Hierro Ø8mm barra 12m", "unidad": "barras"},
-        {"nombre": "Hierro Ø10mm barra 12m", "unidad": "barras"},
-        {"nombre": "Hierro Ø12mm barra 12m", "unidad": "barras"},
-        {"nombre": "Hierro Ø16mm barra 12m", "unidad": "barras"},
-        {"nombre": "Hierro Ø20mm barra 12m", "unidad": "barras"},
-        {"nombre": "Malla Q188", "unidad": "paneles"},
-        {"nombre": "Malla Q257", "unidad": "paneles"},
-        {"nombre": "Cascote", "unidad": "m³"},
-        {"nombre": "Desencofrante 5L", "unidad": "bidones"},
-        {"nombre": "Fenólico 18mm 1.22x2.44m", "unidad": "unidades"}
+      "subcategorias": [
+        {
+          "nombre": "Áridos y sueltos",
+          "materiales": [
+            {"nombre": "Arena fina", "unidad": "m³"},
+            {"nombre": "Arena gruesa", "unidad": "m³"},
+            {"nombre": "Piedra partida 6/10", "unidad": "m³"},
+            {"nombre": "Piedra partida 10/20", "unidad": "m³"},
+            {"nombre": "Canto rodado", "unidad": "m³"},
+            {"nombre": "Polvo de ladrillo", "unidad": "m³"},
+            {"nombre": "Tosca", "unidad": "m³"},
+            {"nombre": "Cascote", "unidad": "m³"}
+          ]
+        },
+        {
+          "nombre": "Aglomerantes",
+          "materiales": [
+            {"nombre": "Cemento Portland 50kg", "unidad": "bolsas"},
+            {"nombre": "Cemento de albañilería 40kg", "unidad": "bolsas"},
+            {"nombre": "Cal hidráulica 25kg", "unidad": "bolsas"},
+            {"nombre": "Yeso 40kg", "unidad": "bolsas"},
+            {"nombre": "Hormigón premezclado en bolsa 25kg", "unidad": "bolsas"},
+            {"nombre": "Mortero premezclado 25kg", "unidad": "bolsas"},
+            {"nombre": "Hidrófugo 5L", "unidad": "bidones"},
+            {"nombre": "Ceresita 5L", "unidad": "bidones"},
+            {"nombre": "Tacurú 25kg", "unidad": "bolsas"}
+          ]
+        },
+        {
+          "nombre": "Ladrillos y Bloques",
+          "materiales": [
+            {"nombre": "Ladrillo hueco 6x12x18cm", "unidad": "unidades"},
+            {"nombre": "Ladrillo hueco 8x18x33cm", "unidad": "unidades"},
+            {"nombre": "Ladrillo hueco 12x18x33cm", "unidad": "unidades"},
+            {"nombre": "Ladrillo hueco 18x18x33cm", "unidad": "unidades"},
+            {"nombre": "Ladrillo común", "unidad": "unidades"},
+            {"nombre": "Ladrillo cerámico portante", "unidad": "unidades"},
+            {"nombre": "Ladrillo refractario", "unidad": "unidades"},
+            {"nombre": "Bloque de hormigón 20x20x40cm", "unidad": "unidades"},
+            {"nombre": "Bloque de hormigón 15x20x40cm", "unidad": "unidades"}
+          ]
+        },
+        {
+          "nombre": "Hierro y Acero",
+          "materiales": [
+            {"nombre": "Hierro Ø4.2mm barra 12m", "unidad": "barras"},
+            {"nombre": "Hierro Ø6mm barra 12m", "unidad": "barras"},
+            {"nombre": "Hierro Ø8mm barra 12m", "unidad": "barras"},
+            {"nombre": "Hierro Ø10mm barra 12m", "unidad": "barras"},
+            {"nombre": "Hierro Ø12mm barra 12m", "unidad": "barras"},
+            {"nombre": "Hierro Ø16mm barra 12m", "unidad": "barras"},
+            {"nombre": "Hierro Ø20mm barra 12m", "unidad": "barras"},
+            {"nombre": "Hierro Ø25mm barra 12m", "unidad": "barras"},
+            {"nombre": "Malla electrosoldada Q88", "unidad": "paneles"},
+            {"nombre": "Malla electrosoldada Q188", "unidad": "paneles"},
+            {"nombre": "Malla electrosoldada Q257", "unidad": "paneles"},
+            {"nombre": "Malla electrosoldada Q335", "unidad": "paneles"},
+            {"nombre": "Alambre de fardo kg", "unidad": "kg"},
+            {"nombre": "Clavos 50mm 1kg", "unidad": "bolsas"},
+            {"nombre": "Clavos 75mm 1kg", "unidad": "bolsas"},
+            {"nombre": "Clavos 100mm 1kg", "unidad": "bolsas"}
+          ]
+        }
       ]
     },
     {
-      "nombre": "Terminación",
-      "icono": "🎨",
-      "materiales": [
-        {"nombre": "Cerámico 40x40", "unidad": "m²"},
-        {"nombre": "Cerámico 60x60", "unidad": "m²"},
-        {"nombre": "Porcelanato 60x60", "unidad": "m²"},
-        {"nombre": "Porcelanato 80x80", "unidad": "m²"},
-        {"nombre": "Adhesivo para cerámica 25kg", "unidad": "bolsas"},
-        {"nombre": "Pastina 5kg", "unidad": "bolsas"},
-        {"nombre": "Pintura látex interior 20L", "unidad": "latas"},
-        {"nombre": "Pintura látex exterior 20L", "unidad": "latas"},
-        {"nombre": "Impermeabilizante 20L", "unidad": "latas"},
-        {"nombre": "Esmalte sintético 4L", "unidad": "latas"},
-        {"nombre": "Yeso 40kg", "unidad": "bolsas"}
-      ]
-    },
-    {
-      "nombre": "Seco",
-      "icono": "📐",
-      "materiales": [
-        {"nombre": "Placa Durlock 12.5mm", "unidad": "unidades"},
-        {"nombre": "Placa Durlock 9.5mm", "unidad": "unidades"},
-        {"nombre": "Perfil montante 70mm", "unidad": "unidades"},
-        {"nombre": "Perfil solera 70mm", "unidad": "unidades"},
-        {"nombre": "Perfil montante 100mm", "unidad": "unidades"},
-        {"nombre": "Perfil solera 100mm", "unidad": "unidades"},
-        {"nombre": "Tornillos Durlock x100", "unidad": "cajas"},
-        {"nombre": "Masilla Durlock 30kg", "unidad": "bolsas"},
-        {"nombre": "Cinta papel 50m", "unidad": "rollos"}
-      ]
-    },
-    {
-      "nombre": "Instalaciones",
-      "icono": "🔌",
-      "materiales": [
-        {"nombre": "Caño PVC presión 1/2\"", "unidad": "barras"},
-        {"nombre": "Caño PVC presión 3/4\"", "unidad": "barras"},
-        {"nombre": "Caño PVC presión 1\"", "unidad": "barras"},
-        {"nombre": "Codo PVC 1/2\" 90°", "unidad": "unidades"},
-        {"nombre": "Tee PVC 1/2\"", "unidad": "unidades"},
-        {"nombre": "Cable 1.5mm² rollo 100m", "unidad": "rollos"},
-        {"nombre": "Cable 2.5mm² rollo 100m", "unidad": "rollos"},
-        {"nombre": "Cable 4mm² rollo 100m", "unidad": "rollos"},
-        {"nombre": "Caño conduit PVC 16mm", "unidad": "barras"},
-        {"nombre": "Caño conduit PVC 20mm", "unidad": "barras"},
-        {"nombre": "Caja octogonal", "unidad": "unidades"},
-        {"nombre": "Caja rectangular", "unidad": "unidades"}
+      "nombre": "Obra Fina",
+      "icono": "🔧",
+      "subcategorias": [
+        {
+          "nombre": "Techos y Aislantes",
+          "materiales": [
+            {"nombre": "Chapa zinc Nº25 1x3m", "unidad": "unidades"},
+            {"nombre": "Chapa galvanizada Nº25 1x3m", "unidad": "unidades"},
+            {"nombre": "Chapa color Nº25 1x3m", "unidad": "unidades"},
+            {"nombre": "Chapa plástica traslúcida 1x3m", "unidad": "unidades"},
+            {"nombre": "Membrana asfáltica 4mm 10m", "unidad": "rollos"},
+            {"nombre": "Membrana asfáltica aluminio 4mm 10m", "unidad": "rollos"},
+            {"nombre": "Aislante térmico 50mm", "unidad": "m²"},
+            {"nombre": "Lana de vidrio 50mm", "unidad": "m²"},
+            {"nombre": "Foam aislante en aerosol", "unidad": "unidades"}
+          ]
+        },
+        {
+          "nombre": "Pisos y Revestimientos",
+          "materiales": [
+            {"nombre": "Cerámico 40x40cm", "unidad": "m²"},
+            {"nombre": "Cerámico 60x60cm", "unidad": "m²"},
+            {"nombre": "Porcelanato 60x60cm", "unidad": "m²"},
+            {"nombre": "Porcelanato 80x80cm", "unidad": "m²"},
+            {"nombre": "Porcelanato 120x60cm", "unidad": "m²"},
+            {"nombre": "Piso flotante AC4", "unidad": "m²"},
+            {"nombre": "Mosaico calcáreo 20x20cm", "unidad": "m²"},
+            {"nombre": "Adhesivo para cerámicos 25kg", "unidad": "bolsas"},
+            {"nombre": "Pastina blanca 5kg", "unidad": "bolsas"},
+            {"nombre": "Pastina de color 5kg", "unidad": "bolsas"},
+            {"nombre": "Zócalo cerámico 8x60cm", "unidad": "unidades"}
+          ]
+        },
+        {
+          "nombre": "Sanitarios y Agua",
+          "materiales": [
+            {"nombre": "Caño PVC desagüe Ø50mm 3m", "unidad": "barras"},
+            {"nombre": "Caño PVC desagüe Ø75mm 3m", "unidad": "barras"},
+            {"nombre": "Caño PVC desagüe Ø110mm 3m", "unidad": "barras"},
+            {"nombre": "Caño polipropileno 1/2\" 3m", "unidad": "barras"},
+            {"nombre": "Caño polipropileno 3/4\" 3m", "unidad": "barras"},
+            {"nombre": "Caño polipropileno 1\" 3m", "unidad": "barras"},
+            {"nombre": "Tanque de agua 500L", "unidad": "unidades"},
+            {"nombre": "Tanque de agua 1000L", "unidad": "unidades"},
+            {"nombre": "Inodoro completo", "unidad": "unidades"},
+            {"nombre": "Lavatorio con pedestal", "unidad": "unidades"},
+            {"nombre": "Pileta de cocina simple", "unidad": "unidades"},
+            {"nombre": "Grifería monocomando lavatorio", "unidad": "unidades"},
+            {"nombre": "Grifería monocomando cocina", "unidad": "unidades"},
+            {"nombre": "Ducha teléfono", "unidad": "unidades"}
+          ]
+        },
+        {
+          "nombre": "Aberturas",
+          "materiales": [
+            {"nombre": "Puerta placa 70x200cm", "unidad": "unidades"},
+            {"nombre": "Puerta placa 80x200cm", "unidad": "unidades"},
+            {"nombre": "Puerta chapa doble 90x200cm", "unidad": "unidades"},
+            {"nombre": "Puerta madera maciza 80x200cm", "unidad": "unidades"},
+            {"nombre": "Ventana aluminio corredera 120x100cm", "unidad": "unidades"},
+            {"nombre": "Ventana aluminio corredera 150x100cm", "unidad": "unidades"},
+            {"nombre": "Ventana PVC 120x100cm", "unidad": "unidades"},
+            {"nombre": "Puerta ventana aluminio 200x200cm", "unidad": "unidades"}
+          ]
+        },
+        {
+          "nombre": "Pintura y Terminación",
+          "materiales": [
+            {"nombre": "Pintura látex interior 20L", "unidad": "latas"},
+            {"nombre": "Pintura látex exterior 20L", "unidad": "latas"},
+            {"nombre": "Pintura látex interior 4L", "unidad": "latas"},
+            {"nombre": "Impermeabilizante 20L", "unidad": "latas"},
+            {"nombre": "Esmalte sintético brillante 4L", "unidad": "latas"},
+            {"nombre": "Fijador para paredes 4L", "unidad": "latas"},
+            {"nombre": "Enduido plástico 25kg", "unidad": "bolsas"},
+            {"nombre": "Sellador acrílico 4L", "unidad": "latas"},
+            {"nombre": "Pintura de caucho 20L", "unidad": "latas"}
+          ]
+        },
+        {
+          "nombre": "Seco (Durlock)",
+          "materiales": [
+            {"nombre": "Placa Durlock estándar 12.5mm", "unidad": "unidades"},
+            {"nombre": "Placa Durlock RH 12.5mm", "unidad": "unidades"},
+            {"nombre": "Placa Durlock RF 12.5mm", "unidad": "unidades"},
+            {"nombre": "Perfil montante 70mm 3m", "unidad": "unidades"},
+            {"nombre": "Perfil solera 70mm 3m", "unidad": "unidades"},
+            {"nombre": "Perfil montante 100mm 3m", "unidad": "unidades"},
+            {"nombre": "Perfil solera 100mm 3m", "unidad": "unidades"},
+            {"nombre": "Tornillos Durlock 3.5x25mm x100", "unidad": "cajas"},
+            {"nombre": "Masilla Durlock 30kg", "unidad": "bolsas"},
+            {"nombre": "Cinta papel 75m", "unidad": "rollos"},
+            {"nombre": "Lana de vidrio para Durlock 50mm", "unidad": "m²"}
+          ]
+        },
+        {
+          "nombre": "Eléctrico",
+          "materiales": [
+            {"nombre": "Cable unipolar 1.5mm² rollo 100m", "unidad": "rollos"},
+            {"nombre": "Cable unipolar 2.5mm² rollo 100m", "unidad": "rollos"},
+            {"nombre": "Cable unipolar 4mm² rollo 100m", "unidad": "rollos"},
+            {"nombre": "Cable unipolar 6mm² rollo 100m", "unidad": "rollos"},
+            {"nombre": "Caño conduit PVC 16mm 3m", "unidad": "barras"},
+            {"nombre": "Caño conduit PVC 20mm 3m", "unidad": "barras"},
+            {"nombre": "Caja octogonal PVC", "unidad": "unidades"},
+            {"nombre": "Caja rectangular PVC", "unidad": "unidades"},
+            {"nombre": "Caja de paso 10x10cm", "unidad": "unidades"},
+            {"nombre": "Tablero eléctrico 12 módulos", "unidad": "unidades"},
+            {"nombre": "Disyuntor 2x20A", "unidad": "unidades"},
+            {"nombre": "Térmico 1x10A", "unidad": "unidades"},
+            {"nombre": "Térmico 1x16A", "unidad": "unidades"},
+            {"nombre": "Térmico 1x20A", "unidad": "unidades"}
+          ]
+        }
       ]
     },
     {
       "nombre": "Ferretería",
       "icono": "🔩",
-      "materiales": [
-        {"nombre": "Clavos 50mm 1kg", "unidad": "bolsas"},
-        {"nombre": "Clavos 75mm 1kg", "unidad": "bolsas"},
-        {"nombre": "Clavos 100mm 1kg", "unidad": "bolsas"},
-        {"nombre": "Tornillos madera 4x40 x100", "unidad": "cajas"},
-        {"nombre": "Tornillos hormigón 6x50 x50", "unidad": "cajas"},
-        {"nombre": "Tirante 2x3\" 3m", "unidad": "unidades"},
-        {"nombre": "Tabla 1x6\" 3m", "unidad": "unidades"},
-        {"nombre": "Machimbre 3m", "unidad": "unidades"},
-        {"nombre": "Listón de madera 3m", "unidad": "unidades"}
+      "subcategorias": [
+        {
+          "nombre": "Herramientas",
+          "materiales": [
+            {"nombre": "Pala punta redonda", "unidad": "unidades"},
+            {"nombre": "Pala cuadrada", "unidad": "unidades"},
+            {"nombre": "Pico de albañil", "unidad": "unidades"},
+            {"nombre": "Cuchara de albañil", "unidad": "unidades"},
+            {"nombre": "Fratach de madera", "unidad": "unidades"},
+            {"nombre": "Fratach de esponja", "unidad": "unidades"},
+            {"nombre": "Nivel de aluminio 60cm", "unidad": "unidades"},
+            {"nombre": "Nivel de aluminio 120cm", "unidad": "unidades"},
+            {"nombre": "Amoladora angular 115mm", "unidad": "unidades"},
+            {"nombre": "Taladro percutor 13mm", "unidad": "unidades"},
+            {"nombre": "Carretilla 80L", "unidad": "unidades"},
+            {"nombre": "Batea de albañil", "unidad": "unidades"},
+            {"nombre": "Balde plástico 12L", "unidad": "unidades"}
+          ]
+        },
+        {
+          "nombre": "Seguridad",
+          "materiales": [
+            {"nombre": "Casco de seguridad", "unidad": "unidades"},
+            {"nombre": "Guantes de cuero", "unidad": "pares"},
+            {"nombre": "Guantes de nitrilo", "unidad": "pares"},
+            {"nombre": "Botas de goma", "unidad": "pares"},
+            {"nombre": "Arnés de seguridad", "unidad": "unidades"},
+            {"nombre": "Lentes de protección", "unidad": "unidades"},
+            {"nombre": "Protector auditivo", "unidad": "unidades"},
+            {"nombre": "Barbijo N95", "unidad": "unidades"}
+          ]
+        },
+        {
+          "nombre": "Insumos y Accesorios",
+          "materiales": [
+            {"nombre": "Disco de corte para amoladora 115mm", "unidad": "unidades"},
+            {"nombre": "Disco de desbaste 115mm", "unidad": "unidades"},
+            {"nombre": "Disco diamantado 115mm", "unidad": "unidades"},
+            {"nombre": "Adhesivo epoxi bicomponente", "unidad": "unidades"},
+            {"nombre": "Cemento de contacto 1L", "unidad": "latas"},
+            {"nombre": "Silicona transparente", "unidad": "unidades"},
+            {"nombre": "Silicona blanca", "unidad": "unidades"},
+            {"nombre": "Cinta métrica 5m", "unidad": "unidades"},
+            {"nombre": "Cinta métrica 8m", "unidad": "unidades"},
+            {"nombre": "Tornillos madera 4x40 x100", "unidad": "cajas"},
+            {"nombre": "Tornillos autoperforante 4.2x13 x100", "unidad": "cajas"},
+            {"nombre": "Tornillos hormigón 6x50 x50", "unidad": "cajas"},
+            {"nombre": "Tarugos plásticos Ø6mm x100", "unidad": "cajas"},
+            {"nombre": "Tarugos plásticos Ø8mm x100", "unidad": "cajas"},
+            {"nombre": "Tirante pino 2x3\" 3m", "unidad": "unidades"},
+            {"nombre": "Tabla pino 1x6\" 3m", "unidad": "unidades"},
+            {"nombre": "Fenólico 18mm 1.22x2.44m", "unidad": "unidades"},
+            {"nombre": "Terciado 4mm 1.22x2.44m", "unidad": "unidades"},
+            {"nombre": "Desencofrante 5L", "unidad": "bidones"},
+            {"nombre": "Alambre galvanizado Nº14 kg", "unidad": "kg"}
+          ]
+        }
       ]
     }
   ]
