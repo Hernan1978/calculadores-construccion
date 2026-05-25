@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <!-- HEADER MEJORADO -->
+    <!-- HEADER -->
     <header>
         <a href="index.html" class="logo">Calculadoras<span>Construcción</span></a>
         
@@ -23,7 +23,6 @@
     </header>
 
     <main>
-
         <!-- CATEGORÍAS -->
         <div class="cat-tabs">
             <button class="cat-btn active" onclick="showCat('estructura', this)">🏗 Estructura</button>
@@ -34,10 +33,7 @@
             <button class="cat-btn" onclick="showCat('ferreteria', this)">🔩 Ferretería</button>
         </div>
 
-        <!-- ===== TODO TU CONTENIDO ORIGINAL VA AQUÍ ===== -->
-        <!-- (Pega aquí todo el contenido que tenías antes dentro de <main>) -->
-
-        <!-- Ejemplo de la primera sección (Estructura) - el resto lo pegas vos -->
+        <!-- ESTRUCTURA -->
         <div id="cat-estructura" class="cat-panel active">
             <div class="mat-tabs">
                 <button class="mat-btn active" onclick="showMat('estructura','hormigon',this)">Hormigón / Losa</button>
@@ -47,10 +43,33 @@
                 <button class="mat-btn" onclick="showMat('estructura','desencofrante',this)">Desencofrante</button>
             </div>
 
-            <!-- Aquí pega todo el contenido de las categorías que tenías antes -->
-            <!-- (hormigon, hierros, mampostería, etc.) -->
+            <!-- Hormigón -->
+            <div id="mat-hormigon" class="mat-panel active">
+                <h2>Hormigón / Losa</h2>
+                <div class="field"><label>Tipo de trabajo</label>
+                    <select id="h-tipo" onchange="calcHormigon()">
+                        <option value="losa">Losa (10 cm espesor)</option>
+                        <option value="columna">Columna / viga</option>
+                        <option value="zapata">Zapata de fundación</option>
+                        <option value="piso">Piso de hormigón (8 cm)</option>
+                    </select>
+                </div>
+                <div class="grid-3">
+                    <div class="field"><label>Largo (m)</label><input type="number" id="h-largo" value="5" min="0.1" step="0.1" oninput="calcHormigon()"></div>
+                    <div class="field"><label>Ancho (m)</label><input type="number" id="h-ancho" value="4" min="0.1" step="0.1" oninput="calcHormigon()"></div>
+                    <div class="field"><label>Espesor (m)</label><input type="number" id="h-alto" value="0.10" min="0.01" step="0.01" oninput="calcHormigon()"></div>
+                </div>
+                <div class="results" id="res-hormigon"></div>
+                <p class="tip">Mezcla H-20: 1 parte cemento, 2 arena, 3 piedra. +10% desperdicio.</p>
+                <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+            </div>
+
+            <!-- Agrega aquí el resto de tus paneles (hierros, mallas, etc.) -->
+            <!-- ... pega el resto de tu código original ... -->
 
         </div>
+
+        <!-- Aquí van las otras categorías (mampostería, terminación, seco, etc.) -->
 
     </main>
 
@@ -59,7 +78,7 @@
     </footer>
 
     <script>
-        // ==================== MENÚ MÓVIL ====================
+        // Menú móvil
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
 
@@ -77,8 +96,8 @@
             });
         });
 
-        // ==================== TUS FUNCIONES ORIGINALES ====================
-        // Pega aquí todas tus funciones JavaScript (showCat, showMat, calcHormigon, etc.)
+        // === PEGA AQUÍ TODAS TUS FUNCIONES JAVASCRIPT ORIGINALES ===
+        // (showCat, showMat, calcHormigon, calcLadrillos, etc.)
 
     </script>
 
