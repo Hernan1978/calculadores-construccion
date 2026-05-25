@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadoras de materiales de construcción</title>
+    <title>Home - Calculadoras de Construcción</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- HEADER MEJORADO -->
+    <!-- HEADER -->
     <header>
         <a href="index.html" class="logo">Calculadoras<span>Construcción</span></a>
         
         <nav class="nav-links" id="navLinks">
-            <a href="index.html" class="hbtn active">Inicio</a>
-            <a href="home.html" class="hbtn">Home</a>
+            <a href="index.html" class="hbtn">Inicio</a>
+            <a href="home.html" class="hbtn active">Home</a>
             <a href="revista.html" class="hbtn">Revista</a>
             <a href="marketplace.html" class="hbtn">Marketplace</a>
         </nav>
@@ -22,57 +22,54 @@
         <button class="menu-toggle" id="menuToggle">☰</button>
     </header>
 
+    <!-- HERO -->
+    <section class="hero">
+        <h2>Calculadoras de Construcción</h2>
+        <p>La herramienta más práctica para calcular materiales de obra de forma rápida y precisa.</p>
+        <a href="index.html" class="btn-leer" style="font-size: 1.15rem; padding: 16px 36px; margin-top: 20px;">
+            Empezar a Calcular Ahora →
+        </a>
+    </section>
+
     <main>
+        <div style="max-width: 1100px; margin: 3rem auto; padding: 0 5%;">
+            <h2 style="text-align:center; margin-bottom: 2.5rem; color: var(--primary);">¿Qué podés hacer en esta web?</h2>
 
-        <!-- CATEGORÍAS -->
-        <div class="cat-tabs">
-            <button class="cat-btn active" onclick="showCat('estructura', this)">🏗 Estructura</button>
-            <button class="cat-btn" onclick="showCat('mamposteria', this)">🧱 Mampostería</button>
-            <button class="cat-btn" onclick="showCat('terminacion', this)">🎨 Terminación</button>
-            <button class="cat-btn" onclick="showCat('seco', this)">📐 Seco</button>
-            <button class="cat-btn" onclick="showCat('instalaciones', this)">🔌 Instalaciones</button>
-            <button class="cat-btn" onclick="showCat('ferreteria', this)">🔩 Ferretería</button>
-        </div>
-
-        <!-- ===== ESTRUCTURA ===== -->
-        <div id="cat-estructura" class="cat-panel active">
-            <div class="mat-tabs">
-                <button class="mat-btn active" onclick="showMat('estructura','hormigon',this)">Hormigón / Losa</button>
-                <button class="mat-btn" onclick="showMat('estructura','hierros',this)">Hierros</button>
-                <button class="mat-btn" onclick="showMat('estructura','mallas',this)">Mallas de hierro</button>
-                <button class="mat-btn" onclick="showMat('estructura','cascote',this)">Cascote / Relleno</button>
-                <button class="mat-btn" onclick="showMat('estructura','desencofrante',this)">Desencofrante</button>
-            </div>
-            <div id="mat-hormigon" class="mat-panel active">
-                <h2>Hormigón / Losa</h2>
-                <div class="field"><label>Tipo de trabajo</label>
-                    <select id="h-tipo" onchange="calcHormigon()">
-                        <option value="losa">Losa (10 cm espesor)</option>
-                        <option value="columna">Columna / viga</option>
-                        <option value="zapata">Zapata de fundación</option>
-                        <option value="piso">Piso de hormigón (8 cm)</option>
-                    </select>
+            <div class="grid-articulos">
+                <!-- Card 1 -->
+                <div class="articulo">
+                    <div class="art-img" style="background:#dbeafe; font-size: 4rem; display:flex; align-items:center; justify-content:center;">📐</div>
+                    <div class="art-body">
+                        <div class="art-cat">CALCULADORAS</div>
+                        <div class="art-titulo">Calculá materiales exactos</div>
+                        <div class="art-desc">Hormigón, ladrillos, hierros, pintura, durlock, instalaciones y más.</div>
+                        <a href="index.html" class="btn-leer">Ir a las Calculadoras</a>
+                    </div>
                 </div>
-                <div class="grid-3">
-                    <div class="field"><label>Largo (m)</label><input type="number" id="h-largo" value="5" min="0.1" step="0.1" oninput="calcHormigon()"></div>
-                    <div class="field"><label>Ancho (m)</label><input type="number" id="h-ancho" value="4" min="0.1" step="0.1" oninput="calcHormigon()"></div>
-                    <div class="field"><label>Espesor (m)</label><input type="number" id="h-alto" value="0.10" min="0.01" step="0.01" oninput="calcHormigon()"></div>
+
+                <!-- Card 2 -->
+                <div class="articulo">
+                    <div class="art-img" style="background:#fef3c7; font-size: 4rem; display:flex; align-items:center; justify-content:center;">📰</div>
+                    <div class="art-body">
+                        <div class="art-cat">REVISTA</div>
+                        <div class="art-titulo">Consejos y guías útiles</div>
+                        <div class="art-desc">Artículos técnicos, trucos y recomendaciones para tu obra.</div>
+                        <a href="revista.html" class="btn-leer">Ir a la Revista</a>
+                    </div>
                 </div>
-                <div class="results" id="res-hormigon"></div>
-                <p class="tip">Mezcla H-20: 1 parte cemento, 2 arena, 3 piedra. Bolsas 50 kg. +10% desperdicio.</p>
-                <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+
+                <!-- Card 3 -->
+                <div class="articulo">
+                    <div class="art-img" style="background:#ecfdf5; font-size: 4rem; display:flex; align-items:center; justify-content:center;">🛒</div>
+                    <div class="art-body">
+                        <div class="art-cat">MARKETPLACE</div>
+                        <div class="art-titulo">Pedí materiales</div>
+                        <div class="art-desc">Conecta tus cálculos directamente con corralones.</div>
+                        <a href="marketplace.html" class="btn-leer">Ir al Marketplace</a>
+                    </div>
+                </div>
             </div>
-            <!-- Resto de Estructura -->
-            <div id="mat-hierros" class="mat-panel">
-                <h2>Hierros</h2>
-                <!-- ... todo tu código original ... -->
-            </div>
-            <!-- (El resto de tus paneles van aquí) -->
         </div>
-
-        <!-- Todas las otras categorías (mampostería, terminación, etc.) -->
-        <!-- Copia y pega el resto de tu código original aquí dentro de <main> -->
-
     </main>
 
     <footer>
@@ -80,7 +77,7 @@
     </footer>
 
     <script>
-        // MENÚ MÓVIL
+        // Menú móvil
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
 
@@ -97,11 +94,6 @@
                 menuToggle.textContent = '☰';
             });
         });
-
-        // ==================== TUS FUNCIONES ORIGINALES ====================
-        // Pega aquí todas las funciones que tenías en tu versión anterior
-        // (showCat, showMat, todas las calcXXX, pedirMateriales, etc.)
-
     </script>
 
 </body>
