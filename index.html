@@ -264,7 +264,7 @@
         <select id="ar-tipo" onchange="calcArena()">
           <option value="arena_fina">Arena fina (revoques, enlucidos)</option>
           <option value="arena_gruesa">Arena gruesa (contrapisos, hormigón)</option>
-          <option value="piedra_6_10">Piedra partida 6/10 (hormigón)</option>
+          <option value="piedra_6_12">Piedra partida 6/10 (hormigón)</option>
           <option value="piedra_10_20">Piedra partida 10/20 (fundaciones)</option>
           <option value="granza">Granza / cascote (relleno)</option>
         </select>
@@ -590,7 +590,7 @@ function calcHormigon() {
   const vol = largo * ancho * alto * 1.10;
   renderResults('res-hormigon', [
     {label:'Volumen', value: vol.toFixed(2), unit:'m³'},
-    {label:'Cemento', value: Math.ceil(vol*7), unit:'bolsas 50 kg'},
+    {label:'Cemento', value: Math.ceil(vol*7), unit:'bolsas 25 kg'},
     {label:'Arena', value: (vol*0.42).toFixed(2), unit:'m³'},
     {label:'Piedra', value: (vol*0.83).toFixed(2), unit:'m³'},
     {label:'Agua aprox.', value: Math.ceil(vol*140), unit:'litros'},
@@ -654,7 +654,7 @@ function calcLadrillos() {
   renderResults('res-ladrillos', [
     {label:'Superficie', value: sup.toFixed(1), unit:'m²'},
     {label:'Ladrillos', value: Math.ceil(sup*porM2*1.10).toLocaleString('es-AR'), unit:'unidades'},
-    {label:'Cemento', value: Math.ceil(sup*0.15), unit:'bolsas 50 kg'},
+    {label:'Cemento', value: Math.ceil(sup*0.15), unit:'bolsas 25 kg'},
     {label:'Arena', value: (sup*0.03*1.10).toFixed(2), unit:'m³'},
   ]);
 }
@@ -667,7 +667,7 @@ function calcCemento() {
   if(tipo==='contrapiso') {bC=Math.ceil(sup*0.5*1.1);  mA=(sup*0.08*1.1).toFixed(2);}
   if(tipo==='pegado')     {bC=Math.ceil(sup*0.15*1.1); mA=(sup*0.03*1.1).toFixed(2); bCal=Math.ceil(sup*0.05);}
   if(tipo==='carpeta')    {bC=Math.ceil(sup*0.25*1.1); mA=(sup*0.04*1.1).toFixed(2);}
-  const items = [{label:'Superficie',value:sup.toFixed(0),unit:'m²'},{label:'Cemento',value:bC,unit:'bolsas 50 kg'},{label:'Arena',value:mA,unit:'m³'}];
+  const items = [{label:'Superficie',value:sup.toFixed(0),unit:'m²'},{label:'Cemento',value:bC,unit:'bolsas 25 kg'},{label:'Arena',value:mA,unit:'m³'}];
   if(bCal) items.push({label:'Cal',value:bCal,unit:'bolsas 25 kg'});
   renderResults('res-cemento', items);
 }
@@ -780,7 +780,7 @@ function calcCarpeta() {
   const vol = sup * esp * 1.10;
   renderResults('res-carpeta', [
     {label:'Superficie', value: sup.toFixed(0), unit:'m²'},
-    {label:'Cemento', value: Math.ceil(vol*250/50), unit:'bolsas 50 kg'},
+    {label:'Cemento', value: Math.ceil(vol*250/50), unit:'bolsas 25 kg'},
     {label:'Arena', value: (vol*0.75).toFixed(2), unit:'m³'},
   ]);
 }
