@@ -94,20 +94,13 @@
 <body>
 
 <header>
-    <!-- Logo + Título clicable (vuelve a la página principal) -->
-    <a href="index.html" class="logo">
-        Calculadoras<span>Construcción</span>
-    </a>
-    
-    <nav class="nav-links" id="navLinks">
-        <a href="index.html" class="hbtn">Inicio</a>
-        <a href="home.html" class="hbtn">Home</a>
-        <a href="revista.html" class="hbtn">Revista</a>
-        <a href="marketplace.html" class="hbtn">Marketplace</a>
-    </nav>
-    
-    <button class="menu-toggle" id="menuToggle">☰</button>
+  <div>
+    <h1>🏗 Materiales Ya</h1>
+    <p>Cotizá en varios corralones de tu zona</p>
+  </div>
+  <a href="index.html" class="hbtn">← Calculadores</a>
 </header>
+
 <main>
 
   <!-- PASO 1: DATOS -->
@@ -214,7 +207,7 @@ async function cargarCatalogo() {
       subcategorias:[{
         nombre:'Materiales',
         materiales:[
-          {nombre:'Cemento Portland 25kg', unidad:'bolsas'},
+          {nombre:'Cemento Portland 50kg', unidad:'bolsas'},
           {nombre:'Arena gruesa', unidad:'m³'},
           {nombre:'Ladrillo común', unidad:'unidades'},
         ]
@@ -368,35 +361,5 @@ window.addEventListener('DOMContentLoaded', function() {
   } catch(e) { console.error(e); }
 });
 </script>
-</body>
-</html>
-    <!-- Aquí va todo tu contenido (main, footer, etc.) -->
-
-    <script>
-        // Menú móvil
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        if (menuToggle && navLinks) {
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                
-                if (navLinks.classList.contains('active')) {
-                    menuToggle.textContent = '✕';
-                } else {
-                    menuToggle.textContent = '☰';
-                }
-            });
-        }
-
-        // Cerrar menú al hacer clic en un enlace
-        const links = document.querySelectorAll('.nav-links a');
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuToggle.textContent = '☰';
-            });
-        });
-    </script>
 </body>
 </html>
