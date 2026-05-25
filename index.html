@@ -47,12 +47,80 @@
     </div>
 
     <main>
-        <!-- Resto de tu contenido original (cards, cómo funciona, artículos, etc.) -->
-        <!-- (Mantengo todo tu diseño) -->
-
         <div style="max-width: 960px; margin: 3rem auto; padding: 0 1rem;">
-            <!-- Tus cards-main, como-funciona, articulos-grid y cta-final se mantienen igual -->
-            <!-- ... (todo tu código anterior va aquí) ... -->
+            
+            <!-- TRES SECCIONES -->
+            <div style="margin-bottom:1rem">
+                <div class="section-title">¿Qué podés hacer acá?</div>
+                <div class="section-sub">Tres herramientas pensadas para facilitar tu obra</div>
+            </div>
+
+            <div class="cards-main">
+                <a href="index.html" class="card-main">
+                    <div class="card-main-img bg1">🧮</div>
+                    <div class="card-main-body">
+                        <div class="card-main-tag">Herramienta</div>
+                        <div class="card-main-titulo">Calculadores de materiales</div>
+                        <div class="card-main-desc">24 calculadores para saber exactamente cuánto material necesitás.</div>
+                        <div class="card-main-link">Abrir calculadores →</div>
+                    </div>
+                </a>
+                <a href="marketplace.html" class="card-main">
+                    <div class="card-main-img bg2">🏗</div>
+                    <div class="card-main-body">
+                        <div class="card-main-tag">Marketplace</div>
+                        <div class="card-main-titulo">Pedí cotización a corralones</div>
+                        <div class="card-main-desc">Cargá tu lista y recibí cotizaciones de corralones cercanos.</div>
+                        <div class="card-main-link">Pedir materiales →</div>
+                    </div>
+                </a>
+                <a href="revista.html" class="card-main">
+                    <div class="card-main-img bg3">📰</div>
+                    <div class="card-main-body">
+                        <div class="card-main-tag">Revista</div>
+                        <div class="card-main-titulo">Guías y consejos</div>
+                        <div class="card-main-desc">Artículos útiles con fotos y recomendaciones.</div>
+                        <div class="card-main-link">Leer artículos →</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- CÓMO FUNCIONA -->
+            <div class="como-funciona">
+                <h2>¿Cómo funciona?</h2>
+                <div class="pasos">
+                    <div class="paso">
+                        <div class="paso-num">1</div>
+                        <div class="paso-titulo">Calculá</div>
+                        <div class="paso-desc">Usá los calculadores para saber exactamente cuánto material necesitás.</div>
+                    </div>
+                    <div class="paso">
+                        <div class="paso-num">2</div>
+                        <div class="paso-titulo">Pedí cotización</div>
+                        <div class="paso-desc">Cargá tu lista. Tu pedido llega a los corralones de tu zona.</div>
+                    </div>
+                    <div class="paso">
+                        <div class="paso-num">3</div>
+                        <div class="paso-titulo">Comparás</div>
+                        <div class="paso-desc">Recibís las cotizaciones y elegís la mejor opción.</div>
+                    </div>
+                    <div class="paso">
+                        <div class="paso-num">4</div>
+                        <div class="paso-titulo">Comprás</div>
+                        <div class="paso-desc">Confirmás y coordinás la entrega.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA FINAL -->
+            <div class="cta-final">
+                <h2>¿Listo para empezar?</h2>
+                <p>Calculá tus materiales y pedí cotización. Es gratis y rápido.</p>
+                <div class="cta-btns">
+                    <a href="marketplace.html" class="btn-cta-w">Pedir materiales ahora →</a>
+                    <a href="index.html" class="btn-cta-o">Ver calculadores</a>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -75,7 +143,7 @@
                 navLinks.classList.toggle('active');
                 menuToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
             });
-        });
+        }
 
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
