@@ -54,18 +54,60 @@
 
   footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
   footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid #2e4a7a;
+    border-radius: 7px;
+    color: #90afd4;
+    font-size: 18px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .nav-links.open { 
+    display: flex !important; 
+    flex-direction: column; 
+    position: absolute; 
+    top: 56px; left: 0; right: 0; 
+    background: #1a2744; 
+    padding: 1rem; gap: 8px;
+    z-index: 100;
+    border-top: 1px solid #2e4a7a;
+  }
+  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
+  @media(max-width:600px) {
+    nav { padding: .875rem 1rem; position: relative; }
+    nav .logo span { display: none; }
+    .nav-links { display: none !important; }
+    .menu-toggle { display: flex !important; }
+  }
+
+  @media(max-width:600px) {
+    main { margin: 1rem auto; padding: 0 .75rem; }
+    .cat-tabs { gap: 5px; }
+    .cat-btn { padding: 6px 10px; font-size: 11px; }
+    .mat-tabs { padding: 8px; gap: 5px; }
+    .mat-btn { padding: 5px 8px; font-size: 11px; }
+    .mat-panel { padding: 1rem; }
+    .results { grid-template-columns: repeat(2, 1fr); }
+    .result-card .r-value { font-size: 18px; }
+  }
+
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
-  <div class="nav-links">
+  <div class="nav-links" id="navLinks">
     <a href="calculadores.html" class="nav-link active">Calculadores</a>
     <a href="marketplace.html" class="nav-link">Pedir materiales</a>
     <a href="mapa.html" class="nav-link">📍 Mapa</a>
     
   </div>
+
+  <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">☰</button>
 </nav>
 
 <main>
