@@ -5,1127 +5,930 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadores de materiales — Materiales Ya</title>
 <style>
-  :root {
-    --azul-oscuro:  #1a2744;
-    --azul-medio:   #1e3a6e;
-    --azul-claro:   #1a4a8a;
-    --azul-accent:  #90afd4;
-    --azul-borde:   #2e5a9a;
-    --azul-texto:   #b0c8e8;
-    --bg:           #eef2f7;
-    --bg-card:      #fff;
-    --bg-result:    #dce8f5;
-    --borde-card:   #d0dcea;
-    --texto-muted:  #6a85a8;
-  }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--azul-oscuro); min-height: 100vh; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a1a; min-height: 100vh; }
 
-  header { background: var(--azul-oscuro); color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-  header h1 { font-size: 1.3rem; font-weight: 600; }
-  header p { font-size: 0.8rem; color: var(--azul-accent); margin-top: 2px; }
-  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid var(--azul-borde); color: var(--azul-accent); font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
-  .hbtn:hover { background: #fff; color: var(--azul-oscuro); border-color: #fff; }
+  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
+  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
+  .nav-links { display: flex; gap: 8px; }
+  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
+  .nav-link:hover, .nav-link.active { background: #fff; color: #1a2744; border-color: #fff; }
+  @media(max-width:520px) { .nav-links { display: none; } }
 
   main { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
 
-  /* CATEGORÍAS NIVEL 1 */
-  .fase-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
-  .fase-tab { padding: 7px 14px; border-radius: 20px; border: 1px solid var(--borde-card); background: var(--bg-card); color: #4a6080; font-size: 12px; font-weight: 500; cursor: pointer; transition: all .15s; white-space: nowrap; }
-  .fase-tab.active { background: var(--azul-oscuro); color: #fff; border-color: var(--azul-oscuro); }
-  .fase-tab:hover:not(.active) { background: #dce8f5; border-color: var(--azul-accent); }
+  .cat-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .cat-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #d0dcea; background: #fff; color: #555; font-size: 13px; cursor: pointer; transition: all .15s; font-weight: 500; }
+  .cat-btn.active { background: #1a2744; color: #fff; border-color: #1a2744; }
+  .cat-btn:hover:not(.active) { background: #e8eef5; }
 
-  /* TABS DE CALCULADORES */
-  .calc-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--borde-card); }
-  .calc-tab { padding: 6px 14px; border-radius: 7px; border: 1px solid var(--borde-card); background: #f0f5fb; color: #4a6080; font-size: 12px; cursor: pointer; transition: all .15s; }
-  .calc-tab.active { background: var(--azul-medio); color: #fff; border-color: var(--azul-medio); font-weight: 500; }
-  .calc-tab:hover:not(.active) { background: #dce8f5; border-color: var(--azul-accent); }
+  .mat-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; padding: 10px; background: #e8eef5; border-radius: 8px; }
+  .mat-btn { padding: 6px 12px; border-radius: 6px; border: 1px solid #d0dcea; background: #fff; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
+  .mat-btn.active { background: #1a2744; color: #fff; border-color: #1a2744; }
+  .mat-btn:hover:not(.active) { background: #e8eef5; }
 
-  .fase-panel { display: none; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--borde-card); padding: 1.5rem; }
-  .fase-panel.active { display: block; }
-  .fase-panel > h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--azul-oscuro); }
-
-  .calc-panel { display: none; }
-  .calc-panel.active { display: block; }
-  .calc-panel h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; color: var(--azul-medio); }
+  .cat-panel { display: none; }
+  .cat-panel.active { display: block; }
+  .mat-panel { display: none; background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; }
+  .mat-panel.active { display: block; }
+  .mat-panel h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; color: #1a2744; }
 
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   @media(max-width:520px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
-
   .field { margin-bottom: 1rem; }
-  .field label { display: block; font-size: 12px; color: var(--texto-muted); margin-bottom: 5px; font-weight: 500; }
-  .field input, .field select {
-    width: 100%; padding: 9px 12px; border: 1px solid var(--borde-card); border-radius: 8px;
-    font-size: 14px; color: var(--azul-oscuro); background: #f8fafd; outline: none; transition: border .15s;
-  }
-  .field input:focus, .field select:focus { border-color: var(--azul-claro); background: #fff; }
+  .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+  .field input, .field select { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; color: #1a1a1a; background: #fafbfd; outline: none; transition: border .15s; }
+  .field input:focus, .field select:focus { border-color: #1a2744; background: #fff; }
 
-  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 1.25rem; }
-  .result-card { background: var(--bg-result); border-radius: 8px; padding: 12px 14px; border: 1px solid #b8d0ea; }
-  .result-card .r-label { font-size: 11px; color: var(--texto-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
-  .result-card .r-value { font-size: 22px; font-weight: 700; color: var(--azul-oscuro); line-height: 1.1; }
-  .result-card .r-unit { font-size: 11px; color: var(--texto-muted); margin-top: 2px; }
+  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 1.5rem; }
+  .result-card { background: #eef2f7; border-radius: 8px; padding: 12px 14px; }
+  .result-card .r-label { font-size: 11px; color: #5a8abf; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+  .result-card .r-value { font-size: 22px; font-weight: 700; color: #1a2744; line-height: 1.1; }
+  .result-card .r-unit { font-size: 11px; color: #888; margin-top: 2px; }
 
-  .tip { font-size: 12px; color: var(--texto-muted); margin-top: 1rem; background: #edf3fb; border-radius: 8px; padding: 8px 12px; border-left: 3px solid var(--azul-accent); line-height: 1.5; }
+  .tip { font-size: 12px; color: #888; margin-top: 1rem; background: #f5f8fc; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #90afd4; }
+  .btn-pedir { margin-top: 1.5rem; width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
+  .btn-pedir:hover { opacity: .85; }
 
-  .btn-pedir {
-    margin-top: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 8px;
-    width: 100%; padding: 12px; border-radius: 8px; text-decoration: none;
-    border: none; background: #25d366; color: #fff;
-    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .15s;
-  }
-  .btn-pedir:hover { opacity: .88; }
-
-  .divider { border: none; border-top: 1px solid #dce8f5; margin: 1.25rem 0; }
-
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--texto-muted); }
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
+  footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
 </style>
 </head>
 <body>
 
-<header>
-  <div>
-    <h1>🧮 Calculadores de materiales</h1>
-    <p>Calculá exactamente lo que necesitás para tu obra</p>
+<nav>
+  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
+  <div class="nav-links">
+    <a href="calculadores.html" class="nav-link active">Calculadores</a>
+    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
+    <a href="revista.html" class="nav-link">Revista</a>
   </div>
-  <a href="index.html" class="hbtn">← Inicio</a>
-</header>
+</nav>
 
 <main>
-
-  <!-- TABS DE FASES -->
-  <div class="fase-tabs">
-    <button class="fase-tab active" onclick="showFase('preliminares', this)">⛏️ Preliminares</button>
-    <button class="fase-tab" onclick="showFase('obragruesa', this)">🏗 Obra Gruesa</button>
-    <button class="fase-tab" onclick="showFase('instalaciones', this)">⚡ Instalaciones</button>
-    <button class="fase-tab" onclick="showFase('revoques', this)">🪣 Revoques</button>
-    <button class="fase-tab" onclick="showFase('revestimientos', this)">🔲 Revestimientos</button>
-    <button class="fase-tab" onclick="showFase('carpinteria', this)">🚪 Carpintería</button>
-    <button class="fase-tab" onclick="showFase('herreria', this)">🔧 Herrería</button>
-    <button class="fase-tab" onclick="showFase('terminaciones', this)">🪟 Terminaciones</button>
+  <div class="cat-tabs">
+    <button class="cat-btn active" onclick="showCat('estructura',this)">🏗 Estructura</button>
+    <button class="cat-btn" onclick="showCat('mamposteria',this)">🧱 Mampostería</button>
+    <button class="cat-btn" onclick="showCat('terminacion',this)">🎨 Terminación</button>
+    <button class="cat-btn" onclick="showCat('seco',this)">📐 Seco</button>
+    <button class="cat-btn" onclick="showCat('instalaciones',this)">🔌 Instalaciones</button>
+    <button class="cat-btn" onclick="showCat('ferreteria',this)">🔩 Ferretería</button>
   </div>
 
-  <!-- ═══════════════════════════════ PRELIMINARES ═══════════════════════════════ -->
-  <div id="fase-preliminares" class="fase-panel active">
-    <h2>⛏️ Trabajos Preliminares</h2>
-    <div class="calc-tabs">
-      <button class="calc-tab active" onclick="showCalc('fase-preliminares','limpieza', this)">Limpieza / Demolición</button>
-      <button class="calc-tab" onclick="showCalc('fase-preliminares','nivelacion', this)">Nivelación</button>
+  <!-- ESTRUCTURA -->
+  <div id="cat-estructura" class="cat-panel active">
+    <div class="mat-tabs">
+      <button class="mat-btn active" onclick="showMat('estructura','hormigon',this)">Hormigón / Losa</button>
+      <button class="mat-btn" onclick="showMat('estructura','hierros',this)">Hierros</button>
+      <button class="mat-btn" onclick="showMat('estructura','mallas',this)">Mallas</button>
+      <button class="mat-btn" onclick="showMat('estructura','cascote',this)">Cascote</button>
+      <button class="mat-btn" onclick="showMat('estructura','desencofrante',this)">Desencofrante</button>
     </div>
-
-    <div id="calc-limpieza" class="calc-panel active">
-      <h3>Estimación de escombros y demolición</h3>
-      <div class="grid-2">
-        <div class="field"><label>Superficie a demoler (m²)</label><input type="number" id="dem-sup" value="20" min="1" oninput="calcDemolicion()"></div>
-        <div class="field"><label>Tipo de estructura</label>
-          <select id="dem-tipo" onchange="calcDemolicion()">
-            <option value="0.3">Pared de yeso / tabique liviano</option>
-            <option value="0.8" selected>Mampostería ladrillo hueco</option>
-            <option value="1.5">Mampostería ladrillo común</option>
-            <option value="2.5">Hormigón / losa</option>
-          </select>
-        </div>
+    <div id="mat-hormigon" class="mat-panel active">
+      <h2>Hormigón / Losa</h2>
+      <div class="field"><label>Tipo de trabajo</label>
+        <select id="h-tipo" onchange="calcHormigon()">
+          <option value="losa">Losa (10 cm espesor)</option>
+          <option value="columna">Columna / viga</option>
+          <option value="zapata">Zapata de fundación</option>
+          <option value="piso">Piso de hormigón (8 cm)</option>
+        </select>
       </div>
-      <div id="res-demolicion" class="results"></div>
-      <p class="tip">Estimación orientativa de volumen de escombros. El retiro en volquetes de 4m³ depende del acceso y distancia al punto de disposición.</p>
+      <div class="grid-3">
+        <div class="field"><label>Largo (m)</label><input type="number" id="h-largo" value="5" min="0.1" step="0.1" oninput="calcHormigon()"></div>
+        <div class="field"><label>Ancho (m)</label><input type="number" id="h-ancho" value="4" min="0.1" step="0.1" oninput="calcHormigon()"></div>
+        <div class="field"><label>Espesor (m)</label><input type="number" id="h-alto" value="0.10" min="0.01" step="0.01" oninput="calcHormigon()"></div>
+      </div>
+      <div class="results" id="res-hormigon"></div>
+      <div id="tip-hormigon" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Mezcla H-20: 1 cemento, 2 arena, 3 piedra. Bolsas 50 kg. +10% desperdicio.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
-
-    <div id="calc-nivelacion" class="calc-panel">
-      <h3>Replanteo y nivelación de terreno</h3>
-      <div class="grid-2">
-        <div class="field"><label>Frente del terreno (m)</label><input type="number" id="niv-frente" value="10" min="1" oninput="calcNivelacion()"></div>
-        <div class="field"><label>Fondo del terreno (m)</label><input type="number" id="niv-fondo" value="25" min="1" oninput="calcNivelacion()"></div>
+    <div id="mat-hierros" class="mat-panel">
+      <h2>Hierros</h2>
+      <div class="field"><label>Diámetro</label>
+        <select id="hi-diam" onchange="calcHierros()">
+          <option value="0.617">Ø8mm — 0.617 kg/m</option>
+          <option value="0.888">Ø10mm — 0.888 kg/m</option>
+          <option value="1.208">Ø12mm — 1.208 kg/m</option>
+          <option value="1.578">Ø14mm — 1.578 kg/m</option>
+          <option value="2.466">Ø16mm — 2.466 kg/m</option>
+          <option value="3.850">Ø20mm — 3.850 kg/m</option>
+          <option value="5.549">Ø25mm — 5.549 kg/m</option>
+        </select>
       </div>
-      <div class="field"><label>Espesor de relleno / nivelación (cm)</label><input type="number" id="niv-esp" value="10" min="1" max="100" oninput="calcNivelacion()"></div>
-      <div id="res-nivelacion" class="results"></div>
-      <p class="tip">La tosca se usa para relleno general. Si el terreno tiene desnivel, puede necesitar movimiento de tierra adicional.</p>
+      <div class="grid-2">
+        <div class="field"><label>Metros lineales</label><input type="number" id="hi-metros" value="50" min="1" oninput="calcHierros()"></div>
+        <div class="field"><label>Cantidad de barras</label><input type="number" id="hi-barras-n" value="10" min="1" oninput="calcHierros()"></div>
+      </div>
+      <div class="results" id="res-hierros"></div>
+      <div id="tip-hierros" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Barras de 12m estándar. +10% por empalmes y desperdicios.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-mallas" class="mat-panel">
+      <h2>Mallas de hierro</h2>
+      <div class="field"><label>Tipo de malla</label>
+        <select id="ma-tipo" onchange="calcMallas()">
+          <option value="14.4">Malla Q188 — 15x15cm Ø4.2mm</option>
+          <option value="14.4">Malla Q257 — 15x15cm Ø5mm</option>
+          <option value="14.4">Malla Q335 — 10x10cm Ø4.2mm</option>
+          <option value="14.4">Malla Q377 — 15x15cm Ø6mm</option>
+        </select>
+      </div>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="ma-sup" value="20" min="1" oninput="calcMallas()"></div>
+      <div class="results" id="res-mallas"></div>
+      <div id="tip-mallas" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Panel estándar 6x2.40m = 14.4m². +15% por solapas.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-cascote" class="mat-panel">
+      <h2>Cascote / Relleno</h2>
+      <div class="grid-3">
+        <div class="field"><label>Largo (m)</label><input type="number" id="cas-largo" value="5" min="0.1" step="0.1" oninput="calcCascote()"></div>
+        <div class="field"><label>Ancho (m)</label><input type="number" id="cas-ancho" value="4" min="0.1" step="0.1" oninput="calcCascote()"></div>
+        <div class="field"><label>Espesor (m)</label><input type="number" id="cas-esp" value="0.15" min="0.05" step="0.05" oninput="calcCascote()"></div>
+      </div>
+      <div class="results" id="res-cascote"></div>
+      <div id="tip-cascote" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">1m³ ≈ 1.4 toneladas. Bolsas de 25kg o a granel.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-desencofrante" class="mat-panel">
+      <h2>Desencofrante</h2>
+      <div class="field"><label>Superficie de encofrado (m²)</label><input type="number" id="de-sup" value="20" min="1" oninput="calcDesencofrante()"></div>
+      <div class="results" id="res-desencofrante"></div>
+      <div id="tip-desencofrante" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Rendimiento aprox. 15m² por litro.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ OBRA GRUESA ═══════════════════════════════ -->
-  <div id="fase-obragruesa" class="fase-panel">
-    <h2>🏗 Obra Gruesa</h2>
-    <div class="calc-tabs">
-      <button class="calc-tab active" onclick="showCalc('fase-obragruesa','ladrillos', this)">Ladrillos</button>
-      <button class="calc-tab" onclick="showCalc('fase-obragruesa','hormigon', this)">Hormigón</button>
-      <button class="calc-tab" onclick="showCalc('fase-obragruesa','hierros', this)">Hierros / Malla</button>
-      <button class="calc-tab" onclick="showCalc('fase-obragruesa','techo', this)">Techo / Cubierta</button>
+  <!-- MAMPOSTERÍA -->
+  <div id="cat-mamposteria" class="cat-panel">
+    <div class="mat-tabs">
+      <button class="mat-btn active" onclick="showMat('mamposteria','ladrillos',this)">Ladrillos</button>
+      <button class="mat-btn" onclick="showMat('mamposteria','cemento',this)">Cemento</button>
+      <button class="mat-btn" onclick="showMat('mamposteria','cal',this)">Cal</button>
+      <button class="mat-btn" onclick="showMat('mamposteria','cemalbañileria',this)">Cem. Albañilería</button>
+      <button class="mat-btn" onclick="showMat('mamposteria','ceresita',this)">Ceresita</button>
+      <button class="mat-btn" onclick="showMat('mamposteria','tacuru',this)">Tacurú</button>
+      <button class="mat-btn" onclick="showMat('mamposteria','arena',this)">Arena / Piedra</button>
     </div>
-
-    <div id="calc-ladrillos" class="calc-panel active">
-      <h3>Calculador de ladrillos y mezcla</h3>
+    <div id="mat-ladrillos" class="mat-panel active">
+      <h2>Ladrillos</h2>
       <div class="grid-2">
         <div class="field"><label>Ancho de pared (m)</label><input type="number" id="l-ancho" value="5" min="0.1" step="0.1" oninput="calcLadrillos()"></div>
         <div class="field"><label>Alto de pared (m)</label><input type="number" id="l-alto" value="2.5" min="0.1" step="0.1" oninput="calcLadrillos()"></div>
       </div>
       <div class="field"><label>Tipo de ladrillo</label>
         <select id="l-tipo" onchange="calcLadrillos()">
-          <option value="60">Ladrillo común (6x12x25 cm) — 60 u/m²</option>
-          <option value="45">Ladrillo hueco 8cm — 45 u/m²</option>
-          <option value="16">Ladrillo hueco 12cm — 16 u/m²</option>
-          <option value="12">Ladrillo portante 18cm — 12 u/m²</option>
+          <option value="60">Ladrillo común (6x12x25cm) — 60u/m²</option>
+          <option value="45">Ladrillo hueco 8cm — 45u/m²</option>
+          <option value="16">Ladrillo hueco 12cm — 16u/m²</option>
+          <option value="12">Ladrillo portante 18cm — 12u/m²</option>
         </select>
       </div>
       <div class="field"><label>Aberturas a descontar (m²)</label><input type="number" id="l-aberturas" value="0" min="0" step="0.1" oninput="calcLadrillos()"></div>
-      <div id="res-ladrillos" class="results"></div>
-      <p class="tip">+10% de desperdicio incluido. Cemento y arena calculados para el asentado con mezcla 1:4 (cemento:arena).</p>
+      <div class="results" id="res-ladrillos"></div>
+      <div id="tip-ladrillos" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">+10% desperdicio. Cemento y arena para asentado incluidos.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
-
-    <div id="calc-hormigon" class="calc-panel">
-      <h3>Calculador de hormigón / contrapiso</h3>
+    <div id="mat-cemento" class="mat-panel">
+      <h2>Cemento Portland</h2>
       <div class="field"><label>Tipo de trabajo</label>
-        <select id="h-tipo" onchange="calcHormigon()">
-          <option value="losa_8">Losa nervurada — 8 cm espesor</option>
-          <option value="losa_12">Losa maciza — 12 cm espesor</option>
-          <option value="contrapiso_8">Contrapiso — 8 cm espesor</option>
-          <option value="columna">Columna de hormigón</option>
-          <option value="viga">Viga / encadenado</option>
-          <option value="fundacion">Fundación / zapata</option>
+        <select id="c-tipo" onchange="calcCemento()">
+          <option value="revoque">Revoque grueso (1.5cm)</option>
+          <option value="contrapiso">Contrapiso (8cm)</option>
+          <option value="pegado">Pegado de ladrillos</option>
+          <option value="carpeta">Carpeta niveladora (3cm)</option>
         </select>
       </div>
-      <div class="grid-2">
-        <div class="field"><label>Superficie / largo (m² o m)</label><input type="number" id="h-sup" value="30" min="1" oninput="calcHormigon()"></div>
-        <div class="field" id="h-sec-field" style="display:none"><label>Sección (m² — para columna/viga)</label><input type="number" id="h-sec" value="0.09" min="0.01" step="0.01" oninput="calcHormigon()"></div>
-      </div>
-      <div id="res-hormigon" class="results"></div>
-      <p class="tip">Mezcla H-21 (1:2:3 — cemento:arena:piedra). El agua de amasado no se incluye. Pedí hormigón elaborado para obras grandes: sale más barato y tiene mejor control de calidad.</p>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="c-sup" value="20" min="1" oninput="calcCemento()"></div>
+      <div class="results" id="res-cemento"></div>
+      <div id="tip-cemento" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Bolsas 25kg. Arena en m³. +10% desperdicio.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
-
-    <div id="calc-hierros" class="calc-panel">
-      <h3>Calculador de hierros y mallas</h3>
-      <div class="field"><label>Tipo de elemento</label>
-        <select id="fe-tipo" onchange="calcHierros()">
-          <option value="losa_q188">Losa con malla Q188</option>
-          <option value="losa_q257">Losa con malla Q257</option>
-          <option value="losa_q335">Losa con malla Q335</option>
-          <option value="viga_10">Viga con hierro Ø10mm</option>
-          <option value="viga_12">Viga con hierro Ø12mm</option>
-          <option value="columna_12">Columna con hierro Ø12mm</option>
-          <option value="columna_16">Columna con hierro Ø16mm</option>
-          <option value="estribos">Estribos Ø6mm solamente</option>
+    <div id="mat-cal" class="mat-panel">
+      <h2>Cal hidráulica</h2>
+      <div class="field"><label>Tipo de trabajo</label>
+        <select id="cal-tipo" onchange="calcCal()">
+          <option value="revoque_fino">Revoque fino (enlucido)</option>
+          <option value="junta">Junta de ladrillos</option>
+          <option value="pintura_cal">Pintura a la cal</option>
         </select>
       </div>
-      <div class="grid-2">
-        <div class="field"><label>Superficie / largo (m² o m)</label><input type="number" id="fe-sup" value="20" min="1" oninput="calcHierros()"></div>
-        <div class="field"><label>Cantidad de elementos</label><input type="number" id="fe-cant" value="1" min="1" oninput="calcHierros()"></div>
-      </div>
-      <div id="res-hierros" class="results"></div>
-      <p class="tip">Incluye 10% por empalmes y desperdicios. Las barras vienen de 12m. Consultá los planos estructurales para las cantidades exactas.</p>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="cal-sup" value="20" min="1" oninput="calcCal()"></div>
+      <div class="results" id="res-cal"></div>
+      <div id="tip-cal" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Bolsas de 25kg.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
-
-    <div id="calc-techo" class="calc-panel">
-      <h3>Calculador de techo / cubierta</h3>
-      <div class="grid-2">
-        <div class="field"><label>Superficie de techo (m²)</label><input type="number" id="t-sup" value="40" min="1" oninput="calcTecho()"></div>
-        <div class="field"><label>Tipo de cubierta</label>
-          <select id="t-tipo" onchange="calcTecho()">
-            <option value="chapa">Chapa zinc / galvanizada 1x3m</option>
-            <option value="chapa_color">Chapa prepintada color 1x3m</option>
-            <option value="membrana">Membrana asfáltica (techo plano)</option>
-          </select>
-        </div>
-      </div>
-      <div class="field"><label>Pendiente del techo</label>
-        <select id="t-pendiente" onchange="calcTecho()">
-          <option value="1.10">Plana (0-5%) — factor 1.00</option>
-          <option value="1.12" selected>Baja (5-15%) — factor 1.12</option>
-          <option value="1.18">Media (15-30%) — factor 1.18</option>
-          <option value="1.25">Alta (30%+) — factor 1.25</option>
+    <div id="mat-cemalbañileria" class="mat-panel">
+      <h2>Cemento de albañilería</h2>
+      <div class="field"><label>Tipo de trabajo</label>
+        <select id="ca2-tipo" onchange="calcCemAlb()">
+          <option value="junta">Junta de ladrillos</option>
+          <option value="revoque">Revoque exterior</option>
+          <option value="contrapiso">Contrapiso liviano</option>
         </select>
       </div>
-      <div id="res-techo" class="results"></div>
-      <p class="tip">Chapa: se superponen 10cm entre chapas. Membrana: se superponen 15cm en uniones. Siempre agregar cumbrera, ganchos y tornillos.</p>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="ca2-sup" value="20" min="1" oninput="calcCemAlb()"></div>
+      <div class="results" id="res-cemalbañileria"></div>
+      <div id="tip-cemalbañileria" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Bolsas de 40kg. Ya contiene cal.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
-  </div>
-
-  <!-- ═══════════════════════════════ INSTALACIONES ═══════════════════════════════ -->
-  <div id="fase-instalaciones" class="fase-panel">
-    <h2>⚡ Instalaciones</h2>
-    <div class="calc-tabs">
-      <button class="calc-tab active" onclick="showCalc('fase-instalaciones','electrico', this)">Eléctrico</button>
-      <button class="calc-tab" onclick="showCalc('fase-instalaciones','agua', this)">Agua / Sanitario</button>
-      <button class="calc-tab" onclick="showCalc('fase-instalaciones','gas', this)">Gas</button>
-      <button class="calc-tab" onclick="showCalc('fase-instalaciones','aireac', this)">Aire Acondicionado</button>
-    </div>
-
-    <div id="calc-electrico" class="calc-panel active">
-      <h3>Calculador de instalación eléctrica</h3>
-      <div class="grid-2">
-        <div class="field"><label>Superficie del local (m²)</label><input type="number" id="elec-sup" value="60" min="10" oninput="calcElectrico()"></div>
-        <div class="field"><label>Tipo de vivienda</label>
-          <select id="elec-tipo" onchange="calcElectrico()">
-            <option value="basica">Básica (1 circuito por ambiente)</option>
-            <option value="comoda" selected>Cómoda (2 circuitos por ambiente)</option>
-            <option value="completa">Completa (3+ circuitos, domótica)</option>
-          </select>
-        </div>
-      </div>
-      <div id="res-electrico" class="results"></div>
-      <p class="tip">Estimación para cableado y cañería empotrada. No incluye artefactos (luminarias, tomacorrientes) ni el tablero. Consultá con un electricista matriculado.</p>
-    </div>
-
-    <div id="calc-agua" class="calc-panel">
-      <h3>Calculador de instalación sanitaria</h3>
-      <div class="grid-2">
-        <div class="field"><label>Cantidad de baños</label><input type="number" id="ag-banios" value="2" min="1" max="10" oninput="calcAgua()"></div>
-        <div class="field"><label>Cantidad de cocinas / lavaderos</label><input type="number" id="ag-cocinas" value="1" min="0" max="5" oninput="calcAgua()"></div>
-      </div>
-      <div class="field"><label>Distancia al tanque / medidor (m)</label><input type="number" id="ag-dist" value="15" min="5" oninput="calcAgua()"></div>
-      <div id="res-agua" class="results"></div>
-      <p class="tip">Caños en polipropileno para agua fría y caliente. Desagüe en PVC. Estimación para una planta. Consultá con un plomero matriculado.</p>
-    </div>
-
-    <div id="calc-gas" class="calc-panel">
-      <h3>Calculador de instalación de gas</h3>
-      <div class="grid-2">
-        <div class="field"><label>Cantidad de artefactos a gas</label><input type="number" id="gas-art" value="3" min="1" max="15" oninput="calcGas()"></div>
-        <div class="field"><label>Tipo de cañería</label>
-          <select id="gas-tipo" onchange="calcGas()">
-            <option value="cobre">Cobre soldado (interior)</option>
-            <option value="galvanizado">Galvanizado roscado (exterior/subterráneo)</option>
-          </select>
-        </div>
-      </div>
-      <div class="field"><label>Metros lineales estimados de cañería</label><input type="number" id="gas-metros" value="20" min="5" oninput="calcGas()"></div>
-      <div id="res-gas" class="results"></div>
-      <p class="tip">La instalación de gas requiere habilitación por gasista matriculado. Incluye 15% extra por uniones, codos y derivaciones.</p>
-    </div>
-
-    <div id="calc-aireac" class="calc-panel">
-      <h3>Calculador de frigorías para aire acondicionado</h3>
-      <div class="grid-2">
-        <div class="field"><label>Superficie del ambiente (m²)</label><input type="number" id="aa-sup" value="25" min="5" oninput="calcAireAc()"></div>
-        <div class="field"><label>Altura del techo (m)</label>
-          <select id="aa-alto" onchange="calcAireAc()">
-            <option value="2.4">2.40 m (estándar)</option>
-            <option value="2.7">2.70 m</option>
-            <option value="3.0">3.00 m</option>
-          </select>
-        </div>
-      </div>
-      <div class="field"><label>Orientación / exposición solar</label>
-        <select id="aa-orient" onchange="calcAireAc()">
-          <option value="1.0">Norte o sombra permanente</option>
-          <option value="1.1" selected>Este u Oeste (sol media jornada)</option>
-          <option value="1.2">Sur con vidrios grandes</option>
-          <option value="1.3">Oeste con sol directo intenso</option>
-        </select>
-      </div>
-      <div id="res-aireac" class="results"></div>
-      <p class="tip">Regla general: 600 frigorías por m² en zona templada. Se ajusta por altura, orientación y tipo de aislación. Modelo recomendado para uso doméstico.</p>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════ REVOQUES ═══════════════════════════════ -->
-  <div id="fase-revoques" class="fase-panel">
-    <h2>🪣 Revoques y Contrapisos</h2>
-    <div class="calc-tabs">
-      <button class="calc-tab active" onclick="showCalc('fase-revoques','revoque', this)">Revoque</button>
-      <button class="calc-tab" onclick="showCalc('fase-revoques','contrapiso', this)">Contrapiso</button>
-      <button class="calc-tab" onclick="showCalc('fase-revoques','yeso', this)">Yeso</button>
-      <button class="calc-tab" onclick="showCalc('fase-revoques','carpeta', this)">Carpeta niveladora</button>
-    </div>
-
-    <div id="calc-revoque" class="calc-panel active">
-      <h3>Calculador de revoque</h3>
-      <div class="field"><label>Tipo de revoque</label>
-        <select id="rev-tipo" onchange="calcRevoque()">
-          <option value="grueso_ext">Revoque grueso exterior (1.5cm)</option>
-          <option value="grueso_int">Revoque grueso interior (1.2cm)</option>
-          <option value="fino">Revoque fino / enlucido (3mm)</option>
-          <option value="proyectable">Revoque proyectable (15mm)</option>
-        </select>
-      </div>
-      <div class="field"><label>Superficie (m²)</label><input type="number" id="rev-sup" value="30" min="1" oninput="calcRevoque()"></div>
-      <div id="res-revoque" class="results"></div>
-      <p class="tip">+10% de desperdicio incluido. Para interiores se puede usar yeso proyectable en lugar de revoque, es más rápido.</p>
-    </div>
-
-    <div id="calc-contrapiso" class="calc-panel">
-      <h3>Calculador de contrapiso</h3>
-      <div class="grid-2">
-        <div class="field"><label>Superficie (m²)</label><input type="number" id="cp-sup" value="40" min="1" oninput="calcContrapiso()"></div>
-        <div class="field"><label>Espesor (cm)</label>
-          <select id="cp-esp" onchange="calcContrapiso()">
-            <option value="6">6 cm (interior sobre losa)</option>
-            <option value="8" selected>8 cm (estándar planta baja)</option>
-            <option value="10">10 cm (planta baja con cascote)</option>
-            <option value="12">12 cm (carga pesada)</option>
-          </select>
-        </div>
-      </div>
-      <div class="field"><label>¿Incluye cascote de relleno?</label>
-        <select id="cp-cascote" onchange="calcContrapiso()">
-          <option value="no">No, solo hormigón pobre</option>
-          <option value="si">Sí, 50% cascote + 50% hormigón</option>
-        </select>
-      </div>
-      <div id="res-contrapiso" class="results"></div>
-      <p class="tip">El cascote puede ser de demolición y reduce el costo significativamente. Poner membrana de polietileno antes del hormigón en planta baja.</p>
-    </div>
-
-    <div id="calc-yeso" class="calc-panel">
-      <h3>Calculador de yeso</h3>
+    <div id="mat-ceresita" class="mat-panel">
+      <h2>Ceresita (hidrófugo)</h2>
       <div class="field"><label>Tipo de aplicación</label>
-        <select id="yes-tipo" onchange="calcYeso()">
-          <option value="cielorraso">Cielorraso proyectado (10mm)</option>
-          <option value="pared">Pared revocada con yeso fino (5mm)</option>
-          <option value="enlucido">Enlucido / terminación (3mm)</option>
+        <select id="cer2-tipo" onchange="calcCeresita()">
+          <option value="mezcla">Aditivo en mezcla</option>
+          <option value="pintura">Pintura hidrófuga directa</option>
         </select>
       </div>
-      <div class="field"><label>Superficie (m²)</label><input type="number" id="yes-sup" value="25" min="1" oninput="calcYeso()"></div>
-      <div id="res-yeso" class="results"></div>
-      <p class="tip">Bolsas de 40 kg. El yeso fragua rápido: mezclar de a poco y usar en 20-30 minutos. Para cielorrasos usar yeso proyectable para mejor terminación.</p>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="cer2-sup" value="20" min="1" oninput="calcCeresita()"></div>
+      <div class="results" id="res-ceresita"></div>
+      <div id="tip-ceresita" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Como aditivo: 1L cada 5L de agua. Como pintura: 2 manos.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
-
-    <div id="calc-carpeta" class="calc-panel">
-      <h3>Calculador de carpeta niveladora</h3>
-      <div class="grid-2">
-        <div class="field"><label>Superficie (m²)</label><input type="number" id="carp-sup" value="30" min="1" oninput="calcCarpeta()"></div>
-        <div class="field"><label>Espesor promedio (cm)</label>
-          <select id="carp-esp" onchange="calcCarpeta()">
-            <option value="2">2 cm (nivelación mínima)</option>
-            <option value="3" selected>3 cm (estándar)</option>
-            <option value="5">5 cm (desnivel importante)</option>
-          </select>
-        </div>
+    <div id="mat-tacuru" class="mat-panel">
+      <h2>Tacurú (impermeabilizante)</h2>
+      <div class="field"><label>Tipo de trabajo</label>
+        <select id="tac-tipo" onchange="calcTacuru()">
+          <option value="techo">Techo / terraza</option>
+          <option value="pared">Pared exterior</option>
+          <option value="zocalo">Zócalo hidrófugo</option>
+        </select>
       </div>
-      <div id="res-carpeta" class="results"></div>
-      <p class="tip">Se aplica sobre el contrapiso antes del cerámico. Si el desnivel supera 3cm, usar cascote + contrapiso es más económico.</p>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="tac-sup" value="20" min="1" oninput="calcTacuru()"></div>
+      <div class="results" id="res-tacuru"></div>
+      <div id="tip-tacuru" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">2 manos mínimo. 1kg/m² por mano.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-arena" class="mat-panel">
+      <h2>Arena / Piedra</h2>
+      <div class="field"><label>Material</label>
+        <select id="ar-tipo" onchange="calcArena()">
+          <option value="arena_fina">Arena fina</option>
+          <option value="arena_gruesa">Arena gruesa</option>
+          <option value="piedra_6_10">Piedra partida 6/10</option>
+          <option value="piedra_10_20">Piedra partida 10/20</option>
+          <option value="granza">Granza / cascote</option>
+        </select>
+      </div>
+      <div class="field"><label>Volumen (m³)</label><input type="number" id="ar-vol" value="2" min="0.5" step="0.5" oninput="calcArena()"></div>
+      <div class="results" id="res-arena"></div>
+      <div id="tip-arena" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">1m³ ≈ 1.4t arena / 1.5t piedra.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ REVESTIMIENTOS ═══════════════════════════════ -->
-  <div id="fase-revestimientos" class="fase-panel">
-    <h2>🔲 Revestimientos y Solados</h2>
-    <div class="calc-tabs">
-      <button class="calc-tab active" onclick="showCalc('fase-revestimientos','ceramico', this)">Cerámico / Porcelanato</button>
-      <button class="calc-tab" onclick="showCalc('fase-revestimientos','pintura', this)">Pintura</button>
-      <button class="calc-tab" onclick="showCalc('fase-revestimientos','flotante', this)">Piso flotante</button>
-      <button class="calc-tab" onclick="showCalc('fase-revestimientos','pastina', this)">Pastina</button>
+  <!-- TERMINACIÓN -->
+  <div id="cat-terminacion" class="cat-panel">
+    <div class="mat-tabs">
+      <button class="mat-btn active" onclick="showMat('terminacion','ceramico',this)">Cerámico</button>
+      <button class="mat-btn" onclick="showMat('terminacion','pintura',this)">Pintura</button>
+      <button class="mat-btn" onclick="showMat('terminacion','revoque',this)">Revoque fino</button>
+      <button class="mat-btn" onclick="showMat('terminacion','carpeta',this)">Carpeta</button>
     </div>
-
-    <div id="calc-ceramico" class="calc-panel active">
-      <h3>Calculador de cerámico / porcelanato</h3>
+    <div id="mat-ceramico" class="mat-panel active">
+      <h2>Cerámico / Porcelanato</h2>
       <div class="grid-2">
-        <div class="field"><label>Superficie a cubrir (m²)</label><input type="number" id="cer-sup" value="15" min="1" oninput="calcCeramico()"></div>
-        <div class="field"><label>Tamaño de la pieza</label>
+        <div class="field"><label>Superficie (m²)</label><input type="number" id="cer-sup" value="15" min="1" oninput="calcCeramico()"></div>
+        <div class="field"><label>Tamaño de pieza</label>
           <select id="cer-tam" onchange="calcCeramico()">
-            <option value="0.04">20x20 cm</option>
-            <option value="0.09">30x30 cm</option>
-            <option value="0.16">40x40 cm</option>
-            <option value="0.36" selected>60x60 cm</option>
-            <option value="0.64">80x80 cm</option>
-            <option value="0.72">60x120 cm</option>
-            <option value="1.00">100x100 cm</option>
+            <option value="0.09">20x20cm</option><option value="0.16">40x40cm</option>
+            <option value="0.36" selected>60x60cm</option><option value="0.64">80x80cm</option><option value="1.00">100x100cm</option>
           </select>
         </div>
       </div>
       <div class="field"><label>Tipo de colocación</label>
         <select id="cer-col" onchange="calcCeramico()">
-          <option value="0.10">Junta corrida — 10% desperdicio</option>
-          <option value="0.15">Diagonal — 15% desperdicio</option>
-          <option value="0.20">Espina de pescado — 20% desperdicio</option>
-          <option value="0.12">Juntas al tresbolillo — 12% desperdicio</option>
+          <option value="0.10">Junta corrida — 10%</option>
+          <option value="0.15">Diagonal — 15%</option>
+          <option value="0.20">Espina de pescado — 20%</option>
         </select>
       </div>
-      <div id="res-ceramico" class="results"></div>
-      <p class="tip">Adhesivo: 5 kg/m² (porcelanato gran formato usa adhesivo flexible). Pastina: 0.5 kg/m² con junta de 3mm. El desperdicio varía según habilidad del colocador.</p>
+      <div class="results" id="res-ceramico"></div>
+      <div id="tip-ceramico" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Adhesivo 5kg/m². Pastina 0.5kg/m².</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
-
-    <div id="calc-pintura" class="calc-panel">
-      <h3>Calculador de pintura</h3>
+    <div id="mat-pintura" class="mat-panel">
+      <h2>Pintura</h2>
       <div class="grid-2">
         <div class="field"><label>Superficie (m²)</label><input type="number" id="p-sup" value="30" min="1" oninput="calcPintura()"></div>
-        <div class="field"><label>Cantidad de manos</label>
+        <div class="field"><label>Manos</label>
           <select id="p-manos" onchange="calcPintura()">
-            <option value="1">1 mano (repaso)</option>
-            <option value="2" selected>2 manos (estándar)</option>
-            <option value="3">3 manos (color oscuro / cambio de color)</option>
+            <option value="1">1 mano</option><option value="2" selected>2 manos</option><option value="3">3 manos</option>
           </select>
         </div>
       </div>
       <div class="field"><label>Tipo de pintura</label>
         <select id="p-tipo" onchange="calcPintura()">
-          <option value="10">Látex interior — 10 m²/litro</option>
-          <option value="8">Látex exterior — 8 m²/litro</option>
-          <option value="6">Impermeabilizante — 6 m²/litro</option>
-          <option value="12">Esmalte sintético — 12 m²/litro</option>
-          <option value="7">Pintura de caucho — 7 m²/litro</option>
-          <option value="9">Esmalte al agua — 9 m²/litro</option>
+          <option value="10">Látex interior — 10m²/L</option>
+          <option value="8">Látex exterior — 8m²/L</option>
+          <option value="6">Impermeabilizante — 6m²/L</option>
+          <option value="12">Esmalte sintético — 12m²/L</option>
+          <option value="5">Pintura a la cal — 5m²/L</option>
         </select>
       </div>
-      <div id="res-pintura" class="results"></div>
-      <p class="tip">Sobre pared porosa el rendimiento baja un 20%. Siempre aplicar fijador / imprimación antes de pintar en paredes nuevas.</p>
+      <div class="results" id="res-pintura"></div>
+      <div id="tip-pintura" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">+10% desperdicio.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
-
-    <div id="calc-flotante" class="calc-panel">
-      <h3>Calculador de piso flotante</h3>
+    <div id="mat-revoque" class="mat-panel">
+      <h2>Revoque fino</h2>
+      <div class="field"><label>Tipo</label>
+        <select id="rev-tipo" onchange="calcRevoque()">
+          <option value="yeso">Yeso proyectado</option>
+          <option value="cal">Cal y arena fina</option>
+          <option value="exterior">Exterior (impermeable)</option>
+        </select>
+      </div>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="rev-sup" value="20" min="1" oninput="calcRevoque()"></div>
+      <div class="results" id="res-revoque"></div>
+      <div id="tip-revoque" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Espesor 5-8mm. Bolsas 20kg (yeso) o 25kg (cal).</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-carpeta" class="mat-panel">
+      <h2>Carpeta niveladora</h2>
       <div class="grid-2">
-        <div class="field"><label>Superficie a cubrir (m²)</label><input type="number" id="fl-sup" value="20" min="1" oninput="calcFlotante()"></div>
-        <div class="field"><label>Tipo de instalación</label>
-          <select id="fl-tipo" onchange="calcFlotante()">
-            <option value="0.10">Recto (filas paralelas) — 10%</option>
-            <option value="0.15" selected>A escuadra / 45° — 15%</option>
-            <option value="0.20">Espiga / herringbone — 20%</option>
+        <div class="field"><label>Superficie (m²)</label><input type="number" id="carp-sup" value="20" min="1" oninput="calcCarpeta()"></div>
+        <div class="field"><label>Espesor (cm)</label>
+          <select id="carp-esp" onchange="calcCarpeta()">
+            <option value="2">2cm</option><option value="3" selected>3cm</option><option value="5">5cm</option>
           </select>
         </div>
       </div>
-      <div id="res-flotante" class="results"></div>
-      <p class="tip">Incluye underliner acústico 3mm (1 m² por m²). Dejar 10mm de dilatación en paredes y puertas. Zócalos calculados por perímetro estimado.</p>
-    </div>
-
-    <div id="calc-pastina" class="calc-panel">
-      <h3>Calculador de pastina</h3>
-      <div class="grid-2">
-        <div class="field"><label>Superficie (m²)</label><input type="number" id="pas-sup" value="15" min="1" oninput="calcPastina()"></div>
-        <div class="field"><label>Tamaño de la junta (mm)</label>
-          <select id="pas-junta" onchange="calcPastina()">
-            <option value="0.3">1.5 mm (rectificado, sin junta)</option>
-            <option value="0.5" selected>3 mm (estándar)</option>
-            <option value="0.8">5 mm (rústico / exterior)</option>
-            <option value="1.2">8 mm (mosaico / piezas chicas)</option>
-          </select>
-        </div>
-      </div>
-      <div class="field"><label>Tamaño de la pieza</label>
-        <select id="pas-tam" onchange="calcPastina()">
-          <option value="20">20x20 cm</option>
-          <option value="30">30x30 cm</option>
-          <option value="40">40x40 cm</option>
-          <option value="60" selected>60x60 cm</option>
-          <option value="80">80x80 cm</option>
-        </select>
-      </div>
-      <div id="res-pastina" class="results"></div>
-      <p class="tip">La pastina epoxi es más resistente pero costosa — ideal para locales comerciales, piletas o áreas con químicos. Para uso doméstico, la pastina cementicia es suficiente.</p>
+      <div class="results" id="res-carpeta"></div>
+      <div id="tip-carpeta" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Mezcla 1:3 cemento/arena. +10%.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════ CARPINTERÍA ═══════════════════════════════ -->
-  <div id="fase-carpinteria" class="fase-panel">
-    <h2>🚪 Carpintería</h2>
-    <div class="calc-tabs">
-      <button class="calc-tab active" onclick="showCalc('fase-carpinteria','puertas', this)">Puertas y Ventanas</button>
-      <button class="calc-tab" onclick="showCalc('fase-carpinteria','placard', this)">Placares / Muebles</button>
+  <!-- SECO -->
+  <div id="cat-seco" class="cat-panel">
+    <div class="mat-tabs">
+      <button class="mat-btn active" onclick="showMat('seco','durlock',this)">Durlock</button>
+      <button class="mat-btn" onclick="showMat('seco','steel',this)">Steel Framing</button>
+      <button class="mat-btn" onclick="showMat('seco','cielorraso',this)">Cielorraso</button>
     </div>
-
-    <div id="calc-puertas" class="calc-panel active">
-      <h3>Resumen de aberturas</h3>
-      <div class="grid-3">
-        <div class="field"><label>Puertas interiores</label><input type="number" id="ab-pint" value="3" min="0" oninput="calcAberturas()"></div>
-        <div class="field"><label>Puertas exteriores</label><input type="number" id="ab-pext" value="1" min="0" oninput="calcAberturas()"></div>
-        <div class="field"><label>Ventanas</label><input type="number" id="ab-vent" value="4" min="0" oninput="calcAberturas()"></div>
-      </div>
-      <div class="grid-2">
-        <div class="field"><label>Puertas ventana / balcón</label><input type="number" id="ab-pv" value="1" min="0" oninput="calcAberturas()"></div>
-        <div class="field"><label>Portones</label><input type="number" id="ab-port" value="1" min="0" oninput="calcAberturas()"></div>
-      </div>
-      <div id="res-aberturas" class="results"></div>
-      <p class="tip">Estimación de accesorios y fijaciones. Cada abertura necesita: premarco, silicona, espuma poliuretano y tornillos. Las cerraduras y manijas se cotizan aparte.</p>
-    </div>
-
-    <div id="calc-placard" class="calc-panel">
-      <h3>Calculador de placard / mueble a medida</h3>
-      <div class="grid-2">
-        <div class="field"><label>Ancho total (m)</label><input type="number" id="pl-ancho" value="3" min="0.5" step="0.1" oninput="calcPlacard()"></div>
-        <div class="field"><label>Alto (m)</label><input type="number" id="pl-alto" value="2.4" min="0.5" step="0.1" oninput="calcPlacard()"></div>
-      </div>
-      <div class="grid-2">
-        <div class="field"><label>Profundidad (m)</label><input type="number" id="pl-prof" value="0.6" min="0.3" step="0.1" oninput="calcPlacard()"></div>
-        <div class="field"><label>Tipo de material</label>
-          <select id="pl-tipo" onchange="calcPlacard()">
-            <option value="18">Melamínico 18mm</option>
-            <option value="25">Melamínico 25mm (más rígido)</option>
-            <option value="15">MDF 15mm (para pintar)</option>
-          </select>
-        </div>
-      </div>
-      <div id="res-placard" class="results"></div>
-      <p class="tip">Los tableros melamínicos son 1.83x2.44m. Incluye 15% de desperdicios por cortes. No incluye puertas corredizas ni accesorios de interior.</p>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════ HERRERÍA ═══════════════════════════════ -->
-  <div id="fase-herreria" class="fase-panel">
-    <h2>🔧 Herrería</h2>
-    <div class="calc-tabs">
-      <button class="calc-tab active" onclick="showCalc('fase-herreria','baranda', this)">Barandas</button>
-      <button class="calc-tab" onclick="showCalc('fase-herreria','reja', this)">Rejas</button>
-    </div>
-
-    <div id="calc-baranda" class="calc-panel active">
-      <h3>Calculador de baranda / pasamano</h3>
-      <div class="grid-2">
-        <div class="field"><label>Metros lineales de baranda</label><input type="number" id="bar-metros" value="10" min="1" oninput="calcBaranda()"></div>
-        <div class="field"><label>Altura de la baranda (m)</label>
-          <select id="bar-alto" onchange="calcBaranda()">
-            <option value="0.9">0.90 m (estándar interior)</option>
-            <option value="1.1">1.10 m (escalera exterior / balcón)</option>
-            <option value="1.2">1.20 m (terraza / uso público)</option>
-          </select>
-        </div>
-      </div>
-      <div class="field"><label>Tipo de baranda</label>
-        <select id="bar-tipo" onchange="calcBaranda()">
-          <option value="caño">Caño redondo (montante + horizontal)</option>
-          <option value="tubo_vidrio">Caño con vidrio templado</option>
-          <option value="hierro_forjado">Hierro forjado decorativo</option>
-        </select>
-      </div>
-      <div id="res-baranda" class="results"></div>
-      <p class="tip">Los montantes van cada 1m. Pintura anticorrosiva + esmalte incluida en el cálculo de terminación. El vidrio templado se cotiza aparte.</p>
-    </div>
-
-    <div id="calc-reja" class="calc-panel">
-      <h3>Calculador de rejas</h3>
-      <div class="grid-2">
-        <div class="field"><label>Ancho (m)</label><input type="number" id="rej-ancho" value="1.2" min="0.3" step="0.1" oninput="calcReja()"></div>
-        <div class="field"><label>Alto (m)</label><input type="number" id="rej-alto" value="1.2" min="0.3" step="0.1" oninput="calcReja()"></div>
-      </div>
-      <div class="grid-2">
-        <div class="field"><label>Cantidad de rejas</label><input type="number" id="rej-cant" value="2" min="1" oninput="calcReja()"></div>
-        <div class="field"><label>Tipo de reja</label>
-          <select id="rej-tipo" onchange="calcReja()">
-            <option value="simple">Barrotes simples Ø3/4\"</option>
-            <option value="doble">Doble barrote (más segura)</option>
-            <option value="artistica">Artística con flores / decoración</option>
-          </select>
-        </div>
-      </div>
-      <div id="res-reja" class="results"></div>
-      <p class="tip">Incluye hierro para marco y barrotes. Pintura anticorrosiva + esmalte. Los pesos son aproximados y sirven para estimar el costo de material.</p>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════ TERMINACIONES ═══════════════════════════════ -->
-  <div id="fase-terminaciones" class="fase-panel">
-    <h2>🪟 Vidriería y Terminaciones</h2>
-    <div class="calc-tabs">
-      <button class="calc-tab active" onclick="showCalc('fase-terminaciones','vidrio', this)">Vidrios y Espejos</button>
-      <button class="calc-tab" onclick="showCalc('fase-terminaciones','durlock', this)">Durlock / Seco</button>
-    </div>
-
-    <div id="calc-vidrio" class="calc-panel active">
-      <h3>Calculador de vidrio / espejo</h3>
-      <div class="grid-2">
-        <div class="field"><label>Ancho (m)</label><input type="number" id="vid-ancho" value="1.2" min="0.1" step="0.1" oninput="calcVidrio()"></div>
-        <div class="field"><label>Alto (m)</label><input type="number" id="vid-alto" value="1.0" min="0.1" step="0.1" oninput="calcVidrio()"></div>
-      </div>
-      <div class="grid-2">
-        <div class="field"><label>Cantidad de paños</label><input type="number" id="vid-cant" value="3" min="1" oninput="calcVidrio()"></div>
-        <div class="field"><label>Tipo</label>
-          <select id="vid-tipo" onchange="calcVidrio()">
-            <option value="flotado4">Vidrio flotado 4mm</option>
-            <option value="flotado6">Vidrio flotado 6mm</option>
-            <option value="templado6">Vidrio templado 6mm</option>
-            <option value="templado8">Vidrio templado 8mm</option>
-            <option value="dh">Doble hermético 4/6/4mm</option>
-            <option value="espejo3">Espejo 3mm</option>
-            <option value="espejo4">Espejo 4mm</option>
-          </select>
-        </div>
-      </div>
-      <div id="res-vidrio" class="results"></div>
-      <p class="tip">El vidrio templado no se puede cortar en obra, pedir medidas exactas al vidriero. El doble hermético mejora aislación térmica y acústica significativamente.</p>
-    </div>
-
-    <div id="calc-durlock" class="calc-panel">
-      <h3>Calculador de Durlock</h3>
+    <div id="mat-durlock" class="mat-panel active">
+      <h2>Durlock</h2>
       <div class="field"><label>Tipo de trabajo</label>
         <select id="d-tipo" onchange="calcDurlock()">
-          <option value="pared">Pared simple (1 placa por lado)</option>
+          <option value="pared">Pared simple</option>
           <option value="cielorraso">Cielorraso</option>
-          <option value="doble">Pared doble (2 placas por lado)</option>
+          <option value="doble">Pared doble</option>
         </select>
       </div>
       <div class="grid-2">
-        <div class="field"><label>Ancho / largo (m)</label><input type="number" id="d-ancho" value="4" min="0.1" step="0.1" oninput="calcDurlock()"></div>
+        <div class="field"><label>Ancho (m)</label><input type="number" id="d-ancho" value="4" min="0.1" step="0.1" oninput="calcDurlock()"></div>
         <div class="field"><label>Alto (m)</label><input type="number" id="d-alto" value="2.5" min="0.1" step="0.1" oninput="calcDurlock()"></div>
       </div>
-      <div id="res-durlock" class="results"></div>
-      <p class="tip">Placa estándar 1.20×2.40 m. +10% de desperdicio en todos los materiales. Para ambientes húmedos usar placa RH (verde).</p>
+      <div class="results" id="res-durlock"></div>
+      <div id="tip-durlock" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Placa 1.20x2.40m. +10% desperdicio.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-steel" class="mat-panel">
+      <h2>Steel Framing</h2>
+      <div class="field"><label>Tipo de estructura</label>
+        <select id="sf-tipo" onchange="calcSteel()">
+          <option value="pared">Pared exterior</option>
+          <option value="interior">Pared interior</option>
+          <option value="techo">Techo / cubierta</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Largo (m)</label><input type="number" id="sf-largo" value="6" min="0.1" step="0.1" oninput="calcSteel()"></div>
+        <div class="field"><label>Alto (m)</label><input type="number" id="sf-alto" value="2.5" min="0.1" step="0.1" oninput="calcSteel()"></div>
+      </div>
+      <div class="results" id="res-steel"></div>
+      <div id="tip-steel" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Separación montantes: 40cm. +10%.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-cielorraso" class="mat-panel">
+      <h2>Cielorraso tradicional</h2>
+      <div class="field"><label>Tipo</label>
+        <select id="ci-tipo" onchange="calcCielorraso()">
+          <option value="yeso">Yeso proyectado</option>
+          <option value="madera">Listones de madera</option>
+          <option value="machimbre">Machimbre</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Largo (m)</label><input type="number" id="ci-largo" value="5" min="0.1" step="0.1" oninput="calcCielorraso()"></div>
+        <div class="field"><label>Ancho (m)</label><input type="number" id="ci-ancho" value="4" min="0.1" step="0.1" oninput="calcCielorraso()"></div>
+      </div>
+      <div class="results" id="res-cielorraso"></div>
+      <div id="tip-cielorraso" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">+10% desperdicio.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
     </div>
   </div>
 
+  <!-- INSTALACIONES -->
+  <div id="cat-instalaciones" class="cat-panel">
+    <div class="mat-tabs">
+      <button class="mat-btn active" onclick="showMat('instalaciones','cañeria',this)">Cañería de agua</button>
+      <button class="mat-btn" onclick="showMat('instalaciones','cables',this)">Cables eléctricos</button>
+      <button class="mat-btn" onclick="showMat('instalaciones','cañosluz',this)">Caños de luz</button>
+    </div>
+    <div id="mat-cañeria" class="mat-panel active">
+      <h2>Cañería de agua</h2>
+      <div class="field"><label>Tipo</label>
+        <select id="ca-tipo" onchange="calcCañeria()">
+          <option value="pvc">PVC presión</option>
+          <option value="ppr">PPR (termofusión)</option>
+          <option value="cobre">Cobre</option>
+        </select>
+      </div>
+      <div class="field"><label>Diámetro</label>
+        <select id="ca-diam" onchange="calcCañeria()">
+          <option value="0.5">1/2" — ramales</option>
+          <option value="0.75">3/4" — distribución</option>
+          <option value="1">1" — principal</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Metros lineales</label><input type="number" id="ca-metros" value="15" min="1" oninput="calcCañeria()"></div>
+        <div class="field"><label>Bocas de agua</label><input type="number" id="ca-bocas" value="4" min="1" oninput="calcCañeria()"></div>
+      </div>
+      <div class="results" id="res-cañeria"></div>
+      <div id="tip-cañeria" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Barras de 3m. +15% desperdicio.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-cables" class="mat-panel">
+      <h2>Cables eléctricos</h2>
+      <div class="field"><label>Tipo de circuito</label>
+        <select id="cab-tipo" onchange="calcCables()">
+          <option value="iluminacion">Iluminación — 1.5mm²</option>
+          <option value="tomacorriente">Tomacorrientes — 2.5mm²</option>
+          <option value="cocina">Cocina / horno — 4mm²</option>
+          <option value="termotanque">Termotanque / AC — 6mm²</option>
+          <option value="tablero">Tablero principal — 10mm²</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Metros lineales</label><input type="number" id="cab-metros" value="20" min="1" oninput="calcCables()"></div>
+        <div class="field"><label>Cantidad de bocas</label><input type="number" id="cab-bocas" value="6" min="1" oninput="calcCables()"></div>
+      </div>
+      <div class="results" id="res-cables"></div>
+      <div id="tip-cables" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Rollo 100m. +20% desperdicio.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-cañosluz" class="mat-panel">
+      <h2>Caños de luz (conduit)</h2>
+      <div class="field"><label>Tipo</label>
+        <select id="cl-tipo" onchange="calcCañosLuz()">
+          <option value="pvc_liviano">PVC liviano Ø16mm</option>
+          <option value="pvc_reforzado">PVC reforzado Ø20mm</option>
+          <option value="metalico">Metálico Ø3/4"</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Metros lineales</label><input type="number" id="cl-metros" value="20" min="1" oninput="calcCañosLuz()"></div>
+        <div class="field"><label>Cantidad de bocas</label><input type="number" id="cl-bocas" value="6" min="1" oninput="calcCañosLuz()"></div>
+      </div>
+      <div class="results" id="res-cañosluz"></div>
+      <div id="tip-cañosluz" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Barras de 3m. +15% desperdicio.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+  </div>
+
+  <!-- FERRETERÍA -->
+  <div id="cat-ferreteria" class="cat-panel">
+    <div class="mat-tabs">
+      <button class="mat-btn active" onclick="showMat('ferreteria','clavos',this)">Clavos</button>
+      <button class="mat-btn" onclick="showMat('ferreteria','tornillos',this)">Tornillos</button>
+      <button class="mat-btn" onclick="showMat('ferreteria','madera',this)">Madera</button>
+    </div>
+    <div id="mat-clavos" class="mat-panel active">
+      <h2>Clavos</h2>
+      <div class="field"><label>Tipo de clavo</label>
+        <select id="clav-tipo" onchange="calcClavos()">
+          <option value="50">Clavo 50mm (2")</option>
+          <option value="75">Clavo 75mm (3")</option>
+          <option value="100">Clavo 100mm (4")</option>
+          <option value="20">Clavo 20mm sin cabeza</option>
+        </select>
+      </div>
+      <div class="field"><label>Superficie (m²)</label><input type="number" id="clav-cant" value="20" min="1" oninput="calcClavos()"></div>
+      <div class="results" id="res-clavos"></div>
+      <div id="tip-clavos" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Bolsas de 1kg o 5kg.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-tornillos" class="mat-panel">
+      <h2>Tornillos</h2>
+      <div class="field"><label>Tipo de tornillo</label>
+        <select id="torn-tipo" onchange="calcTornillos()">
+          <option value="durlock">Tornillo Durlock 3.5x25mm</option>
+          <option value="autoperf">Autoperforante 4.2x13mm</option>
+          <option value="madera">Tornillo madera 4x40mm</option>
+          <option value="hormigon">Tornillo hormigón 6x50mm</option>
+        </select>
+      </div>
+      <div class="field"><label>Cantidad de placas o m²</label><input type="number" id="torn-cant" value="10" min="1" oninput="calcTornillos()"></div>
+      <div class="results" id="res-tornillos"></div>
+      <div id="tip-tornillos" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">Cajas de 100 o 200 unidades.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+    <div id="mat-madera" class="mat-panel">
+      <h2>Madera</h2>
+      <div class="field"><label>Tipo de uso</label>
+        <select id="mad-tipo" onchange="calcMadera()">
+          <option value="tirante">Tirante 2x3" (estructural)</option>
+          <option value="tabla">Tabla 1x6" (encofrado)</option>
+          <option value="fenolico">Fenólico 18mm</option>
+          <option value="terciado">Terciado 4mm</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Superficie (m²)</label><input type="number" id="mad-sup" value="20" min="1" oninput="calcMadera()"></div>
+        <div class="field"><label>Usos del encofrado</label>
+          <select id="mad-usos" onchange="calcMadera()">
+            <option value="1">1 uso</option><option value="3">3 usos</option><option value="5">5 usos</option>
+          </select>
+        </div>
+      </div>
+      <div class="results" id="res-madera"></div>
+      <div id="tip-madera" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
+      <p class="tip">+15% desperdicio por cortes.</p>
+      <button class="btn-pedir" onclick="pedirMateriales(this)">Pedir estos materiales al corralón →</button>
+    </div>
+  </div>
 </main>
-<footer>Materiales Ya — Calculadores de construcción</footer>
+
+<footer>
+  <a href="index.html">Inicio</a>
+  <a href="marketplace.html">Marketplace</a>
+  <a href="revista.html">Revista</a>
+</footer>
 
 <script>
-// ── Navegación de fases y calculadores ──
-function showFase(id, btn) {
-  document.querySelectorAll('.fase-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.fase-tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('fase-' + id).classList.add('active');
+function showCat(id, btn) {
+  document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('cat-'+id).classList.add('active');
   btn.classList.add('active');
 }
-
-function showCalc(faseId, calcId, btn) {
-  const fase = document.getElementById(faseId);
-  fase.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
-  fase.querySelectorAll('.calc-tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('calc-' + calcId).classList.add('active');
+function showMat(cat, id, btn) {
+  const catEl = document.getElementById('cat-'+cat);
+  catEl.querySelectorAll('.mat-panel').forEach(p => p.classList.remove('active'));
+  catEl.querySelectorAll('.mat-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mat-'+id).classList.add('active');
   btn.classList.add('active');
 }
-
 function renderResults(id, items) {
   document.getElementById(id).innerHTML = items.map(i =>
     `<div class="result-card"><div class="r-label">${i.label}</div><div class="r-value">${i.value}</div><div class="r-unit">${i.unit}</div></div>`
   ).join('');
 }
-
-// ── PRELIMINARES ──
-function calcDemolicion() {
-  const sup = parseFloat(document.getElementById('dem-sup').value) || 0;
-  const factor = parseFloat(document.getElementById('dem-tipo').value);
-  const m3 = (sup * factor).toFixed(1);
-  const volquetes = Math.ceil(m3 / 4);
-  renderResults('res-demolicion', [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Escombros', value: m3, unit: 'm³ aprox.' },
-    { label: 'Volquetes 4m³', value: volquetes, unit: 'unidades' },
-  ]);
-}
-
-function calcNivelacion() {
-  const frente = parseFloat(document.getElementById('niv-frente').value) || 0;
-  const fondo = parseFloat(document.getElementById('niv-fondo').value) || 0;
-  const esp = (parseFloat(document.getElementById('niv-esp').value) || 0) / 100;
-  const sup = frente * fondo;
-  const m3 = (sup * esp * 1.2).toFixed(1);
-  renderResults('res-nivelacion', [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Tosca / relleno', value: m3, unit: 'm³' },
-    { label: 'Hilo de obra', value: Math.ceil((frente + fondo) * 2 / 100), unit: 'rollos 100m' },
-  ]);
-}
-
-// ── OBRA GRUESA ──
-function calcLadrillos() {
-  const ancho = parseFloat(document.getElementById('l-ancho').value) || 0;
-  const alto = parseFloat(document.getElementById('l-alto').value) || 0;
-  const aberturas = parseFloat(document.getElementById('l-aberturas').value) || 0;
-  const porM2 = parseFloat(document.getElementById('l-tipo').value);
-  const sup = Math.max(0, ancho * alto - aberturas);
-  const ladrillos = Math.ceil(sup * porM2 * 1.10);
-  const cemento = Math.ceil(sup * 0.15 * 1.1);
-  const cal = Math.ceil(sup * 0.05 * 1.1);
-  const arena = (sup * 0.03 * 1.10).toFixed(2);
-  renderResults('res-ladrillos', [
-    { label: 'Superficie neta', value: sup.toFixed(1), unit: 'm²' },
-    { label: 'Ladrillos', value: ladrillos.toLocaleString('es-AR'), unit: 'unidades' },
-    { label: 'Cemento', value: cemento, unit: 'bolsas 50kg' },
-    { label: 'Cal', value: cal, unit: 'bolsas 25kg' },
-    { label: 'Arena', value: arena, unit: 'm³' },
-  ]);
+function pedirMateriales(btn) {
+  const panel = btn.closest('.mat-panel');
+  const titulo = panel.querySelector('h2').textContent.trim();
+  const cards = panel.querySelectorAll('.result-card');
+  const items = [];
+  cards.forEach(card => {
+    const label = card.querySelector('.r-label').textContent.trim();
+    const value = card.querySelector('.r-value').textContent.trim();
+    const unit = card.querySelector('.r-unit').textContent.trim();
+    if(label !== 'Superficie' && label !== 'Volumen' && value !== '0' && value !== '0.0' && value !== '0.00')
+      items.push({mat: titulo+' — '+label, cant: value.replace(/\./g,'').replace(/,/g,'.'), u: unit});
+  });
+  if(items.length === 0) { alert('Ingresá los datos del calculador primero.'); return; }
+  sessionStorage.setItem('pedido_precargado', JSON.stringify(items));
+  window.location.href = 'marketplace.html';
 }
 
 function calcHormigon() {
-  const tipo = document.getElementById('h-tipo').value;
-  const sup = parseFloat(document.getElementById('h-sup').value) || 0;
-  const sec = parseFloat(document.getElementById('h-sec').value) || 0.09;
-  const secField = document.getElementById('h-sec-field');
-
-  const usaSec = tipo === 'columna' || tipo === 'viga' || tipo === 'fundacion';
-  secField.style.display = usaSec ? 'block' : 'none';
-
-  const espesores = { losa_8: 0.08, losa_12: 0.12, contrapiso_8: 0.08 };
-  let m3;
-  if (usaSec) {
-    m3 = sup * sec * 1.1;
-  } else {
-    m3 = sup * espesores[tipo] * 1.1;
-  }
-  m3 = parseFloat(m3.toFixed(2));
-
-  const cemento = Math.ceil(m3 * 6.5);
-  const arena   = (m3 * 0.55).toFixed(2);
-  const piedra  = (m3 * 0.85).toFixed(2);
-
-  renderResults('res-hormigon', [
-    { label: 'm³ hormigón', value: m3, unit: 'm³' },
-    { label: 'Cemento', value: cemento, unit: 'bolsas 50kg' },
-    { label: 'Arena', value: arena, unit: 'm³' },
-    { label: 'Piedra', value: piedra, unit: 'm³' },
-  ]);
+  const v = (parseFloat(document.getElementById('h-largo').value)||0)*(parseFloat(document.getElementById('h-ancho').value)||0)*(parseFloat(document.getElementById('h-alto').value)||0)*1.10;
+  renderResults('res-hormigon',[{label:'Volumen',value:v.toFixed(2),unit:'m³'},{label:'Cemento',value:Math.ceil(v*14),unit:'bolsas 25 kg'},{label:'Arena',value:(v*0.42).toFixed(2),unit:'m³'},{label:'Piedra',value:(v*0.83).toFixed(2),unit:'m³'},{label:'Agua aprox.',value:Math.ceil(v*140),unit:'litros'}]);
+  tipHormigon(v, Math.ceil(v*14));
 }
-
 function calcHierros() {
-  const tipo = document.getElementById('fe-tipo').value;
-  const sup = parseFloat(document.getElementById('fe-sup').value) || 0;
-  const cant = parseFloat(document.getElementById('fe-cant').value) || 1;
-
-  let resultado = [];
-
-  if (tipo.startsWith('losa_')) {
-    const mallaMap = { losa_q188: 'Q188', losa_q257: 'Q257', losa_q335: 'Q335' };
-    const nombre = mallaMap[tipo];
-    const paneles = Math.ceil((sup * cant * 1.10) / 2.4);
-    resultado = [
-      { label: 'Superficie', value: (sup*cant).toFixed(0), unit: 'm²' },
-      { label: `Malla ${nombre}`, value: paneles, unit: 'paneles (2.4x6m)' },
-    ];
-  } else {
-    const kgM = { viga_10: 0.617, viga_12: 0.888, columna_12: 3.55, columna_16: 6.31, estribos: 0.222 };
-    const kg = sup * cant * kgM[tipo] * 1.10;
-    const barras12 = tipo.startsWith('columna') || tipo.startsWith('viga')
-      ? Math.ceil((sup * cant * 1.10) / 12)
-      : Math.ceil((sup * cant * 4 * 1.10) / 12);
-    resultado = [
-      { label: 'kg de hierro', value: kg.toFixed(0), unit: 'kg' },
-      { label: 'Barras 12m', value: barras12, unit: 'unidades' },
-    ];
-    if (tipo !== 'estribos') {
-      const estribos = Math.ceil(sup * cant / 0.2);
-      resultado.push({ label: 'Estribos Ø6', value: estribos, unit: 'unidades' });
-    }
-  }
-  renderResults('res-hierros', resultado);
+  const m=(parseFloat(document.getElementById('hi-metros').value)||0)*(parseFloat(document.getElementById('hi-barras-n').value)||0)*1.10;
+  const kg=parseFloat(document.getElementById('hi-diam').value);
+  renderResults('res-hierros',[{label:'Metros totales',value:m.toFixed(0),unit:'ml'},{label:'Barras x 12m',value:Math.ceil(m/12),unit:'unidades'},{label:'Peso total',value:(m*kg).toFixed(1),unit:'kg'}]);
+  tipHierros(m, Math.ceil(m/12));
 }
-
-function calcTecho() {
-  const sup = parseFloat(document.getElementById('t-sup').value) || 0;
-  const tipo = document.getElementById('t-tipo').value;
-  const pend = parseFloat(document.getElementById('t-pendiente').value);
-
-  if (tipo === 'membrana') {
-    const supReal = sup * 1.05;
-    const rollos = Math.ceil(supReal / 10 * 1.15);
-    const imprimacion = Math.ceil(supReal / 25);
-    renderResults('res-techo', [
-      { label: 'Superficie real', value: supReal.toFixed(0), unit: 'm²' },
-      { label: 'Membrana 4mm', value: rollos, unit: 'rollos 10m' },
-      { label: 'Imprimación', value: imprimacion, unit: 'latas 4L' },
-    ]);
-  } else {
-    const supReal = sup * pend;
-    const chapas = Math.ceil(supReal / 2.7);
-    const ganchos = Math.ceil(chapas * 4);
-    const cumbreras = Math.ceil(sup / 10);
-    renderResults('res-techo', [
-      { label: 'Superficie real', value: supReal.toFixed(0), unit: 'm²' },
-      { label: 'Chapas 1x3m', value: chapas, unit: 'unidades' },
-      { label: 'Ganchos J', value: ganchos, unit: 'unidades' },
-      { label: 'Cumbreras', value: cumbreras, unit: 'unidades' },
-    ]);
-  }
+function calcMallas() {
+  const sup=(parseFloat(document.getElementById('ma-sup').value)||0)*1.15;
+  renderResults('res-mallas',[{label:'Superficie',value:(sup/1.15).toFixed(0),unit:'m²'},{label:'Con solapas',value:sup.toFixed(1),unit:'m²'},{label:'Paneles 6x2.4m',value:Math.ceil(sup/14.4),unit:'unidades'}]);
+  tipMallas(Math.ceil(sup/14.4));
 }
-
-// ── INSTALACIONES ──
-function calcElectrico() {
-  const sup = parseFloat(document.getElementById('elec-sup').value) || 0;
-  const tipo = document.getElementById('elec-tipo').value;
-  const factores = { basica: 6, comoda: 10, completa: 16 };
-  const f = factores[tipo];
-  const m_cable15 = Math.ceil(sup * f * 0.4);
-  const m_cable25 = Math.ceil(sup * f * 0.6);
-  const m_conduit = Math.ceil((m_cable15 + m_cable25) * 0.35);
-  const cajas = Math.ceil(sup * 0.5);
-  renderResults('res-electrico', [
-    { label: 'Cable 1.5mm²', value: m_cable15, unit: 'm lineales' },
-    { label: 'Cable 2.5mm²', value: m_cable25, unit: 'm lineales' },
-    { label: 'Conduit 20mm', value: m_conduit, unit: 'm lineales' },
-    { label: 'Cajas PVC', value: cajas, unit: 'unidades' },
-  ]);
+function calcCascote() {
+  const v=(parseFloat(document.getElementById('cas-largo').value)||0)*(parseFloat(document.getElementById('cas-ancho').value)||0)*(parseFloat(document.getElementById('cas-esp').value)||0)*1.10;
+  renderResults('res-cascote',[{label:'Volumen',value:v.toFixed(2),unit:'m³'},{label:'Peso aprox.',value:(v*1.4).toFixed(1),unit:'toneladas'},{label:'Bolsas 25kg',value:Math.ceil(v*1400/25),unit:'unidades'}]);
+  tipCascote(v);
 }
-
-function calcAgua() {
-  const banios = parseInt(document.getElementById('ag-banios').value) || 0;
-  const cocinas = parseInt(document.getElementById('ag-cocinas').value) || 0;
-  const dist = parseFloat(document.getElementById('ag-dist').value) || 0;
-  const puntos = banios * 4 + cocinas * 3;
-  const m_pp = Math.ceil(puntos * 4 + dist * 2);
-  const m_desague = Math.ceil(puntos * 3 + dist);
-  const llaves = banios * 2 + cocinas + 2;
-  renderResults('res-agua', [
-    { label: 'Puntos de agua', value: puntos, unit: 'puntos' },
-    { label: 'Caño poliprop.', value: m_pp, unit: 'm lineales' },
-    { label: 'Caño PVC Ø110', value: m_desague, unit: 'm lineales' },
-    { label: 'Llaves de paso', value: llaves, unit: 'unidades' },
-  ]);
+function calcDesencofrante() {
+  const s=parseFloat(document.getElementById('de-sup').value)||0;
+  renderResults('res-desencofrante',[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Litros',value:Math.ceil(s/15*1.10),unit:'litros'},{label:'Bidones 5L',value:Math.ceil(s/15*1.10/5),unit:'unidades'}]);
+  tipDesencofrante(Math.ceil(s/15*1.10));
 }
-
-function calcGas() {
-  const art = parseInt(document.getElementById('gas-art').value) || 0;
-  const metros = parseFloat(document.getElementById('gas-metros').value) || 0;
-  const tipo = document.getElementById('gas-tipo').value;
-  const m_total = Math.ceil(metros * 1.15);
-  const barras = Math.ceil(m_total / 3);
-  const llaves = art + 1;
-  renderResults('res-gas', [
-    { label: 'Artefactos', value: art, unit: 'puntos' },
-    { label: tipo === 'cobre' ? 'Caño cobre 1/2"' : 'Caño galv. 3/4"', value: barras, unit: 'barras 3m' },
-    { label: 'Llaves esfera', value: llaves, unit: 'unidades' },
-    { label: 'Metros totales', value: m_total, unit: 'm lineales' },
-  ]);
+function calcLadrillos() {
+  const sup=Math.max(0,(parseFloat(document.getElementById('l-ancho').value)||0)*(parseFloat(document.getElementById('l-alto').value)||0)-(parseFloat(document.getElementById('l-aberturas').value)||0));
+  const pm=parseFloat(document.getElementById('l-tipo').value);
+  renderResults('res-ladrillos',[{label:'Superficie',value:sup.toFixed(1),unit:'m²'},{label:'Ladrillos',value:Math.ceil(sup*pm*1.10).toLocaleString('es-AR'),unit:'unidades'},{label:'Cemento',value:Math.ceil(sup*0.15),unit:'bolsas 25 kg'},{label:'Arena',value:(sup*0.03*1.10).toFixed(2),unit:'m³'}]);
+  tipLadrillos(Math.ceil(sup*pm*1.10), sup);
 }
-
-function calcAireAc() {
-  const sup = parseFloat(document.getElementById('aa-sup').value) || 0;
-  const alto = parseFloat(document.getElementById('aa-alto').value);
-  const orient = parseFloat(document.getElementById('aa-orient').value);
-  const frigorias = Math.ceil(sup * 600 * (alto / 2.4) * orient);
-  let modelo = '';
-  if (frigorias <= 2200) modelo = '2200 (muy chico)';
-  else if (frigorias <= 3000) modelo = '3000 frigorías';
-  else if (frigorias <= 4000) modelo = '3500 / 4000 frigorías';
-  else if (frigorias <= 5000) modelo = '5000 frigorías';
-  else if (frigorias <= 6000) modelo = '6000 frigorías';
-  else modelo = '+ de 6000 (consultar)';
-  renderResults('res-aireac', [
-    { label: 'Frigorías necesarias', value: frigorias.toLocaleString('es-AR'), unit: 'kcal/h' },
-    { label: 'Modelo sugerido', value: modelo, unit: '' },
-    { label: 'Cañería cobre', value: '1', unit: 'rollo 3m' },
-  ]);
+function calcCemento() {
+  const s=parseFloat(document.getElementById('c-sup').value)||0,t=document.getElementById('c-tipo').value;
+  let bC,mA,bCal=0;
+  if(t==='revoque'){bC=Math.ceil(s*0.12*1.1);mA=(s*0.025*1.1).toFixed(2);bCal=Math.ceil(s*0.05);}
+  if(t==='contrapiso'){bC=Math.ceil(s*0.5*1.1);mA=(s*0.08*1.1).toFixed(2);}
+  if(t==='pegado'){bC=Math.ceil(s*0.15*1.1);mA=(s*0.03*1.1).toFixed(2);bCal=Math.ceil(s*0.05);}
+  if(t==='carpeta'){bC=Math.ceil(s*0.25*1.1);mA=(s*0.04*1.1).toFixed(2);}
+  const it=[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Cemento',value:bC,unit:'bolsas 25 kg'},{label:'Arena',value:mA,unit:'m³'}];
+  if(bCal) it.push({label:'Cal',value:bCal,unit:'bolsas 25 kg'});
+  renderResults('res-cemento',it);
 }
-
-// ── REVOQUES ──
-function calcRevoque() {
-  const sup = parseFloat(document.getElementById('rev-sup').value) || 0;
-  const tipo = document.getElementById('rev-tipo').value;
-  let cemento = 0, cal = 0, arena = 0, yeso = 0;
-  if (tipo === 'grueso_ext') { cemento = Math.ceil(sup * 0.15 * 1.1); cal = Math.ceil(sup * 0.06 * 1.1); arena = (sup * 0.025 * 1.1).toFixed(2); }
-  if (tipo === 'grueso_int') { cemento = Math.ceil(sup * 0.10 * 1.1); cal = Math.ceil(sup * 0.08 * 1.1); arena = (sup * 0.020 * 1.1).toFixed(2); }
-  if (tipo === 'fino')       { yeso = Math.ceil(sup * 0.012 * 1.1 * 25); cal = Math.ceil(sup * 0.04 * 1.1); }
-  if (tipo === 'proyectable'){ cemento = Math.ceil(sup * 0.20 * 1.1); arena = (sup * 0.030 * 1.1).toFixed(2); }
-
-  const items = [{ label: 'Superficie', value: sup.toFixed(0), unit: 'm²' }];
-  if (cemento) items.push({ label: 'Cemento alba.', value: cemento, unit: 'bolsas 40kg' });
-  if (cal) items.push({ label: 'Cal', value: cal, unit: 'bolsas 25kg' });
-  if (arena) items.push({ label: 'Arena fina', value: arena, unit: 'm³' });
-  if (yeso) items.push({ label: 'Yeso', value: yeso, unit: 'kg' });
-  renderResults('res-revoque', items);
+function calcCal() {
+  const s=parseFloat(document.getElementById('cal-sup').value)||0,t=document.getElementById('cal-tipo').value;
+  const b=t==='revoque_fino'?Math.ceil(s*0.08*1.1):t==='junta'?Math.ceil(s*0.05*1.1):Math.ceil(s*0.04*1.1);
+  renderResults('res-cal',[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Cal hidráulica',value:b,unit:'bolsas 25 kg'}]);
 }
-
-function calcContrapiso() {
-  const sup = parseFloat(document.getElementById('cp-sup').value) || 0;
-  const esp = parseFloat(document.getElementById('cp-esp').value) / 100;
-  const conCascote = document.getElementById('cp-cascote').value === 'si';
-  let m3Hormigon = sup * esp * (conCascote ? 0.5 : 1.0) * 1.05;
-  const cascote = conCascote ? (sup * esp * 0.5 * 1.1).toFixed(2) : 0;
-  const cemento = Math.ceil(m3Hormigon * 5.5);
-  const arena = (m3Hormigon * 0.55).toFixed(2);
-  const polietileno = Math.ceil(sup * 1.15 / 50);
-  const items = [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Cemento', value: cemento, unit: 'bolsas 50kg' },
-    { label: 'Arena gruesa', value: arena, unit: 'm³' },
-    { label: 'Polietileno', value: polietileno, unit: 'rollos 50m²' },
-  ];
-  if (conCascote) items.push({ label: 'Cascote', value: cascote, unit: 'm³' });
-  renderResults('res-contrapiso', items);
+function calcCemAlb() {
+  const s=parseFloat(document.getElementById('ca2-sup').value)||0,t=document.getElementById('ca2-tipo').value;
+  let b,a;
+  if(t==='junta'){b=Math.ceil(s*0.10*1.1);a=(s*0.025*1.1).toFixed(2);}
+  if(t==='revoque'){b=Math.ceil(s*0.15*1.1);a=(s*0.030*1.1).toFixed(2);}
+  if(t==='contrapiso'){b=Math.ceil(s*0.40*1.1);a=(s*0.070*1.1).toFixed(2);}
+  renderResults('res-cemalbañileria',[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Cem. albañilería',value:b,unit:'bolsas 20 kg'},{label:'Arena',value:a,unit:'m³'}]);
 }
-
-function calcYeso() {
-  const sup = parseFloat(document.getElementById('yes-sup').value) || 0;
-  const tipo = document.getElementById('yes-tipo').value;
-  const espesores = { cielorraso: 0.010, pared: 0.005, enlucido: 0.003 };
-  const esp = espesores[tipo];
-  const kgYeso = Math.ceil(sup * esp * 1000 * 1.10);
-  const bolsas = Math.ceil(kgYeso / 40);
-  renderResults('res-yeso', [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Yeso total', value: kgYeso.toLocaleString('es-AR'), unit: 'kg' },
-    { label: 'Bolsas 40kg', value: bolsas, unit: 'unidades' },
-  ]);
+function calcCeresita() {
+  const s=parseFloat(document.getElementById('cer2-sup').value)||0,t=document.getElementById('cer2-tipo').value;
+  const l=t==='mezcla'?Math.ceil(s*0.08*1.1):Math.ceil(s*0.20*1.1);
+  renderResults('res-ceresita',[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Ceresita',value:l,unit:'litros'},{label:'Bidones 5L',value:Math.ceil(l/5),unit:'unidades'}]);
 }
-
-function calcCarpeta() {
-  const sup = parseFloat(document.getElementById('carp-sup').value) || 0;
-  const esp = parseFloat(document.getElementById('carp-esp').value) / 100;
-  const cemento = Math.ceil(sup * esp * 500 * 1.1);
-  const bolsasCem = Math.ceil(cemento / 50);
-  const arena = (sup * esp * 0.7 * 1.1).toFixed(2);
-  const aditivo = Math.ceil(sup * 0.3);
-  renderResults('res-carpeta', [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Cemento', value: bolsasCem, unit: 'bolsas 50kg' },
-    { label: 'Arena fina', value: arena, unit: 'm³' },
-    { label: 'Aditivo adher.', value: aditivo, unit: 'litros' },
-  ]);
+function calcTacuru() {
+  const s=parseFloat(document.getElementById('tac-sup').value)||0,kg=Math.ceil(s*2*1.10);
+  renderResults('res-tacuru',[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Tacurú',value:kg,unit:'kg'},{label:'Bolsas 25kg',value:Math.ceil(kg/25),unit:'unidades'}]);
 }
-
-// ── REVESTIMIENTOS ──
+function calcArena() {
+  const v=parseFloat(document.getElementById('ar-vol').value)||0,t=document.getElementById('ar-tipo').value;
+  const d=t.includes('piedra')?1.5:1.4;
+  renderResults('res-arena',[{label:'Volumen',value:v.toFixed(1),unit:'m³'},{label:'Peso aprox.',value:(v*d).toFixed(1),unit:'toneladas'},{label:'Bolsas 25kg',value:Math.ceil(v*d*1000/25),unit:'unidades'}]);
+}
 function calcCeramico() {
-  const sup = parseFloat(document.getElementById('cer-sup').value) || 0;
-  const tamPieza = parseFloat(document.getElementById('cer-tam').value);
-  const desp = parseFloat(document.getElementById('cer-col').value);
-  const supTotal = sup * (1 + desp);
-  const piezas = Math.ceil(supTotal / tamPieza);
-  const adhesivo = Math.ceil(sup * 5 * 1.1);
-  const bolsasAdh = Math.ceil(adhesivo / 25);
-  const pastina = Math.ceil(sup * 0.5 * 1.1);
-  renderResults('res-ceramico', [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Piezas', value: piezas.toLocaleString('es-AR'), unit: 'unidades' },
-    { label: 'Adhesivo', value: bolsasAdh, unit: 'bolsas 25kg' },
-    { label: 'Pastina', value: pastina, unit: 'kg' },
-  ]);
+  const s=parseFloat(document.getElementById('cer-sup').value)||0,t=parseFloat(document.getElementById('cer-tam').value),d=parseFloat(document.getElementById('cer-col').value);
+  renderResults('res-ceramico',[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Piezas',value:Math.ceil(s*(1+d)/t).toLocaleString('es-AR'),unit:'unidades'},{label:'Adhesivo',value:Math.ceil(s*5),unit:'kg'},{label:'Pastina',value:Math.ceil(s*0.5),unit:'kg'}]);
+  tipCeramico(Math.ceil(s*(1+d)/t), s, d);
 }
-
 function calcPintura() {
-  const sup = parseFloat(document.getElementById('p-sup').value) || 0;
-  const manos = parseFloat(document.getElementById('p-manos').value);
-  const rend = parseFloat(document.getElementById('p-tipo').value);
-  const litros = Math.ceil((sup * manos / rend) * 1.10);
-  const latas20 = Math.floor(litros / 20);
-  const resto = litros - latas20 * 20;
-  const latas4 = Math.ceil(resto / 4);
-  renderResults('res-pintura', [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Litros totales', value: litros, unit: 'litros' },
-    { label: 'Latas x 20L', value: latas20, unit: 'unidades' },
-    { label: 'Latas x 4L', value: latas4, unit: 'unidades' },
-  ]);
+  const s=parseFloat(document.getElementById('p-sup').value)||0,m=parseFloat(document.getElementById('p-manos').value),r=parseFloat(document.getElementById('p-tipo').value);
+  const l=Math.ceil(s*m/r*1.10);
+  renderResults('res-pintura',[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Litros totales',value:l,unit:'litros'},{label:'Latas x 20L',value:Math.floor(l/20),unit:'unidades'},{label:'Latas x 4L',value:Math.ceil((l%20)/4),unit:'unidades'}]);
+  tipPintura(l, m);
 }
-
-function calcFlotante() {
-  const sup = parseFloat(document.getElementById('fl-sup').value) || 0;
-  const desp = parseFloat(document.getElementById('fl-tipo').value);
-  const supTotal = (sup * (1 + desp)).toFixed(1);
-  const underliner = Math.ceil(sup * 1.05);
-  const zocalos = Math.ceil(Math.sqrt(sup) * 4 * 1.15 / 2.5);
-  renderResults('res-flotante', [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Piso flotante', value: supTotal, unit: 'm² a comprar' },
-    { label: 'Underliner', value: underliner, unit: 'm²' },
-    { label: 'Zócalos 2.5m', value: zocalos, unit: 'unidades (est.)' },
-  ]);
+function calcRevoque() {
+  const s=parseFloat(document.getElementById('rev-sup').value)||0,t=document.getElementById('rev-tipo').value;
+  const it=[{label:'Superficie',value:s.toFixed(0),unit:'m²'}];
+  if(t==='yeso') it.push({label:'Yeso',value:Math.ceil(s*0.008*1.1*1000/20),unit:'bolsas 20 kg'});
+  else { it.push({label:'Cal',value:Math.ceil(s*0.08*1.1),unit:'bolsas 25 kg'}); it.push({label:'Arena fina',value:(s*0.02*1.1).toFixed(2),unit:'m³'}); }
+  renderResults('res-revoque',it);
 }
-
-function calcPastina() {
-  const sup = parseFloat(document.getElementById('pas-sup').value) || 0;
-  const junta = parseFloat(document.getElementById('pas-junta').value);
-  const tam = parseFloat(document.getElementById('pas-tam').value) / 100;
-  const kg = sup * junta * (1/tam) * 1.7 * 1.10;
-  const bolsas = Math.ceil(kg / 5);
-  renderResults('res-pastina', [
-    { label: 'Superficie', value: sup.toFixed(0), unit: 'm²' },
-    { label: 'Pastina total', value: kg.toFixed(1), unit: 'kg' },
-    { label: 'Bolsas 5kg', value: bolsas, unit: 'unidades' },
-  ]);
+function calcCarpeta() {
+  const s=parseFloat(document.getElementById('carp-sup').value)||0,e=parseFloat(document.getElementById('carp-esp').value)/100,v=s*e*1.10;
+  renderResults('res-carpeta',[{label:'Superficie',value:s.toFixed(0),unit:'m²'},{label:'Cemento',value:Math.ceil(v*250/25),unit:'bolsas 25 kg'},{label:'Arena',value:(v*0.75).toFixed(2),unit:'m³'}]);
 }
-
-// ── CARPINTERÍA ──
-function calcAberturas() {
-  const pint = parseInt(document.getElementById('ab-pint').value) || 0;
-  const pext = parseInt(document.getElementById('ab-pext').value) || 0;
-  const vent = parseInt(document.getElementById('ab-vent').value) || 0;
-  const pv   = parseInt(document.getElementById('ab-pv').value) || 0;
-  const port = parseInt(document.getElementById('ab-port').value) || 0;
-  const total = pint + pext + vent + pv + port;
-  const silicona = Math.ceil(total * 1.5);
-  const espuma = total;
-  const bisagras = (pint + pext) * 2;
-  renderResults('res-aberturas', [
-    { label: 'Total aberturas', value: total, unit: 'unidades' },
-    { label: 'Silicona 300ml', value: silicona, unit: 'unidades' },
-    { label: 'Espuma poliu.', value: espuma, unit: 'unidades 750ml' },
-    { label: 'Bisagras 3"', value: bisagras, unit: 'pares' },
-  ]);
-}
-
-function calcPlacard() {
-  const ancho = parseFloat(document.getElementById('pl-ancho').value) || 0;
-  const alto  = parseFloat(document.getElementById('pl-alto').value) || 0;
-  const prof  = parseFloat(document.getElementById('pl-prof').value) || 0;
-  const esp   = parseInt(document.getElementById('pl-tipo').value);
-  const areaTab = 1.83 * 2.44;
-  const supNecesaria = (ancho * alto * 2 + ancho * prof * 2 + alto * prof * 2) * 1.15;
-  const tableros = Math.ceil(supNecesaria / areaTab);
-  const canto = Math.ceil(supNecesaria / 50) + 1;
-  const bisagras = Math.ceil(ancho / 0.6) * 2;
-  renderResults('res-placard', [
-    { label: 'Superficie total', value: supNecesaria.toFixed(1), unit: 'm²' },
-    { label: `Tableros ${esp}mm`, value: tableros, unit: 'unidades' },
-    { label: 'Canto 22mm', value: canto, unit: 'rollos 50m' },
-    { label: 'Bisagras', value: bisagras, unit: 'pares' },
-  ]);
-}
-
-// ── HERRERÍA ──
-function calcBaranda() {
-  const metros = parseFloat(document.getElementById('bar-metros').value) || 0;
-  const alto = parseFloat(document.getElementById('bar-alto').value);
-  const tipo = document.getElementById('bar-tipo').value;
-  const montantes = Math.ceil(metros / 1.0) + 1;
-  let barras6m = 0;
-  if (tipo === 'caño') {
-    barras6m = Math.ceil((metros + montantes * alto) / 6 * 1.15);
-  } else if (tipo === 'hierro_forjado') {
-    barras6m = Math.ceil((metros * 3 + montantes * alto) / 6 * 1.20);
-  }
-  const anticorrosivo = Math.ceil(metros * alto * 0.15);
-  renderResults('res-baranda', [
-    { label: 'Metros lineales', value: metros.toFixed(0), unit: 'm' },
-    { label: 'Montantes', value: montantes, unit: 'unidades' },
-    { label: 'Caño / barras 6m', value: barras6m, unit: 'unidades' },
-    { label: 'Anticorrosivo', value: anticorrosivo, unit: 'latas 4L' },
-  ]);
-}
-
-function calcReja() {
-  const ancho = parseFloat(document.getElementById('rej-ancho').value) || 0;
-  const alto  = parseFloat(document.getElementById('rej-alto').value) || 0;
-  const cant  = parseInt(document.getElementById('rej-cant').value) || 1;
-  const tipo  = document.getElementById('rej-tipo').value;
-  const sup = ancho * alto * cant;
-  const factorKg = tipo === 'simple' ? 12 : tipo === 'doble' ? 20 : 15;
-  const kg = Math.ceil(sup * factorKg * 1.10);
-  const anticorrosivo = Math.ceil(sup * cant * 0.15);
-  renderResults('res-reja', [
-    { label: 'Superficie total', value: sup.toFixed(1), unit: 'm²' },
-    { label: 'Hierro aprox.', value: kg, unit: 'kg' },
-    { label: 'Anticorrosivo', value: anticorrosivo, unit: 'latas 4L' },
-    { label: 'Electrodos', value: Math.ceil(kg/15), unit: 'cajas x25' },
-  ]);
-}
-
-// ── TERMINACIONES ──
-function calcVidrio() {
-  const ancho = parseFloat(document.getElementById('vid-ancho').value) || 0;
-  const alto  = parseFloat(document.getElementById('vid-alto').value) || 0;
-  const cant  = parseInt(document.getElementById('vid-cant').value) || 1;
-  const m2Total = (ancho * alto * cant).toFixed(2);
-  const silicona = Math.ceil(ancho * cant * 2 + alto * cant * 2);
-  renderResults('res-vidrio', [
-    { label: 'Superficie total', value: m2Total, unit: 'm²' },
-    { label: 'Cantidad de paños', value: cant, unit: 'unidades' },
-    { label: 'Silicona 300ml', value: Math.ceil(silicona / 8), unit: 'unidades' },
-  ]);
-}
-
 function calcDurlock() {
-  const ancho = parseFloat(document.getElementById('d-ancho').value) || 0;
-  const alto  = parseFloat(document.getElementById('d-alto').value) || 0;
-  const tipo  = document.getElementById('d-tipo').value;
-  const sup = ancho * alto;
-  const placaM2 = 1.20 * 2.40;
-  const lados = tipo === 'cielorraso' ? 1 : (tipo === 'doble' ? 4 : 2);
-  const placas   = Math.ceil((sup * lados / placaM2) * 1.10);
-  const perfiles = Math.ceil((ancho / 0.40) * alto * (tipo === 'doble' ? 2 : 1) * 1.10);
-  const tornillos = placas * 25;
-  const masilla   = Math.ceil(sup * lados * 0.3);
-  renderResults('res-durlock', [
-    { label: 'Superficie', value: sup.toFixed(1), unit: 'm²' },
-    { label: 'Placas 1.2x2.4', value: placas, unit: 'unidades' },
-    { label: 'Perfiles', value: perfiles, unit: 'unidades' },
-    { label: 'Tornillos', value: tornillos.toLocaleString('es-AR'), unit: 'unidades' },
-    { label: 'Masilla', value: masilla, unit: 'kg' },
-  ]);
+  const a=parseFloat(document.getElementById('d-ancho').value)||0,al=parseFloat(document.getElementById('d-alto').value)||0,t=document.getElementById('d-tipo').value;
+  const s=a*al,l=t==='cielorraso'?1:t==='doble'?4:2,pl=Math.ceil(s*l/(1.20*2.40)*1.10);
+  renderResults('res-durlock',[{label:'Superficie',value:s.toFixed(1),unit:'m²'},{label:'Placas',value:pl,unit:'unidades'},{label:'Perfiles',value:Math.ceil(a/0.40*al*(t==='doble'?2:1)*1.10),unit:'unidades'},{label:'Tornillos',value:(pl*25).toLocaleString('es-AR'),unit:'unidades'},{label:'Masilla',value:Math.ceil(s*l*0.3),unit:'kg'}]);
+  tipDurlock(pl, t);
+}
+function calcSteel() {
+  const lg=parseFloat(document.getElementById('sf-largo').value)||0,al=parseFloat(document.getElementById('sf-alto').value)||0,t=document.getElementById('sf-tipo').value;
+  const s=lg*al,mo=Math.ceil((lg/0.40+1)*1.10),so=Math.ceil(lg*2/3*1.10);
+  const it=[{label:'Superficie',value:s.toFixed(1),unit:'m²'},{label:'Montantes',value:mo,unit:'unidades'},{label:'Soleras',value:so,unit:'barras 3m'},{label:'Tornillos',value:(mo*12).toLocaleString('es-AR'),unit:'unidades'}];
+  if(t!=='techo') it.push({label:'Placas OSB',value:Math.ceil(s/(1.20*2.40)*1.10),unit:'unidades'});
+  renderResults('res-steel',it);
+}
+function calcCielorraso() {
+  const lg=parseFloat(document.getElementById('ci-largo').value)||0,an=parseFloat(document.getElementById('ci-ancho').value)||0,t=document.getElementById('ci-tipo').value;
+  const s=lg*an;
+  const it=[{label:'Superficie',value:s.toFixed(1),unit:'m²'}];
+  if(t==='yeso'){it.push({label:'Yeso',value:Math.ceil(s*0.008*1.1*1000/20),unit:'bolsas 20 kg'});it.push({label:'Perfiles',value:Math.ceil((lg/0.40+an/0.40)*1.10),unit:'unidades'});}
+  else if(t==='madera'){it.push({label:'Listones 3m',value:Math.ceil(s/0.10*1.10/3),unit:'unidades'});it.push({label:'Clavos',value:Math.ceil(s*8),unit:'unidades'});}
+  else{it.push({label:'Machimbre 3m',value:Math.ceil(s/0.10*1.10/3),unit:'unidades'});it.push({label:'Clavos sin cabeza',value:Math.ceil(s*10),unit:'unidades'});}
+  renderResults('res-cielorraso',it);
+}
+function calcCañeria() {
+  const m=parseFloat(document.getElementById('ca-metros').value)||0,b=parseFloat(document.getElementById('ca-bocas').value)||0,mc=Math.ceil(m*1.15);
+  renderResults('res-cañeria',[{label:'Metros con desp.',value:mc,unit:'ml'},{label:'Barras x 3m',value:Math.ceil(mc/3),unit:'unidades'},{label:'Codos',value:b*2,unit:'unidades'},{label:'Tees',value:Math.ceil(b/2),unit:'unidades'},{label:'Uniones',value:Math.ceil(mc/6),unit:'unidades'}]);
+}
+function calcCables() {
+  const m=parseFloat(document.getElementById('cab-metros').value)||0,b=parseFloat(document.getElementById('cab-bocas').value)||0,mc=Math.ceil(m*b*1.20);
+  renderResults('res-cables',[{label:'Metros totales',value:mc,unit:'ml'},{label:'Rollos x 100m',value:Math.ceil(mc/100),unit:'unidades'},{label:'Cajas de paso',value:Math.ceil(b/3),unit:'unidades'},{label:'Llaves/tomac.',value:b,unit:'unidades'}]);
+}
+function calcCañosLuz() {
+  const m=parseFloat(document.getElementById('cl-metros').value)||0,b=parseFloat(document.getElementById('cl-bocas').value)||0,mc=Math.ceil(m*b*1.15);
+  renderResults('res-cañosluz',[{label:'Metros totales',value:mc,unit:'ml'},{label:'Barras x 3m',value:Math.ceil(mc/3),unit:'unidades'},{label:'Curvas 90°',value:b*2,unit:'unidades'},{label:'Cajas octogonales',value:b,unit:'unidades'},{label:'Cajas de paso',value:Math.ceil(b/3),unit:'unidades'}]);
+}
+function calcClavos() {
+  const c=parseFloat(document.getElementById('clav-cant').value)||0,u=Math.ceil(c*10*1.10);
+  renderResults('res-clavos',[{label:'Unidades aprox.',value:u.toLocaleString('es-AR'),unit:'unidades'},{label:'Bolsas 1kg',value:Math.ceil(u/100),unit:'unidades'},{label:'Bolsas 5kg',value:Math.ceil(u/500),unit:'unidades'}]);
+}
+function calcTornillos() {
+  const c=parseFloat(document.getElementById('torn-cant').value)||0,t=document.getElementById('torn-tipo').value;
+  const pu=t==='durlock'?25:t==='autoperf'?15:t==='madera'?8:4,total=Math.ceil(c*pu*1.10);
+  renderResults('res-tornillos',[{label:'Total',value:total.toLocaleString('es-AR'),unit:'unidades'},{label:'Cajas x 100u',value:Math.ceil(total/100),unit:'cajas'},{label:'Cajas x 200u',value:Math.ceil(total/200),unit:'cajas'}]);
+}
+function calcMadera() {
+  const s=parseFloat(document.getElementById('mad-sup').value)||0,t=document.getElementById('mad-tipo').value,u=parseFloat(document.getElementById('mad-usos').value),sr=s/u*1.15;
+  const it=[{label:'Superficie',value:s.toFixed(0),unit:'m²'}];
+  if(t==='tirante') it.push({label:'Tirantes 3m',value:Math.ceil(sr/0.05/3),unit:'unidades'});
+  else if(t==='tabla') it.push({label:'Tablas 3m',value:Math.ceil(sr/0.15/3),unit:'unidades'});
+  else if(t==='fenolico') it.push({label:'Fenólico 1.22x2.44m',value:Math.ceil(sr/(1.22*2.44)),unit:'unidades'});
+  else it.push({label:'Terciado 2.44x1.22m',value:Math.ceil(sr/(2.44*1.22)),unit:'unidades'});
+  it.push({label:'Sup. a comprar',value:sr.toFixed(1),unit:'m²'});
+  renderResults('res-madera',it);
 }
 
-// ── Init: ejecutar todos los calculadores al cargar ──
-calcDemolicion(); calcNivelacion();
-calcLadrillos(); calcHormigon(); calcHierros(); calcTecho();
-calcElectrico(); calcAgua(); calcGas(); calcAireAc();
-calcRevoque(); calcContrapiso(); calcYeso(); calcCarpeta();
-calcCeramico(); calcPintura(); calcFlotante(); calcPastina();
-calcAberturas(); calcPlacard();
-calcBaranda(); calcReja();
-calcVidrio(); calcDurlock();
+
+// ── Tips dinámicos de desperdicio ──
+function showTip(id, html) {
+  const el = document.getElementById('tip-' + id);
+  if (!el) return;
+  el.innerHTML = '💡 ' + html;
+  el.style.display = 'block';
+}
+
+function tipLadrillos(ladrillos, sup) {
+  const extra = Math.ceil(ladrillos * 0.10);
+  showTip('ladrillos', `Pedí <strong>${ladrillos.toLocaleString('es-AR')}</strong> ladrillos. Te recomendamos agregar <strong>${extra}</strong> extra (10%) para cubrir cortes en esquinas y aberturas. Para ${sup.toFixed(0)}m² de pared, los cortes en los bordes suelen generar ese desperdicio mínimo.`);
+}
+
+function tipCemento(bolsas, tipo) {
+  const msgs = {
+    revoque: `Usá las bolsas dentro de los <strong>30 días</strong> de comprarlas. El cemento absorbe humedad y fragua dentro de la bolsa. Comprá <strong>${bolsas}</strong> bolsas y guardálas en lugar seco sobre tarima de madera.`,
+    contrapiso: `Para contrapiso comprás <strong>${bolsas}</strong> bolsas. Mezclá en tandas pequeñas — el hormigón empieza a fraguar en 30-45 minutos. No agregues agua extra para facilitar el trabajo: debilita la mezcla.`,
+    pegado: `<strong>${bolsas}</strong> bolsas para pegar ladrillos. Preparar solo la cantidad que vas a usar en 1-2 horas. La mezcla que empieza a endurecer no se "rescata" con agua.`,
+    carpeta: `<strong>${bolsas}</strong> bolsas para la carpeta. Esperá 28 días antes de colocar cerámico encima — aunque parezca seca en 3 días, la resistencia final la alcanza al mes.`
+  };
+  showTip('cemento', msgs[tipo] || `Comprá <strong>${bolsas}</strong> bolsas.`);
+}
+
+function tipHormigon(vol, bolsas) {
+  showTip('hormigon', `Para <strong>${vol.toFixed(2)}m³</strong> de hormigón necesitás <strong>${bolsas}</strong> bolsas. Consejo clave: si el volumen supera 3m³, conviene pedir hormigón elaborado en camión — sale más barato y la calidad es superior a la mezcla manual.`);
+}
+
+function tipHierros(metros, barras) {
+  showTip('hierros', `Pedí <strong>${barras}</strong> barras. Al doblar estribos y hacer empalmes, los cortes desperdician hasta un 15%. Siempre pedí un 10% extra. Guardá el sobrante — los hierros no vencen y siempre sirven.`);
+}
+
+function tipMallas(paneles) {
+  showTip('mallas', `Necesitás <strong>${paneles}</strong> paneles. Las solapas entre paneles (mínimo 20cm) son obligatorias — no las salteés para ahorrar. Una losa sin solapa adecuada puede fisurarse en esa junta.`);
+}
+
+function tipCascote(vol) {
+  showTip('cascote', `Para <strong>${vol.toFixed(2)}m³</strong> de relleno: el cascote se compacta con el tiempo, así que considerá un 15% extra si el suelo es irregular. Si usás cascote propio de obra, asegurate que no tenga yeso — el yeso se expande con la humedad.`);
+}
+
+function tipDesencofrante(litros) {
+  showTip('desencofrante', `Con <strong>${litros}</strong> litros tenés suficiente. Aplicalo en capa fina y uniforme — el exceso mancha el hormigón y dificulta la terminación. En días de calor, dos manos finas son mejor que una gruesa.`);
+}
+
+function tipLadrillosCalc(ladrillos, sup) { tipLadrillos(ladrillos, sup); }
+
+function tipCal(bolsas, tipo) {
+  const msgs = {
+    revoque_fino: `<strong>${bolsas}</strong> bolsas para enlucido. La cal necesita <strong>apagarse</strong> con agua 24hs antes de usarse — no la mezclés recién abierta. Una cal bien apagada da mejor terminación y no se fisura.`,
+    junta: `<strong>${bolsas}</strong> bolsas. La mezcla con cal para junta debe tener consistencia de manteca — ni muy seca ni muy húmeda. Probá apretando un poco en la mano: tiene que mantenerse unida.`,
+    pintura_cal: `<strong>${bolsas}</strong> bolsas. La pintura a la cal se aplica con la pared húmeda — mojá la superficie antes. En tiempo muy caluroso, dos manos delgadas con 4hs de diferencia son mejor que una mano gruesa.`
+  };
+  showTip('cal', msgs[tipo] || `Comprá <strong>${bolsas}</strong> bolsas.`);
+}
+
+function tipCemAlb(bolsas, tipo) {
+  showTip('cemalbañileria', `<strong>${bolsas}</strong> bolsas de cemento de albañilería. Ya tiene cal incorporada — no le agregues cal extra. Es más trabajable que el Portland puro pero menos resistente, ideal para mampostería no estructural.`);
+}
+
+function tipCeresita(litros) {
+  showTip('ceresita', `<strong>${litros}</strong> litros. El hidrófugo no reemplaza a una buena membrana en techos — es para muros y contrapisos. Aplicalo siempre en la mezcla fresca, no sobre superficies ya fraguadas.`);
+}
+
+function tipTacuru(kg) {
+  showTip('tacuru', `<strong>${kg}</strong> kg. Aplicá la primera mano y esperá que esté bien seca antes de la segunda (mínimo 24hs). En techos con pendiente menor al 2%, considerá membrana asfáltica en lugar de solo Tacurú.`);
+}
+
+function tipArena(vol) {
+  showTip('arena', `Para <strong>${vol.toFixed(1)}m³</strong>: si comprás a granel, pedí que lo descarguen cerca del punto de uso — mover arena en carretilla tiene un costo físico enorme. Para obras grandes, calculá cuánto entra por la entrada antes de pedir el camión.`);
+}
+
+function tipCeramico(piezas, sup, desp) {
+  const extra = Math.ceil(sup * desp);
+  showTip('ceramico', `Pedís <strong>${piezas.toLocaleString('es-AR')}</strong> piezas para <strong>${sup.toFixed(0)}m²</strong>. El ${(desp*100).toFixed(0)}% de desperdicio incluye <strong>${extra.toFixed(1)}m²</strong> de cortes. Tip: pedí siempre del mismo lote (mismo número de lote en la caja) — los tonos varían entre lotes aunque sean el mismo modelo.`);
+}
+
+function tipPintura(litros, manos) {
+  showTip('pintura', `<strong>${litros}</strong> litros para <strong>${manos}</strong> ${manos>1?'manos':'mano'}. Primero siempre fijador o sellador — sin él, la pintura se "come" en paredes porosas y necesitás el doble. En paredes nuevas de revoque, esperá 30 días antes de pintar.`);
+}
+
+function tipRevoque(tipo) {
+  const msgs = {
+    yeso: 'El yeso fragua rápido — en 20-30 minutos empieza a endurecer. Preparar solo lo que vayas a usar en ese tiempo. En invierno frío fragua más lento; en verano caluroso, más rápido.',
+    cal: 'El revoque de cal necesita tiempo: humectá la pared antes de aplicar y volvé a humectar al día siguiente. Se fisura menos que el yeso pero tarda más en secar.',
+    exterior: 'Para revoque exterior: aplicá en días sin viento ni sol directo. El secado rápido genera fisuras. Protegé con sombra o regá ligeramente las primeras 48hs.'
+  };
+  showTip('revoque', msgs[tipo] || 'Seguí las proporciones del fabricante.');
+}
+
+function tipCarpeta(sup, esp) {
+  showTip('carpeta', `Para <strong>${sup.toFixed(0)}m²</strong> a <strong>${esp}cm</strong>: la carpeta necesita <strong>28 días</strong> de curado antes de colocar cerámica. Si la pisás antes, se puede fisturar. Humedecela con agua los primeros 3 días para que cure bien.`);
+}
+
+function tipDurlock(placas, tipo) {
+  const msgs = {
+    pared: `<strong>${placas}</strong> placas. Dejá siempre 1cm de separación entre la placa y el piso — el contacto directo con humedad del suelo deteriora la placa. Sellá las juntas con masilla en dos manos con lija intermedia.`,
+    cielorraso: `<strong>${placas}</strong> placas para cielorraso. Las juntas del cielorraso se ven más que las de paredes — tomáte el tiempo para masilllar bien. Usá cinta de papel en todas las juntas, no solo masilla.`,
+    doble: `<strong>${placas}</strong> placas para pared doble. La pared doble es ideal para aislación acústica — si ese es el objetivo, completá el interior con lana de vidrio antes de cerrar el segundo lado.`
+  };
+  showTip('durlock', msgs[tipo] || `Pedís <strong>${placas}</strong> placas.`);
+}
+
+function tipSteel(montantes) {
+  showTip('steel', `<strong>${montantes}</strong> montantes. En steel framing, la separación de 40cm entre montantes es estándar para placas de 12.5mm — no la aumentes para ahorrar perfiles porque las placas se flexionan. Usá tornillos autoperforantes, no los de Durlock.`);
+}
+
+function tipCielorraso(tipo, sup) {
+  const msgs = {
+    yeso: `Para ${sup.toFixed(0)}m² de yeso proyectado: el yeso de cielorraso se aplica más diluido que el de pared. Trabajá siempre con la habitación cerrada — las corrientes de aire secan el yeso de forma irregular y generan fisuras.`,
+    madera: `Para cielorraso de madera: tratá los listones con preservante antes de instalarlos. La madera sin tratar en ambientes húmedos se tuerce y mancha. Dejá una ventilación mínima en los extremos.`,
+    machimbre: `Para machimbre: aclimatá las tablas en el ambiente 48hs antes de instalarlas. La madera se expande y contrae con la humedad — si las ponés recién compradas pueden aparecer separaciones.`
+  };
+  showTip('cielorraso', msgs[tipo] || `Seguí las especificaciones del fabricante.`);
+}
+
+function tipCañeria(metros, tipo) {
+  const msgs = {
+    pvc: `Para <strong>${metros}</strong> metros de PVC: los cortes deben ser perpendiculares — usá sierra o cortacaños, nunca amoladora. Las uniones con adhesivo PVC necesitan 24hs de secado antes de hacer presión.`,
+    ppr: `Para <strong>${metros}</strong> metros de PPR: la termofusión es definitiva — no se puede desunir. Practicá primero en retazos. La temperatura correcta de fusión es clave, seguí las instrucciones de la máquina.`,
+    cobre: `Para <strong>${metros}</strong> metros de cobre: el cobre es el más durable pero requiere soldadura con soplete. Si no tenés experiencia, considerás PPR para ramales y cobre solo en la línea principal.`
+  };
+  showTip('cañeria', msgs[tipo] || `Metros calculados con desperdicio incluido.`);
+}
+
+function tipCables(metros, tipo) {
+  showTip('cables', `<strong>${metros}</strong> metros totales. Tip crítico: nunca empalmes cables dentro de la pared — todos los empalmes van en cajas de paso accesibles. Marcá cada circuito con cinta de colores para facilitar mantenimiento futuro.`);
+}
+
+function tipCañosLuz(metros) {
+  showTip('cañosluz', `<strong>${metros}</strong> metros de conduit. Los caños deben quedar fijos cada 80cm como máximo — sin soporte, se comban y dificultan el paso de cables. Dejá siempre un hilo guía al instalar para poder pasar más cables después.`);
+}
+
+function tipClavos(unidades) {
+  showTip('clavos', `<strong>${unidades.toLocaleString('es-AR')}</strong> clavos estimados. Comprá en bolsas de 5kg si superás 500 unidades — sale bastante más barato por kilo. Guardá en lugar seco: los clavos oxidados no clavan bien y manchan la madera.`);
+}
+
+function tipTornillos(total, tipo) {
+  const msgs = {
+    durlock: `<strong>${total.toLocaleString('es-AR')}</strong> tornillos Durlock. Hundílos 1mm por debajo de la superficie de la placa — ni muy superficiales (queda una cúpula que se ve en la pintura) ni demasiado profundos (rompen la placa).`,
+    autoperf: `<strong>${total.toLocaleString('es-AR')}</strong> tornillos autoperforantes. Usá mecha de punta broca — los autoperforantes para chapa no necesitan preperforado, pero en acero grueso conviene marcar el centro antes.`,
+    madera: `<strong>${total.toLocaleString('es-AR')}</strong> tornillos para madera. En maderas duras (quebracho, lapacho), siempre preperforá — sin agujero piloto, la madera se parte. El diámetro del agujero piloto debe ser el 70% del diámetro del tornillo.`,
+    hormigon: `<strong>${total.toLocaleString('es-AR')}</strong> tornillos para hormigón. Usá taco plástico del diámetro correcto. En cargas pesadas (más de 20kg) usá taco metálico expansivo — el plástico puede ceder con el tiempo.`
+  };
+  showTip('tornillos', msgs[tipo] || `Total estimado: <strong>${total.toLocaleString('es-AR')}</strong> tornillos.`);
+}
+
+function tipMadera(sup, tipo) {
+  const msgs = {
+    tirante: `Para <strong>${sup.toFixed(0)}m²</strong> con tirantes: tratá la madera con fungicida si va en contacto con el suelo o en exterior. El pino sin tratar en exterior dura 2-3 años; tratado, 10-15 años.`,
+    tabla: `Para encofrado: las tablas se pueden reutilizar 3-5 veces si las limpiás bien con espátula y aplicás desencofrante antes de cada uso. Secálas antes de guardarlas para evitar hongos.`,
+    fenolico: `El fenólico aguanta 5-8 usos con buen mantenimiento. Limpialo con espátula (no con agua) y aplicá desencofrante en ambas caras. Guardalo apoyado en horizontal para que no se deforme.`,
+    terciado: `El terciado de 4mm es liviano pero sensible a la humedad — se delamina fácilmente. Para exterior, usá fenólico o terciado marino (resistente al agua).`
+  };
+  showTip('madera', msgs[tipo] || `Superficie a comprar calculada con desperdicio.`);
+}
+
+// Init
+calcHormigon();calcHierros();calcMallas();calcCascote();calcDesencofrante();
+calcLadrillos();calcCemento();calcCal();calcCemAlb();calcCeresita();calcTacuru();calcArena();
+calcCeramico();calcPintura();calcRevoque();calcCarpeta();
+calcDurlock();calcSteel();calcCielorraso();
+calcCañeria();calcCables();calcCañosLuz();
+calcClavos();calcTornillos();calcMadera();
 </script>
 </body>
 </html>
