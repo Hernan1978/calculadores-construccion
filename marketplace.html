@@ -6,37 +6,37 @@
 <title>Materiales Ya — Pedí cotización a corralones</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
 
-  header { background: #1a1a1a; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 1.3rem; font-weight: 600; }
   header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
-  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #555; color: #ccc; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
-  .hbtn:hover { background: #fff; color: #1a1a1a; border-color: #fff; }
+  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
+  .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
 
   main { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
 
   /* STEPS */
   .steps { display: flex; margin-bottom: 2rem; }
   .step { flex: 1; text-align: center; position: relative; }
-  .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e0e0d8; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
-  .step.active .step-circle { background: #1a1a1a; color: #fff; }
-  .step.done .step-circle { background: #2d8a4e; color: #fff; }
+  .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #d0dcea; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
+  .step.active .step-circle { background: #1a2744; color: #fff; }
+  .step.done .step-circle { background: #1a6a3e; color: #fff; }
   .step-label { font-size: 11px; color: #888; }
   .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
-  .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #e0e0d8; z-index: 0; }
+  .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #d0dcea; z-index: 0; }
   .step:last-child::after { display: none; }
 
   /* CARDS */
-  .card { background: #fff; border-radius: 12px; border: 1px solid #e0e0d8; padding: 1.5rem; margin-bottom: 1rem; }
+  .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; margin-bottom: 1rem; }
   .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; }
   .card h3 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; color: #555; text-transform: uppercase; letter-spacing: .05em; }
 
   /* FORM */
   .field { margin-bottom: 1rem; }
   .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
-  .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; color: #1a1a1a; background: #fafafa; outline: none; transition: border .15s; resize: vertical; }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a1a1a; background: #fff; }
+  .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: #fafbfd; outline: none; transition: border .15s; resize: vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a2744; background: #fff; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
 
@@ -44,13 +44,13 @@
   .cat-nivel1 { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   .cat-nivel2 { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; min-height: 30px; }
   .pill-cat { padding: 6px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 13px; color: #444; cursor: pointer; transition: all .15s; font-weight: 500; }
-  .pill-cat.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-  .pill-sub { padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #f5f5f0; font-size: 12px; color: #555; cursor: pointer; transition: all .15s; }
-  .pill-sub.active { background: #444; color: #fff; border-color: #444; }
+  .pill-cat.active { background: #1a2744; color: #fff; border-color: #1a1a1a; }
+  .pill-sub { padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #eef2f7; font-size: 12px; color: #555; cursor: pointer; transition: all .15s; }
+  .pill-sub.active { background: #1a3a6e; color: #fff; border-color: #444; }
   .pill-sub:hover:not(.active) { border-color: #999; background: #fff; }
-  .mats-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; min-height: 36px; padding: 8px; background: #f9f9f5; border-radius: 8px; border: 1px solid #eee; }
-  .pill-mat { padding: 5px 12px; border-radius: 6px; border: 1px solid #e0e0d8; background: #fff; font-size: 12px; color: #333; cursor: pointer; transition: all .15s; }
-  .pill-mat:hover { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
+  .mats-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; min-height: 36px; padding: 8px; background: #f5f8fc; border-radius: 8px; border: 1px solid #eee; }
+  .pill-mat { padding: 5px 12px; border-radius: 6px; border: 1px solid #d0dcea; background: #fff; font-size: 12px; color: #333; cursor: pointer; transition: all .15s; }
+  .pill-mat:hover { border-color: #1a1a1a; background: #1a2744; color: #fff; }
 
   /* ITEMS */
   .item-header { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; margin-bottom: 4px; padding: 0 2px; }
@@ -58,17 +58,17 @@
   .item-row { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
   @media(max-width:480px) { .item-row, .item-header { grid-template-columns: 1fr 55px 75px 28px; } }
   .item-row input { padding: 7px 10px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; width: 100%; background: #fafafa; outline: none; }
-  .item-row input:focus { border-color: #1a1a1a; background: #fff; }
+  .item-row input:focus { border-color: #1a2744; background: #fff; }
   .btn-remove { background: none; border: none; color: #ddd; font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 5px; line-height: 1; }
   .btn-remove:hover { color: #e53e3e; background: #fff0f0; }
   .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all .15s; }
-  .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f9f9f5; }
+  .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f5f8fc; }
 
   /* BOTONES */
-  .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a1a1a; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
+  .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
   .btn-primary:hover { opacity: .85; }
   .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
-  .btn-secondary:hover { background: #f5f5f0; }
+  .btn-secondary:hover { background: #eef2f7; }
 
   /* BANNER */
   .banner-verde { background: #e6f4ea; border: 1px solid #2d8a4e; border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: #2d8a4e; font-weight: 500; }
@@ -78,12 +78,12 @@
   .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
   .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
   .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
-  .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #f5f5f0; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
+  .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #eef2f7; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
   .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; }
   .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
 
   .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
-  .tip { font-size: 12px; color: #888; background: #f9f9f5; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #ddd; margin-top: 1rem; }
+  .tip { font-size: 12px; color: #888; background: #f5f8fc; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #90afd4; margin-top: 1rem; }
 
   .paso { display: none; }
   .paso.active { display: block; }
@@ -98,7 +98,7 @@
     <h1>🏗 Materiales Ya</h1>
     <p>Cotizá en varios corralones de tu zona</p>
   </div>
-  <a href="index.html" class="hbtn">← Calculadores</a>
+  <a href="index.html" class="hbtn" style="border-color:#2e4a7a;color:#90afd4;">← Inicio</a> <a href="calculadores.html" class="hbtn" style="border-color:#2e4a7a;color:#90afd4;">Calculadores</a>
 </header>
 
 <main>
