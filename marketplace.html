@@ -89,6 +89,49 @@
   .paso.active { display: block; }
 
   footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid #2e4a7a;
+    border-radius: 7px;
+    color: #90afd4;
+    font-size: 18px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .nav-links.open { 
+    display: flex !important; 
+    flex-direction: column; 
+    position: absolute; 
+    top: 56px; left: 0; right: 0; 
+    background: #1a2744; 
+    padding: 1rem; gap: 8px;
+    z-index: 100;
+    border-top: 1px solid #2e4a7a;
+  }
+  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
+  @media(max-width:600px) {
+    nav { padding: .875rem 1rem; position: relative; }
+    nav .logo span { display: none; }
+    .nav-links { display: none !important; }
+    .menu-toggle { display: flex !important; }
+  }
+
+  @media(max-width:600px) {
+    header { padding: .875rem 1rem; }
+    header h1 { font-size: 1rem; }
+    main { padding: 0 .75rem; margin: 1rem auto; }
+    .card { padding: 1rem; }
+    .step-label { font-size: 10px; }
+    .cat-nivel1 { gap: 5px; }
+    .pill-cat { padding: 5px 10px; font-size: 12px; }
+    .pill-sub { padding: 4px 8px; font-size: 11px; }
+    .item-header, .item-row { grid-template-columns: 1.5fr 52px 68px 26px; }
+    .confirm-box { padding: 1.25rem .5rem; }
+    .codigo { font-size: 1.1rem; }
+  }
+
 </style>
 </head>
 <body>
@@ -436,5 +479,22 @@ setTimeout(() => {
 }, 4000);
 </script>
 
+<script>
+function toggleMenu() {
+  const nav = document.getElementById('navLinks');
+  const btn = document.getElementById('menuToggle');
+  if(!nav||!btn) return;
+  nav.classList.toggle('open');
+  btn.textContent = nav.classList.contains('open') ? '✕' : '☰';
+}
+document.addEventListener('click', function(e) {
+  const nav = document.getElementById('navLinks');
+  const btn = document.getElementById('menuToggle');
+  if(nav && btn && !nav.contains(e.target) && !btn.contains(e.target)) {
+    nav.classList.remove('open');
+    if(btn) btn.textContent = '☰';
+  }
+});
+</script>
 </body>
 </html>
