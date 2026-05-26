@@ -87,18 +87,64 @@
   footer { text-align: center; padding: 2rem; font-size: 12px; color: #888; }
   footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
   footer a:hover { color: #1a2744; }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid #2e4a7a;
+    border-radius: 7px;
+    color: #90afd4;
+    font-size: 18px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .nav-links.open { 
+    display: flex !important; 
+    flex-direction: column; 
+    position: absolute; 
+    top: 56px; left: 0; right: 0; 
+    background: #1a2744; 
+    padding: 1rem; gap: 8px;
+    z-index: 100;
+    border-top: 1px solid #2e4a7a;
+  }
+  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
+  @media(max-width:600px) {
+    nav { padding: .875rem 1rem; position: relative; }
+    nav .logo span { display: none; }
+    .nav-links { display: none !important; }
+    .menu-toggle { display: flex !important; }
+  }
+
+  @media(max-width:600px) {
+    .hero { padding: 2.5rem 1.25rem 2rem; }
+    .hero h1 { font-size: 1.8rem; }
+    .hero p { font-size: 0.9rem; }
+    .hero-btns { flex-direction: column; }
+    .btn-hero-primary, .btn-hero-secondary { width: 100%; text-align: center; padding: 12px; }
+    .stats-inner { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .cards-main { grid-template-columns: 1fr; }
+    .pasos { grid-template-columns: 1fr 1fr; }
+    .articulos-grid { grid-template-columns: 1fr 1fr; }
+    .cta-btns { flex-direction: column; }
+    .btn-cta-w, .btn-cta-o { text-align: center; }
+    main { margin: 1.5rem auto; padding: 0 1rem; }
+  }
+
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
-  <div class="nav-links">
+  <div class="nav-links" id="navLinks">
     <a href="calculadores.html" class="nav-link">Calculadores</a>
     <a href="marketplace.html" class="nav-link">Pedir materiales</a>
     <a href="mapa.html" class="nav-link">📍 Mapa</a>
     
   </div>
+
+  <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">☰</button>
 </nav>
 
 <div class="hero">
