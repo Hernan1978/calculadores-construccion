@@ -123,7 +123,7 @@
     <a href="mapa.html" class="nav-link active">Mapa</a>
   </div>
 
-  <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">☰</button>
+  <button class="menu-toggle" id="menuToggle">&#9776;</button>
 </nav>
 
 <div class="page-header">
@@ -320,6 +320,32 @@ function toggleBubble() {
 }
 
 cargarNegocios();
+</script>
+<script>
+(function() {
+  function initMenu() {
+    var btn = document.getElementById('menuToggle');
+    var nav = document.getElementById('navLinks');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = nav.classList.contains('open');
+      nav.classList.toggle('open');
+      btn.innerHTML = isOpen ? '&#9776;' : '&#x2715;';
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && e.target !== btn) {
+        nav.classList.remove('open');
+        btn.innerHTML = '&#9776;';
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenu);
+  } else {
+    initMenu();
+  }
+})();
 </script>
 </body>
 </html>
