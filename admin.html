@@ -135,7 +135,7 @@
     <div class="tabs">
       <button class="tab active" onclick="showTab('negocios', this)">🏪 Negocios</button>
       <button class="tab" onclick="showTab('nuevo', this)">➕ Agregar negocio</button>
-      <button class="tab" onclick="showTab('pedidos', this)">📦 Pedidos simulados</button>
+      <button class="tab" onclick="showTab('pedidos', this)">📞 Contactos</button>
       <button class="tab" onclick="showTab('json', this)">📋 Exportar JSON</button>
     </div>
 
@@ -185,9 +185,13 @@
     <!-- TAB PEDIDOS -->
     <div id="tab-pedidos" class="tab-panel">
       <div class="card">
-        <h2>Pedidos recibidos <span style="font-size:12px;color:#888;font-weight:400">Simulados — los reales llegan por WhatsApp</span></h2>
+        <h2>Contactos recibidos <span style="font-size:12px;color:#888;font-weight:400">Los contactos reales llegan por WhatsApp</span></h2>
         <div id="lista-pedidos"></div>
-        <p class="tip">📲 Los pedidos reales los recibís por WhatsApp. Esta sección es para referencia y seguimiento manual.</p>
+        <div style="margin-bottom:1rem">
+          <button class="btn-primary" onclick="agregarContacto()" style="margin-bottom:.5rem">+ Registrar contacto manual</button>
+        </div>
+        <div id="contactos-extra"></div>
+        <p class="tip">📲 Cada vez que un cliente hace clic en "Contactar" desde el mapa, te llega por WhatsApp. Registrá acá los contactos para el seguimiento mensual y cobro.</p>
       </div>
     </div>
 
@@ -265,6 +269,7 @@ function renderStats() {
     <div class="stat-card"><div class="stat-num" style="color:#065f46">${activos}</div><div class="stat-label">Activos en mapa</div></div>
     <div class="stat-card"><div class="stat-num" style="color:#991b1b">${inactivos}</div><div class="stat-label">Inactivos</div></div>
     <div class="stat-card"><div class="stat-num">${tipos}</div><div class="stat-label">Tipos de negocio</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#1a4a8a">0</div><div class="stat-label">Contactos este mes</div></div>
   `;
 }
 
@@ -282,7 +287,7 @@ function renderNegocios() {
         <div class="neg-detalle">${n.direccion} · ${n.telefono}</div>
         <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
           <span class="badge badge-tipo">${TIPOS_LABEL[n.tipo] || n.tipo}</span>
-          <span class="badge badge-${n.plan||'basico'}">${PLANES[n.plan||'basico']}</span>
+          <span class="badge" style="background:#f0f5ff;color:#1a4a8a">$500-1000/contacto</span>
         </div>
       </div>
       <span class="badge ${n.activo ? 'badge-activo' : 'badge-inactivo'}">${n.activo ? 'Activo' : 'Inactivo'}</span>
@@ -353,17 +358,30 @@ const pedidosEjemplo = [
   { id:'MAT-003', fecha:'Ayer 16:40', cliente:'Roberto M.', tel:'11 7777-9012', zona:'Avellaneda', items:'Hierro Ø10mm x15 barras, Malla Q188 x8', urgencia:'Esta quincena' },
 ];
 function renderPedidos() {
-  document.getElementById('lista-pedidos').innerHTML = pedidosEjemplo.map(p => `
+  const lista = contactos || pedidosEjemplo;
+  document.getElementById('lista-pedidos').innerHTML = lista.map(p => `
     <div class="pedido-row">
       <div class="pedido-header">
         <span class="pedido-id">${p.id}</span>
         <span class="pedido-fecha">${p.fecha}</span>
+        ${p.negocio ? `<span class="badge" style="background:#dbeafe;color:#1e40af">${p.negocio}</span>` : ''}
       </div>
       <div class="pedido-cliente">👤 ${p.cliente} · 📱 ${p.tel}</div>
       <div class="pedido-zona">📍 ${p.zona} · ⏰ ${p.urgencia}</div>
       <div class="pedido-items">📦 ${p.items}</div>
     </div>
   `).join('');
+}
+
+// ── Contactos manuales ──
+let contactos = [...pedidosEjemplo];
+function agregarContacto() {
+  const negocio = prompt('Nombre del corralón/negocio:');
+  if(!negocio) return;
+  const cliente = prompt('Nombre del cliente (opcional):') || 'Cliente';
+  const fecha = new Date().toLocaleString('es-AR');
+  contactos.unshift({ id:'C-'+Date.now().toString().slice(-4), fecha, cliente, tel:'-', zona:'-', items:'Contacto desde el mapa', urgencia:'-', negocio });
+  renderPedidos();
 }
 
 // ── JSON ──
