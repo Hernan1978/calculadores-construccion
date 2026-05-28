@@ -59,24 +59,13 @@
       padding:9px 14px;
       font-weight:700;
       cursor:pointer;
-      box-shadow:0 2px 8px rgba(217,48,37,.22);
-      transition:background .15s ease, transform .15s ease, box-shadow .15s ease;
       display:flex;
       align-items:center;
       gap:8px;
     }
-    .btn-salir:hover{
-      background:#b3261e;
-      box-shadow:0 4px 12px rgba(217,48,37,.3);
-      transform:translateY(-1px);
-    }
-    .btn-salir:active{
-      transform:translateY(0);
-    }
-    .icon-salir{
-      font-size:16px;
-      line-height:1;
-    }
+    .btn-salir:hover{ background:#b3261e; }
+    .icon-salir{ font-size:16px; line-height:1; }
+
     main{
       max-width:1100px;
       margin:20px auto;
@@ -151,7 +140,9 @@
       margin-bottom:12px;
     }
     .toolbar input,
-    .toolbar select{
+    .toolbar select,
+    .field input,
+    .field textarea{
       padding:10px 12px;
       border:1px solid #cfd8e3;
       border-radius:10px;
@@ -159,6 +150,7 @@
       font-size:14px;
       outline:none;
       color:#1a1a1a;
+      width:100%;
     }
     .btn{
       padding:10px 14px;
@@ -168,14 +160,9 @@
       color:#fff;
       font-weight:600;
       cursor:pointer;
-      transition:opacity .15s ease, transform .15s ease;
     }
-    .btn:hover{ opacity:.92; }
-    .btn:active{ transform:translateY(1px); }
-    .btn.secondary{
-      background:#e8eef5;
-      color:#1a2744;
-    }
+    .btn.secondary{ background:#e8eef5; color:#1a2744; }
+    .btn.edit{ background:#2563eb; }
     table{
       width:100%;
       border-collapse:collapse;
@@ -223,13 +210,8 @@
       background:#f7f9fc;
       font-size:13px;
     }
-    .sum-row strong{
-      color:#1a2744;
-    }
-    .sum-row span{
-      color:#334155;
-      font-weight:600;
-    }
+    .sum-row strong{ color:#1a2744; }
+    .sum-row span{ color:#334155; font-weight:600; }
     .footer-actions{
       display:flex;
       gap:10px;
@@ -246,15 +228,80 @@
       border-radius:12px;
       padding:10px 12px;
     }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.58);
+      z-index:999;
+      padding:16px;
+      overflow:auto;
+    }
+    .modal.active{ display:flex; align-items:center; justify-content:center; }
+    .modal-box{
+      width:min(760px,100%);
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+    .modal-head{
+      background:#1a2744;
+      color:#fff;
+      padding:16px 18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .modal-head h3{ font-size:1.05rem; }
+    .modal-close{
+      background:transparent;
+      border:none;
+      color:#fff;
+      font-size:22px;
+      cursor:pointer;
+      line-height:1;
+    }
+    .modal-body{ padding:18px; }
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    .field{ display:grid; gap:6px; }
+    .field.full{ grid-column:1 / -1; }
+    .field label{
+      font-size:12px;
+      font-weight:700;
+      color:#334155;
+    }
+    .switch-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
+      color:#1f2937;
+    }
+    .modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
     @media(max-width:900px){
       .grid-kpis,
-      .split{
+      .split,
+      .form-grid{
         grid-template-columns:1fr 1fr;
       }
     }
     @media(max-width:640px){
       .grid-kpis,
-      .split{
+      .split,
+      .form-grid{
         grid-template-columns:1fr;
       }
       table{
@@ -262,9 +309,7 @@
         overflow-x:auto;
         white-space:nowrap;
       }
-      header .wrap{
-        align-items:flex-start;
-      }
+      header .wrap{ align-items:flex-start; }
     }
   </style>
 </head>
@@ -275,7 +320,6 @@
         <h1>Panel privado</h1>
         <p>Leads del mes, resumen por corralón y cobro final.</p>
       </div>
-
       <div class="header-actions">
         <div class="pill">Materiales Ya · Admin</div>
         <button class="btn-salir" onclick="salirPanel()" aria-label="Salir">
@@ -291,43 +335,22 @@
       <h2>Resumen rápido</h2>
       <p class="sub">Vista general del mes actual. Este panel está pensado para que midas contactos recibidos, los corralones activos y el total a cobrar al cierre.</p>
       <div class="grid-kpis">
-        <div class="kpi">
-          <div class="label">Leads del mes</div>
-          <div class="value" id="kpiLeads">128</div>
-          <div class="sub">Total de contactos recibidos</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Corralones activos</div>
-          <div class="value" id="kpiCorralones">14</div>
-          <div class="sub">Con al menos 1 lead</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Cobro estimado</div>
-          <div class="value" id="kpiCobro">$64.000</div>
-          <div class="sub">Con comisión de $500 por lead</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Leads cerrados</div>
-          <div class="value" id="kpiCerrados">52</div>
-          <div class="sub">Derivados y respondidos</div>
-        </div>
+        <div class="kpi"><div class="label">Leads del mes</div><div class="value" id="kpiLeads">128</div><div class="sub">Total de contactos recibidos</div></div>
+        <div class="kpi"><div class="label">Corralones activos</div><div class="value" id="kpiCorralones">14</div><div class="sub">Con al menos 1 lead</div></div>
+        <div class="kpi"><div class="label">Cobro estimado</div><div class="value" id="kpiCobro">$64.000</div><div class="sub">Con comisión de $500 por lead</div></div>
+        <div class="kpi"><div class="label">Leads cerrados</div><div class="value" id="kpiCerrados">52</div><div class="sub">Derivados y respondidos</div></div>
       </div>
-
       <div class="footer-actions">
         <button class="btn" onclick="exportarCSV()">Exportar CSV</button>
         <button class="btn secondary" onclick="marcarCierre()">Marcar cierre de mes</button>
       </div>
-
-      <div class="note">
-        Después podés conectar este panel con Google Sheets para cargar los contactos automáticamente y sacar el resumen sin hacerlo a mano.
-      </div>
+      <div class="note">Después podés conectar este panel con Google Sheets para cargar los contactos automáticamente y sacar el resumen sin hacerlo a mano.</div>
     </section>
 
     <section class="split">
       <div class="card">
         <h2>Leads del mes</h2>
         <div class="sub">Listado de los contactos que llegaron por WhatsApp, con su estado de gestión.</div>
-
         <div class="toolbar">
           <input type="month" id="filtroMes" />
           <select id="filtroEstado">
@@ -339,56 +362,13 @@
           </select>
           <button class="btn" onclick="filtrarLeads()">Filtrar</button>
         </div>
-
-        <table id="tablaLeads">
+        <table>
           <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Cliente</th>
-              <th>Zona</th>
-              <th>Corralón</th>
-              <th>Pedido</th>
-              <th>WhatsApp</th>
-              <th>Estado</th>
-            </tr>
+            <tr><th>Fecha</th><th>Cliente</th><th>Zona</th><th>Corralón</th><th>Pedido</th><th>WhatsApp</th><th>Estado</th></tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>2026-05-01</td>
-              <td>Juan Pérez</td>
-              <td>Rosario centro</td>
-              <td>Corralón San Martín</td>
-              <td>Cemento y arena</td>
-              <td>+54 9 341 555-1200</td>
-              <td><span class="badge new">Nuevo</span></td>
-            </tr>
-            <tr>
-              <td>2026-05-03</td>
-              <td>Carla Gómez</td>
-              <td>Fisherton</td>
-              <td>Materiales del Norte</td>
-              <td>Ladrillos huecos</td>
-              <td>+54 9 341 555-2200</td>
-              <td><span class="badge sent">Enviado</span></td>
-            </tr>
-            <tr>
-              <td>2026-05-03</td>
-              <td>Andrés Silva</td>
-              <td>Funes</td>
-              <td>Corralón La Obra</td>
-              <td>Hierros 10</td>
-              <td>+54 9 341 555-3300</td>
-              <td><span class="badge closed">Cerrado</span></td>
-            </tr>
-            <tr>
-              <td>2026-05-05</td>
-              <td>Lucía Torres</td>
-              <td>Zona sur</td>
-              <td>Corralón San Martín</td>
-              <td>Mapa + consulta</td>
-              <td>+54 9 341 555-4400</td>
-              <td><span class="badge lost">Perdido</span></td>
-            </tr>
+          <tbody id="tbodyLeads">
+            <tr><td>2026-05-01</td><td>Juan Pérez</td><td>Rosario centro</td><td>Corralón San Martín</td><td>Cemento y arena</td><td>+54 9 341 555-1200</td><td><span class="badge new">Nuevo</span></td></tr>
+            <tr><td>2026-05-03</td><td>Carla Gómez</td><td>Fisherton</td><td>Materiales del Norte</td><td>Ladrillos huecos</td><td>+54 9 341 555-2200</td><td><span class="badge sent">Enviado</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -396,16 +376,16 @@
       <div class="card">
         <h2>Resumen por corralón</h2>
         <div class="sub">Cantidad de contactos recibidos por cada negocio durante el mes.</div>
-        <div class="summary-list">
+        <div class="summary-list" id="listaCorralones">
           <div class="sum-row"><strong>Corralón San Martín</strong><span>38 leads</span></div>
           <div class="sum-row"><strong>Materiales del Norte</strong><span>27 leads</span></div>
           <div class="sum-row"><strong>Corralón La Obra</strong><span>21 leads</span></div>
-          <div class="sum-row"><strong>Constructora Oeste</strong><span>14 leads</span></div>
-          <div class="sum-row"><strong>Otros</strong><span>28 leads</span></div>
+        </div>
+        <div class="footer-actions">
+          <button class="btn edit" onclick="abrirModal()">Editar listado</button>
         </div>
 
         <h2 style="margin-top:18px;">Cobro final</h2>
-        <div class="sub">Cálculo simple con comisión fija por lead.</div>
         <div class="summary-list">
           <div class="sum-row"><strong>Tarifa por lead</strong><span>$500</span></div>
           <div class="sum-row"><strong>Total leads facturables</strong><span>128</span></div>
@@ -416,15 +396,102 @@
     </section>
   </main>
 
+  <div class="modal" id="modalCorralones">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Editar listado de corralones</h3>
+        <button class="modal-close" onclick="cerrarModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field"><label>Corralón 1</label><input id="c1_nombre" placeholder="Nombre"></div>
+          <div class="field"><label>Zona 1</label><input id="c1_zona" placeholder="Zona"></div>
+          <div class="field"><label>Teléfono 1</label><input id="c1_tel" placeholder="Teléfono"></div>
+          <div class="field"><label>Tarifa 1</label><input id="c1_tarifa" placeholder="Tarifa"></div>
+
+          <div class="field"><label>Corralón 2</label><input id="c2_nombre" placeholder="Nombre"></div>
+          <div class="field"><label>Zona 2</label><input id="c2_zona" placeholder="Zona"></div>
+          <div class="field"><label>Teléfono 2</label><input id="c2_tel" placeholder="Teléfono"></div>
+          <div class="field"><label>Tarifa 2</label><input id="c2_tarifa" placeholder="Tarifa"></div>
+
+          <div class="field"><label>Corralón 3</label><input id="c3_nombre" placeholder="Nombre"></div>
+          <div class="field"><label>Zona 3</label><input id="c3_zona" placeholder="Zona"></div>
+          <div class="field"><label>Teléfono 3</label><input id="c3_tel" placeholder="Teléfono"></div>
+          <div class="field"><label>Tarifa 3</label><input id="c3_tarifa" placeholder="Tarifa"></div>
+
+          <div class="field full">
+            <label class="switch-row">
+              <input type="checkbox" id="activo_global" checked />
+              Activar listado para mostrarse en el panel
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn secondary" onclick="cerrarModal()">Cancelar</button>
+          <button class="btn" onclick="guardarListado()">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDK46AwRgxQ1Mm6KQdLdKQMPYGFLDf7Af65mv5EBH9A2RSRTzqRbdeac9b8815hE0aGA/exec";
 
     function salirPanel() {
-      if (history.length > 1) {
-        history.back();
-      } else {
-        window.location.href = "index.html";
-      }
+      if (history.length > 1) history.back();
+      else window.location.href = "index.html";
+    }
+
+    function abrirModal() {
+      document.getElementById('modalCorralones').classList.add('active');
+      const data = [
+        ["c1_nombre","Corralón San Martín"],["c1_zona","Centro"],["c1_tel","3415551000"],["c1_tarifa","500"],
+        ["c2_nombre","Materiales del Norte"],["c2_zona","Fisherton"],["c2_tel","3415552000"],["c2_tarifa","500"],
+        ["c3_nombre","Corralón La Obra"],["c3_zona","Funes"],["c3_tel","3415553000"],["c3_tarifa","500"]
+      ];
+      data.forEach(([id,val]) => document.getElementById(id).value = val);
+      document.getElementById('activo_global').checked = true;
+    }
+
+    function cerrarModal() {
+      document.getElementById('modalCorralones').classList.remove('active');
+    }
+
+    function guardarListado() {
+      const listado = {
+        action: "saveConfig",
+        corralones: [
+          {
+            nombre: document.getElementById('c1_nombre').value,
+            zona: document.getElementById('c1_zona').value,
+            telefono: document.getElementById('c1_tel').value,
+            tarifa: document.getElementById('c1_tarifa').value
+          },
+          {
+            nombre: document.getElementById('c2_nombre').value,
+            zona: document.getElementById('c2_zona').value,
+            telefono: document.getElementById('c2_tel').value,
+            tarifa: document.getElementById('c2_tarifa').value
+          },
+          {
+            nombre: document.getElementById('c3_nombre').value,
+            zona: document.getElementById('c3_zona').value,
+            telefono: document.getElementById('c3_tel').value,
+            tarifa: document.getElementById('c3_tarifa').value
+          }
+        ],
+        activo_global: document.getElementById('activo_global').checked,
+        modificado_en: new Date().toISOString()
+      };
+
+      const html = listado.corralones.filter(c => c.nombre).map(c =>
+        `<div class="sum-row"><strong>${c.nombre}</strong><span>${c.zona} · ${c.tarifa}</span></div>`
+      ).join('');
+      document.getElementById('listaCorralones').innerHTML = html || '<div class="sum-row"><strong>Sin datos</strong><span>—</span></div>';
+
+      alert("Listado actualizado en pantalla. Para guardarlo en Sheets, después conectamos saveConfig en Apps Script.");
+      cerrarModal();
     }
 
     async function guardarLead(data) {
@@ -465,17 +532,14 @@
       }
     }
 
-    function filtrarLeads() {
-      alert('Filtro listo para conectar con Google Sheets.');
-    }
+    function filtrarLeads() { alert('Filtro listo para conectar con Google Sheets.'); }
+    function exportarCSV() { alert('Exportación pensada para conectar con tu planilla.'); }
+    function marcarCierre() { alert('Cierre de mes listo para automatizar.'); }
 
-    function exportarCSV() {
-      alert('Exportación pensada para conectar con tu planilla.');
-    }
-
-    function marcarCierre() {
-      alert('Cierre de mes listo para automatizar.');
-    }
+    window.addEventListener('click', function(e){
+      const modal = document.getElementById('modalCorralones');
+      if (e.target === modal) cerrarModal();
+    });
   </script>
 </body>
 </html>
