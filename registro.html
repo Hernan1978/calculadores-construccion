@@ -278,15 +278,7 @@
     </div>
 
     <div class="form-section">
-      <h3>Plan elegido</h3>
-      <div class="plan-radio" id="plan-radio">
-        <div class="plan-opt" id="opt-basico" onclick="selectPlanOpt('basico')">
-          <div class="plan-opt-nombre">🌱 Plan Básico</div>
-          <div class="plan-opt-precio">$5.000/mes</div>
-        </div>
-        <div class="plan-opt active" id="opt-pro" onclick="selectPlanOpt('pro')">
-          <div class="plan-opt-nombre">🚀 Plan Pro</div>
-          <div class="plan-opt-precio">$9.000/mes</div>
+      
         </div>
         <div class="plan-opt" id="opt-comision" onclick="selectPlanOpt('comision')">
           <div class="plan-opt-nombre">🤝 Por pedido</div>
@@ -422,14 +414,50 @@ function enviarRegistro() {
 })();
 </script>
  <script>
-  const ADMIN_PASSWORD = '1234';
-  const openAdmin = document.getElementById('openAdmin');
-  const adminModal = document.getElementById('adminModal');
-  const closeAdmin = document.getElementById('closeAdmin');
-  const enterAdmin = document.getElementById('enterAdmin');
-  const adminPass = document.getElementById('adminPass');
-  const adminMsg = document.getElementById('adminMsg');
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const ADMIN_PASSWORD = '1234';
+    const openAdmin = document.getElementById('openAdmin');
+    const adminModal = document.getElementById('adminModal');
+    const closeAdmin = document.getElementById('closeAdmin');
+    const enterAdmin = document.getElementById('enterAdmin');
+    const adminPass = document.getElementById('adminPass');
+    const adminMsg = document.getElementById('adminMsg');
 
+    if (!openAdmin || !adminModal || !closeAdmin || !enterAdmin || !adminPass || !adminMsg) return;
+
+    openAdmin.addEventListener('click', (e) => {
+      e.preventDefault();
+      adminModal.style.display = 'flex';
+      adminMsg.textContent = '';
+      adminMsg.style.color = '#4b5b73';
+      adminPass.value = '';
+      setTimeout(() => adminPass.focus(), 100);
+    });
+
+    closeAdmin.addEventListener('click', () => {
+      adminModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === adminModal) adminModal.style.display = 'none';
+    });
+
+    enterAdmin.addEventListener('click', () => {
+      if (adminPass.value === ADMIN_PASSWORD) {
+        adminModal.style.display = 'none';
+        window.location.href = 'admin.html';
+      } else {
+        adminMsg.textContent = 'Contraseña incorrecta';
+        adminMsg.style.color = '#b71c1c';
+      }
+    });
+
+    adminPass.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') enterAdmin.click();
+    });
+  });
+</script>
   openAdmin.addEventListener('click', (e) => {
     e.preventDefault();
     adminModal.style.display = 'flex';
@@ -460,17 +488,18 @@ function enviarRegistro() {
 </script>
 </body>
 </html>
-<footer class="footer">
+<div class="footer">
   © 2025 Materiales Ya
   <a href="calculadores.html">Calculadores</a>
   <a href="javascript:void(0)" id="openAdmin">Marketplace</a>
   <a href="revista.html">Revista</a>
-</footer>
+</div>
 
 <div id="adminModal" class="admin-modal">
   <div class="admin-box">
     <button id="closeAdmin" class="admin-close">×</button>
     <h3>Acceso privado</h3>
+    <p>Ingresá la contraseña para abrir el panel privado.</p>
     <input id="adminPass" type="password" placeholder="Contraseña">
     <button id="enterAdmin">Entrar</button>
     <p id="adminMsg"></p>
