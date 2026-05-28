@@ -417,11 +417,51 @@
   </main>
 
   <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDK46AwRgxQ1Mm6KQdLdKQMPYGFLDf7Af65mv5EBH9A2RSRTzqRbdeac9b8815hE0aGA/exec";
+
     function salirPanel() {
       if (history.length > 1) {
         history.back();
       } else {
         window.location.href = "index.html";
+      }
+    }
+
+    async function guardarLead(data) {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    }
+
+    function armarLeadPrueba() {
+      return {
+        action: "saveLead",
+        fecha: new Date().toISOString().slice(0, 10),
+        hora: new Date().toTimeString().slice(0, 5),
+        cliente: "Juan Pérez",
+        telefono: "3415551200",
+        zona: "Centro",
+        corralon: "Corralón San Martín",
+        categoria: "Estructura",
+        material: "Hormigón",
+        cantidad: "5",
+        estado: "nuevo",
+        cobro: "500",
+        observaciones: "Prueba",
+        usuario: "admin",
+        modificado_en: new Date().toISOString()
+      };
+    }
+
+    async function probarGuardado() {
+      try {
+        const r = await guardarLead(armarLeadPrueba());
+        alert(r.ok ? "Guardado OK" : ("Error: " + r.error));
+      } catch (e) {
+        alert("Error de conexión: " + e);
       }
     }
 
