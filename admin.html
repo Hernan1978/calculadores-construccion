@@ -74,6 +74,8 @@
     }
     .btn.secondary{ background:#e8eef5;color:#1a2744; }
     .btn.edit{ background:#2563eb; }
+    .btn.danger{ background:#dc2626; }
+    .btn.small{ padding:8px 10px; font-size:12px; }
     table{
       width:100%;border-collapse:collapse;overflow:hidden;
     }
@@ -109,7 +111,7 @@
     }
     .modal.active{ display:flex;align-items:center;justify-content:center; }
     .modal-box{
-      width:min(760px,100%);background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;
+      width:min(980px,100%);background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;
     }
     .modal-head{
       background:#1a2744;color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;
@@ -119,19 +121,72 @@
       background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;
     }
     .modal-body{ padding:18px; }
-    .form-grid{
-      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
-    }
-    .field{ display:grid;gap:6px; }
-    .field.full{ grid-column:1 / -1; }
-    .field label{
-      font-size:12px;font-weight:700;color:#334155;
-    }
-    .switch-row{
-      display:flex;align-items:center;gap:10px;font-size:14px;color:#1f2937;
-    }
     .modal-actions{
       display:flex;justify-content:flex-end;gap:10px;margin-top:14px;flex-wrap:wrap;
+    }
+    .companies-toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+      align-items:center;
+    }
+    .companies-table{
+      width:100%;
+      border-collapse:collapse;
+    }
+    .companies-table th,.companies-table td{
+      border-bottom:1px solid #e8edf4;
+      padding:10px 8px;
+      font-size:13px;
+      vertical-align:middle;
+    }
+    .companies-table th{
+      background:#f7f9fc;
+      color:#51627c;
+      font-weight:700;
+    }
+    .companies-table input[type="text"],
+    .companies-table input[type="number"]{
+      width:100%;
+      padding:9px 10px;
+      border:1px solid #cfd8e3;
+      border-radius:8px;
+      outline:none;
+      font-size:13px;
+    }
+    .switch{
+      position:relative;
+      display:inline-block;
+      width:46px;
+      height:26px;
+    }
+    .switch input{ opacity:0; width:0; height:0; }
+    .slider{
+      position:absolute;
+      cursor:pointer;
+      top:0; left:0; right:0; bottom:0;
+      background:#cbd5e1;
+      transition:.2s;
+      border-radius:999px;
+    }
+    .slider:before{
+      position:absolute;
+      content:"";
+      height:20px;
+      width:20px;
+      left:3px;
+      bottom:3px;
+      background:white;
+      transition:.2s;
+      border-radius:50%;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+    }
+    .switch input:checked + .slider{
+      background:#22c55e;
+    }
+    .switch input:checked + .slider:before{
+      transform:translateX(20px);
     }
 
     .ws-wrap{
@@ -186,10 +241,11 @@
     }
 
     @media(max-width:900px){
-      .grid-kpis,.split,.form-grid{ grid-template-columns:1fr 1fr; }
+      .grid-kpis,.split{ grid-template-columns:1fr 1fr; }
+      .modal-box{ width:min(100%,100%); }
     }
     @media(max-width:640px){
-      .grid-kpis,.split,.form-grid{ grid-template-columns:1fr; }
+      .grid-kpis,.split{ grid-template-columns:1fr; }
       table{ display:block;overflow-x:auto;white-space:nowrap; }
       header .wrap{ align-items:flex-start; }
       .ws-menu{ min-width:200px; }
@@ -282,36 +338,34 @@
   <div class="modal" id="modalCorralones">
     <div class="modal-box">
       <div class="modal-head">
-        <h3>Editar listado de corralones</h3>
+        <h3>Editar empresas / corralones</h3>
         <button class="modal-close" onclick="cerrarModal()">×</button>
       </div>
       <div class="modal-body">
-        <div class="form-grid">
-          <div class="field"><label>Corralón 1</label><input id="c1_nombre" placeholder="Nombre"></div>
-          <div class="field"><label>Zona 1</label><input id="c1_zona" placeholder="Zona"></div>
-          <div class="field"><label>Teléfono 1</label><input id="c1_tel" placeholder="Teléfono"></div>
-          <div class="field"><label>Tarifa 1</label><input id="c1_tarifa" placeholder="Tarifa"></div>
-
-          <div class="field"><label>Corralón 2</label><input id="c2_nombre" placeholder="Nombre"></div>
-          <div class="field"><label>Zona 2</label><input id="c2_zona" placeholder="Zona"></div>
-          <div class="field"><label>Teléfono 2</label><input id="c2_tel" placeholder="Teléfono"></div>
-          <div class="field"><label>Tarifa 2</label><input id="c2_tarifa" placeholder="Tarifa"></div>
-
-          <div class="field"><label>Corralón 3</label><input id="c3_nombre" placeholder="Nombre"></div>
-          <div class="field"><label>Zona 3</label><input id="c3_zona" placeholder="Zona"></div>
-          <div class="field"><label>Teléfono 3</label><input id="c3_tel" placeholder="Teléfono"></div>
-          <div class="field"><label>Tarifa 3</label><input id="c3_tarifa" placeholder="Tarifa"></div>
-
-          <div class="field full">
-            <label class="switch-row">
-              <input type="checkbox" id="activo_global" checked />
-              Activar listado para mostrarse en el panel
-            </label>
-          </div>
+        <div class="companies-toolbar">
+          <button class="btn small" onclick="agregarFila()">+ Agregar empresa</button>
+          <button class="btn secondary small" onclick="cargarDemo()">Cargar ejemplo</button>
         </div>
+
+        <div style="overflow-x:auto;">
+          <table class="companies-table" id="tablaEmpresas">
+            <thead>
+              <tr>
+                <th>Activo</th>
+                <th>Empresa</th>
+                <th>Zona</th>
+                <th>Teléfono</th>
+                <th>Tarifa</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyEmpresas"></tbody>
+          </table>
+        </div>
+
         <div class="modal-actions">
           <button class="btn secondary" onclick="cerrarModal()">Cancelar</button>
-          <button class="btn" onclick="guardarListado()">Guardar cambios</button>
+          <button class="btn" onclick="guardarEmpresas()">Guardar cambios</button>
         </div>
       </div>
     </div>
@@ -330,6 +384,12 @@
   </div>
 
   <script>
+    let empresas = [
+      { activo:true, nombre:"Corralón San Martín", zona:"Centro", telefono:"3415551000", tarifa:"500" },
+      { activo:true, nombre:"Materiales del Norte", zona:"Fisherton", telefono:"3415552000", tarifa:"500" },
+      { activo:true, nombre:"Corralón La Obra", zona:"Funes", telefono:"3415553000", tarifa:"500" }
+    ];
+
     function salirPanel() {
       if (history.length > 1) history.back();
       else window.location.href = "index.html";
@@ -337,36 +397,60 @@
 
     function abrirModal() {
       document.getElementById('modalCorralones').classList.add('active');
-      const data = [
-        ["c1_nombre","Corralón San Martín"],["c1_zona","Centro"],["c1_tel","3415551000"],["c1_tarifa","500"],
-        ["c2_nombre","Materiales del Norte"],["c2_zona","Fisherton"],["c2_tel","3415552000"],["c2_tarifa","500"],
-        ["c3_nombre","Corralón La Obra"],["c3_zona","Funes"],["c3_tel","3415553000"],["c3_tarifa","500"]
-      ];
-      data.forEach(([id,val]) => document.getElementById(id).value = val);
-      document.getElementById('activo_global').checked = true;
+      renderEmpresas();
     }
 
     function cerrarModal() {
       document.getElementById('modalCorralones').classList.remove('active');
     }
 
-    function guardarListado() {
-      const listado = {
-        action: "saveConfig",
-        corralones: [
-          { nombre: document.getElementById('c1_nombre').value, zona: document.getElementById('c1_zona').value, telefono: document.getElementById('c1_tel').value, tarifa: document.getElementById('c1_tarifa').value },
-          { nombre: document.getElementById('c2_nombre').value, zona: document.getElementById('c2_zona').value, telefono: document.getElementById('c2_tel').value, tarifa: document.getElementById('c2_tarifa').value },
-          { nombre: document.getElementById('c3_nombre').value, zona: document.getElementById('c3_zona').value, telefono: document.getElementById('c3_tel').value, tarifa: document.getElementById('c3_tarifa').value }
-        ],
-        activo_global: document.getElementById('activo_global').checked,
-        modificado_en: new Date().toISOString()
-      };
+    function cargarDemo() {
+      empresas = [
+        { activo:true, nombre:"Corralón San Martín", zona:"Centro", telefono:"3415551000", tarifa:"500" },
+        { activo:true, nombre:"Materiales del Norte", zona:"Fisherton", telefono:"3415552000", tarifa:"500" },
+        { activo:false, nombre:"Corralón La Obra", zona:"Funes", telefono:"3415553000", tarifa:"500" }
+      ];
+      renderEmpresas();
+    }
 
-      const html = listado.corralones.filter(c => c.nombre).map(c =>
-        `<div class="sum-row"><strong>${c.nombre}</strong><span>${c.zona} · ${c.tarifa}</span></div>`
-      ).join('');
-      document.getElementById('listaCorralones').innerHTML = html || '<div class="sum-row"><strong>Sin datos</strong><span>—</span></div>';
+    function agregarFila() {
+      empresas.push({ activo:true, nombre:"", zona:"", telefono:"", tarifa:"" });
+      renderEmpresas();
+    }
 
+    function eliminarFila(i) {
+      empresas.splice(i, 1);
+      renderEmpresas();
+    }
+
+    function renderEmpresas() {
+      const tbody = document.getElementById('tbodyEmpresas');
+      tbody.innerHTML = empresas.map((e, i) => `
+        <tr>
+          <td>
+            <label class="switch">
+              <input type="checkbox" ${e.activo ? 'checked' : ''} onchange="empresas[${i}].activo=this.checked">
+              <span class="slider"></span>
+            </label>
+          </td>
+          <td><input type="text" value="${escapeHtml(e.nombre)}" oninput="empresas[${i}].nombre=this.value" placeholder="Nombre empresa"></td>
+          <td><input type="text" value="${escapeHtml(e.zona)}" oninput="empresas[${i}].zona=this.value" placeholder="Zona"></td>
+          <td><input type="text" value="${escapeHtml(e.telefono)}" oninput="empresas[${i}].telefono=this.value" placeholder="Teléfono"></td>
+          <td><input type="number" value="${escapeHtml(e.tarifa)}" oninput="empresas[${i}].tarifa=this.value" placeholder="Tarifa"></td>
+          <td><button class="btn danger small" onclick="eliminarFila(${i})">Eliminar</button></td>
+        </tr>
+      `).join('');
+
+      const visibles = empresas.filter(e => e.activo && e.nombre.trim());
+      document.getElementById('listaCorralones').innerHTML = visibles.length
+        ? visibles.map(e => `<div class="sum-row"><strong>${escapeHtml(e.nombre)}</strong><span>${escapeHtml(e.zona)} · ${escapeHtml(e.tarifa)}</span></div>`).join('')
+        : '<div class="sum-row"><strong>Sin datos</strong><span>—</span></div>';
+
+      document.getElementById('kpiCorralones').textContent = visibles.length || 0;
+    }
+
+    function guardarEmpresas() {
+      renderEmpresas();
       alert("Listado actualizado en pantalla.");
       cerrarModal();
     }
@@ -385,6 +469,17 @@
     function filtrarLeads() { alert('Filtro listo para conectar con Google Sheets.'); }
     function exportarCSV() { alert('Exportación pensada para conectar con tu planilla.'); }
     function marcarCierre() { alert('Cierre de mes listo para automatizar.'); }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    renderEmpresas();
   </script>
 </body>
 </html>
