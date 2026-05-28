@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin | Materiales Ya</title>
+  <title>Panel privado | Materiales Ya</title>
   <style>
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
+    *{box-sizing:border-box;margin:0;padding:0}
     body{
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:#eef2f7;
@@ -39,6 +35,12 @@
       font-size:13px;
       color:#c8d6eb;
     }
+    .header-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
     .pill{
       background:#1a4a8a;
       color:#fff;
@@ -48,6 +50,32 @@
       font-size:12px;
       font-weight:600;
       white-space:nowrap;
+    }
+    .btn-salir{
+      background:#d93025;
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      padding:9px 14px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 2px 8px rgba(217,48,37,.22);
+      transition:background .15s ease, transform .15s ease, box-shadow .15s ease;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .btn-salir:hover{
+      background:#b3261e;
+      box-shadow:0 4px 12px rgba(217,48,37,.3);
+      transform:translateY(-1px);
+    }
+    .btn-salir:active{
+      transform:translateY(0);
+    }
+    .icon-salir{
+      font-size:16px;
+      line-height:1;
     }
     main{
       max-width:1100px;
@@ -247,7 +275,14 @@
         <h1>Panel privado</h1>
         <p>Leads del mes, resumen por corralón y cobro final.</p>
       </div>
-      <div class="pill">Materiales Ya · Admin</div>
+
+      <div class="header-actions">
+        <div class="pill">Materiales Ya · Admin</div>
+        <button class="btn-salir" onclick="salirPanel()" aria-label="Salir">
+          <span class="icon-salir">⎋</span>
+          <span>Salir</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -382,59 +417,25 @@
   </main>
 
   <script>
+    function salirPanel() {
+      if (history.length > 1) {
+        history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    }
+
     function filtrarLeads() {
       alert('Filtro listo para conectar con Google Sheets.');
     }
+
     function exportarCSV() {
       alert('Exportación pensada para conectar con tu planilla.');
     }
+
     function marcarCierre() {
       alert('Cierre de mes listo para automatizar.');
     }
   </script>
-<script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDK46AwRgxQ1Mm6KQdLdKQMPYGFLDf7Af65mv5EBH9A2RSRTzqRbdeac9b8815hE0aGA/exec";
-
-async function guardarLead(data) {
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
-    body: JSON.stringify(data)
-  });
-
-  return await res.json();
-}
-
-function armarLeadPrueba() {
-  return {
-    action: "saveLead",
-    fecha: new Date().toISOString().slice(0, 10),
-    hora: new Date().toTimeString().slice(0, 5),
-    cliente: "Juan Pérez",
-    telefono: "3415551200",
-    zona: "Centro",
-    corralon: "Corralón San Martín",
-    categoria: "Estructura",
-    material: "Hormigón",
-    cantidad: "5",
-    estado: "nuevo",
-    cobro: "500",
-    observaciones: "Prueba",
-    usuario: "admin",
-    modificado_en: new Date().toISOString()
-  };
-}
-
-async function probarGuardado() {
-  try {
-    const r = await guardarLead(armarLeadPrueba());
-    alert(r.ok ? "Guardado OK" : ("Error: " + r.error));
-  } catch (e) {
-    alert("Error de conexión: " + e);
-  }
-}
-</script>
 </body>
 </html>
