@@ -1,360 +1,96 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sumá tu negocio — Materiales Ya</title>
-<meta name="description" content="Registrá tu corralón, ferretería o casa de materiales en Materiales Ya y recibí pedidos de clientes de tu zona.">
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
-
-  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: relative; }
-  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
-  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
-  .nav-links { display: flex; gap: 8px; }
-  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
-  .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
-  .menu-toggle { display: none; background: none; border: 1px solid #2e4a7a; border-radius: 7px; color: #90afd4; font-size: 18px; padding: 5px 10px; cursor: pointer; }
-  .nav-links.open { display: flex !important; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: #1a2744; padding: 1rem; gap: 8px; z-index: 100; border-top: 1px solid #2e4a7a; }
-  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
-  @media(max-width:600px) { nav { padding: .875rem 1rem; } nav .logo span { display: none; } .nav-links { display: none !important; } .menu-toggle { display: flex !important; } }
-
-  /* HERO */
-  .hero { background: linear-gradient(135deg, #1a2744 0%, #1e3a6e 60%, #1a4a8a 100%); color: #fff; padding: 3rem 2rem; text-align: center; }
-  .hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: .75rem; }
-  .hero p { font-size: 1rem; color: #b0c8e8; max-width: 520px; margin: 0 auto; line-height: 1.6; }
-
-  main { max-width: 860px; margin: 2.5rem auto; padding: 0 1rem; }
-
-  /* PLANES */
-  .planes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 3rem; }
-  .plan { background: #fff; border-radius: 14px; border: 2px solid #d0dcea; padding: 1.5rem; cursor: pointer; transition: all .2s; position: relative; }
-  .plan:hover { border-color: #1a2744; box-shadow: 0 4px 20px rgba(26,39,68,.1); }
-  .plan.selected { border-color: #1a4a8a; background: #f0f5ff; }
-  .plan-recomendado { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #1a4a8a; color: #fff; font-size: 11px; font-weight: 600; padding: 2px 12px; border-radius: 10px; white-space: nowrap; }
-  .plan-icono { font-size: 2rem; margin-bottom: .75rem; }
-  .plan-nombre { font-size: 1rem; font-weight: 700; color: #1a2744; margin-bottom: 4px; }
-  .plan-precio { font-size: 1.6rem; font-weight: 800; color: #1a4a8a; margin-bottom: .75rem; }
-  .plan-precio span { font-size: 13px; font-weight: 400; color: #888; }
-  .plan-features { list-style: none; }
-  .plan-features li { font-size: 13px; color: #555; padding: 4px 0; display: flex; align-items: flex-start; gap: 6px; }
-  .plan-features li::before { content: '✓'; color: #1a4a8a; font-weight: 700; flex-shrink: 0; }
-
-  /* FORMULARIO */
-  .form-card { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2rem; margin-bottom: 2rem; }
-  .form-card h2 { font-size: 1.1rem; font-weight: 700; color: #1a2744; margin-bottom: 1.5rem; }
-  .form-section { margin-bottom: 1.5rem; }
-  .form-section h3 { font-size: 0.8rem; font-weight: 600; color: #5a8abf; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1rem; padding-bottom: 6px; border-bottom: 1px solid #eef2f7; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
-  .field { margin-bottom: 1rem; }
-  .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
-  .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: #fafbfd; outline: none; transition: border .15s; resize: vertical; }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a2744; background: #fff; }
-  .field.required label::after { content: ' *'; color: #e53e3e; }
-
-  /* PLAN SELECTOR EN FORM */
-  .plan-radio { display: flex; gap: 10px; flex-wrap: wrap; }
-  .plan-opt { flex: 1; min-width: 140px; border: 1px solid #d0dcea; border-radius: 8px; padding: 10px 14px; cursor: pointer; transition: all .15s; }
-  .plan-opt.active { border-color: #1a4a8a; background: #f0f5ff; }
-  .plan-opt-nombre { font-size: 13px; font-weight: 600; color: #1a2744; }
-  .plan-opt-precio { font-size: 12px; color: #5a8abf; }
-
-  /* BOTÓN */
-  .btn-submit { width: 100%; padding: 14px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity .15s; margin-top: .5rem; }
-  .btn-submit:hover { opacity: .88; }
-
-  /* BENEFICIOS */
-  .beneficios { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
-  .beneficio { background: #fff; border-radius: 10px; border: 1px solid #d0dcea; padding: 1.25rem; text-align: center; }
-  .beneficio-icono { font-size: 2rem; margin-bottom: .5rem; }
-  .beneficio-titulo { font-size: 13px; font-weight: 600; color: #1a2744; margin-bottom: 4px; }
-  .beneficio-desc { font-size: 12px; color: #888; line-height: 1.4; }
-
-  .section-title { font-size: 1.3rem; font-weight: 700; color: #1a2744; margin-bottom: .5rem; }
-  .section-sub { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
-
-  .tip { font-size: 12px; color: #5a8abf; background: #f0f5ff; border-radius: 8px; padding: 10px 14px; border-left: 3px solid #90afd4; margin-top: 1rem; }
-
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
-  footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
-</style>
-</head>
-<body>
-
-<nav>
-  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="calculadores.html" class="nav-link">Calculadores</a>
-    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
-    <a href="mapa.html" class="nav-link">📍 Mapa</a>
-  </div>
-  <button class="menu-toggle" id="menuToggle">&#9776;</button>
-</nav>
-
-<div class="hero">
-  <h1>Sumá tu negocio a Materiales Ya</h1>
-  <p>Llegá a clientes que ya están buscando tus materiales. Registrate y empezá a recibir pedidos de tu zona.</p>
-</div>
-
-<main>
-
-  <!-- BENEFICIOS -->
-  <div style="margin:2rem 0 1rem">
-    <div class="section-title">¿Por qué sumarte?</div>
-    <div class="section-sub">Miles de clientes buscan materiales en tu zona todos los días</div>
-  </div>
-  <div class="beneficios">
-    <div class="beneficio"><div class="beneficio-icono">📦</div><div class="beneficio-titulo">Pedidos directos</div><div class="beneficio-desc">Recibís pedidos de clientes de tu zona con la lista de materiales lista</div></div>
-    <div class="beneficio"><div class="beneficio-icono">📍</div><div class="beneficio-titulo">Aparecés en el mapa</div><div class="beneficio-desc">Tu negocio visible en el mapa interactivo con datos de contacto</div></div>
-    <div class="beneficio"><div class="beneficio-icono">📲</div><div class="beneficio-titulo">Contacto por WhatsApp</div><div class="beneficio-desc">Los clientes te contactan directo por WhatsApp desde el mapa</div></div>
-    <div class="beneficio"><div class="beneficio-icono">💰</div><div class="beneficio-titulo">Sin comisión por venta</div><div class="beneficio-desc">Pagás solo la suscripción mensual, no un porcentaje de cada venta</div></div>
-  </div>
-
-  <!-- PLANES -->
-  <div style="margin-bottom:1rem">
-    <div class="section-title">Elegí tu plan</div>
-    <div class="section-sub">Empezá con el plan que más te convenga</div>
-  </div>
-  <div class="planes">
-    <div class="plan" id="plan-basico" onclick="selectPlan('basico')">
-      <div class="plan-icono">🌱</div>
-      <div class="plan-nombre">Plan Básico</div>
-      <div class="plan-precio">$5.000 <span>/ mes</span></div>
-      <ul class="plan-features">
-        <li>Aparecés en el mapa</li>
-        <li>Datos de contacto visibles</li>
-        <li>Botón WhatsApp directo</li>
-        <li>Hasta 10 pedidos/mes</li>
-      </ul>
-    </div>
-    <div class="plan selected" id="plan-pro" onclick="selectPlan('pro')">
-      <div class="plan-recomendado">⭐ Más elegido</div>
-      <div class="plan-icono">🚀</div>
-      <div class="plan-nombre">Plan Pro</div>
-      <div class="plan-precio">$9.000 <span>/ mes</span></div>
-      <ul class="plan-features">
-        <li>Todo el Plan Básico</li>
-        <li>Pedidos ilimitados</li>
-        <li>Destacado en el mapa</li>
-        <li>Aparecés primero en la lista</li>
-        <li>Badge "Verificado"</li>
-      </ul>
-    </div>
-    <div class="plan" id="plan-comision" onclick="selectPlan('comision')">
-      <div class="plan-icono">🤝</div>
-      <div class="plan-nombre">Plan por pedido</div>
-      <div class="plan-precio">$500 <span>/ pedido</span></div>
-      <ul class="plan-features">
-        <li>Sin cuota mensual fija</li>
-        <li>Pagás solo por lo que usás</li>
-        <li>Aparecés en el mapa</li>
-        <li>Ideal para empezar</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- FORMULARIO -->
-  <div class="form-card">
-    <h2>Completá tus datos</h2>
-
-    <div class="form-section">
-      <h3>Datos del negocio</h3>
-      <div class="grid-2">
-        <div class="field required"><label>Nombre del negocio</label><input type="text" id="f-nombre" placeholder="Corralón San Martín"></div>
-        <div class="field required"><label>Tipo de negocio</label>
-          <select id="f-tipo">
-            <option value="">Seleccioná...</option>
-            <option value="corralon">🏗 Corralón</option>
-            <option value="ferreteria">🔩 Ferretería</option>
-            <option value="durlock">📐 Casa de Durlock / Yeso</option>
-            <option value="maderera">🪵 Maderera</option>
-          </select>
-        </div>
-      </div>
-      <div class="field required"><label>Dirección completa</label><input type="text" id="f-dir" placeholder="Av. San Martín 1234, Lomas de Zamora"></div>
-      <div class="grid-2">
-        <div class="field required"><label>Zona / Partido</label>
-          <select id="f-zona">
-            <option value="">Seleccioná...</option>
-            <optgroup label="CABA">
-              <option>CABA Norte</option><option>CABA Centro</option><option>CABA Sur</option><option>CABA Oeste</option>
-            </optgroup>
-            <optgroup label="GBA Norte">
-              <option>San Isidro</option><option>Vicente López</option><option>San Martín</option><option>Tres de Febrero</option>
-              <option>Tigre</option><option>San Fernando</option><option>Escobar</option><option>Pilar</option>
-              <option>Malvinas Argentinas</option><option>José C. Paz</option><option>San Miguel</option>
-              <option>Hurlingham</option><option>Ituzaingó</option>
-            </optgroup>
-            <optgroup label="GBA Oeste">
-              <option>Morón</option><option>Merlo</option><option>Moreno</option><option>La Matanza</option>
-              <option>Marcos Paz</option><option>General Rodríguez</option><option>Luján</option>
-            </optgroup>
-            <optgroup label="GBA Sur">
-              <option>Avellaneda</option><option>Lanús</option><option>Lomas de Zamora</option>
-              <option>Almirante Brown</option><option>Esteban Echeverría</option><option>Ezeiza</option>
-              <option>Quilmes</option><option>Berazategui</option><option>Florencio Varela</option>
-              <option>La Plata</option><option>Ensenada</option><option>Berisso</option>
-            </optgroup>
-          </select>
-        </div>
-        <div class="field required"><label>Horario de atención</label><input type="text" id="f-horario" placeholder="Lun-Vie 8-18hs, Sáb 8-13hs"></div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Datos de contacto</h3>
-      <div class="grid-2">
-        <div class="field required"><label>Nombre y apellido del responsable</label><input type="text" id="f-responsable" placeholder="Juan García"></div>
-        <div class="field required"><label>WhatsApp del negocio</label><input type="tel" id="f-tel" placeholder="11 1234-5678"></div>
-      </div>
-      <div class="field"><label>Email (opcional)</label><input type="email" id="f-email" placeholder="info@corralon.com"></div>
-    </div>
-
-    <div class="form-section">
-      <h3>Plan elegido</h3>
-      <div class="plan-radio" id="plan-radio">
-        <div class="plan-opt" id="opt-basico" onclick="selectPlanOpt('basico')">
-          <div class="plan-opt-nombre">🌱 Plan Básico</div>
-          <div class="plan-opt-precio">$5.000/mes</div>
-        </div>
-        <div class="plan-opt active" id="opt-pro" onclick="selectPlanOpt('pro')">
-          <div class="plan-opt-nombre">🚀 Plan Pro</div>
-          <div class="plan-opt-precio">$9.000/mes</div>
-        </div>
-        <div class="plan-opt" id="opt-comision" onclick="selectPlanOpt('comision')">
-          <div class="plan-opt-nombre">🤝 Por pedido</div>
-          <div class="plan-opt-precio">$500/pedido</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Información adicional</h3>
-      <div class="field"><label>¿Qué materiales o productos principales vendés?</label>
-        <textarea id="f-productos" rows="2" placeholder="Ej: ladrillos, cemento, hierros, arena, piedra..."></textarea>
-      </div>
-      <div class="field"><label>¿Algo más que quieras contarnos?</label>
-        <textarea id="f-notas" rows="2" placeholder="Ej: hacemos entregas a domicilio, tenemos estacionamiento..."></textarea>
-      </div>
-    </div>
-
-    <button class="btn-submit" onclick="enviarRegistro()">Enviar solicitud de registro →</button>
-    <p class="tip">📋 Tu solicitud llega directamente a nuestro equipo. Te contactamos en menos de 24hs para confirmar tu alta y coordinar el primer pago.</p>
-  </div>
-
-</main>
-
-<footer>
-  <p>© 2025 Materiales Ya</p>
-  <p style="margin-top:8px">
-    <a href="index.html">Inicio</a>
-    <a href="calculadores.html">Calculadores</a>
-    <a href="marketplace.html">Marketplace</a>
-    <a href="mapa.html">Mapa</a>
-  </p>
-</footer>
-
-<script>
-let planSeleccionado = 'pro';
-
-function selectPlan(plan) {
-  planSeleccionado = plan;
-  document.querySelectorAll('.plan').forEach(p => p.classList.remove('selected'));
-  document.getElementById('plan-' + plan).classList.add('selected');
-  selectPlanOpt(plan);
-}
-
-function selectPlanOpt(plan) {
-  planSeleccionado = plan;
-  document.querySelectorAll('.plan-opt').forEach(p => p.classList.remove('active'));
-  document.getElementById('opt-' + plan).classList.add('active');
-  document.querySelectorAll('.plan').forEach(p => p.classList.remove('selected'));
-  document.getElementById('plan-' + plan).classList.add('selected');
-}
-
-function enviarRegistro() {
-  const nombre = document.getElementById('f-nombre').value.trim();
-  const tipo = document.getElementById('f-tipo').value;
-  const dir = document.getElementById('f-dir').value.trim();
-  const zona = document.getElementById('f-zona').value;
-  const horario = document.getElementById('f-horario').value.trim();
-  const responsable = document.getElementById('f-responsable').value.trim();
-  const tel = document.getElementById('f-tel').value.trim();
-
-  if (!nombre || !tipo || !dir || !zona || !horario || !responsable || !tel) {
-    alert('Por favor completá todos los campos obligatorios (*)');
-    return;
-  }
-
-  const planes = {
-    basico: 'Plan Básico — $5.000/mes',
-    pro: 'Plan Pro — $9.000/mes ⭐',
-    comision: 'Plan por pedido — $500/pedido'
-  };
-
-  const productos = document.getElementById('f-productos').value.trim();
-  const notas = document.getElementById('f-notas').value.trim();
-  const email = document.getElementById('f-email').value.trim();
-
-  let msg = `🏗 *NUEVA SOLICITUD DE REGISTRO*\n\n`;
-  msg += `🏪 *Negocio:* ${nombre}\n`;
-  msg += `📂 *Tipo:* ${tipo}\n`;
-  msg += `📍 *Dirección:* ${dir}\n`;
-  msg += `🗺 *Zona:* ${zona}\n`;
-  msg += `🕐 *Horario:* ${horario}\n\n`;
-  msg += `👤 *Responsable:* ${responsable}\n`;
-  msg += `📱 *WhatsApp:* ${tel}\n`;
-  if (email) msg += `📧 *Email:* ${email}\n`;
-  msg += `\n💳 *Plan elegido:* ${planes[planSeleccionado]}\n`;
-  if (productos) msg += `\n📦 *Productos:* ${productos}\n`;
-  if (notas) msg += `\n📝 *Notas:* ${notas}\n`;
-  msg += `\n_Solicitud desde Materiales Ya_`;
-
-  // ⚠️ Reemplazá por tu número real
-  const ADMIN_WS = '5491112345678';
-  window.open(`https://wa.me/${ADMIN_WS}?text=${encodeURIComponent(msg)}`, '_blank');
-
-  // Mostrar confirmación
-  document.querySelector('.form-card').innerHTML = `
-    <div style="text-align:center;padding:3rem 1rem">
-      <div style="font-size:3rem;margin-bottom:1rem">✅</div>
-      <h2 style="font-size:1.2rem;font-weight:700;color:#1a2744;margin-bottom:.75rem">¡Solicitud enviada!</h2>
-      <p style="font-size:14px;color:#666;line-height:1.6;margin-bottom:1.5rem">
-        Recibimos tu solicitud para <strong>${nombre}</strong>.<br>
-        Te contactamos en menos de 24hs para confirmar tu alta.
-      </p>
-      <a href="index.html" style="padding:12px 24px;border-radius:8px;background:#1a2744;color:#fff;font-size:14px;font-weight:500;text-decoration:none;">Volver al inicio →</a>
-    </div>
-  `;
-}
-
-// Hamburger
-(function() {
-  function initMenu() {
-    var btn = document.getElementById('menuToggle');
-    var nav = document.getElementById('navLinks');
-    if (!btn || !nav) return;
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var isOpen = nav.classList.contains('open');
-      nav.classList.toggle('open');
-      btn.innerHTML = isOpen ? '&#9776;' : '&#x2715;';
-    });
-    document.addEventListener('click', function(e) {
-      if (!nav.contains(e.target) && e.target !== btn) {
-        nav.classList.remove('open');
-        btn.innerHTML = '&#9776;';
-      }
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMenu);
-  } else {
-    initMenu();
-  }
-})();
-</script>
-</body>
-</html>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sumá tu negocio | Materiales Ya</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#eef2f7;
+      color:#1a1a1a;
+      min-height:100vh;
+    }
+    nav{
+      background:#1a2744;
+      padding:1rem 2rem;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:12px;
+      position:relative;
+    }
+    nav .logo{
+      color:#fff;
+      font-size:1.2rem;
+      font-weight:700;
+      text-decoration:none;
+    }
+    nav .logo span{
+      color:#90afd4;
+      font-weight:400;
+      font-size:.85rem;
+      margin-left:8px;
+    }
+    .nav-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .nav-link{
+      padding:6px 14px;
+      border-radius:7px;
+      border:1px solid #2e4a7a;
+      color:#90afd4;
+      font-size:12px;
+      text-decoration:none;
+      transition:all .15s;
+    }
+    .nav-link:hover,
+    .nav-link.active{
+      background:#fff;
+      color:#1a2744;
+      border-color:#fff;
+    }
+    main{
+      max-width:760px;
+      margin:2rem auto;
+      padding:0 1rem;
+    }
+    .card{
+      background:#fff;
+      border:1px solid #d0dcea;
+      border-radius:14px;
+      padding:1.5rem;
+      box-shadow:0 6px 20px rgba(26,39,68,.05);
+    }
+    .card h1{
+      font-size:1.8rem;
+      color:#1a2744;
+      margin-bottom:.5rem;
+    }
+    .card p{
+      color:#4b5b73;
+      line-height:1.6;
+      margin-bottom:1rem;
+    }
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    @media(max-width:600px){
+      .grid-2{grid-template-columns:1fr}
+      nav{padding:.875rem 1rem}
+      nav .logo span{display:none}
+      .nav-links{display:none}
+    }
+    .field{margin-bottom:1rem}
+    .field label{
+      display:block;
+      font-size:12px;
+      color:#666;
+      margin-bottom:5px;
+      
