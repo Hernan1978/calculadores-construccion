@@ -212,4 +212,134 @@
       right:10px;
       width:32px;
       height:32px;
-      
+      border:none;
+      border-radius:50%;
+      background:#e8eef5;
+      color:#1a2744;
+      font-size:18px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    #adminMsg{
+      margin-top:10px;
+      font-size:13px;
+      min-height:18px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
+    <div class="nav-links">
+      <a href="calculadores.html" class="nav-link">Calculadores</a>
+      <a href="marketplace.html" class="nav-link">Marketplace</a>
+      <a href="revista.html" class="nav-link">Revista</a>
+      <a href="registro.html" class="nav-link active" style="background:#1a4a8a;border-color:#1a4a8a;color:#fff;">+ Sumá tu negocio</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="card">
+      <h1>Sumá tu negocio</h1>
+      <p>Completá tus datos para aparecer en el marketplace y recibir contactos de clientes interesados en materiales.</p>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>Nombre del corralón</label>
+          <input type="text" placeholder="Ej: Corralón San Martín">
+        </div>
+        <div class="field">
+          <label>Zona</label>
+          <input type="text" placeholder="Ej: Rosario centro">
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>WhatsApp</label>
+          <input type="text" placeholder="+54 9 ...">
+        </div>
+        <div class="field">
+          <label>Dirección</label>
+          <input type="text" placeholder="Calle y número">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Descripción</label>
+        <textarea rows="4" placeholder="Contanos qué vendés y en qué zona trabajás"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="button">Enviar registro</button>
+        <a class="btn secondary" href="marketplace.html">Volver al marketplace</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="footer">
+    © 2025 Materiales Ya
+    <a href="calculadores.html">Calculadores</a>
+    <button type="button" id="openAdmin" class="footer-secret">Marketplace</button>
+    <a href="revista.html">Revista</a>
+  </div>
+
+  <div id="adminModal" class="admin-modal">
+    <div class="admin-box">
+      <button id="closeAdmin" class="admin-close" type="button">×</button>
+      <h3>Acceso privado</h3>
+      <p>Ingresá la contraseña para abrir el panel privado.</p>
+      <input id="adminPass" type="password" placeholder="Contraseña">
+      <button id="enterAdmin" type="button">Entrar</button>
+      <p id="adminMsg"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const ADMIN_PASSWORD = '1234';
+      const openAdmin = document.getElementById('openAdmin');
+      const adminModal = document.getElementById('adminModal');
+      const closeAdmin = document.getElementById('closeAdmin');
+      const enterAdmin = document.getElementById('enterAdmin');
+      const adminPass = document.getElementById('adminPass');
+      const adminMsg = document.getElementById('adminMsg');
+
+      if (!openAdmin || !adminModal || !closeAdmin || !enterAdmin || !adminPass || !adminMsg) return;
+
+      openAdmin.addEventListener('click', function () {
+        adminModal.style.display = 'flex';
+        adminMsg.textContent = '';
+        adminPass.value = '';
+        setTimeout(function () { adminPass.focus(); }, 100);
+      });
+
+      closeAdmin.addEventListener('click', function () {
+        adminModal.style.display = 'none';
+      });
+
+      window.addEventListener('click', function (e) {
+        if (e.target === adminModal) adminModal.style.display = 'none';
+      });
+
+      enterAdmin.addEventListener('click', function () {
+        if (adminPass.value === ADMIN_PASSWORD) {
+          adminModal.style.display = 'none';
+          window.location.href = 'admin.html';
+        } else {
+          adminMsg.textContent = 'Contraseña incorrecta';
+          adminMsg.style.color = '#b71c1c';
+        }
+      });
+
+      adminPass.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') enterAdmin.click();
+      });
+    });
+  </script>
+
+</body>
+</html>
