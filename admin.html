@@ -384,105 +384,61 @@
   </div>
 
   <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbx8aRSh2MDQ1u62uoGvg0RcOWY_N3DxzqfU3Y5dHpeC96EtcTJ-IZDB25ILAojo2wE7UA/exec";
-    let empresas = [
-      { activo:true, nombre:"Corralón San Martín", zona:"Centro", telefono:"3415551000", tarifa:"500" },
-      { activo:true, nombre:"Materiales del Norte", zona:"Fisherton", telefono:"3415552000", tarifa:"500" },
-      { activo:true, nombre:"Corralón La Obra", zona:"Funes", telefono:"3415553000", tarifa:"500" }
-    ];
+ <script>
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8aRSh2MDQ1u62uoGvg0RcOWY_N3DxzqfU3Y5dHpeC96EtcTJ-IZDB25ILAojo2wE7UA/exec";
 
-    function salirPanel() {
-      if (history.length > 1) history.back();
-      else window.location.href = "index.html";
-    }
+  let empresas = [
+    { activo:true, nombre:"Corralón San Martín", zona:"Centro", telefono:"3415551000", tarifa:"500" },
+    { activo:true, nombre:"Materiales del Norte", zona:"Fisherton", telefono:"3415552000", tarifa:"500" },
+    { activo:true, nombre:"Corralón La Obra", zona:"Funes", telefono:"3415553000", tarifa:"500" }
+  ];
 
-    function abrirModal() {
-      document.getElementById('modalCorralones').classList.add('active');
-      renderEmpresas();
-    }
+  function salirPanel(){ if (history.length > 1) history.back(); else window.location.href = "index.html"; }
+  function abrirModal(){ document.getElementById('modalCorralones').classList.add('active'); renderEmpresas(); }
+  function cerrarModal(){ document.getElementById('modalCorralones').classList.remove('active'); }
+  function cargarDemo(){ empresas = [{ activo:true, nombre:"Corralón San Martín", zona:"Centro", telefono:"3415551000", tarifa:"500" },{ activo:true, nombre:"Materiales del Norte", zona:"Fisherton", telefono:"3415552000", tarifa:"500" },{ activo:false, nombre:"Corralón La Obra", zona:"Funes", telefono:"3415553000", tarifa:"500" }]; renderEmpresas(); }
+  function agregarFila(){ empresas.push({ activo:true, nombre:"", zona:"", telefono:"", tarifa:"" }); renderEmpresas(); }
+  function eliminarFila(i){ empresas.splice(i,1); renderEmpresas(); }
 
-    function cerrarModal() {
-      document.getElementById('modalCorralones').classList.remove('active');
-    }
+  function renderEmpresas(){
+    const tbody = document.getElementById('tbodyEmpresas');
+    tbody.innerHTML = empresas.map((e,i)=>`
+      <tr>
+        <td><label class="switch"><input type="checkbox" ${e.activo ? 'checked' : ''} onchange="empresas[${i}].activo=this.checked"><span class="slider"></span></label></td>
+        <td><input type="text" value="${escapeHtml(e.nombre)}" oninput="empresas[${i}].nombre=this.value" placeholder="Nombre empresa"></td>
+        <td><input type="text" value="${escapeHtml(e.zona)}" oninput="empresas[${i}].zona=this.value" placeholder="Zona"></td>
+        <td><input type="text" value="${escapeHtml(e.telefono)}" oninput="empresas[${i}].telefono=this.value" placeholder="Teléfono"></td>
+        <td><input type="number" value="${escapeHtml(e.tarifa)}" oninput="empresas[${i}].tarifa=this.value" placeholder="Tarifa"></td>
+        <td><button class="btn danger small" onclick="eliminarFila(${i})">Eliminar</button></td>
+      </tr>
+    `).join('');
+    const visibles = empresas.filter(e => e.activo && e.nombre.trim());
+    document.getElementById('listaCorralones').innerHTML = visibles.length ? visibles.map(e => `<div class="sum-row"><strong>${escapeHtml(e.nombre)}</strong><span>${escapeHtml(e.zona)} · ${escapeHtml(e.tarifa)}</span></div>`).join('') : '<div class="sum-row"><strong>Sin datos</strong><span>—</span></div>';
+    document.getElementById('kpiCorralones').textContent = visibles.length || 0;
+  }
 
-    function cargarDemo() {
-      empresas = [
-        { activo:true, nombre:"Corralón San Martín", zona:"Centro", telefono:"3415551000", tarifa:"500" },
-        { activo:true, nombre:"Materiales del Norte", zona:"Fisherton", telefono:"3415552000", tarifa:"500" },
-        { activo:false, nombre:"Corralón La Obra", zona:"Funes", telefono:"3415553000", tarifa:"500" }
-      ];
-      renderEmpresas();
-    }
-
-    function agregarFila() {
-      empresas.push({ activo:true, nombre:"", zona:"", telefono:"", tarifa:"" });
-      renderEmpresas();
-    }
-
-    function eliminarFila(i) {
-      empresas.splice(i, 1);
-      renderEmpresas();
-    }
-
-    function renderEmpresas() {
-      const tbody = document.getElementById('tbodyEmpresas');
-      tbody.innerHTML = empresas.map((e, i) => `
-        <tr>
-          <td>
-            <label class="switch">
-              <input type="checkbox" ${e.activo ? 'checked' : ''} onchange="empresas[${i}].activo=this.checked">
-              <span class="slider"></span>
-            </label>
-          </td>
-          <td><input type="text" value="${escapeHtml(e.nombre)}" oninput="empresas[${i}].nombre=this.value" placeholder="Nombre empresa"></td>
-          <td><input type="text" value="${escapeHtml(e.zona)}" oninput="empresas[${i}].zona=this.value" placeholder="Zona"></td>
-          <td><input type="text" value="${escapeHtml(e.telefono)}" oninput="empresas[${i}].telefono=this.value" placeholder="Teléfono"></td>
-          <td><input type="number" value="${escapeHtml(e.tarifa)}" oninput="empresas[${i}].tarifa=this.value" placeholder="Tarifa"></td>
-          <td><button class="btn danger small" onclick="eliminarFila(${i})">Eliminar</button></td>
-        </tr>
-      `).join('');
-
-      const visibles = empresas.filter(e => e.activo && e.nombre.trim());
-      document.getElementById('listaCorralones').innerHTML = visibles.length
-        ? visibles.map(e => `<div class="sum-row"><strong>${escapeHtml(e.nombre)}</strong><span>${escapeHtml(e.zona)} · ${escapeHtml(e.tarifa)}</span></div>`).join('')
-        : '<div class="sum-row"><strong>Sin datos</strong><span>—</span></div>';
-
-      document.getElementById('kpiCorralones').textContent = visibles.length || 0;
-    }
-
-    function guardarEmpresas() {
-      renderEmpresas();
-      alert("Listado actualizado en pantalla.");
-      cerrarModal();
-    }
-
-    function toggleWsMenu() {
-      document.getElementById('wsMenu').classList.toggle('active');
-    }
-
-    window.addEventListener('click', function(e){
-      const modal = document.getElementById('modalCorralones');
-      const menu = document.getElementById('wsMenu');
-      if (e.target === modal) cerrarModal();
-      if (!e.target.closest('.ws-wrap')) menu.classList.remove('active');
-    });
-
-    function filtrarLeads() { alert('Filtro listo para conectar con Google Sheets.'); }
-    function exportarCSV() { alert('Exportación pensada para conectar con tu planilla.'); }
-    function marcarCierre() { alert('Cierre de mes listo para automatizar.'); }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;');
-    }
-
+  async function guardarEmpresas(){
     renderEmpresas();
-  </script>
-  const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbx8aRSh2MDQ1u62uoGvg0RcOWY_N3DxzqfU3Y5dHpeC96EtcTJ-IZDB25ILAojo2wE7UA/exec";
-</body>
-</html>
+    const payload = {
+      action: 'saveConfig',
+      activo_global: true,
+      modificado_en: new Date().toISOString(),
+      corralones: empresas.map(e => ({ activo: !!e.activo, nombre: e.nombre, zona: e.zona, telefono: e.telefono, tarifa: e.tarifa }))
+    };
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+      const out = await res.json();
+      alert(out.ok ? 'Listado guardado en Sheets.' : ('Error: ' + out.error));
+    } catch (err) {
+      alert('Error de conexión: ' + err);
+    }
+    cerrarModal();
+  }
+
+  function toggleWsMenu(){ document.getElementById('wsMenu').classList.toggle('active'); }
+  window.addEventListener('click', function(e){ const modal = document.getElementById('modalCorralones'); const menu = document.getElementById('wsMenu'); if (e.target === modal) cerrarModal(); if (!e.target.closest('.ws-wrap')) menu.classList.remove('active'); });
+  function filtrarLeads(){ alert('Filtro listo para conectar con Google Sheets.'); }
+  function exportarCSV(){ alert('Exportación pensada para conectar con tu planilla.'); }
+  function marcarCierre(){ alert('Cierre de mes listo para automatizar.'); }
+  function escapeHtml(str){ return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+</script>
