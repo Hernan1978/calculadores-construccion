@@ -1,398 +1,161 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel Admin — Materiales Ya</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
-
-  /* LOGIN */
-  .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-  .login-card { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2.5rem 2rem; width: 100%; max-width: 360px; text-align: center; }
-  .login-card h1 { font-size: 1.3rem; font-weight: 700; color: #1a2744; margin-bottom: .5rem; }
-  .login-card p { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
-  .login-field { margin-bottom: 1rem; text-align: left; }
-  .login-field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
-  .login-field input { width: 100%; padding: 10px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; outline: none; }
-  .login-field input:focus { border-color: #1a2744; }
-  .login-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: .5rem; }
-  .login-error { color: #e53e3e; font-size: 13px; margin-top: .75rem; display: none; }
-
-  /* PANEL */
-  .panel { display: none; }
-  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-  nav .logo { color: #fff; font-size: 1.1rem; font-weight: 700; }
-  nav .logo span { color: #90afd4; font-size: 12px; font-weight: 400; margin-left: 8px; }
-  .nav-right { display: flex; gap: 8px; align-items: center; }
-  .nav-btn { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; cursor: pointer; background: none; transition: all .15s; }
-  .nav-btn:hover { background: #fff; color: #1a2744; border-color: #fff; }
-
-  main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-
-  /* STATS */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-  .stat-card { background: #fff; border-radius: 10px; border: 1px solid #d0dcea; padding: 1.25rem; text-align: center; }
-  .stat-num { font-size: 2rem; font-weight: 700; color: #1a2744; }
-  .stat-label { font-size: 12px; color: #888; margin-top: 4px; }
-
-  /* TABS */
-  .tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; border-bottom: 1px solid #d0dcea; padding-bottom: 0; }
-  .tab { padding: 10px 20px; border: none; background: none; font-size: 14px; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; transition: all .15s; }
-  .tab.active { color: #1a2744; border-bottom-color: #1a2744; }
-
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-
-  /* CARDS */
-  .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; margin-bottom: 1rem; }
-  .card h2 { font-size: 1rem; font-weight: 700; color: #1a2744; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; }
-
-  /* TABLA NEGOCIOS */
-  .negocio-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #eef2f7; }
-  .negocio-row:last-child { border-bottom: none; }
-  .neg-info { }
-  .neg-nombre { font-size: 14px; font-weight: 600; color: #1a2744; }
-  .neg-detalle { font-size: 12px; color: #888; margin-top: 2px; }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
-  .badge-activo { background: #d1fae5; color: #065f46; }
-  .badge-inactivo { background: #fee2e2; color: #991b1b; }
-  .badge-tipo { background: #dbeafe; color: #1e40af; }
-  .badge-pro { background: #fef3c7; color: #92400e; }
-  .badge-basico { background: #f3f4f6; color: #374151; }
-  .badge-comision { background: #ede9fe; color: #5b21b6; }
-  .btn-toggle { padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; transition: all .15s; }
-  .btn-activar { background: #d1fae5; color: #065f46; }
-  .btn-activar:hover { background: #065f46; color: #fff; }
-  .btn-desactivar { background: #fee2e2; color: #991b1b; }
-  .btn-desactivar:hover { background: #991b1b; color: #fff; }
-  .btn-editar { padding: 5px 10px; border-radius: 6px; font-size: 12px; background: #eef2f7; color: #1a2744; border: 1px solid #d0dcea; cursor: pointer; }
-
-  /* FORM NUEVO NEGOCIO */
-  .form-inline { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
-  @media(max-width:600px) { .form-inline { grid-template-columns: 1fr; } }
-  .field { margin-bottom: 0; }
-  .field label { display: block; font-size: 11px; color: #888; margin-bottom: 3px; font-weight: 500; }
-  .field input, .field select { width: 100%; padding: 8px 10px; border: 1px solid #d0dcea; border-radius: 7px; font-size: 13px; outline: none; background: #fafbfd; }
-  .field input:focus, .field select:focus { border-color: #1a2744; }
-  .btn-primary { padding: 9px 20px; border-radius: 7px; background: #1a2744; color: #fff; border: none; font-size: 13px; font-weight: 500; cursor: pointer; }
-  .btn-secondary { padding: 9px 20px; border-radius: 7px; background: #fff; color: #555; border: 1px solid #d0dcea; font-size: 13px; cursor: pointer; }
-
-  /* PEDIDOS */
-  .pedido-row { padding: 12px 0; border-bottom: 1px solid #eef2f7; }
-  .pedido-row:last-child { border-bottom: none; }
-  .pedido-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
-  .pedido-id { font-size: 12px; font-family: monospace; font-weight: 700; color: #1a2744; }
-  .pedido-fecha { font-size: 11px; color: #aaa; }
-  .pedido-cliente { font-size: 13px; color: #333; margin-bottom: 4px; }
-  .pedido-zona { font-size: 12px; color: #5a8abf; }
-  .pedido-items { font-size: 12px; color: #666; margin-top: 4px; }
-
-  /* JSON EXPORT */
-  .json-box { background: #1a2744; color: #90afd4; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 12px; overflow-x: auto; white-space: pre; max-height: 300px; overflow-y: auto; margin-top: 1rem; }
-  .btn-copy { padding: 6px 14px; border-radius: 6px; background: #fff; color: #1a2744; border: none; font-size: 12px; font-weight: 500; cursor: pointer; }
-
-  .tip { font-size: 12px; color: #5a8abf; background: #f0f5ff; border-radius: 8px; padding: 10px 14px; border-left: 3px solid #90afd4; margin-top: 1rem; }
-  .empty { text-align: center; color: #aaa; font-size: 14px; padding: 2rem; }
-
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Materiales Ya</title>
+  <style>
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#eef2f7;color:#1a2744}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
+    .card{background:#fff;border:1px solid #d0dcea;border-radius:14px;padding:16px;box-shadow:0 6px 20px rgba(26,39,68,.05)}
+    h1,h2{margin:0 0 12px} h1{font-size:24px} h2{font-size:18px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:800px){.row{grid-template-columns:1fr}}
+    .field{margin-bottom:12px} label{display:block;font-size:12px;color:#5b687d;margin-bottom:6px;font-weight:600}
+    input,select,textarea,button{font:inherit} input,select,textarea{width:100%;padding:10px 12px;border:1px solid #cfd8e3;border-radius:10px;background:#fafbfd;outline:none}
+    textarea{min-height:160px;resize:vertical}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tab{border:1px solid #cfd8e3;background:#fff;padding:10px 14px;border-radius:999px;cursor:pointer}.tab.active{background:#1a2744;color:#fff;border-color:#1a2744}
+    .panel{display:none}.panel.active{display:block}.list{display:grid;gap:10px}.item{padding:12px;border:1px solid #e1e7ef;border-radius:12px;background:#fbfcfe}.meta{font-size:12px;color:#667} .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.btn{border:none;border-radius:10px;padding:10px 14px;cursor:pointer}.btn.primary{background:#1a2744;color:#fff}.btn.gray{background:#e8eef5}.btn.red{background:#ffebee;color:#b71c1c}.btn.green{background:#e8f5e9;color:#1b5e20}.btn.outline{background:#fff;border:1px solid #cfd8e3}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#e8eef5;color:#1a2744;font-size:12px;font-weight:700}.muted{color:#667;font-size:13px}.split{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}@media(max-width:900px){.split{grid-template-columns:1fr}}
+    .login{max-width:420px;margin:10vh auto}.hide{display:none}.small{font-size:12px}.ok{color:#1b5e20}.warn{color:#8a4b00}.err{color:#b71c1c}.copyrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.jsonbox{white-space:pre;overflow:auto;max-height:420px;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:12px;font-size:12px}
+  </style>
 </head>
 <body>
-
-<!-- LOGIN -->
-<div class="login-wrap" id="loginWrap">
-  <div class="login-card">
-    <div style="font-size:2.5rem;margin-bottom:.75rem">🏗</div>
-    <h1>Panel Admin</h1>
-    <p>Materiales Ya — Acceso restringido</p>
-    <div class="login-field">
-      <label>Contraseña</label>
-      <input type="password" id="loginPass" placeholder="••••••" onkeydown="if(event.key==='Enter')login()">
+  <div class="wrap">
+    <div id="loginView" class="login card">
+      <h1>Panel admin</h1>
+      <p class="muted">Acceso restringido por URL y contraseña.</p>
+      <div class="field"><label>Contraseña</label><input id="pass" type="password" placeholder="1234"></div>
+      <button class="btn primary" onclick="login()">Entrar</button>
+      <p id="loginMsg" class="muted small"></p>
     </div>
-    <button class="login-btn" onclick="login()">Ingresar →</button>
-    <div class="login-error" id="loginError">Contraseña incorrecta</div>
+
+    <div id="adminView" class="hide">
+      <div class="topbar">
+        <div>
+          <h1>Admin — Materiales Ya</h1>
+          <div class="muted">Negocios, pedidos y exportación JSON.</div>
+        </div>
+        <div class="copyrow">
+          <span class="badge">LocalStorage</span>
+          <button class="btn outline" onclick="resetDemo()">Reset demo</button>
+          <button class="btn red" onclick="logout()">Salir</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('negocios', this)">Tab Negocios</button>
+        <button class="tab" onclick="showTab('agregar', this)">Tab Agregar negocio</button>
+        <button class="tab" onclick="showTab('pedidos', this)">Tab Pedidos</button>
+        <button class="tab" onclick="showTab('exportar', this)">Tab Exportar JSON</button>
+      </div>
+
+      <div id="tab-negocios" class="panel active split">
+        <div class="card">
+          <h2>Negocios</h2>
+          <div class="muted">Lista todos los negocios con estado activo/inactivo.</div>
+          <div id="businessList" class="list" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <h2>Editar negocio</h2>
+          <div class="muted">Seleccioná un negocio para editar nombre, teléfono, horario y coordenadas.</div>
+          <div id="editEmpty" class="muted" style="margin-top:12px">Elegí un negocio de la lista.</div>
+          <div id="editForm" class="hide">
+            <input type="hidden" id="editId">
+            <div class="field"><label>Nombre</label><input id="editName"></div>
+            <div class="row">
+              <div class="field"><label>Teléfono</label><input id="editPhone"></div>
+              <div class="field"><label>Horario</label><input id="editHours"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Latitud</label><input id="editLat" type="number" step="any"></div>
+              <div class="field"><label>Longitud</label><input id="editLng" type="number" step="any"></div>
+            </div>
+            <div class="field"><label>Estado</label><select id="editActive"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
+            <div class="actions"><button class="btn primary" onclick="saveEdit()">Guardar cambios</button><button class="btn gray" onclick="clearEdit()">Cancelar</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-agregar" class="panel card">
+        <h2>Agregar negocio</h2>
+        <div class="muted">Formulario completo con coordenadas.</div>
+        <div class="row" style="margin-top:12px">
+          <div class="field"><label>Nombre</label><input id="newName"></div>
+          <div class="field"><label>Teléfono</label><input id="newPhone"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Horario</label><input id="newHours" placeholder="Lun a Vie 8 a 18"></div>
+          <div class="field"><label>Zona / Dirección</label><input id="newAddress"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Latitud</label><input id="newLat" type="number" step="any"></div>
+          <div class="field"><label>Longitud</label><input id="newLng" type="number" step="any"></div>
+        </div>
+        <div class="field"><label>Notas</label><textarea id="newNotes" placeholder="Rubros, delivery, referencias, etc."></textarea></div>
+        <p class="small warn">Tip para obtener lat/lng desde Google Maps: hacé clic derecho sobre el punto exacto y copiá las coordenadas que aparecen.</p>
+        <div class="actions"><button class="btn primary" onclick="addBusiness()">Agregar negocio</button><button class="btn gray" onclick="fillSample()">Cargar ejemplo</button></div>
+      </div>
+
+      <div id="tab-pedidos" class="panel card">
+        <h2>Pedidos</h2>
+        <div class="muted">Los pedidos reales llegan por WhatsApp; acá hacés seguimiento manual.</div>
+        <div class="row" style="margin-top:12px">
+          <div class="field"><label>Cliente / negocio</label><input id="orderName"></div>
+          <div class="field"><label>Estado</label><select id="orderStatus"><option>Nuevo</option><option>En proceso</option><option>Entregado</option><option>Cancelado</option></select></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>WhatsApp</label><input id="orderPhone"></div>
+          <div class="field"><label>Fecha</label><input id="orderDate" type="date"></div>
+        </div>
+        <div class="field"><label>Detalle</label><textarea id="orderDetail"></textarea></div>
+        <div class="actions"><button class="btn primary" onclick="addOrder()">Guardar pedido</button></div>
+        <div id="orderList" class="list" style="margin-top:14px"></div>
+      </div>
+
+      <div id="tab-exportar" class="panel card">
+        <h2>Exportar JSON</h2>
+        <div class="muted">Muestra el JSON actualizado con todos los cambios hechos.</div>
+        <div class="actions" style="margin:12px 0">
+          <button class="btn primary" onclick="copyJSON()">Copiar JSON</button>
+          <button class="btn gray" onclick="downloadJSON()">Descargar JSON</button>
+        </div>
+        <div class="jsonbox" id="jsonPreview"></div>
+        <p class="small">Pegalo en GitHub → <code>materiales.json</code> → commit → el mapa se actualiza.</p>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- PANEL -->
-<div class="panel" id="adminPanel">
-  <nav>
-    <div class="logo">🏗 Materiales Ya <span>Panel Admin</span></div>
-    <div class="nav-right">
-      <a href="index.html" class="nav-btn" target="_blank">Ver sitio →</a>
-      <button class="nav-btn" onclick="logout()">Salir</button>
-    </div>
-  </nav>
-
-  <main>
-
-    <!-- STATS -->
-    <div class="stats" id="statsGrid"></div>
-
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('negocios', this)">🏪 Negocios</button>
-      <button class="tab" onclick="showTab('nuevo', this)">➕ Agregar negocio</button>
-      <button class="tab" onclick="showTab('pedidos', this)">📞 Contactos</button>
-      <button class="tab" onclick="showTab('json', this)">📋 Exportar JSON</button>
-    </div>
-
-    <!-- TAB NEGOCIOS -->
-    <div id="tab-negocios" class="tab-panel active">
-      <div class="card">
-        <h2>Negocios registrados <span style="font-size:12px;color:#888;font-weight:400">Editá activo/inactivo y copiá el JSON actualizado</span></h2>
-        <div id="lista-negocios-admin"></div>
-      </div>
-    </div>
-
-    <!-- TAB NUEVO NEGOCIO -->
-    <div id="tab-nuevo" class="tab-panel">
-      <div class="card">
-        <h2>Agregar nuevo negocio</h2>
-        <div class="form-inline">
-          <div class="field"><label>Nombre *</label><input type="text" id="n-nombre" placeholder="Corralón San Martín"></div>
-          <div class="field"><label>Tipo *</label>
-            <select id="n-tipo">
-              <option value="corralon">🏗 Corralón</option>
-              <option value="ferreteria">🔩 Ferretería</option>
-              <option value="durlock">📐 Durlock / Yeso</option>
-              <option value="maderera">🪵 Maderera</option>
-            </select>
-          </div>
-          <div class="field"><label>Dirección *</label><input type="text" id="n-dir" placeholder="Av. San Martín 1234, Lomas de Zamora"></div>
-          <div class="field"><label>Teléfono *</label><input type="text" id="n-tel" placeholder="11 4444-1111"></div>
-          <div class="field"><label>Horario</label><input type="text" id="n-horario" placeholder="Lun-Vie 8-18hs"></div>
-          <div class="field"><label>Plan</label>
-            <select id="n-plan">
-              <option value="pro">Pro</option>
-              <option value="basico">Básico</option>
-              <option value="comision">Por pedido</option>
-            </select>
-          </div>
-          <div class="field"><label>Latitud *</label><input type="number" id="n-lat" placeholder="-34.7612" step="0.0001"></div>
-          <div class="field"><label>Longitud *</label><input type="number" id="n-lng" placeholder="-58.3956" step="0.0001"></div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn-primary" onclick="agregarNegocio()">Agregar negocio</button>
-          <button class="btn-secondary" onclick="showTab('json', document.querySelectorAll(\'.tab\')[3])">Ver JSON para copiar</button>
-        </div>
-        <p class="tip">💡 Para obtener lat/lng: abrí Google Maps, buscá la dirección, clic derecho → las coordenadas aparecen arriba del menú.</p>
-      </div>
-    </div>
-
-    <!-- TAB PEDIDOS -->
-    <div id="tab-pedidos" class="tab-panel">
-      <div class="card">
-        <h2>Contactos recibidos <span style="font-size:12px;color:#888;font-weight:400">Los contactos reales llegan por WhatsApp</span></h2>
-        <div id="lista-pedidos"></div>
-        <div style="margin-bottom:1rem">
-          <button class="btn-primary" onclick="agregarContacto()" style="margin-bottom:.5rem">+ Registrar contacto manual</button>
-        </div>
-        <div id="contactos-extra"></div>
-        <p class="tip">📲 Cada vez que un cliente hace clic en "Contactar" desde el mapa, te llega por WhatsApp. Registrá acá los contactos para el seguimiento mensual y cobro.</p>
-      </div>
-    </div>
-
-    <!-- TAB JSON -->
-    <div id="tab-json" class="tab-panel">
-      <div class="card">
-        <h2>
-          Exportar JSON actualizado
-          <button class="btn-copy" onclick="copiarJSON()">📋 Copiar JSON</button>
-        </h2>
-        <p style="font-size:13px;color:#666;margin-bottom:.75rem">Copiá este JSON y reemplazá el contenido de <strong>materiales.json</strong> en GitHub para que los cambios se reflejen en el mapa.</p>
-        <div class="json-box" id="jsonBox"></div>
-        <p class="tip">⚠️ Después de copiar, andá a GitHub → <strong>materiales.json</strong> → lápiz ✏️ → borrá todo → pegá → Commit changes.</p>
-      </div>
-    </div>
-
-  </main>
-  <footer>Panel Admin — Materiales Ya</footer>
-</div>
-
-<script>
-const PASS = '1234';
-let negocios = [];
-let catalogoOriginal = {};
-
-// ── Auth ──
-function login() {
-  if(document.getElementById('loginPass').value === PASS) {
-    document.getElementById('loginWrap').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
-    cargarDatos();
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-    document.getElementById('loginPass').value = '';
-  }
-}
-function logout() {
-  document.getElementById('loginWrap').style.display = 'flex';
-  document.getElementById('adminPanel').style.display = 'none';
-  document.getElementById('loginPass').value = '';
-}
-
-// ── Tabs ──
-function showTab(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  btn.classList.add('active');
-  if(id === 'json') renderJSON();
-}
-
-// ── Cargar datos ──
-async function cargarDatos() {
-  try {
-    const res = await fetch('materiales.json');
-    catalogoOriginal = await res.json();
-    negocios = catalogoOriginal.negocios || [];
-    renderStats();
-    renderNegocios();
-    renderPedidos();
-  } catch(e) {
-    negocios = [];
-    renderStats();
-    renderNegocios();
-  }
-}
-
-// ── Stats ──
-function renderStats() {
-  const activos = negocios.filter(n => n.activo).length;
-  const inactivos = negocios.filter(n => !n.activo).length;
-  const tipos = [...new Set(negocios.map(n => n.tipo))].length;
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-card"><div class="stat-num">${negocios.length}</div><div class="stat-label">Total negocios</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:#065f46">${activos}</div><div class="stat-label">Activos en mapa</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:#991b1b">${inactivos}</div><div class="stat-label">Inactivos</div></div>
-    <div class="stat-card"><div class="stat-num">${tipos}</div><div class="stat-label">Tipos de negocio</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:#1a4a8a">0</div><div class="stat-label">Contactos este mes</div></div>
-  `;
-}
-
-// ── Negocios ──
-const PLANES = { pro: '⭐ Pro', basico: 'Básico', comision: 'Por pedido' };
-const TIPOS_LABEL = { corralon: '🏗 Corralón', ferreteria: '🔩 Ferretería', durlock: '📐 Durlock', maderera: '🪵 Maderera' };
-
-function renderNegocios() {
-  const el = document.getElementById('lista-negocios-admin');
-  if(negocios.length === 0) { el.innerHTML = '<div class="empty">No hay negocios cargados todavía.</div>'; return; }
-  el.innerHTML = negocios.map((n, i) => `
-    <div class="negocio-row">
-      <div class="neg-info">
-        <div class="neg-nombre">${n.nombre}</div>
-        <div class="neg-detalle">${n.direccion} · ${n.telefono}</div>
-        <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
-          <span class="badge badge-tipo">${TIPOS_LABEL[n.tipo] || n.tipo}</span>
-          <span class="badge" style="background:#f0f5ff;color:#1a4a8a">$500-1000/contacto</span>
-        </div>
-      </div>
-      <span class="badge ${n.activo ? 'badge-activo' : 'badge-inactivo'}">${n.activo ? 'Activo' : 'Inactivo'}</span>
-      <button class="btn-toggle ${n.activo ? 'btn-desactivar' : 'btn-activar'}" onclick="toggleActivo(${i})">
-        ${n.activo ? 'Desactivar' : 'Activar'}
-      </button>
-      <button class="btn-editar" onclick="editarNegocio(${i})">✏️</button>
-    </div>
-  `).join('');
-}
-
-function toggleActivo(i) {
-  negocios[i].activo = !negocios[i].activo;
-  renderNegocios();
-  renderStats();
-  renderJSON();
-}
-
-function editarNegocio(i) {
-  const n = negocios[i];
-  const nuevoNombre = prompt('Nombre del negocio:', n.nombre);
-  if(nuevoNombre === null) return;
-  const nuevoTel = prompt('Teléfono:', n.telefono);
-  if(nuevoTel === null) return;
-  const nuevoHorario = prompt('Horario:', n.horario);
-  if(nuevoHorario === null) return;
-  negocios[i].nombre = nuevoNombre || n.nombre;
-  negocios[i].telefono = nuevoTel || n.telefono;
-  negocios[i].horario = nuevoHorario || n.horario;
-  renderNegocios();
-  renderJSON();
-}
-
-// ── Agregar negocio ──
-function agregarNegocio() {
-  const nombre = document.getElementById('n-nombre').value.trim();
-  const tipo = document.getElementById('n-tipo').value;
-  const dir = document.getElementById('n-dir').value.trim();
-  const tel = document.getElementById('n-tel').value.trim();
-  const horario = document.getElementById('n-horario').value.trim();
-  const plan = document.getElementById('n-plan').value;
-  const lat = parseFloat(document.getElementById('n-lat').value);
-  const lng = parseFloat(document.getElementById('n-lng').value);
-
-  if(!nombre || !dir || !tel || !lat || !lng) { alert('Completá al menos nombre, dirección, teléfono y coordenadas.'); return; }
-
-  const nuevo = {
-    id: Date.now(),
-    nombre, tipo, direccion: dir, telefono: tel,
-    horario: horario || 'Consultar horario',
-    lat, lng, plan, activo: true
-  };
-  negocios.push(nuevo);
-  renderNegocios();
-  renderStats();
-  renderJSON();
-
-  // Limpiar form
-  ['n-nombre','n-dir','n-tel','n-horario','n-lat','n-lng'].forEach(id => document.getElementById(id).value = '');
-  showTab('negocios', document.querySelectorAll('.tab')[0]);
-  alert(`✅ "${nombre}" agregado. Copiá el JSON y actualizá materiales.json en GitHub.`);
-}
-
-// ── Pedidos simulados ──
-const pedidosEjemplo = [
-  { id:'MAT-001', fecha:'Hoy 10:23', cliente:'Carlos R.', tel:'11 5555-1234', zona:'Lomas de Zamora', items:'Cemento x10, Arena 2m³, Ladrillo x500', urgencia:'Esta semana' },
-  { id:'MAT-002', fecha:'Hoy 09:15', cliente:'María L.', tel:'11 6666-5678', zona:'Quilmes', items:'Placa Durlock x20, Perfil montante x40', urgencia:'Lo antes posible' },
-  { id:'MAT-003', fecha:'Ayer 16:40', cliente:'Roberto M.', tel:'11 7777-9012', zona:'Avellaneda', items:'Hierro Ø10mm x15 barras, Malla Q188 x8', urgencia:'Esta quincena' },
-];
-function renderPedidos() {
-  const lista = contactos || pedidosEjemplo;
-  document.getElementById('lista-pedidos').innerHTML = lista.map(p => `
-    <div class="pedido-row">
-      <div class="pedido-header">
-        <span class="pedido-id">${p.id}</span>
-        <span class="pedido-fecha">${p.fecha}</span>
-        ${p.negocio ? `<span class="badge" style="background:#dbeafe;color:#1e40af">${p.negocio}</span>` : ''}
-      </div>
-      <div class="pedido-cliente">👤 ${p.cliente} · 📱 ${p.tel}</div>
-      <div class="pedido-zona">📍 ${p.zona} · ⏰ ${p.urgencia}</div>
-      <div class="pedido-items">📦 ${p.items}</div>
-    </div>
-  `).join('');
-}
-
-// ── Contactos manuales ──
-let contactos = [...pedidosEjemplo];
-function agregarContacto() {
-  const negocio = prompt('Nombre del corralón/negocio:');
-  if(!negocio) return;
-  const cliente = prompt('Nombre del cliente (opcional):') || 'Cliente';
-  const fecha = new Date().toLocaleString('es-AR');
-  contactos.unshift({ id:'C-'+Date.now().toString().slice(-4), fecha, cliente, tel:'-', zona:'-', items:'Contacto desde el mapa', urgencia:'-', negocio });
-  renderPedidos();
-}
-
-// ── JSON ──
-function renderJSON() {
-  const data = { ...catalogoOriginal, negocios };
-  document.getElementById('jsonBox').textContent = JSON.stringify(data, null, 2);
-}
-function copiarJSON() {
-  const text = document.getElementById('jsonBox').textContent;
-  navigator.clipboard.writeText(text).then(() => alert('✅ JSON copiado. Ahora pegalo en materiales.json en GitHub.'));
-}
-</script>
+  <script>
+    const LS='my_admin_data_v1';
+    const AUTH='my_admin_auth_v1';
+    const demo={businesses:[
+      {id:1,name:'Corralón Central',phone:'+54 11 4444-1111',hours:'Lun a Sáb 8 a 18',lat:-34.6037,lng:-58.3816,address:'CABA',notes:'Entrega en obra',active:true},
+      {id:2,name:'Materiales del Sur',phone:'+54 11 5555-2222',hours:'Lun a Vie 7:30 a 17',lat:-34.76,lng:-58.39,address:'Zona Sur',notes:'Mostrador rápido',active:false}
+    ],orders:[]};
+    const load=()=>JSON.parse(localStorage.getItem(LS)||JSON.stringify(demo));
+    const save=d=>localStorage.setItem(LS,JSON.stringify(d));
+    let data=load();
+    if(!localStorage.getItem(LS)) save(demo);
+    const authOn=()=>localStorage.getItem(AUTH)==='1';
+    function login(){const p=document.getElementById('pass').value;document.getElementById('loginMsg').textContent=p==='1234'?'': 'Contraseña incorrecta';if(p==='1234'){localStorage.setItem(AUTH,'1');showAdmin();}}
+    function logout(){localStorage.removeItem(AUTH);location.reload();}
+    function showAdmin(){document.getElementById('loginView').classList.add('hide');document.getElementById('adminView').classList.remove('hide');renderAll();}
+    function showTab(id,btn){document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');renderAll();}
+    function renderBusinesses(){const el=document.getElementById('businessList');el.innerHTML=data.businesses.map(b=>`<div class='item'><div><strong>${b.name}</strong> <span class='badge'>${b.active?'Activo':'Inactivo'}</span></div><div class='meta'>${b.phone||''} · ${b.hours||''}</div><div class='meta'>${b.address||''} · ${b.lat}, ${b.lng}</div><div class='actions'><button class='btn ${b.active?'red':'green'}' onclick='toggleBusiness(${b.id})'>${b.active?'Desactivar':'Activar'}</button><button class='btn outline' onclick='editBusiness(${b.id})'>✏️ Editar</button></div></div>`).join('')||'<p class="muted">No hay negocios cargados.</p>'}
+    function toggleBusiness(id){const b=data.businesses.find(x=>x.id===id);if(b){b.active=!b.active;save(data);renderAll();}}
+    function editBusiness(id){const b=data.businesses.find(x=>x.id===id);if(!b)return;document.getElementById('editEmpty').classList.add('hide');document.getElementById('editForm').classList.remove('hide');editId.value=b.id;editName.value=b.name;editPhone.value=b.phone||'';editHours.value=b.hours||'';editLat.value=b.lat;editLng.value=b.lng;editActive.value=String(!!b.active);}
+    function clearEdit(){document.getElementById('editForm').classList.add('hide');document.getElementById('editEmpty').classList.remove('hide');}
+    function saveEdit(){const id=Number(editId.value);const b=data.businesses.find(x=>x.id===id);if(!b)return;b.name=editName.value;b.phone=editPhone.value;b.hours=editHours.value;b.lat=Number(editLat.value);b.lng=Number(editLng.value);b.active=editActive.value==='true';save(data);renderAll();}
+    function addBusiness(){const n={id:Date.now(),name:newName.value.trim(),phone:newPhone.value.trim(),hours:newHours.value.trim(),address:newAddress.value.trim(),lat:Number(newLat.value),lng:Number(newLng.value),notes:newNotes.value.trim(),active:true};if(!n.name)return alert('Falta el nombre');data.businesses.unshift(n);save(data);renderAll();document.getElementById('tab-negocios').scrollIntoView({behavior:'smooth'});}
+    function fillSample(){newName.value='Corralón Ejemplo';newPhone.value='351 123-4567';newHours.value='Lun a Vie 8 a 18';newAddress.value='Bº Centro';newLat.value='-31.4167';newLng.value='-64.1833';newNotes.value='Entrega a domicilio';}
+    function addOrder(){data.orders.unshift({id:Date.now(),name:orderName.value,phone:orderPhone.value,date:orderDate.value,status:orderStatus.value,detail:orderDetail.value});save(data);renderAll();orderName.value=orderPhone.value=orderDetail.value='';}
+    function renderOrders(){document.getElementById('orderList').innerHTML=data.orders.map(o=>`<div class='item'><strong>${o.name||'Sin nombre'}</strong> <span class='badge'>${o.status}</span><div class='meta'>${o.phone||''} · ${o.date||''}</div><div class='meta'>${o.detail||''}</div></div>`).join('')||'<p class="muted">Todavía no hay pedidos.</p>'}
+    function renderJSON(){document.getElementById('jsonPreview').textContent=JSON.stringify(data,null,2)}
+    async function copyJSON(){await navigator.clipboard.writeText(JSON.stringify(data,null,2));alert('JSON copiado');}
+    function downloadJSON(){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='materiales.json';a.click();}
+    function resetDemo(){if(confirm('Restablecer datos de ejemplo?')){localStorage.setItem(LS,JSON.stringify(demo));data=load();renderAll();}}
+    function renderAll(){data=load();renderBusinesses();renderOrders();renderJSON();}
+    if(authOn()) showAdmin();
+    document.getElementById('orderDate').value=new Date().toISOString().slice(0,10);
+  </script>
 </body>
 </html>
