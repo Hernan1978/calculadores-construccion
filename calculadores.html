@@ -138,13 +138,8 @@
     </div>
     <div id="mat-hormigon" class="mat-panel active">
       <h2>Hormigón / Losa</h2>
-      <div class="field"><label>Tipo de trabajo</label>
-        <select id="h-tipo" onchange="calcHormigon()">
-          <option value="losa">Losa (10 cm espesor)</option>
-          <option value="columna">Columna / viga</option>
-          <option value="zapata">Zapata de fundación</option>
-          <option value="piso">Piso de hormigón (8 cm)</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="h-tipo" placeholder="Ej: losa de techo, columna, zapata, piso..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;">
       </div>
       <div class="grid-3">
         <div class="field"><label>Largo (m)</label><input type="number" id="h-largo" value="5" min="0.1" step="0.1" oninput="calcHormigon()"></div>
@@ -249,13 +244,9 @@
     </div>
     <div id="mat-cemento" class="mat-panel">
       <h2>Cemento Portland</h2>
-      <div class="field"><label>Tipo de trabajo</label>
-        <select id="c-tipo" onchange="calcCemento()">
-          <option value="revoque">Revoque grueso (1.5cm)</option>
-          <option value="contrapiso">Contrapiso (8cm)</option>
-          <option value="pegado">Pegado de ladrillos</option>
-          <option value="carpeta">Carpeta niveladora (3cm)</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="c-tipo-texto" placeholder="Ej: revoque, contrapiso, pegado de ladrillos..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcCemento()">
+        <input type="hidden" id="c-tipo" value="revoque">
       </div>
       <div class="field"><label>Superficie (m²)</label><input type="number" id="c-sup" value="20" min="1" oninput="calcCemento()"></div>
       <div class="results" id="res-cemento"></div>
@@ -265,12 +256,9 @@
     </div>
     <div id="mat-cal" class="mat-panel">
       <h2>Cal hidráulica</h2>
-      <div class="field"><label>Tipo de trabajo</label>
-        <select id="cal-tipo" onchange="calcCal()">
-          <option value="revoque_fino">Revoque fino (enlucido)</option>
-          <option value="junta">Junta de ladrillos</option>
-          <option value="pintura_cal">Pintura a la cal</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="cal-tipo-texto" placeholder="Ej: revoque fino, junta de ladrillos, pintura a la cal..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcCal()">
+        <input type="hidden" id="cal-tipo" value="revoque_fino">
       </div>
       <div class="field"><label>Superficie (m²)</label><input type="number" id="cal-sup" value="20" min="1" oninput="calcCal()"></div>
       <div class="results" id="res-cal"></div>
@@ -280,12 +268,9 @@
     </div>
     <div id="mat-cemalbañileria" class="mat-panel">
       <h2>Cemento de albañilería</h2>
-      <div class="field"><label>Tipo de trabajo</label>
-        <select id="ca2-tipo" onchange="calcCemAlb()">
-          <option value="junta">Junta de ladrillos</option>
-          <option value="revoque">Revoque exterior</option>
-          <option value="contrapiso">Contrapiso liviano</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="ca2-tipo-texto" placeholder="Ej: junta de ladrillos, revoque exterior, contrapiso..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcCemAlb()">
+        <input type="hidden" id="ca2-tipo" value="junta">
       </div>
       <div class="field"><label>Superficie (m²)</label><input type="number" id="ca2-sup" value="20" min="1" oninput="calcCemAlb()"></div>
       <div class="results" id="res-cemalbañileria"></div>
@@ -295,11 +280,9 @@
     </div>
     <div id="mat-ceresita" class="mat-panel">
       <h2>Ceresita (hidrófugo)</h2>
-      <div class="field"><label>Tipo de aplicación</label>
-        <select id="cer2-tipo" onchange="calcCeresita()">
-          <option value="mezcla">Aditivo en mezcla</option>
-          <option value="pintura">Pintura hidrófuga directa</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="cer2-tipo-texto" placeholder="Ej: aditivo en mezcla, pintura hidrófuga directa..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcCeresita()">
+        <input type="hidden" id="cer2-tipo" value="mezcla">
       </div>
       <div class="field"><label>Superficie (m²)</label><input type="number" id="cer2-sup" value="20" min="1" oninput="calcCeresita()"></div>
       <div class="results" id="res-ceresita"></div>
@@ -309,12 +292,9 @@
     </div>
     <div id="mat-tacuru" class="mat-panel">
       <h2>Tacurú (impermeabilizante)</h2>
-      <div class="field"><label>Tipo de trabajo</label>
-        <select id="tac-tipo" onchange="calcTacuru()">
-          <option value="techo">Techo / terraza</option>
-          <option value="pared">Pared exterior</option>
-          <option value="zocalo">Zócalo hidrófugo</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="tac-tipo-texto" placeholder="Ej: techo, terraza, pared exterior, zócalo..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcTacuru()">
+        <input type="hidden" id="tac-tipo" value="techo">
       </div>
       <div class="field"><label>Superficie (m²)</label><input type="number" id="tac-sup" value="20" min="1" oninput="calcTacuru()"></div>
       <div class="results" id="res-tacuru"></div>
@@ -382,14 +362,9 @@
           </select>
         </div>
       </div>
-      <div class="field"><label>Tipo de pintura</label>
-        <select id="p-tipo" onchange="calcPintura()">
-          <option value="10">Látex interior — 10m²/L</option>
-          <option value="8">Látex exterior — 8m²/L</option>
-          <option value="6">Impermeabilizante — 6m²/L</option>
-          <option value="12">Esmalte sintético — 12m²/L</option>
-          <option value="5">Pintura a la cal — 5m²/L</option>
-        </select>
+      <div class="field"><label>Tipo de pintura <span style="font-weight:400;color:#aaa">(escribí el tipo)</span></label>
+        <input type="text" id="p-tipo-texto" placeholder="Ej: látex interior, látex exterior, esmalte, impermeabilizante..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcPintura()">
+        <input type="hidden" id="p-tipo" value="10">
       </div>
       <div class="results" id="res-pintura"></div>
       <div id="tip-pintura" class="tip-dinamico" style="display:none;margin-top:.75rem;background:#e8f0fb;border-left:3px solid #5a8abf;border-radius:8px;padding:10px 14px;font-size:13px;color:#1a2744;line-height:1.5;"></div>
@@ -398,12 +373,9 @@
     </div>
     <div id="mat-revoque" class="mat-panel">
       <h2>Revoque fino</h2>
-      <div class="field"><label>Tipo</label>
-        <select id="rev-tipo" onchange="calcRevoque()">
-          <option value="yeso">Yeso proyectado</option>
-          <option value="cal">Cal y arena fina</option>
-          <option value="exterior">Exterior (impermeable)</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="rev-tipo-texto" placeholder="Ej: yeso proyectado, cal y arena fina, exterior..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcRevoque()">
+        <input type="hidden" id="rev-tipo" value="yeso">
       </div>
       <div class="field"><label>Superficie (m²)</label><input type="number" id="rev-sup" value="20" min="1" oninput="calcRevoque()"></div>
       <div class="results" id="res-revoque"></div>
@@ -437,12 +409,9 @@
     </div>
     <div id="mat-durlock" class="mat-panel active">
       <h2>Durlock</h2>
-      <div class="field"><label>Tipo de trabajo</label>
-        <select id="d-tipo" onchange="calcDurlock()">
-          <option value="pared">Pared simple</option>
-          <option value="cielorraso">Cielorraso</option>
-          <option value="doble">Pared doble</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="d-tipo-texto" placeholder="Ej: pared simple, cielorraso, pared doble..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcDurlock()">
+        <input type="hidden" id="d-tipo" value="pared">
       </div>
       <div class="grid-2">
         <div class="field"><label>Ancho (m)</label><input type="number" id="d-ancho" value="4" min="0.1" step="0.1" oninput="calcDurlock()"></div>
@@ -455,12 +424,9 @@
     </div>
     <div id="mat-steel" class="mat-panel">
       <h2>Steel Framing</h2>
-      <div class="field"><label>Tipo de estructura</label>
-        <select id="sf-tipo" onchange="calcSteel()">
-          <option value="pared">Pared exterior</option>
-          <option value="interior">Pared interior</option>
-          <option value="techo">Techo / cubierta</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="sf-tipo-texto" placeholder="Ej: pared exterior, pared interior, techo..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcSteel()">
+        <input type="hidden" id="sf-tipo" value="pared">
       </div>
       <div class="grid-2">
         <div class="field"><label>Largo (m)</label><input type="number" id="sf-largo" value="6" min="0.1" step="0.1" oninput="calcSteel()"></div>
@@ -473,12 +439,9 @@
     </div>
     <div id="mat-cielorraso" class="mat-panel">
       <h2>Cielorraso tradicional</h2>
-      <div class="field"><label>Tipo</label>
-        <select id="ci-tipo" onchange="calcCielorraso()">
-          <option value="yeso">Yeso proyectado</option>
-          <option value="madera">Listones de madera</option>
-          <option value="machimbre">Machimbre</option>
-        </select>
+      <div class="field"><label>Descripción del trabajo <span style="font-weight:400;color:#aaa">(opcional)</span></label>
+        <input type="text" id="ci-tipo-texto" placeholder="Ej: yeso proyectado, listones de madera, machimbre..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcCielorraso()">
+        <input type="hidden" id="ci-tipo" value="yeso">
       </div>
       <div class="grid-2">
         <div class="field"><label>Largo (m)</label><input type="number" id="ci-largo" value="5" min="0.1" step="0.1" oninput="calcCielorraso()"></div>
@@ -572,13 +535,9 @@
     </div>
     <div id="mat-clavos" class="mat-panel active">
       <h2>Clavos</h2>
-      <div class="field"><label>Tipo de clavo</label>
-        <select id="clav-tipo" onchange="calcClavos()">
-          <option value="50">Clavo 50mm (2")</option>
-          <option value="75">Clavo 75mm (3")</option>
-          <option value="100">Clavo 100mm (4")</option>
-          <option value="20">Clavo 20mm sin cabeza</option>
-        </select>
+      <div class="field"><label>Tipo de clavo <span style="font-weight:400;color:#aaa">(escribí el tipo)</span></label>
+        <input type="text" id="clav-tipo-texto" placeholder="Ej: 50mm, 75mm, 100mm, sin cabeza..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcClavos()">
+        <input type="hidden" id="clav-tipo" value="50">
       </div>
       <div class="field"><label>Superficie (m²)</label><input type="number" id="clav-cant" value="20" min="1" oninput="calcClavos()"></div>
       <div class="results" id="res-clavos"></div>
@@ -588,13 +547,9 @@
     </div>
     <div id="mat-tornillos" class="mat-panel">
       <h2>Tornillos</h2>
-      <div class="field"><label>Tipo de tornillo</label>
-        <select id="torn-tipo" onchange="calcTornillos()">
-          <option value="durlock">Tornillo Durlock 3.5x25mm</option>
-          <option value="autoperf">Autoperforante 4.2x13mm</option>
-          <option value="madera">Tornillo madera 4x40mm</option>
-          <option value="hormigon">Tornillo hormigón 6x50mm</option>
-        </select>
+      <div class="field"><label>Tipo de tornillo <span style="font-weight:400;color:#aaa">(escribí el tipo)</span></label>
+        <input type="text" id="torn-tipo-texto" placeholder="Ej: Durlock, autoperforante, madera, hormigón..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcTornillos()">
+        <input type="hidden" id="torn-tipo" value="durlock">
       </div>
       <div class="field"><label>Cantidad de placas o m²</label><input type="number" id="torn-cant" value="10" min="1" oninput="calcTornillos()"></div>
       <div class="results" id="res-tornillos"></div>
@@ -604,13 +559,9 @@
     </div>
     <div id="mat-madera" class="mat-panel">
       <h2>Madera</h2>
-      <div class="field"><label>Tipo de uso</label>
-        <select id="mad-tipo" onchange="calcMadera()">
-          <option value="tirante">Tirante 2x3" (estructural)</option>
-          <option value="tabla">Tabla 1x6" (encofrado)</option>
-          <option value="fenolico">Fenólico 18mm</option>
-          <option value="terciado">Terciado 4mm</option>
-        </select>
+      <div class="field"><label>Tipo de madera <span style="font-weight:400;color:#aaa">(escribí el tipo)</span></label>
+        <input type="text" id="mad-tipo-texto" placeholder="Ej: tirante estructural, tabla encofrado, fenólico, terciado..." style="width:100%;padding:9px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:14px;color:#1a1a2e;background:#fafbfd;outline:none;" oninput="calcMadera()">
+        <input type="hidden" id="mad-tipo" value="tirante">
       </div>
       <div class="grid-2">
         <div class="field"><label>Superficie (m²)</label><input type="number" id="mad-sup" value="20" min="1" oninput="calcMadera()"></div>
