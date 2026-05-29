@@ -1,18 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Panel principal de Materiales Ya. Gestión de leads, corralones y cobros." />
-  <meta name="robots" content="noindex, nofollow" />
-  <meta name="theme-color" content="#1a2744" />
-
-  <link rel="icon" type="image/png" href="images/logo.png" />
-  <link rel="apple-touch-icon" href="images/logo.png" />
-
   <title>Panel principal | Materiales Ya</title>
-</head>
+  <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#eef2f7;color:#1a1a1a;min-height:100vh}
     header{background:#1a2744;color:#fff;padding:18px 20px;box-shadow:0 2px 10px rgba(26,39,68,.12);position:sticky;top:0;z-index:3000}
@@ -76,7 +68,12 @@
     .switch input:checked + .slider{background:#22c55e}
     .switch input:checked + .slider:before{transform:translateX(20px)}
 
-    .ws-wrap{position:fixed;right:18px;bottom:18px;z-index:2500}
+    .ws-wrap{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:2500;
+    }
     .ws-toggle{
       position:relative;
       width:62px;
@@ -116,7 +113,6 @@
       border:2px solid #fff;
       box-shadow:0 4px 10px rgba(0,0,0,.18);
     }
-
     @keyframes pulseGlow{
       0%{
         transform:scale(1);
