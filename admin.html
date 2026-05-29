@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel privado | Materiales Ya</title>
+  <title>Panel principal | Materiales Ya</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#eef2f7;color:#1a1a1a;min-height:100vh}
-    header{background:#1a2744;color:#fff;padding:18px 20px;box-shadow:0 2px 10px rgba(26,39,68,.12);position:sticky;top:0;z-index:3000;overflow:visible}
-    header .wrap{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;overflow:visible}
+    header{background:#1a2744;color:#fff;padding:18px 20px;box-shadow:0 2px 10px rgba(26,39,68,.12);position:sticky;top:0;z-index:3000}
+    header .wrap{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     header h1{font-size:1.25rem;margin-bottom:4px}
     header p{font-size:13px;color:#c8d6eb}
-    .header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:3001}
+    .header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .pill{background:#1a4a8a;color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 14px;font-size:12px;font-weight:600;white-space:nowrap}
-    .btn-salir{background:#d93025;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;position:relative;z-index:3002}
+    .btn-salir{background:#d93025;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px}
     .btn-salir:hover{background:#b3261e}
     .icon-salir{font-size:16px;line-height:1}
-    main{max-width:1100px;margin:20px auto;padding:0 16px 24px;display:grid;gap:16px;overflow:visible}
-    .card{background:#fff;border:1px solid #d0dcea;border-radius:14px;box-shadow:0 6px 20px rgba(26,39,68,.05);padding:18px;position:relative;z-index:1;overflow:visible}
+    main{max-width:1100px;margin:20px auto;padding:0 16px 24px;display:grid;gap:16px}
+    .card{background:#fff;border:1px solid #d0dcea;border-radius:14px;box-shadow:0 6px 20px rgba(26,39,68,.05);padding:18px}
     .card h2{color:#1a2744;font-size:1.05rem;margin-bottom:12px}
     .card .sub{color:#5b6b83;font-size:13px;margin-top:-6px;margin-bottom:12px;line-height:1.5}
     .grid-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -28,7 +28,7 @@
     .kpi .sub{font-size:12px;color:#7f8ca1;margin-top:4px}
     .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
     .toolbar input,.toolbar select{padding:10px 12px;border:1px solid #cfd8e3;border-radius:10px;background:#fff;font-size:14px;outline:none;color:#1a1a1a;width:100%}
-    .btn{padding:10px 14px;border:none;border-radius:10px;background:#1a2744;color:#fff;font-weight:600;cursor:pointer;position:relative;z-index:2002}
+    .btn{padding:10px 14px;border:none;border-radius:10px;background:#1a2744;color:#fff;font-weight:600;cursor:pointer}
     .btn.secondary{background:#e8eef5;color:#1a2744}
     .btn.edit{background:#2563eb}
     .btn.danger{background:#dc2626}
@@ -50,7 +50,7 @@
     .note{margin-top:10px;font-size:12px;color:#6b7a90;line-height:1.5;background:#f7f9fc;border:1px dashed #d0dcea;border-radius:12px;padding:10px 12px}
     .modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:1500;padding:16px;overflow:auto}
     .modal.active{display:flex;align-items:center;justify-content:center}
-    .modal-box{width:min(980px,100%);background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;position:relative;z-index:1501}
+    .modal-box{width:min(980px,100%);background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden}
     .modal-head{background:#1a2744;color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
     .modal-head h3{font-size:1.05rem}
     .modal-close{background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1}
@@ -67,6 +67,52 @@
     .slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background:white;transition:.2s;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.15)}
     .switch input:checked + .slider{background:#22c55e}
     .switch input:checked + .slider:before{transform:translateX(20px)}
+    .ws-wrap{position:fixed;right:18px;bottom:18px;z-index:2500}
+    .ws-toggle{
+      position:relative;
+      width:60px;
+      height:60px;
+      border:none;
+      border-radius:50%;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#25d366;
+      box-shadow:
+        0 0 0 0 rgba(37,211,102,.28),
+        0 10px 22px rgba(0,0,0,.18),
+        0 0 18px rgba(37,211,102,.45);
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .ws-toggle:hover{
+      transform:translateY(-2px) scale(1.04);
+      background:#20c35a;
+      box-shadow:
+        0 0 0 6px rgba(37,211,102,.12),
+        0 12px 26px rgba(0,0,0,.20),
+        0 0 24px rgba(37,211,102,.6);
+    }
+    .ws-toggle svg{
+      width:30px;
+      height:30px;
+      display:block;
+      fill:#fff;
+    }
+    .ws-badge{
+      position:absolute;
+      top:-8px;
+      right:-8px;
+      background:#ff3b30;
+      color:#fff;
+      font-size:11px;
+      font-weight:700;
+      line-height:1;
+      padding:5px 7px;
+      border-radius:999px;
+      border:2px solid #fff;
+      box-shadow:0 4px 10px rgba(0,0,0,.18);
+    }
     @media(max-width:900px){.grid-kpis,.split{grid-template-columns:1fr 1fr}.modal-box{width:min(100%,100%)}}
     @media(max-width:640px){.grid-kpis,.split{grid-template-columns:1fr}table{display:block;overflow-x:auto;white-space:nowrap}header .wrap{align-items:flex-start}}
   </style>
@@ -75,11 +121,11 @@
   <header>
     <div class="wrap">
       <div>
-        <h1>Panel privado</h1>
-        <p>Leads del mes, resumen por corralón y cobro final.</p>
+        <h1>Panel principal</h1>
+        <p>Resumen general, leads y panel de gestión.</p>
       </div>
       <div class="header-actions">
-        <div class="pill">Materiales Ya · Admin</div>
+        <div class="pill">Materiales Ya · Portal</div>
         <button class="btn-salir" onclick="salirPanel()" aria-label="Salir"><span class="icon-salir">⎋</span><span>Salir</span></button>
       </div>
     </div>
@@ -169,6 +215,15 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="ws-wrap">
+    <button class="ws-toggle" aria-label="WhatsApp">
+      <span class="ws-badge">Nuevo</span>
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M19.11 17.13c-.27-.14-1.59-.78-1.84-.87-.25-.09-.43-.14-.61.14-.18.27-.7.87-.86 1.05-.16.18-.32.21-.59.07-.27-.14-1.14-.42-2.16-1.33-.79-.7-1.32-1.56-1.47-1.83-.15-.27-.02-.41.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.52-.44-.45-.61-.46-.16-.01-.34-.01-.52-.01s-.48.07-.73.34c-.25.27-.96.94-.96 2.29s.99 2.66 1.13 2.84c.14.18 1.93 2.95 4.68 4.13.66.29 1.18.46 1.58.59.66.21 1.26.18 1.73.11.53-.08 1.59-.65 1.82-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32zM16.02 5.33c-5.87 0-10.64 4.77-10.64 10.64 0 1.88.49 3.72 1.42 5.34L5 27l5.84-1.53a10.6 10.6 0 0 0 5.18 1.34h.01c5.87 0 10.64-4.77 10.64-10.64S21.89 5.33 16.02 5.33zm0 19.39h-.01a8.7 8.7 0 0 1-4.44-1.22l-.32-.19-3.46.91.92-3.38-.21-.34a8.67 8.67 0 1 1 7.52 4.22z"/>
+      </svg>
+    </button>
   </div>
 
   <script>
