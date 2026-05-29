@@ -36,7 +36,7 @@
     .kpi .value{font-size:24px;font-weight:800;color:#1a2744;line-height:1}
     .kpi .sub{font-size:12px;color:#7f8ca1;margin-top:4px}
     .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
-    .toolbar input,.toolbar select,.obra-input{
+    .toolbar input,.toolbar select,.obra-input,.categoria-select{
       padding:10px 12px;
       border:1px solid #cfd8e3;
       border-radius:10px;
@@ -48,8 +48,7 @@
       height:42px;
       box-sizing:border-box;
     }
-    .obra-input{min-width:240px}
-    .categoria-select{min-width:240px}
+    .obra-input,.categoria-select{min-width:240px}
     .btn{padding:10px 14px;border:none;border-radius:10px;background:#1a2744;color:#fff;font-weight:600;cursor:pointer}
     .btn.secondary{background:#e8eef5;color:#1a2744}
     .btn.edit{background:#2563eb}
@@ -175,47 +174,7 @@
         <div class="sub">Listado de los contactos que llegaron por WhatsApp, con su estado de gestión.</div>
         <div class="toolbar">
           <select id="categoriaMaterial" class="categoria-select" onchange="cargarMateriales()">
-            <option value="">Todas las categorías</option>
-            <option value="ARIDOS">ARIDOS</option>
-            <option value="CEMENTO">CEMENTO</option>
-            <option value="CEMENTO ALBAÑILERIA">CEMENTO ALBAÑILERIA</option>
-            <option value="CALES">CALES</option>
-            <option value="FRACCIONADOS">FRACCIONADOS</option>
-            <option value="LADRILLOS">LADRILLOS</option>
-            <option value="LADRILLOS HUECOS">LADRILLOS HUECOS</option>
-            <option value="LADRILLOS PORTANTES">LADRILLOS PORTANTES</option>
-            <option value="LADRILLOS DOBLE MURO">LADRILLOS DOBLE MURO</option>
-            <option value="LADRILLOS TECHO">LADRILLOS TECHO</option>
-            <option value="BLOQUES RETAK">BLOQUES RETAK</option>
-            <option value="MORTEROS Y ADHESIVOS BRIMAX">MORTEROS Y ADHESIVOS BRIMAX</option>
-            <option value="MORTEROS Y ADHESIVOS RETAK">MORTEROS Y ADHESIVOS RETAK</option>
-            <option value="ACCESORIOS Y HERRAMIENTAS RETAK">ACCESORIOS Y HERRAMIENTAS RETAK</option>
-            <option value="DINTELES RETAK">DINTELES RETAK</option>
-            <option value="PIEZAS ORNAMENTALES RETAK">PIEZAS ORNAMENTALES RETAK</option>
-            <option value="AGREGADO LIVIANO">AGREGADO LIVIANO</option>
-            <option value="BLOQUE HORMIGON MILANBLOCK">BLOQUE HORMIGON MILANBLOCK</option>
-            <option value="HIERRO ADN">HIERRO ADN</option>
-            <option value="REFRACTARIOS">REFRACTARIOS</option>
-            <option value="ADHESIVOS">ADHESIVOS</option>
-            <option value="MORTEROS MANUALES Y PROYECTABLES">MORTEROS MANUALES Y PROYECTABLES</option>
-            <option value="HERRAMIENTAS DE PROYECTAR">HERRAMIENTAS DE PROYECTAR</option>
-            <option value="YESOS">YESOS</option>
-            <option value="ARTICULOS DE YESERIA">ARTICULOS DE YESERIA</option>
-            <option value="PLACAS DE YESO KNAUF">PLACAS DE YESO KNAUF</option>
-            <option value="HIDROFUGOS">HIDROFUGOS</option>
-            <option value="ADITIVOS / PUENTES DE ADHERENCIA">ADITIVOS / PUENTES DE ADHERENCIA</option>
-            <option value="PASTINAS">PASTINAS</option>
-            <option value="FERRITES">FERRITES</option>
-            <option value="VIGAS">VIGAS</option>
-            <option value="VIGUETONES">VIGUETONES</option>
-            <option value="PLANCHA TELGOPOR">PLANCHA TELGOPOR</option>
-            <option value="LADRILLOS TELGOPOR">LADRILLOS TELGOPOR</option>
-            <option value="TELGOPOR MOLIDO">TELGOPOR MOLIDO</option>
-            <option value="MEMBRANAS EMAPI">MEMBRANAS EMAPI</option>
-            <option value="IMPERMEABILIZANTES ASFALTICOS">IMPERMEABILIZANTES ASFALTICOS</option>
-            <option value="ASFALTOS">ASFALTOS</option>
-            <option value="FIELTROS ASFALTICOS">FIELTROS ASFALTICOS</option>
-            <option value="IMPERMEABILIZANTES LIQUIDOS">IMPERMEABILIZANTES LIQUIDOS</option>
+            <option value="">Cargando categorías...</option>
           </select>
           <input type="text" id="obra" list="listaObras" placeholder="Escribí la obra" class="obra-input" />
           <button class="btn" onclick="cargarMateriales()">Filtrar</button>
@@ -286,7 +245,6 @@
 
   <script>
     const APPS_SCRIPT_URL = "PEGÁ_ACÁ_TU_URL_DE_DEPLOY";
-
     let empresas = [
       { activo:true, nombre:"Corralón San Martín", zona:"Centro", telefono:"3415551000", tarifa:"500" },
       { activo:true, nombre:"Materiales del Norte", zona:"Fisherton", telefono:"3415552000", tarifa:"500" },
@@ -335,10 +293,27 @@
       cerrarModal();
     }
 
+    async function cargarCategorias() {
+      try {
+        const res = await fetch(APPS_SCRIPT_URL + "?action=categorias");
+        const data = await res.json();
+        const select = document.getElementById("categoriaMaterial");
+        if (!data.ok) return;
+
+        const categorias = data.categorias || [];
+        select.innerHTML = [
+          '<option value="">Todas las categorías</option>',
+          ...categorias.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`)
+        ].join("");
+      } catch (err) {
+        console.error("Error cargando categorías:", err);
+      }
+    }
+
     async function cargarMateriales(){
       try {
         const categoria = document.getElementById("categoriaMaterial").value;
-        const url = APPS_SCRIPT_URL + "?sheet=Materiales" + (categoria ? "&categoria=" + encodeURIComponent(categoria) : "");
+        const url = APPS_SCRIPT_URL + "?categoria=" + encodeURIComponent(categoria || "");
         const res = await fetch(url);
         const data = await res.json();
         if (!data.ok) return;
@@ -358,7 +333,10 @@
     function marcarCierre(){ alert('Cierre de mes listo para automatizar.'); }
     function escapeHtml(str){ return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
 
-    document.addEventListener("DOMContentLoaded", cargarMateriales);
+    document.addEventListener("DOMContentLoaded", async () => {
+      await cargarCategorias();
+      await cargarMateriales();
+    });
   </script>
 </body>
 </html>
