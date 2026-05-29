@@ -88,7 +88,6 @@
     .slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background:white;transition:.2s;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.15)}
     .switch input:checked + .slider{background:#22c55e}
     .switch input:checked + .slider:before{transform:translateX(20px)}
-
     .ws-wrap{position:fixed;right:18px;bottom:18px;z-index:2500}
     .ws-toggle{
       position:relative;
@@ -175,9 +174,10 @@
         <div class="sub">Listado de los contactos que llegaron por WhatsApp, con su estado de gestión.</div>
         <div class="toolbar">
           <input type="month" id="filtroMes" />
-          <input type="text" id="obra" placeholder="Escribí la obra" class="obra-input" />
+          <input type="text" id="obra" list="listaObras" placeholder="Escribí la obra" class="obra-input" />
           <button class="btn" onclick="filtrarLeads()">Filtrar</button>
         </div>
+        <datalist id="listaObras"></datalist>
         <table>
           <thead><tr><th>Fecha</th><th>Cliente</th><th>Zona</th><th>Corralón</th><th>Pedido</th><th>WhatsApp</th><th>Estado</th></tr></thead>
           <tbody id="tbodyLeads">
@@ -243,6 +243,23 @@
 
   <script>
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8aRSh2MDQ1u62uoGvg0RcOWY_N3DxzqfU3Y5dHpeC96EtcTJ-IZDB25ILAojo2wE7UA/exec";
+    const materiales = [
+      "Arena x M3","Piedra Partida 6/20 x M3","Piedra Binder 6/12 x M3","Arena x Bolson","Piedra Partida 6/20 x Bolson","Piedra Binder 6/12 x M3","Cascote Picado (Mezcla) x M3","Cascote Picado (Puro) x M3","Granza de Cascote x M3",
+      "Bs. Cemento Avellaneda x 50 Kg.","Bs. Cemento Avellaneda x 25 Kg.","Bs. Cemento Blanco S.Pingüino Plus x 25 Kg.","Bs. Cemento Albañileria Hidralit x 25 Kg.","Bs. Cemento Albañileria Hidralit x 20 Kg.",
+      "Bs. Cal Aerea El Milagro x 20 Kg.","Bs. Cal Aerea Hidratada Santa Elena x 25 Kg","Bs. Cal Hidrat Extra x 25 Kg.","Arena x Bolsa","Piedra Partida 6/20 x Bolsa","Piedra Binder 6/12 x Bolsa","Leca x Bolsa","Cascote x Bolsa",
+      "Envase de Arena Vacio","Envase para Escombro Vacio","Cemento Avellaneda x 1 Kg","Cal Hidrat Extra x 1 Kg","Cal Aerea Milagro x 1 Kg","Cemento Albañileria Hidralit x 1 Kg","Cemento Rápido Klaukol PRACTIK x 1 Kg","Cemento Rápido Gris x 1 Kg","Cemento Rápido Blanco x 1 Kg",
+      "Pegamento Klaukol Impermeable x 1 Kg.","Pegamento Klaukol Impermeable x 5 Kg.","Pegamento Klaukol Impermeable x 10 Kg.","Yeso Tuyango x 1 Kg","Ladrillo Comun (800 un)","Ladrillo Vista Córdoba","Liston Vista Córdoba x paquete (26 un.)",
+      "Ladrillo Hueco 4x18x33","Ladrillo Hueco 8x18x33","Ladrillo Hueco 12x18x33 (6 Agujeros)","Ladrillo Hueco 12x18x33 (9 Agujeros)","Ladrillo Hueco 18x18x33","Ladrillo Portante 12x19x33","Ladrillo Portante 18x19x33",
+      "Doble Muro 20-18-33","Doble Muro 24-18-33","Doble Muro 27-18-33","Ladrillo Techo 11x25x38",
+      "Retak Bloque 7.50 X 25 X 50","Retak Bloque 10 X 25 X 50","Retak Bloque 12,5 X 25 X 50","Retak Bloque 15 X 25 X 50","Retak Bloque 17,5 X 25 X 50","Retak Bloque 20 X 25 X 50","Retak Bloque 25 X 25 X 50",
+      "Retak Bloque \"U\" 15 X 25 X 50","Retak Bloque \"U\" 17,5 X 25 X 50","Retak Bloque \"U\" 20 X 25 X 50","Retak Bloque \"U\" 25 X 25 X 50",
+      "Retak Bloque \"O\" 15 X 25 X 50","Retak Bloque \"O\" 17,5 X 25 X 50","Retak Bloque \"O\" 20 X 25 X 50","Retak Bloque \"O\" 25 X 25 X 50","Retak Bloque Escalón 15 X 17.5 X 50","Retak Escalón 150",
+      "BRIMAX Ladrillo Macizo 60x20x5","BRIMAX Ladrillo Macizo 60x20x7,5","BRIMAX Ladrillo Macizo 60x20x10","BRIMAX Ladrillo Macizo 60x20x12,5","BRIMAX Ladrillo Macizo 60x20x15","BRIMAX Ladrillo Macizo 60x20x17,5","BRIMAX Ladrillo Macizo 60x20x20","BRIMAX Ladrillo Macizo 60x20x25",
+      "BRIMAX Ladrillo \"U\" 60x20x15","BRIMAX Ladrillo \"U\" 60x20x17,5","BRIMAX Ladrillo \"U\" 60x20x20","BRIMAX Ladrillo \"U\" 60x20x25","BRIMAX Mortero Adhesivo HCCA x 25 Kg",
+      "Mortero Adhesivo Retak X 30 Kg.","Mortero Adhesivo Retak X 10 Kg.","Mortero Fijador de Barras Retak X 30 Kg.","Revoque Fibrado Retak X 30 Kg.","Imprimación Retak x 4 lts.","Revoque Cementicio Exterior Retak X 30 Kg.","Revoque Monocapa Color Retak X 30 Kg.","Imprimación Retak 20 lts.","Revoque Int Fino a la Cal Retak X 25 Kg.","Revoque Cementicio Interior Retak X 30 Kg.","Enlucido Interior Retak X 25 Kg.","Base Flexible Retak X 30 Kg.",
+      "MFV 1X50 (5X5MM)","MFV 0,25X50 (5X5MM)","MFV 1X50 (10X10MM)","MFV 0,25X50 (10X10MM)","CHAPA CONECTORA GALVANIZADA","ESPUMA SELLADORA X 500 ML","CUCHARA DE 75 MM","CUCHARA DE 100 MM","CUCHARA DE 125 MM","CUCHARA DE 150 MM","CUCHARA DE 175 MM","CUCHARA DE 200 MM","CUCHARA DE 250 MM"
+    ];
+
     let empresas = [
       { activo:true, nombre:"Corralón San Martín", zona:"Centro", telefono:"3415551000", tarifa:"500" },
       { activo:true, nombre:"Materiales del Norte", zona:"Fisherton", telefono:"3415552000", tarifa:"500" },
@@ -291,6 +308,12 @@
       cerrarModal();
     }
 
+    function poblarDatalist(){
+      const datalist = document.getElementById('listaObras');
+      const unicos = [...new Set(materiales)].sort((a,b)=>a.localeCompare(b,'es'));
+      datalist.innerHTML = unicos.map(m => `<option value="${escapeHtml(m)}"></option>`).join('');
+    }
+
     function filtrarLeads(){
       const mes = document.getElementById('filtroMes').value;
       const obra = document.getElementById('obra').value;
@@ -299,6 +322,8 @@
     function exportarCSV(){ alert('Exportación pensada para conectar con tu planilla.'); }
     function marcarCierre(){ alert('Cierre de mes listo para automatizar.'); }
     function escapeHtml(str){ return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+
+    poblarDatalist();
   </script>
 </body>
 </html>
