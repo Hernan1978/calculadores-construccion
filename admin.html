@@ -36,7 +36,19 @@
     .kpi .value{font-size:24px;font-weight:800;color:#1a2744;line-height:1}
     .kpi .sub{font-size:12px;color:#7f8ca1;margin-top:4px}
     .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-    .toolbar input,.toolbar select{padding:10px 12px;border:1px solid #cfd8e3;border-radius:10px;background:#fff;font-size:14px;outline:none;color:#1a1a1a;width:100%}
+    .toolbar input,.toolbar select,.obra-input{
+      padding:10px 12px;
+      border:1px solid #cfd8e3;
+      border-radius:10px;
+      background:#fff;
+      font-size:14px;
+      outline:none;
+      color:#1a1a1a;
+      width:100%;
+      height:42px;
+      box-sizing:border-box;
+    }
+    .obra-input{min-width:240px}
     .btn{padding:10px 14px;border:none;border-radius:10px;background:#1a2744;color:#fff;font-weight:600;cursor:pointer}
     .btn.secondary{background:#e8eef5;color:#1a2744}
     .btn.edit{background:#2563eb}
@@ -76,6 +88,7 @@
     .slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background:white;transition:.2s;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.15)}
     .switch input:checked + .slider{background:#22c55e}
     .switch input:checked + .slider:before{transform:translateX(20px)}
+
     .ws-wrap{position:fixed;right:18px;bottom:18px;z-index:2500}
     .ws-toggle{
       position:relative;
@@ -162,13 +175,7 @@
         <div class="sub">Listado de los contactos que llegaron por WhatsApp, con su estado de gestión.</div>
         <div class="toolbar">
           <input type="month" id="filtroMes" />
-          <select id="filtroEstado">
-            <option value="">Todos los estados</option>
-            <option value="new">Nuevo</option>
-            <option value="sent">Enviado</option>
-            <option value="closed">Cerrado</option>
-            <option value="lost">Perdido</option>
-          </select>
+          <input type="text" id="obra" placeholder="Escribí la obra" class="obra-input" />
           <button class="btn" onclick="filtrarLeads()">Filtrar</button>
         </div>
         <table>
@@ -284,7 +291,11 @@
       cerrarModal();
     }
 
-    function filtrarLeads(){ alert('Filtro listo para conectar con Google Sheets.'); }
+    function filtrarLeads(){
+      const mes = document.getElementById('filtroMes').value;
+      const obra = document.getElementById('obra').value;
+      alert('Filtrar por mes: ' + mes + ' y obra: ' + obra);
+    }
     function exportarCSV(){ alert('Exportación pensada para conectar con tu planilla.'); }
     function marcarCierre(){ alert('Cierre de mes listo para automatizar.'); }
     function escapeHtml(str){ return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
