@@ -411,20 +411,17 @@ setTimeout(() => {
   }
 })();
 
-  <!-- todo tu contenido -->
-
   <a href="panel-privado.html" id="accesoPrivado" class="privado-btn">·</a>
 
-  <script>
-    let buffer = [];
-    document.addEventListener('keydown', (e) => {
-      buffer.push(e.key.toLowerCase());
-      buffer = buffer.slice(-5);
-      if (buffer.join('') === 'panel') {
-        document.getElementById('accesoPrivado').classList.add('visible');
-      }
-    });
-  </script>
+<script>
+  let buffer = [];
+  document.addEventListener('keydown', (e) => {
+    buffer.push(e.key.toLowerCase());
+    buffer = buffer.slice(-5);
+    if (buffer.join('') === 'panel') {
+      document.getElementById('accesoPrivado').classList.add('visible');
+    }
+  });
+</script>
 </body>
- 
 </html>
