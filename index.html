@@ -410,19 +410,43 @@ setTimeout(() => {
     initHomeMap();
   }
 })();
- <a href="panel-privado.html" id="accesoPrivado" class="privado-btn">PANEL</a>
+<!-- ACCESO PRIVADO OCULTO -->
+<a href="panel-privado.html" id="accesoPrivado" class="privado-btn" aria-label="Acceso privado">·</a>
+
+<style>
+  .privado-btn{
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: #1a2744;
+    color: #1a2744;
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    opacity: 0;
+    z-index: 9999;
+    overflow: hidden;
+  }
+  .privado-btn.visible{
+    opacity: 1;
+    color: #90afd4;
+  }
+</style>
 
 <script>
-  const btn = document.getElementById('accesoPrivado');
-  btn.style.position = 'fixed';
-  btn.style.bottom = '10px';
-  btn.style.right = '10px';
-  btn.style.zIndex = '9999';
-  btn.style.background = '#1a2744';
-  btn.style.color = '#fff';
-  btn.style.padding = '8px 12px';
-  btn.style.borderRadius = '8px';
-  btn.style.fontSize = '12px';
+  document.addEventListener('keydown', function(e) {
+    const key = (e.key || '').toLowerCase();
+    if (key === 'p') {
+      const btn = document.getElementById('accesoPrivado');
+      if (btn) btn.classList.add('visible');
+    }
+  });
 </script>
+</body>
+</html>
 </body>
 </html>
