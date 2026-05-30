@@ -3,488 +3,413 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel Admin — Materiales Ya</title>
+<title>Materiales Ya — Todo para tu obra</title>
+<meta name="description" content="Calculá materiales, pedí cotización a corralones de tu zona y leé guías de construcción. Todo en un solo lugar.">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
 
-  /* LOGIN */
-  .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-  .login-card { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2.5rem 2rem; width: 100%; max-width: 360px; text-align: center; }
-  .login-card h1 { font-size: 1.3rem; font-weight: 700; color: #1a2744; margin-bottom: .5rem; }
-  .login-card p { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
-  .login-field { margin-bottom: 1rem; text-align: left; }
-  .login-field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
-  .login-field input { width: 100%; padding: 10px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; outline: none; }
-  .login-field input:focus { border-color: #1a2744; }
-  .login-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: .5rem; }
-  .login-error { color: #e53e3e; font-size: 13px; margin-top: .75rem; display: none; }
-
-  /* PANEL */
-  .panel { display: none; }
+  /* NAV */
   nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-  nav .logo { color: #fff; font-size: 1.1rem; font-weight: 700; }
-  nav .logo span { color: #90afd4; font-size: 12px; font-weight: 400; margin-left: 8px; }
-  .nav-right { display: flex; gap: 8px; align-items: center; }
-  .nav-btn { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; cursor: pointer; background: none; transition: all .15s; }
-  .nav-btn:hover { background: #fff; color: #1a2744; border-color: #fff; }
+  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
+  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
+  .nav-links { display: flex; gap: 8px; }
+  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
+  .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
+  @media(max-width:520px) { .nav-links { display: none; } }
 
-  main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+  /* HERO */
+  .hero { background: linear-gradient(135deg, #1a2744 0%, #1e3a6e 60%, #1a4a8a 100%); color: #fff; padding: 5rem 2rem 4rem; text-align: center; }
+  .hero-content { max-width: 620px; margin: 0 auto; }
+  .hero-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; border: 1px solid #2e5a9a; color: #90afd4; font-size: 12px; margin-bottom: 1.5rem; }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 span { color: #90afd4; }
+  .hero p { font-size: 1.05rem; color: #b0c8e8; margin-bottom: 2rem; line-height: 1.6; }
+  .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-hero-primary { padding: 13px 28px; border-radius: 8px; background: #fff; color: #1a2744; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity .15s; }
+  .btn-hero-primary:hover { opacity: .9; }
+  .btn-hero-secondary { padding: 13px 28px; border-radius: 8px; border: 1px solid #2e5a9a; color: #b0c8e8; font-size: 14px; text-decoration: none; transition: all .15s; }
+  .btn-hero-secondary:hover { border-color: #fff; color: #fff; }
 
   /* STATS */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-  .stat-card { background: #fff; border-radius: 10px; border: 1px solid #d0dcea; padding: 1.25rem; text-align: center; }
-  .stat-num { font-size: 2rem; font-weight: 700; color: #1a2744; }
-  .stat-label { font-size: 12px; color: #888; margin-top: 4px; }
+  .stats { background: #fff; border-bottom: 1px solid #d0dcea; padding: 1.5rem 2rem; }
+  .stats-inner { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; text-align: center; }
+  .stat-value { font-size: 1.8rem; font-weight: 700; color: #1a2744; }
+  .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
 
-  /* TABS */
-  .tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 2px solid #d0dcea; }
-  .tab { padding: 10px 20px; border: none; background: none; font-size: 14px; color: #888; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; transition: all .15s; }
-  .tab.active { color: #1a2744; border-bottom-color: #1a2744; }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
+  /* MAIN */
+  main { max-width: 960px; margin: 3rem auto; padding: 0 1rem; }
+  .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; color: #1a2744; }
+  .section-sub { font-size: 14px; color: #666; margin-bottom: 2rem; }
 
-  /* CARDS */
-  .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; margin-bottom: 1rem; }
-  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 8px; }
-  .card-header h2 { font-size: 1rem; font-weight: 700; color: #1a2744; }
+  /* CARDS PRINCIPALES */
+  .cards-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+  .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; }
+  .card-main:hover { box-shadow: 0 8px 30px rgba(26,39,68,.12); transform: translateY(-3px); }
+  .card-main-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+  .card-main-img.bg1 { background: linear-gradient(135deg, #1a2744, #1e3a6e); }
+  .card-main-img.bg2 { background: linear-gradient(135deg, #1a3a5c, #1e5a8e); }
+  .card-main-img.bg3 { background: linear-gradient(135deg, #1a4060, #1e6090); }
+  .card-main-body { padding: 1.5rem; }
+  .card-main-tag { font-size: 11px; font-weight: 600; color: #5a8abf; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .card-main-titulo { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #1a2744; }
+  .card-main-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
+  .card-main-link { font-size: 13px; font-weight: 600; color: #1a4a8a; }
 
-  /* NEGOCIO ROW */
-  .neg-row { border: 1px solid #eef2f7; border-radius: 10px; padding: 1rem; margin-bottom: 10px; transition: border .15s; }
-  .neg-row:hover { border-color: #d0dcea; }
-  .neg-row-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-  .neg-nombre { font-size: 15px; font-weight: 700; color: #1a2744; }
-  .neg-badges { display: flex; gap: 6px; flex-wrap: wrap; }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
-  .badge-activo { background: #d1fae5; color: #065f46; }
-  .badge-inactivo { background: #fee2e2; color: #991b1b; }
-  .badge-deuda { background: #fef3c7; color: #92400e; }
-  .badge-al-dia { background: #d1fae5; color: #065f46; }
-  .badge-tipo { background: #dbeafe; color: #1e40af; }
-  .neg-info { font-size: 13px; color: #666; margin-bottom: 8px; line-height: 1.6; }
-  .neg-deuda-monto { font-size: 13px; font-weight: 600; }
-  .neg-deuda-monto.con-deuda { color: #991b1b; }
-  .neg-deuda-monto.al-dia { color: #065f46; }
-  .neg-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-  .btn { padding: 6px 14px; border-radius: 7px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; transition: all .15s; }
-  .btn-edit { background: #eef2f7; color: #1a2744; border: 1px solid #d0dcea; }
-  .btn-edit:hover { background: #1a2744; color: #fff; }
-  .btn-toggle-on { background: #d1fae5; color: #065f46; }
-  .btn-toggle-on:hover { background: #065f46; color: #fff; }
-  .btn-toggle-off { background: #fee2e2; color: #991b1b; }
-  .btn-toggle-off:hover { background: #991b1b; color: #fff; }
-  .btn-delete { background: #fff; color: #991b1b; border: 1px solid #fca5a5; }
-  .btn-delete:hover { background: #991b1b; color: #fff; }
-  .btn-deuda { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-  .btn-deuda:hover { background: #92400e; color: #fff; }
-  .btn-primary { background: #1a2744; color: #fff; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; }
-  .btn-secondary { background: #fff; color: #555; border: 1px solid #d0dcea; padding: 9px 20px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+  /* CÓMO FUNCIONA */
+  .como-funciona { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2rem; margin-bottom: 4rem; }
+  .como-funciona h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: #1a2744; }
+  .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
+  .paso { text-align: center; }
+  .paso-num { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #1a2744, #1e4a8a); color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+  .paso-titulo { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a2744; }
+  .paso-desc { font-size: 12px; color: #888; line-height: 1.5; }
 
-  /* MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; overflow-y: auto; padding: 2rem 1rem; }
-  .modal-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
-  .modal { background: #fff; border-radius: 16px; max-width: 560px; width: 100%; padding: 2rem; margin: auto; position: relative; }
-  .modal h2 { font-size: 1rem; font-weight: 700; color: #1a2744; margin-bottom: 1.25rem; }
-  .modal-close { position: absolute; top: 1rem; right: 1rem; background: #eef2f7; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 16px; cursor: pointer; color: #666; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
-  .field { margin-bottom: .875rem; }
-  .field label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 500; }
-  .field input, .field select, .field textarea { width: 100%; padding: 8px 11px; border: 1px solid #d0dcea; border-radius: 7px; font-size: 13px; outline: none; background: #fafbfd; }
-  .field input:focus, .field select:focus { border-color: #1a2744; }
-  .modal-btns { display: flex; gap: 8px; margin-top: 1rem; }
+  /* ARTÍCULOS */
+  .articulos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .art-card { background: #fff; border-radius: 10px; border: 1px solid #d0dcea; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow .2s; }
+  .art-card:hover { box-shadow: 0 4px 16px rgba(26,39,68,.1); }
+  .art-card-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: #eef2f7; overflow: hidden; }
+  .art-card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .art-card-body { padding: .875rem; }
+  .art-card-cat { font-size: 11px; color: #5a8abf; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+  .art-card-titulo { font-size: 13px; font-weight: 600; line-height: 1.3; color: #1a2744; }
 
-  /* CONTACTOS */
-  .contacto-row { padding: 10px 0; border-bottom: 1px solid #eef2f7; }
-  .contacto-row:last-child { border-bottom: none; }
-  .contacto-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
-  .contacto-id { font-size: 12px; font-family: monospace; font-weight: 700; color: #1a2744; }
-  .contacto-neg { font-size: 12px; font-weight: 600; color: #5a8abf; }
-  .contacto-fecha { font-size: 11px; color: #aaa; }
-  .contacto-info { font-size: 12px; color: #666; }
+  /* CTA */
+  .cta-final { background: linear-gradient(135deg, #1a2744, #1e4a8a); color: #fff; border-radius: 16px; padding: 3rem 2rem; text-align: center; margin-bottom: 3rem; }
+  .cta-final h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: .75rem; }
+  .cta-final p { font-size: 14px; color: #b0c8e8; margin-bottom: 1.5rem; }
+  .cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-cta-w { padding: 12px 24px; border-radius: 8px; background: #fff; color: #1a2744; font-size: 14px; font-weight: 600; text-decoration: none; }
+  .btn-cta-o { padding: 12px 24px; border-radius: 8px; border: 1px solid #2e5a9a; color: #b0c8e8; font-size: 14px; text-decoration: none; }
+  .btn-cta-o:hover { border-color: #fff; color: #fff; }
 
-  /* JSON */
-  .json-box { background: #1a2744; color: #90afd4; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 11px; overflow-x: auto; white-space: pre; max-height: 300px; overflow-y: auto; margin-top: 1rem; }
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: #888; }
+  footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
+  footer a:hover { color: #1a2744; }
 
-  .tip { font-size: 12px; color: #5a8abf; background: #f0f5ff; border-radius: 8px; padding: 10px 14px; border-left: 3px solid #90afd4; margin-top: 1rem; }
-  .empty { text-align: center; color: #aaa; font-size: 14px; padding: 2rem; }
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid #2e4a7a;
+    border-radius: 7px;
+    color: #90afd4;
+    font-size: 18px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .nav-links.open { 
+    display: flex !important; 
+    flex-direction: column; 
+    position: absolute; 
+    top: 56px; left: 0; right: 0; 
+    background: #1a2744; 
+    padding: 1rem; gap: 8px;
+    z-index: 100;
+    border-top: 1px solid #2e4a7a;
+  }
+  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
+  @media(max-width:600px) {
+    nav { padding: .875rem 1rem; position: relative; }
+    nav .logo span { display: none; }
+    .nav-links { display: none !important; }
+    .menu-toggle { display: flex !important; }
+  }
 
-  footer { text-align: center; padding: 1.5rem; font-size: 12px; color: #aaa; }
+  @media(max-width:600px) {
+    .hero { padding: 2.5rem 1.25rem 2rem; }
+    .hero h1 { font-size: 1.8rem; }
+    .hero p { font-size: 0.9rem; }
+    .hero-btns { flex-direction: column; }
+    .btn-hero-primary, .btn-hero-secondary { width: 100%; text-align: center; padding: 12px; }
+    .stats-inner { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .cards-main { grid-template-columns: 1fr; }
+    .pasos { grid-template-columns: 1fr 1fr; }
+    .articulos-grid { grid-template-columns: 1fr 1fr; }
+    .cta-btns { flex-direction: column; }
+    .btn-cta-w, .btn-cta-o { text-align: center; }
+    main { margin: 1.5rem auto; padding: 0 1rem; }
+  }
+
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-wrap" id="loginWrap">
-  <div class="login-card">
-    <div style="font-size:2.5rem;margin-bottom:.75rem">🏗</div>
-    <h1>Panel Admin</h1>
-    <p>Materiales Ya — Acceso restringido</p>
-    <div class="login-field">
-      <label>Contraseña</label>
-      <input type="password" id="loginPass" placeholder="••••••" onkeydown="if(event.key==='Enter')login()">
+<nav>
+  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="calculadores.html" class="nav-link">Calculadores</a>
+    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
+    <a href="mapa.html" class="nav-link">📍 Mapa</a>
+    <a href="registro.html" class="nav-link" style="background:#1a4a8a;border-color:#1a4a8a;">+ Sumá tu negocio</a>
+    
+  </div>
+
+  <button class="menu-toggle" id="menuToggle">&#9776;</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🏗 Plataforma de materiales de construcción</div>
+    <h1>Todo para tu obra<br><span>en un solo lugar</span></h1>
+    <p>Calculá los materiales que necesitás, pedí cotización a corralones de tu zona y aprendé con guías y fotos.</p>
+    <div class="hero-btns">
+      <a href="marketplace.html" class="btn-hero-primary">Pedir materiales →</a>
+      <a href="calculadores.html" class="btn-hero-secondary">Ver calculadores</a>
     </div>
-    <button class="login-btn" onclick="login()">Ingresar →</button>
-    <div class="login-error" id="loginError">Contraseña incorrecta</div>
   </div>
 </div>
 
-<!-- PANEL -->
-<div class="panel" id="adminPanel">
-  <nav>
-    <div class="logo">🏗 Materiales Ya <span>Panel Admin</span></div>
-    <div class="nav-right">
-      <a href="index.html" class="nav-btn" target="_blank">Ver sitio →</a>
-      <button class="nav-btn" onclick="logout()">Salir</button>
-    </div>
-  </nav>
-
-  <main>
-    <div class="stats" id="statsGrid"></div>
-
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('negocios',this)">🏪 Corralones</button>
-      <button class="tab" onclick="showTab('contactos',this)">📞 Contactos</button>
-      <button class="tab" onclick="showTab('json',this)">📋 Exportar JSON</button>
-    </div>
-
-    <!-- TAB CORRALONES -->
-    <div id="tab-negocios" class="tab-panel active">
-      <div class="card">
-        <div class="card-header">
-          <h2>Negocios registrados</h2>
-          <button class="btn-primary" onclick="abrirModalNuevo()">+ Agregar negocio</button>
-        </div>
-        <div id="lista-negocios-admin"></div>
-      </div>
-    </div>
-
-    <!-- TAB CONTACTOS -->
-    <div id="tab-contactos" class="tab-panel">
-      <div class="card">
-        <div class="card-header">
-          <h2>Contactos recibidos</h2>
-          <button class="btn-primary" onclick="abrirModalContacto()">+ Registrar contacto</button>
-        </div>
-        <div id="lista-contactos"></div>
-        <p class="tip">📲 Cada vez que un cliente hace clic en "Contactar" desde el mapa te llega por WhatsApp. Registrá acá para el seguimiento y cobro mensual.</p>
-      </div>
-    </div>
-
-    <!-- TAB JSON -->
-    <div id="tab-json" class="tab-panel">
-      <div class="card">
-        <div class="card-header">
-          <h2>Exportar JSON</h2>
-          <button class="btn-primary" onclick="copiarJSON()">📋 Copiar JSON</button>
-        </div>
-        <p style="font-size:13px;color:#666;margin-bottom:.5rem">Copiá y reemplazá el contenido de <strong>materiales.json</strong> en GitHub para reflejar los cambios en el mapa.</p>
-        <div class="json-box" id="jsonBox"></div>
-        <p class="tip">⚠️ GitHub → materiales.json → lápiz ✏️ → borrá todo → pegá → Commit changes.</p>
-      </div>
-    </div>
-  </main>
-  <footer>Panel Admin — Materiales Ya</footer>
-</div>
-
-<!-- MODAL NEGOCIO -->
-<div class="modal-overlay" id="modalNegocio">
-  <div class="modal">
-    <button class="modal-close" onclick="cerrarModal('modalNegocio')">×</button>
-    <h2 id="modalNegocioTitulo">Agregar negocio</h2>
-    <input type="hidden" id="edit-id">
-    <div class="grid-2">
-      <div class="field"><label>Nombre *</label><input type="text" id="e-nombre" placeholder="Corralón San Martín"></div>
-      <div class="field"><label>Tipo *</label>
-        <select id="e-tipo">
-          <option value="corralon">🏗 Corralón</option>
-          <option value="ferreteria">🔩 Ferretería</option>
-          <option value="durlock">📐 Durlock / Yeso</option>
-          <option value="maderera">🪵 Maderera</option>
-        </select>
-      </div>
-      <div class="field" style="grid-column:1/-1"><label>Dirección *</label><input type="text" id="e-dir" placeholder="Av. San Martín 1234, Lomas de Zamora"></div>
-      <div class="field"><label>Teléfono *</label><input type="text" id="e-tel" placeholder="11 4444-1111"></div>
-      <div class="field"><label>Horario</label><input type="text" id="e-horario" placeholder="Lun-Vie 8-18hs"></div>
-      <div class="field"><label>Latitud *</label><input type="number" id="e-lat" placeholder="-34.7612" step="0.0001"></div>
-      <div class="field"><label>Longitud *</label><input type="number" id="e-lng" placeholder="-58.3956" step="0.0001"></div>
-      <div class="field"><label>Estado de deuda</label>
-        <select id="e-deuda-estado">
-          <option value="al-dia">Al día ✅</option>
-          <option value="pendiente">Pago pendiente ⚠️</option>
-          <option value="deudor">Con deuda ❌</option>
-        </select>
-      </div>
-      <div class="field"><label>Monto deuda ($)</label><input type="number" id="e-deuda-monto" placeholder="0" min="0"></div>
-      <div class="field" style="grid-column:1/-1"><label>Notas internas</label><input type="text" id="e-notas" placeholder="Ej: paga los 15 de cada mes, contacto es Juan..."></div>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-primary" onclick="guardarNegocio()">Guardar</button>
-      <button class="btn-secondary" onclick="cerrarModal('modalNegocio')">Cancelar</button>
-    </div>
-    <p class="tip">💡 Para obtener lat/lng: Google Maps → buscá la dirección → clic derecho → copiá las coordenadas.</p>
+<div class="stats">
+  <div class="stats-inner">
+    <div><div class="stat-value">24</div><div class="stat-label">Calculadores</div></div>
+    <div><div class="stat-value">120+</div><div class="stat-label">Materiales en catálogo</div></div>
+    <div><div class="stat-value">6</div><div class="stat-label">Artículos publicados</div></div>
+    <div><div class="stat-value">100%</div><div class="stat-label">Gratis para clientes</div></div>
   </div>
 </div>
 
-<!-- MODAL CONTACTO -->
-<div class="modal-overlay" id="modalContacto">
-  <div class="modal">
-    <button class="modal-close" onclick="cerrarModal('modalContacto')">×</button>
-    <h2>Registrar contacto</h2>
-    <div class="field"><label>Negocio que recibió el contacto *</label>
-      <select id="c-negocio" style="width:100%;padding:8px 11px;border:1px solid #d0dcea;border-radius:7px;font-size:13px;outline:none;"></select>
-    </div>
-    <div class="grid-2">
-      <div class="field"><label>Nombre del cliente</label><input type="text" id="c-cliente" placeholder="Juan García"></div>
-      <div class="field"><label>Zona</label><input type="text" id="c-zona" placeholder="Lomas de Zamora"></div>
-    </div>
-    <div class="field"><label>Notas</label><input type="text" id="c-notas" placeholder="Ej: consulta por materiales de obra, losa..."></div>
-    <div class="modal-btns">
-      <button class="btn-primary" onclick="guardarContacto()">Registrar</button>
-      <button class="btn-secondary" onclick="cerrarModal('modalContacto')">Cancelar</button>
+<main>
+  <div style="margin-bottom:1rem">
+    <div class="section-title">¿Qué podés hacer acá?</div>
+    <div class="section-sub">Tres herramientas pensadas para facilitar tu obra</div>
+  </div>
+
+  <div class="cards-main">
+    <a href="calculadores.html" class="card-main">
+      <div class="card-main-img bg1">🧮</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Herramienta</div>
+        <div class="card-main-titulo">Calculadores de materiales</div>
+        <div class="card-main-desc">24 calculadores para saber exactamente cuánto material necesitás: ladrillos, cemento, hormigón, hierros, Durlock, pintura y más.</div>
+        <div class="card-main-link">Abrir calculadores →</div>
+      </div>
+    </a>
+    <a href="marketplace.html" class="card-main">
+      <div class="card-main-img bg2">🏗</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Marketplace</div>
+        <div class="card-main-titulo">Pedí cotización a corralones</div>
+        <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
+        <div class="card-main-link">Pedir materiales →</div>
+      </div>
+    </a>
+    <a href="mapa.html" class="card-main">
+      <div class="card-main-img bg3">📍</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Mapa</div>
+        <div class="card-main-titulo">Corralones y ferreterías</div>
+        <div class="card-main-desc">Encontrá corralones, ferreterías, casas de Durlock y maderas cerca tuyo. Contacto directo por WhatsApp.</div>
+        <div class="card-main-link">Ver mapa →</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="como-funciona">
+    <h2>¿Cómo funciona?</h2>
+    <div class="pasos">
+      <div class="paso"><div class="paso-num">1</div><div class="paso-titulo">Calculá</div><div class="paso-desc">Usá los calculadores para saber exactamente cuánto material necesitás sin desperdiciar.</div></div>
+      <div class="paso"><div class="paso-num">2</div><div class="paso-titulo">Pedí cotización</div><div class="paso-desc">Cargá tu lista de materiales. Tu pedido llega a los corralones de tu zona.</div></div>
+      <div class="paso"><div class="paso-num">3</div><div class="paso-titulo">Comparás</div><div class="paso-desc">Recibís las cotizaciones por WhatsApp y elegís el corralón que más te conviene.</div></div>
+      <div class="paso"><div class="paso-num">4</div><div class="paso-titulo">Comprás</div><div class="paso-desc">Confirmás con el corralón elegido y coordinás entrega o retiro. Sin complicaciones.</div></div>
     </div>
   </div>
+
+  <div style="margin-bottom:1rem">
+    <div class="section-title">Últimos artículos</div>
+    <div class="section-sub">Guías y consejos para tu obra</div>
+  </div>
+  <div class="articulos-grid">
+    <a href="revista.html" class="art-card">
+      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Ladrillos" onerror="this.parentElement.innerHTML='🧱'"></div>
+      <div class="art-card-body"><div class="art-card-cat">Obra Gruesa</div><div class="art-card-titulo">Ladrillos: tipos y cuándo usar cada uno</div></div>
+    </a>
+    <a href="revista.html" class="art-card">
+      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80" alt="Cemento" onerror="this.parentElement.innerHTML='🏗'"></div>
+      <div class="art-card-body"><div class="art-card-cat">Obra Gruesa</div><div class="art-card-titulo">Cemento: diferencias entre Portland, albañilería y premezclado</div></div>
+    </a>
+    <a href="revista.html" class="art-card">
+      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=400&q=80" alt="Membrana" onerror="this.parentElement.innerHTML='🎨'"></div>
+      <div class="art-card-body"><div class="art-card-cat">Obra Fina</div><div class="art-card-titulo">Membrana asfáltica: cómo colocarla correctamente</div></div>
+    </a>
+    <a href="revista.html" class="art-card">
+      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1533158326339-7f3cf2404354?w=400&q=80" alt="Consejos" onerror="this.parentElement.innerHTML='💡'"></div>
+      <div class="art-card-body"><div class="art-card-cat">Consejos</div><div class="art-card-titulo">10 errores comunes al comprar materiales</div></div>
+    </a>
+  </div>
+  <div style="text-align:center;margin-bottom:4rem">
+    <a href="revista.html" style="padding:10px 24px;border-radius:8px;border:1px solid #d0dcea;background:#fff;color:#1a2744;font-size:14px;text-decoration:none;">Ver todos los artículos →</a>
+  </div>
+
+  
+  <!-- SECCIÓN MAPA -->
+  <div style="margin-bottom:1rem">
+    <div class="section-title">📍 Corralones y ferreterías cerca tuyo</div>
+    <div class="section-sub">Encontrá negocios de materiales en tu zona</div>
+  </div>
+  <div style="background:#fff;border-radius:16px;border:1px solid #d0dcea;overflow:hidden;margin-bottom:4rem;">
+    <!-- Filtros -->
+    <div style="padding:.75rem 1.25rem;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:1px solid #d0dcea;background:#fff;">
+      <span style="font-size:12px;color:#888;">Filtrar:</span>
+      <button onclick="filtrarHome('todos',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #1a2744;background:#1a2744;color:#fff;font-size:12px;cursor:pointer;" id="hf-todos">Todos</button>
+      <button onclick="filtrarHome('corralon',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-corralon">🏗 Corralones</button>
+      <button onclick="filtrarHome('ferreteria',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-ferreteria">🔩 Ferreterías</button>
+      <button onclick="filtrarHome('durlock',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-durlock">📐 Durlock/Yeso</button>
+      <button onclick="filtrarHome('maderera',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-maderera">🪵 Maderas</button>
+    </div>
+    <!-- Mapa -->
+    <div id="home-map" style="height:380px;"></div>
+    <!-- Footer -->
+    <div style="padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #d0dcea;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-size:14px;font-weight:600;color:#1a2744;">Corralones, ferreterías, casas de Durlock y maderas</div>
+        <div style="font-size:12px;color:#888;margin-top:2px;">Hacé clic en un pin para ver datos y contacto</div>
+      </div>
+      <a href="mapa.html" style="padding:10px 20px;border-radius:8px;background:#1a2744;color:#fff;font-size:13px;font-weight:500;text-decoration:none;">Ver mapa completo →</a>
+    </div>
+  </div>
+
+  <div class="cta-final">
+    <h2>¿Listo para empezar?</h2>
+    <p>Calculá tus materiales y pedí cotización a los corralones de tu zona. Es gratis.</p>
+    <div class="cta-btns">
+      <a href="marketplace.html" class="btn-cta-w">Pedir materiales ahora →</a>
+      <a href="calculadores.html" class="btn-cta-o">Ver calculadores</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2025 Materiales Ya</p>
+  <p style="margin-top:8px">
+    <a href="calculadores.html">Calculadores</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="revista.html">Revista</a>
+  </p>
+</footer>
+
+<!-- WHATSAPP FLOTANTE -->
+<div id="ws-chat" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+  <!-- Burbuja de bienvenida -->
+  <div id="ws-bubble" style="background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:14px 16px;max-width:260px;font-size:13px;color:#1a1a1a;line-height:1.5;display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong style="font-size:13px;">🏗 Materiales Ya</strong>
+      <button onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
+    </div>
+    <p style="margin:0 0 10px">¡Hola! 👋 ¿En qué te podemos ayudar?</p>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">📦 Quiero cotizar materiales</a>
+      <a href="https://wa.me/5491112345678?text=Hola%2C+soy+un+corral%C3%B3n+y+quiero+sumarme+a+la+plataforma" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">🏪 Soy corralón / ferretería</a>
+      <a href="https://wa.me/5491112345678?text=Hola%2C+tengo+una+consulta+general" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">💬 Consulta general</a>
+    </div>
+  </div>
+  <!-- Botón WhatsApp -->
+  <button onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </button>
 </div>
+<script>
+function toggleBubble() {
+  const b = document.getElementById('ws-bubble');
+  b.style.display = b.style.display === 'none' ? 'block' : 'none';
+}
+// Mostrar burbuja automáticamente después de 4 segundos
+setTimeout(() => {
+  document.getElementById('ws-bubble').style.display = 'block';
+}, 4000);
+</script>
 
 <script>
-const PASS = '1234';
-let negocios = [];
-let contactos = [];
-let catalogoOriginal = {};
-const TIPOS_LABEL = { corralon:'🏗 Corralón', ferreteria:'🔩 Ferretería', durlock:'📐 Durlock/Yeso', maderera:'🪵 Maderera' };
-
-// ── Auth ──
-function login() {
-  if(document.getElementById('loginPass').value === PASS) {
-    document.getElementById('loginWrap').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
-    cargarDatos();
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-    document.getElementById('loginPass').value = '';
+(function() {
+  function initMenu() {
+    var btn = document.getElementById('menuToggle');
+    var nav = document.getElementById('navLinks');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = nav.classList.contains('open');
+      nav.classList.toggle('open');
+      btn.innerHTML = isOpen ? '&#9776;' : '&#x2715;';
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && e.target !== btn) {
+        nav.classList.remove('open');
+        btn.innerHTML = '&#9776;';
+      }
+    });
   }
-}
-function logout() {
-  document.getElementById('loginWrap').style.display = 'flex';
-  document.getElementById('adminPanel').style.display = 'none';
-  document.getElementById('loginPass').value = '';
-}
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenu);
+  } else {
+    initMenu();
+  }
+})();
+</script>
 
-// ── Tabs ──
-function showTab(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
-  btn.classList.add('active');
-  if(id==='json') renderJSON();
-}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function() {
+  const TIPOS_HOME = {
+    corralon:   { color: '#1e40af', pin: '🏗' },
+    ferreteria: { color: '#92400e', pin: '🔩' },
+    durlock:    { color: '#065f46', pin: '📐' },
+    maderera:   { color: '#5b21b6', pin: '🪵' },
+  };
+  let homeMap, homeMarkers = [], homeNegocios = [];
 
-// ── Cargar ──
-async function cargarDatos() {
-  try {
-    const res = await fetch('materiales.json');
-    catalogoOriginal = await res.json();
-    negocios = (catalogoOriginal.negocios || []).map(n => ({
-      deudaEstado: 'al-dia', deudaMonto: 0, notas: '', ...n
-    }));
-  } catch(e) { negocios = []; }
-  contactos = JSON.parse(localStorage.getItem('my_contactos') || '[]');
-  renderStats();
-  renderNegocios();
-  renderContactos();
-}
+  function initHomeMap() {
+    if(!document.getElementById('home-map')) return;
+    homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.62, -58.44], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap', maxZoom: 19
+    }).addTo(homeMap);
+    fetch('materiales.json')
+      .then(r => r.json())
+      .then(data => {
+        homeNegocios = (data.negocios || []).filter(n => n.activo);
+        renderHomeMarkers(homeNegocios);
+      }).catch(()=>{});
+  }
 
-// ── Stats ──
-function renderStats() {
-  const activos = negocios.filter(n=>n.activo).length;
-  const inactivos = negocios.filter(n=>!n.activo).length;
-  const conDeuda = negocios.filter(n=>n.deudaEstado==='deudor').length;
-  const totalDeuda = negocios.reduce((s,n)=>s+(parseFloat(n.deudaMonto)||0),0);
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-card"><div class="stat-num">${negocios.length}</div><div class="stat-label">Total negocios</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:#065f46">${activos}</div><div class="stat-label">Activos</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:#991b1b">${inactivos}</div><div class="stat-label">Inactivos</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:#92400e">${conDeuda}</div><div class="stat-label">Con deuda</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:#92400e;font-size:1.4rem">$${totalDeuda.toLocaleString('es-AR')}</div><div class="stat-label">Deuda total</div></div>
-    <div class="stat-card"><div class="stat-num" style="color:#1a4a8a">${contactos.length}</div><div class="stat-label">Contactos registrados</div></div>
-  `;
-}
+  function crearIconoHome(tipo) {
+    const t = TIPOS_HOME[tipo] || TIPOS_HOME.corralon;
+    return L.divIcon({
+      html: `<div style="background:${t.color};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;">${t.pin}</div>`,
+      className:'', iconSize:[32,32], iconAnchor:[16,16], popupAnchor:[0,-18]
+    });
+  }
 
-// ── Negocios ──
-function renderNegocios() {
-  const el = document.getElementById('lista-negocios-admin');
-  if(!negocios.length) { el.innerHTML = '<div class="empty">No hay negocios cargados todavía.</div>'; return; }
-  el.innerHTML = negocios.map((n,i) => `
-    <div class="neg-row">
-      <div class="neg-row-header">
-        <div class="neg-nombre">${n.nombre}</div>
-        <div class="neg-badges">
-          <span class="badge badge-tipo">${TIPOS_LABEL[n.tipo]||n.tipo}</span>
-          <span class="badge ${n.activo?'badge-activo':'badge-inactivo'}">${n.activo?'Activo':'Inactivo'}</span>
-          <span class="badge ${n.deudaEstado==='al-dia'?'badge-al-dia':'badge-deuda'}">${n.deudaEstado==='al-dia'?'Al día ✅':n.deudaEstado==='pendiente'?'Pendiente ⚠️':'Con deuda ❌'}</span>
-        </div>
-      </div>
-      <div class="neg-info">
-        📍 ${n.direccion}<br>
-        📞 ${n.telefono} · 🕐 ${n.horario||'Sin horario'}
-        ${n.notas ? `<br>📝 ${n.notas}` : ''}
-      </div>
-      ${n.deudaMonto > 0 ? `<div class="neg-deuda-monto con-deuda">💸 Deuda: $${parseFloat(n.deudaMonto).toLocaleString('es-AR')}</div>` : '<div class="neg-deuda-monto al-dia">✅ Sin deuda pendiente</div>'}
-      <div class="neg-actions">
-        <button class="btn btn-edit" onclick="abrirModalEditar(${i})">✏️ Editar</button>
-        <button class="btn ${n.activo?'btn-toggle-off':'btn-toggle-on'}" onclick="toggleActivo(${i})">${n.activo?'🔴 Desactivar':'🟢 Activar'}</button>
-        <button class="btn btn-deuda" onclick="registrarPago(${i})">💳 Registrar pago</button>
-        <button class="btn btn-delete" onclick="eliminarNegocio(${i})">🗑 Eliminar</button>
-      </div>
-    </div>
-  `).join('');
-}
+  function renderHomeMarkers(lista) {
+    homeMarkers.forEach(m => homeMap.removeLayer(m));
+    homeMarkers = [];
+    lista.forEach(n => {
+      const wsMsg = encodeURIComponent('📍 Hola! Vi *'+n.nombre+'* en Materiales Ya. Quiero consultar.');
+      const m = L.marker([n.lat, n.lng], {icon: crearIconoHome(n.tipo)})
+        .addTo(homeMap)
+        .bindPopup(`<strong>${n.nombre}</strong><br><small>${n.direccion}</small><br><a href="https://wa.me/5491112345678?text=${wsMsg}" target="_blank" style="color:#1a2744;font-weight:600">Contactar →</a>`);
+      homeMarkers.push(m);
+    });
+    if(homeMarkers.length > 0) {
+      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.15));
+    }
+  }
 
-function toggleActivo(i) {
-  negocios[i].activo = !negocios[i].activo;
-  renderNegocios(); renderStats();
-}
-
-function eliminarNegocio(i) {
-  if(!confirm(`¿Eliminar "${negocios[i].nombre}"? Esta acción no se puede deshacer.`)) return;
-  negocios.splice(i, 1);
-  renderNegocios(); renderStats();
-}
-
-function registrarPago(i) {
-  const monto = prompt(`Registrar pago para "${negocios[i].nombre}"\nMonto cobrado ($):`, negocios[i].deudaMonto || 0);
-  if(monto === null) return;
-  const nuevo = Math.max(0, (parseFloat(negocios[i].deudaMonto)||0) - (parseFloat(monto)||0));
-  negocios[i].deudaMonto = nuevo;
-  negocios[i].deudaEstado = nuevo <= 0 ? 'al-dia' : 'pendiente';
-  renderNegocios(); renderStats();
-  alert(`✅ Pago registrado. Deuda restante: $${nuevo.toLocaleString('es-AR')}`);
-}
-
-// ── Modal negocio ──
-function abrirModalNuevo() {
-  document.getElementById('modalNegocioTitulo').textContent = 'Agregar negocio';
-  document.getElementById('edit-id').value = '';
-  ['e-nombre','e-dir','e-tel','e-horario','e-notas'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('e-lat').value = '';
-  document.getElementById('e-lng').value = '';
-  document.getElementById('e-deuda-monto').value = '0';
-  document.getElementById('e-deuda-estado').value = 'al-dia';
-  document.getElementById('e-tipo').value = 'corralon';
-  document.getElementById('modalNegocio').classList.add('active');
-}
-
-function abrirModalEditar(i) {
-  const n = negocios[i];
-  document.getElementById('modalNegocioTitulo').textContent = 'Editar negocio';
-  document.getElementById('edit-id').value = i;
-  document.getElementById('e-nombre').value = n.nombre || '';
-  document.getElementById('e-tipo').value = n.tipo || 'corralon';
-  document.getElementById('e-dir').value = n.direccion || '';
-  document.getElementById('e-tel').value = n.telefono || '';
-  document.getElementById('e-horario').value = n.horario || '';
-  document.getElementById('e-lat').value = n.lat || '';
-  document.getElementById('e-lng').value = n.lng || '';
-  document.getElementById('e-deuda-estado').value = n.deudaEstado || 'al-dia';
-  document.getElementById('e-deuda-monto').value = n.deudaMonto || 0;
-  document.getElementById('e-notas').value = n.notas || '';
-  document.getElementById('modalNegocio').classList.add('active');
-}
-
-function guardarNegocio() {
-  const nombre = document.getElementById('e-nombre').value.trim();
-  const dir = document.getElementById('e-dir').value.trim();
-  const tel = document.getElementById('e-tel').value.trim();
-  const lat = parseFloat(document.getElementById('e-lat').value);
-  const lng = parseFloat(document.getElementById('e-lng').value);
-  if(!nombre || !dir || !tel || !lat || !lng) { alert('Completá nombre, dirección, teléfono y coordenadas.'); return; }
-
-  const datos = {
-    nombre, tipo: document.getElementById('e-tipo').value,
-    direccion: dir, telefono: tel,
-    horario: document.getElementById('e-horario').value.trim() || 'Consultar horario',
-    lat, lng, activo: true,
-    deudaEstado: document.getElementById('e-deuda-estado').value,
-    deudaMonto: parseFloat(document.getElementById('e-deuda-monto').value) || 0,
-    notas: document.getElementById('e-notas').value.trim()
+  window.filtrarHome = function(tipo, btn) {
+    document.querySelectorAll('[id^="hf-"]').forEach(b => {
+      b.style.background='#fff'; b.style.color='#555'; b.style.borderColor='#d0dcea';
+    });
+    btn.style.background='#1a2744'; btn.style.color='#fff'; btn.style.borderColor='#1a2744';
+    const lista = tipo === 'todos' ? homeNegocios : homeNegocios.filter(n => n.tipo === tipo);
+    renderHomeMarkers(lista);
   };
 
-  const idx = document.getElementById('edit-id').value;
-  if(idx !== '') {
-    datos.activo = negocios[idx].activo;
-    datos.id = negocios[idx].id;
-    negocios[idx] = datos;
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHomeMap);
   } else {
-    datos.id = Date.now();
-    negocios.push(datos);
+    initHomeMap();
   }
-  cerrarModal('modalNegocio');
-  renderNegocios(); renderStats();
-}
-
-// ── Contactos ──
-function renderContactos() {
-  const el = document.getElementById('lista-contactos');
-  if(!contactos.length) { el.innerHTML = '<div class="empty">No hay contactos registrados todavía.</div>'; return; }
-  el.innerHTML = contactos.slice().reverse().map(c => `
-    <div class="contacto-row">
-      <div class="contacto-header">
-        <span class="contacto-id">${c.id}</span>
-        <span class="contacto-neg">🏪 ${c.negocio}</span>
-        <span class="contacto-fecha">${c.fecha}</span>
-      </div>
-      <div class="contacto-info">👤 ${c.cliente||'Cliente'}${c.zona?' · 📍 '+c.zona:''}${c.notas?' · '+c.notas:''}</div>
-    </div>
-  `).join('');
-}
-
-function abrirModalContacto() {
-  // Populate select with negocios
-  const sel = document.getElementById('c-negocio');
-  sel.innerHTML = negocios.map(n => `<option value="${n.nombre}">${n.nombre}</option>`).join('');
-  ['c-cliente','c-zona','c-notas'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('modalContacto').classList.add('active');
-}
-
-function guardarContacto() {
-  const negocio = document.getElementById('c-negocio').value;
-  if(!negocio) { alert('Seleccioná un negocio.'); return; }
-  const nuevo = {
-    id: 'C-' + Date.now().toString().slice(-5),
-    fecha: new Date().toLocaleString('es-AR'),
-    negocio,
-    cliente: document.getElementById('c-cliente').value.trim() || 'Cliente',
-    zona: document.getElementById('c-zona').value.trim(),
-    notas: document.getElementById('c-notas').value.trim()
-  };
-  contactos.push(nuevo);
-  localStorage.setItem('my_contactos', JSON.stringify(contactos));
-  cerrarModal('modalContacto');
-  renderContactos(); renderStats();
-}
-
-// ── Modal helpers ──
-function cerrarModal(id) {
-  document.getElementById(id).classList.remove('active');
-}
-document.addEventListener('click', function(e) {
-  ['modalNegocio','modalContacto'].forEach(id => {
-    const overlay = document.getElementById(id);
-    if(e.target === overlay) overlay.classList.remove('active');
-  });
-});
-
-// ── JSON ──
-function renderJSON() {
-  const exportNegocios = negocios.map(({deudaEstado, deudaMonto, notas, ...n}) => n);
-  const data = { ...catalogoOriginal, negocios: exportNegocios };
-  document.getElementById('jsonBox').textContent = JSON.stringify(data, null, 2);
-}
-function copiarJSON() {
-  renderJSON();
-  navigator.clipboard.writeText(document.getElementById('jsonBox').textContent)
-    .then(() => alert('✅ JSON copiado. Pegalo en materiales.json en GitHub.'));
-}
+})();
 </script>
 </body>
 </html>
