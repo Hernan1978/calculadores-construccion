@@ -411,5 +411,17 @@ setTimeout(() => {
   }
 })();
 </script>
+ <a href="panel-privado.html" id="accesoPrivado" style="display:none;">Panel</a>
+
+<script>
+  let buffer = [];
+  document.addEventListener('keydown', (e) => {
+    buffer.push(e.key.toLowerCase());
+    buffer = buffer.slice(-5);
+    if (buffer.join('') === 'panel') {
+      document.getElementById('accesoPrivado').style.display = 'inline-block';
+    }
+  });
+</script>
 </body>
 </html>
