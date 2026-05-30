@@ -44,7 +44,7 @@
 
   /* CARDS PRINCIPALES */
   .cards-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
-  .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; }
+  .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; position: relative; }
   .card-main:hover { box-shadow: 0 8px 30px rgba(26,39,68,.12); transform: translateY(-3px); }
   .card-main-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
   .card-main-img.bg1 { background: linear-gradient(135deg, #1a2744, #1e3a6e); }
@@ -55,6 +55,23 @@
   .card-main-titulo { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #1a2744; }
   .card-main-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
   .card-main-link { font-size: 13px; font-weight: 600; color: #1a4a8a; }
+
+  .panel-dot{
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#1a2744;
+    border:1px solid #90afd4;
+    display:block;
+    text-decoration:none;
+    z-index:5;
+  }
+  .panel-dot:hover{
+    transform:scale(1.15);
+  }
 
   /* CÓMO FUNCIONA */
   .como-funciona { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2rem; margin-bottom: 4rem; }
@@ -186,15 +203,20 @@
         <div class="card-main-link">Abrir calculadores →</div>
       </div>
     </a>
-    <a href="marketplace.html" class="card-main">
-      <div class="card-main-img bg2">🏗</div>
-      <div class="card-main-body">
-        <div class="card-main-tag">Marketplace</div>
-        <div class="card-main-titulo">Pedí cotización a corralones</div>
-        <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
-        <div class="card-main-link">Pedir materiales →</div>
-      </div>
-    </a>
+
+    <div class="card-main" style="position:relative;">
+      <a href="marketplace.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="card-main-img bg2">🏗</div>
+        <div class="card-main-body">
+          <div class="card-main-tag">Marketplace</div>
+          <div class="card-main-titulo">Pedí cotización a corralones</div>
+          <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
+          <div class="card-main-link">Pedir materiales →</div>
+        </div>
+      </a>
+      <a href="panel-privado.html" class="panel-dot" aria-label="Acceso al panel privado"></a>
+    </div>
+
     <a href="mapa.html" class="card-main">
       <div class="card-main-img bg3">📍</div>
       <div class="card-main-body">
@@ -242,7 +264,6 @@
     <a href="revista.html" style="padding:10px 24px;border-radius:8px;border:1px solid #d0dcea;background:#fff;color:#1a2744;font-size:14px;text-decoration:none;">Ver todos los artículos →</a>
   </div>
 
-  
   <!-- SECCIÓN MAPA -->
   <div style="margin-bottom:1rem">
     <div class="section-title">📍 Corralones y ferreterías cerca tuyo</div>
@@ -314,7 +335,6 @@ function toggleBubble() {
   const b = document.getElementById('ws-bubble');
   b.style.display = b.style.display === 'none' ? 'block' : 'none';
 }
-// Mostrar burbuja automáticamente después de 4 segundos
 setTimeout(() => {
   document.getElementById('ws-bubble').style.display = 'block';
 }, 4000);
