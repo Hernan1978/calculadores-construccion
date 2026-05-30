@@ -87,7 +87,7 @@
   <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
   <div class="nav-links" id="navLinks">
     <a href="calculadores.html" class="nav-link">Calculadores</a>
-    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
+    <a href="marketplace.html" class="nav-link" id="secret-link" onclick="secretAccess(event)">Pedir materiales</a>
     <a href="mapa.html" class="nav-link">📍 Mapa</a>
   </div>
   <button class="menu-toggle" id="menuToggle">&#9776;</button>
@@ -300,6 +300,38 @@ function enviarRegistro() {
   } else {
     initMenu();
   }
+})();
+</script>
+
+<script>
+var secretClicks = 0;
+var secretTimer;
+function secretAccess(e) {
+  secretClicks++;
+  clearTimeout(secretTimer);
+  secretTimer = setTimeout(function(){ secretClicks = 0; }, 2000);
+  if(secretClicks >= 3) {
+    e.preventDefault();
+    window.location.href = 'admin.html';
+    secretClicks = 0;
+  }
+}
+</script>
+
+<script>
+(function() {
+  let clicks = 0;
+  let timer = null;
+  window.checkSecret = function(e) {
+    clicks++;
+    clearTimeout(timer);
+    timer = setTimeout(() => { clicks = 0; }, 2000);
+    if(clicks >= 3) {
+      clicks = 0;
+      e.preventDefault();
+      window.location.href = 'admin.html';
+    }
+  };
 })();
 </script>
 </body>
