@@ -31,53 +31,92 @@
             min-height: 100vh;
         }
 
-        /* PANTALLA PÚBLICA INICIAL */
+        /* PANTALLA PÚBLICA MEJORADA */
         #pantalla-publica {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
-            padding: 2rem;
-            background: white;
+            padding: 3rem 2rem;
+            background-color: var(--primary);
+            color: white;
         }
 
         #pantalla-publica h1 {
-            font-size: 2rem;
-            color: var(--primary);
+            font-size: 2.25rem;
+            font-weight: 700;
             margin-bottom: 1rem;
         }
 
-        #pantalla-publica p {
-            color: #64748b;
-            max-width: 500px;
-            margin-bottom: 2rem;
+        #pantalla-publica .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
         }
 
-        /* EL BOTÓN ESCONDIDO (Abajo a la derecha, camuflado) */
+        /* Grilla de Características */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            text-align: center;
+        }
+
+        .feature-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* EL BOTÓN ESCONDIDO (Camuflado abajo a la derecha) */
         .boton-escondido {
             position: fixed;
             bottom: 20px;
             right: 20px;
             background: transparent;
             border: none;
-            color: #cbd5e1; /* Color muy clarito para que pase desapercibido */
+            color: rgba(255, 255, 255, 0.2);
             font-size: 0.75rem;
             cursor: pointer;
             z-index: 1000;
             user-select: none;
         }
         .boton-escondido:hover {
-            color: #94a3b8;
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        /* PANEL DE ADMINISTRACIÓN (Oculto por defecto) */
+        /* PANEL DE ADMINISTRACIÓN */
         #panel-admin {
-            display: none; /* Se activa solo con la clave */
+            display: none;
         }
 
-        /* ESTILOS DEL PANEL (Sidebar y Contenido) */
         .admin-layout {
             display: flex;
             min-height: 100vh;
@@ -95,448 +134,11 @@
             flex-direction: column;
             padding: 1.5rem 0;
             z-index: 100;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-brand {
             font-size: 1.25rem;
             font-weight: 700;
             padding: 0 1.5rem 1.5rem 1.5rem;
-            border-bottom: 1px solid #334155;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            margin-top: 1.5rem;
-            flex-grow: 1;
-        }
-
-        .sidebar-item a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1.5rem;
-            color: #cbd5e1;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .sidebar-item a:hover, .sidebar-item.active a {
-            background-color: #334155;
-            color: white;
-            border-left: 4px solid var(--accent);
-        }
-
-        .main-content {
-            margin-left: var(--sidebar-width);
-            flex-grow: 1;
-            padding: 2rem;
-            min-width: 0;
-        }
-
-        .panel-section {
-            display: none;
-        }
-
-        .panel-section.active {
-            display: block;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-
-        /* CONTADORES */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .metric-card {
-            background: white;
-            padding: 1.25rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border-top: 4px solid #94a3b8;
-        }
-
-        .metric-card h3 {
-            font-size: 0.875rem;
-            color: #64748b;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-card p {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .metric-card.active-card { border-top-color: var(--success); }
-        .metric-card.debt-card { border-top-color: var(--danger); }
-        .metric-card.no-debt-card { border-top-color: var(--accent); }
-        .metric-card.pending-card { border-top-color: var(--warning); }
-
-        /* TABLAS */
-        .table-container {
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            overflow-x: auto;
-            margin-bottom: 2rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        th {
-            background-color: var(--gray-light);
-            color: #64748b;
-            padding: 0.85rem 1rem;
-            font-weight: 600;
-            border-bottom: 1px solid var(--gray-border);
-        }
-
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--gray-border);
-            vertical-align: middle;
-        }
-
-        /* BOTONES */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            border-radius: 0.375rem;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s;
-            text-decoration: none;
-            gap: 0.25rem;
-        }
-
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-gray { background: #64748b; color: white; }
-
-        .btn-sm {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            border-radius: 0.25rem;
-            margin-right: 0.25rem;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--gray-border);
-            color: var(--text-main);
-        }
-
-        .filters-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            background: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .form-control {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid var(--gray-border);
-            border-radius: 0.375rem;
-            font-size: 0.9rem;
-            outline: none;
-        }
-        input[type="text"].form-control { flex-grow: 1; }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            background: white;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        fieldset {
-            grid-column: 1 / -1;
-            border: 1px solid var(--gray-border);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        textarea.form-control { grid-column: 1 / -1; height: 80px; }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-radius: 0.25rem;
-        }
-        .badge-success { background: #dcfce7; color: #166534; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-warning { background: #fef9c3; color: #854d0e; }
-        .badge-info { background: #e0f2fe; color: #0369a1; }
-    </style>
-</head>
-<body>
-
-    <div id="pantalla-publica">
-        <h1>Suma tu Comercio a Materiales Ya</h1>
-        <p>Próximamente abriremos las inscripciones para nuevos corralones, ferreterías y proveedores de la zona. Si querés recibir alertas cuando abramos los cupos, dejanos tu consulta por WhatsApp.</p>
-        <a href="https://wa.me/5491112345678?text=Hola,%20quiero%20sumar%20mi%20negocio" class="btn btn-primary">Contactar por WhatsApp</a>
-    </div>
-
-    <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
-
-
-    <div id="panel-admin" class="admin-layout">
-        
-        <div class="sidebar">
-            <div class="sidebar-brand">🏗️ Materiales Ya Admin</div>
-            <ul class="sidebar-menu">
-                <li class="sidebar-item active" data-target="dashboard"><a onclick="navegar('dashboard')">📊 Dashboard</a></li>
-                <li class="sidebar-item" data-target="corralones"><a onclick="navegar('corralones')">🏗️ Corralones</a></li>
-                <li class="sidebar-item" data-target="deudas"><a onclick="navegar('deudas')">💰 Deudas</a></li>
-                <li class="sidebar-item" data-target="servicios"><a onclick="navegar('servicios')">📈 Servicios</a></li>
-                <li class="sidebar-item" data-target="mensajes"><a onclick="navegar('mensajes')">💬 Mensajes</a></li>
-                <li class="sidebar-item" data-target="ajustes"><a onclick="navegar('ajustes')">⚙️ Ajustes</a></li>
-            </ul>
-        </div>
-
-        <div class="main-content">
-
-            <div id="dashboard" class="panel-section active">
-                <h2>Panel Principal</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card"><h3>Total Comercios</h3><p id="count-total">4</p></div>
-                    <div class="metric-card active-card"><h3>Activos</h3><p id="count-activos">3</p></div>
-                    <div class="metric-card debt-card"><h3>Con Deuda</h3><p id="count-deuda">1</p></div>
-                    <div class="metric-card no-debt-card"><h3>Sin Deuda</h3><p id="count-sindeuda">3</p></div>
-                    <div class="metric-card pending-card"><h3>Pendientes Revisión</h3><p id="count-pendientes">1</p></div>
-                </div>
-
-                <h3>Últimos Cambios y Alertas</h3>
-                <div class="table-container" style="margin-top: 1rem;">
-                    <table>
-                        <thead>
-                            <tr><th>Comercio</th><th>Alerta / Evento</th><th>Fecha</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><b>Corralón Sarandí</b></td><td><span class="badge badge-danger">Deuda Vencida</span></td><td>Hoy, 18:45</td></tr>
-                            <tr><td><b>Distribuidora Mitre</b></td><td><span class="badge badge-success">Pago Registrado</span></td><td>Ayer, 14:20</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="corralones" class="panel-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
-                    <h2>Corralones</h2>
-                    <button class="btn btn-primary" onclick="abrirFichaNueva()">➕ Agregar corralón</button>
-                </div>
-                <div class="filters-bar">
-                    <input type="text" class="form-control" placeholder="Buscar por nombre...">
-                    <select class="form-control"><option>Todas las zonas</option></select>
-                    <select class="form-control"><option>Todos los estados</option></select>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th><th>Tipo</th><th>Zona</th><th>WhatsApp</th><th>Estado</th><th>Deuda</th><th>Última Update</th><th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><b>Corralón Sarandí</b></td><td>🏗️ Corralón</td><td>Sarandí</td><td>1123456789</td><td><span class="badge badge-success">Activo</span></td><td style="color:var(--danger); font-weight:600;">$15.000</td><td>Hoy</td>
-                                <td>
-                                    <button class="btn btn-outline btn-sm" onclick="verFicha('Corralón Sarandí')">Ver</button>
-                                    <button class="btn btn-outline btn-sm" onclick="editarFicha('Corralón Sarandí')">Editar</button>
-                                    <button class="btn btn-gray btn-sm" onclick="eliminarFila(this)">Eliminar</button>
-                                    <button class="btn btn-danger btn-sm" onclick="alert('Marcado con deuda')">Marcar deuda</button>
-                                    <button class="btn btn-outline btn-sm" onclick="alert('Desactivado')">Desactivar</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="ficha-form" class="panel-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
-                    <h2 id="ficha-titulo">Ficha de corralón</h2>
-                    <button class="btn btn-outline" onclick="navegar('corralones')">Volver</button>
-                </div>
-                <form onsubmit="event.preventDefault(); navegar('corralones');">
-                    <div class="form-grid">
-                        <div class="form-group"><label>Nombre comercial</label><input type="text" class="form-control" id="f-nombre" value="Corralón Sarandí"></div>
-                        <div class="form-group"><label>Tipo de negocio</label><select class="form-control"><option>🏗️ Corralón</option></select></div>
-                        <div class="form-group"><label>Dirección</label><input type="text" class="form-control" value="Av. Mitre 2900"></div>
-                        <div class="form-group"><label>Zona</label><input type="text" class="form-control" value="Sarandí"></div>
-                        <div class="form-group"><label>Teléfono</label><input type="text" class="form-control" value="4204-1234"></div>
-                        <div class="form-group"><label>WhatsApp</label><input type="text" class="form-control" value="1123456789"></div>
-                        <div class="form-group"><label>Horario</label><input type="text" class="form-control" value="8 a 18hs"></div>
-                        <div class="form-group"><label>Coordenadas del mapa</label><input type="text" class="form-control" value="-34.67,-58.34"></div>
-                        <div class="form-group"><label>Estado</label><select class="form-control"><option>Activo</option></select></div>
-                        <fieldset>
-                            <legend>Control de Cuenta y Datos Internos</legend>
-                            <div class="form-group"><label>Estado de deuda</label><select class="form-control"><option>Con deuda</option></select></div>
-                            <div class="form-group"><label>Monto adeudado</label><input type="text" class="form-control" value="$15.000"></div>
-                            <div class="form-group"><label>Vencimiento</label><input type="date" class="form-control" value="2026-06-10"></div>
-                            <div class="form-group"><label>Último contacto</label><input type="date" class="form-control" value="2026-05-28"></div>
-                            <div class="form-group" style="grid-column:1/-1;"><label>Observaciones internas</label><textarea class="form-control"></textarea></div>
-                        </fieldset>
-                    </div>
-                    <button type="submit" class="btn btn-success" style="margin-top:1.5rem;">Guardar Cambios</button>
-                </form>
-            </div>
-
-            <div id="deudas" class="panel-section">
-                <h2>Deudas</h2>
-                <div class="filters-bar">
-                    <button class="btn btn-outline">⚠️ Con deuda</button>
-                    <button class="btn btn-outline">🚨 Vencida</button>
-                    <button class="btn btn-outline">📅 Próxima a vencer</button>
-                    <button class="btn btn-outline">✅ Pagada</button>
-                    <button class="btn btn-outline">🔍 En revisión</button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>Comercio</th><th>Monto</th><th>Vencimiento</th><th>Estado</th><th>Acciones</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><b>Corralón Sarandí</b></td><td style="color:var(--danger); font-weight:600;">$15.000</td><td>10/06/2026</td><td><span class="badge badge-danger">Vencida</span></td>
-                                <td>
-                                    <button class="btn btn-success btn-sm" onclick="alert('Pago registrado')">Registrar pago</button>
-                                    <button class="btn btn-outline btn-sm">Editar saldo</button>
-                                    <button class="btn btn-primary btn-sm">Enviar aviso</button>
-                                    <button class="btn btn-gray btn-sm">Ver historial</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="servicios" class="panel-section">
-                <h2>Seguimiento del Servicio</h2>
-                <p style="margin-bottom:1.5rem; color:#64748b;">Métricas internas de control.</p>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>ID Pedido</th><th>Comercio</th><th>Estado</th><th>Fecha Alta</th><th>Última Resp.</th><th>Resultado</th><th>Prioridad</th><th>Notas</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>#1024</td><td>Corralón Sarandí</td><td><span class="badge badge-info">En proceso</span></td><td>29/05/2026</td><td>Hoy</td><td>Presupuestado</td><td><span class="badge badge-danger">ALTA</span></td><td>Nota interna.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="mensajes" class="panel-section">
-                <h2>Mensajes</h2>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Remitente</th><th>Mensaje</th><th>Fecha</th><th>Acción</th></tr></thead>
-                        <tbody><tr><td>Juan Pérez</td><td>"Consulta de stock..."</td><td>Hoy</td><td><button class="btn btn-outline btn-sm">Responder</button></td></tr></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="ajustes" class="panel-section">
-                <h2>Ajustes</h2>
-                <p>Configuraciones de administración general.</p>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        // Tu contraseña secreta para entrar al panel.
-        const CLAVE_SECRETA = '1234';
-
-        function desbloquearPanel() {
-            const intento = prompt('Ingrese la clave de administrador:');
-            if (intento === CLAVE_SECRETA) {
-                // Escondemos la pantalla pública y mostramos el admin
-                document.getElementById('pantalla-publica').style.display = 'none';
-                document.getElementById('panel-admin').style.display = 'flex';
-                // Ocultamos también el botoncito para que no moleste
-                document.querySelector('.boton-escondido').style.display = 'none';
-                navegar('dashboard');
-            } else if (intento !== null) {
-                alert('Clave incorrecta.');
-            }
-        }
-
-        function navegar(targetId) {
-            const secciones = document.querySelectorAll('.panel-section');
-            secciones.forEach(sec => sec.classList.remove('active'));
-            document.getElementById(targetId).classList.add('active');
-
-            const itemsMenu = document.querySelectorAll('.sidebar-item');
-            itemsMenu.forEach(item => item.classList.remove('active'));
-            
-            const itemActivo = document.querySelector(`[data-target="${targetId}"]`);
-            if(itemActivo) itemActivo.classList.add('active');
-        }
-
-        function abrirFichaNueva() {
-            document.getElementById('ficha-titulo').innerText = "Agregar corralón";
-            navegar('ficha-form');
-        }
-
-        function verFicha(nombre) {
-            document.getElementById('ficha-titulo').innerText = "Ficha de: " + nombre;
-            document.getElementById('f-nombre').value = nombre;
-            navegar('ficha-form');
-        }
-
-        function editarFicha(nombre) {
-            document.getElementById('ficha-titulo').innerText = "Editar: " + nombre;
-            document.getElementById('f-nombre').value = nombre;
-            navegar('ficha-form');
-        }
-
-        function eliminarFila(boton) {
-            if(confirm('¿Estás seguro de que querés eliminar este corralón?')) {
-                const fila = boton.parentNode.parentNode;
-                fila.parentNode.removeChild(fila);
-            }
-        }
-    </script>
-</body>
-</html>
+            border-bottom: 1px solid #3341
