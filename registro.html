@@ -116,6 +116,46 @@
             line-height: 1.5;
         }
 
+        /* MENÚ DESPLEGABLE DE WHATSAPP (ESTILO POPUP) */
+        .ws-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .ws-menu {
+            display: none;
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 260px;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .ws-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            color: #1e293b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-border);
+            transition: background 0.2s;
+        }
+        .ws-menu a:last-child { border-bottom: none; }
+        .ws-menu a:hover { background: #f1f5f9; }
+
+        .ws-container:hover .ws-menu {
+            display: block;
+        }
+
         /* EL BOTÓN ESCONDIDO */
         .boton-escondido {
             position: fixed;
@@ -399,7 +439,13 @@
             </div>
         </div>
 
-        <a href="https://wa.me/5491112345678?text=Hola,%20quiero%20sumar%20mi%20negocio" class="btn btn-primary">Contactar por WhatsApp</a>
+        <div class="ws-container">
+            <div class="ws-menu">
+                <a href="https://wa.me/5491112345678?text=Hola,%20quiero%20comprar%20materiales" target="_blank">🛒 Quiero comprar materiales</a>
+                <a href="https://wa.me/5491112345678?text=Hola,%20tengo%20un%20problema%20o%20consulta" target="_blank">💬 Problema / Consulta</a>
+            </div>
+            <button class="btn btn-primary">Contactar por WhatsApp</button>
+        </div>
     </div>
 
     <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
