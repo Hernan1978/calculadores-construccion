@@ -79,12 +79,13 @@
   .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
   .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
   .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #eef2f7; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
-  .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; }
+  .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; text-align: center; }
   .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
 
   .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
   .tip { font-size: 12px; color: #888; background: #f5f8fc; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #90afd4; margin-top: 1rem; }
 
+  /* CONTROL DE PASOS */
   .paso { display: none; }
   .paso.active { display: block; }
 
@@ -98,7 +99,10 @@
     <h1>🏗 Materiales Ya</h1>
     <p>Cotizá en varios corralones de tu zona</p>
   </div>
-  <a href="index.html" class="hbtn" style="border-color:#2e4a7a;color:#90afd4;">← Inicio</a> <a href="calculadores.html" class="hbtn" style="border-color:#2e4a7a;color:#90afd4;">Calculadores</a>
+  <div>
+    <a href="index.html" class="hbtn">← Inicio</a> 
+    <a href="calculadores.html" class="hbtn">Calculadores</a>
+  </div>
 </header>
 
 <main>
@@ -173,7 +177,7 @@
           <option value="mes">Este mes</option>
         </select>
       </div>
-      <button class="btn-primary" onclick="irPaso2()">Continuar → Cargar pedido</button>
+      <button type="button" class="btn-primary" onclick="irPaso2()">Continuar → Cargar pedido</button>
     </div>
   </div>
 
@@ -190,7 +194,7 @@
       <h3>Agregar desde catálogo</h3>
       <div class="cat-nivel1" id="cats-nivel1"></div>
       <div class="cat-nivel2" id="cats-nivel2"></div>
-      <div class="mats-grid" id="mats-grid"><span style="color:#bbb;font-size:12px;padding:4px">Seleccioná una categoría para ver los materiales</span></div>
+      <div class="mats-grid" id="mats-grid"></div>
 
       <hr class="divider">
       <h3>Lista de materiales</h3>
@@ -198,14 +202,14 @@
         <span>Material</span><span>Cantidad</span><span>Unidad</span><span></span>
       </div>
       <div id="items-container"></div>
-      <button class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
+      <button type="button" class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
 
       <hr class="divider">
       <div class="field"><label>Observaciones (opcional)</label>
         <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta, tengo acceso por rampa..."></textarea>
       </div>
-      <button class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
-      <button class="btn-secondary" onclick="irPaso1()">← Volver</button>
+      <button type="button" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
+      <button type="button" class="btn-secondary" onclick="irPaso1()">← Volver</button>
     </div>
   </div>
 
@@ -222,7 +226,7 @@
         <div class="codigo" id="codigo-pedido"></div>
         <p>Tu pedido fue enviado a los corralones de tu zona.<br>Te van a contactar por WhatsApp con sus cotizaciones.<br><strong>Guardá el código para hacer el seguimiento.</strong></p>
         <a id="btn-wsp" href="#" class="btn-whatsapp" target="_blank">📲 Confirmar por WhatsApp</a>
-        <button class="btn-nuevo" onclick="nuevoPedido()">Hacer otro pedido</button>
+        <button type="button" class="btn-nuevo" onclick="nuevoPedido()">Hacer otro pedido</button>
       </div>
     </div>
   </div>
@@ -234,185 +238,148 @@
   <div id="ws-bubble" style="background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:14px 16px;max-width:260px;font-size:13px;color:#1a1a1a;line-height:1.5;display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <strong style="font-size:13px;">🏗 Materiales Ya</strong>
-      <button onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
+      <button type="button" onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
     </div>
     <p style="margin:0 0 10px">¡Hola! 👋 ¿En qué te podemos ayudar?</p>
     <div style="display:flex;flex-direction:column;gap:6px;">
       <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">📦 Quiero cotizar materiales</a>
       <a href="https://wa.me/5491112345678?text=Hola%2C+soy+un+corral%C3%B3n+y+quiero+sumarme+a+la+plataforma" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">🏪 Soy corralón / ferretería</a>
-      <a href="https://wa.me/5491112345678?text=Hola%2C+tengo+una+consulta+general" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">💬 Consulta general</a>
     </div>
   </div>
-  <button onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+  <button type="button" onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   </button>
 </div>
 
 <script>
-<script>
-// CONFIGURACIÓN DE APIS
-const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
-
 let catalogoData = [];
+let listaMaterialesGlobal = [];
 let catActivaIdx = 0;
-let subActivaIdx = 0;
-let listaMaterialesGlobal = []; // Array unificado para el buscador predictivo
 
 function toggleBubble() {
   const b = document.getElementById('ws-bubble');
   if (b) b.style.display = b.style.display === 'none' ? 'block' : 'none';
 }
-
 setTimeout(() => {
   const b = document.getElementById('ws-bubble');
   if (b) b.style.display = 'block';
 }, 4000);
 
-// ── Cargar catálogo desde JSON local e inicializar buscador predictivo ──
+// NAVEGACIÓN DIRECTA ENTRE PANTALLAS
+function irPaso1() {
+  document.getElementById('paso1').style.display = 'block';
+  document.getElementById('paso2').style.display = 'none';
+  document.getElementById('paso3').style.display = 'none';
+}
+
+function irPaso2() {
+  const nombre = document.getElementById('cli-nombre').value.trim();
+  const zona = document.getElementById('cli-zona').value;
+  if(!nombre) { alert('Ingresá tu nombre para continuar.'); return; }
+  if(!zona) { alert('Seleccioná tu zona para continuar.'); return; }
+
+  document.getElementById('paso1').style.display = 'none';
+  document.getElementById('paso2').style.display = 'block';
+  document.getElementById('paso3').style.display = 'none';
+}
+
+// CARGA DEL CATÁLOGO LOCAL
 async function cargarCatalogo() {
   try {
     const res = await fetch('materiales.json');
-    if (!res.ok) throw new Error("No se pudo cargar el JSON");
     const data = await res.json();
     catalogoData = data.categorias || [];
   } catch(e) {
-    console.log("Usando catálogo de respaldo por error en fetch:", e);
-    // Respaldo idéntico a tus necesidades reales por si falla el JSON local
+    // Si falla el fetch local, usamos el catálogo con los pesajes corregidos (25kg y 20kg)
     catalogoData = [{
-      nombre:'General', icono:'📦',
+      nombre:'Obra Gruesa', icono:'🏗',
       subcategorias:[{
-        nombre:'Materiales',
+        nombre:'Áridos y sueltos',
         materiales:[
           {nombre:'Cemento Portland 25kg', unidad:'bolsas'},
           {nombre:'Cemento de albañilería 20kg', unidad:'bolsas'},
-          {nombre:'Arena gruesa', unidad:'m³'},
-          {nombre:'Ladrillo común', unidad:'unidades'},
+          {nombre:'Arena fina', unidad:'bolsas'},
+          {nombre:'Arena gruesa', unidad:'m³'}
         ]
       }]
     }];
   }
-  
   renderNivel1();
   selectCat(0);
-  generarListadoAutocompletado();
+  generarAutocompletado();
 }
 
-// Extrae todos los materiales del JSON local para armar el autocompletado inteligente
-function generarListadoAutocompletado() {
+function generarAutocompletado() {
   let materialesSet = new Set();
-  
-  if (Array.isArray(catalogoData)) {
-    catalogoData.forEach(cat => {
-      if (cat.subcategorias && Array.isArray(cat.subcategorias)) {
-        cat.subcategorias.forEach(sub => {
-          if (sub.materiales && Array.isArray(sub.materiales)) {
-            sub.materiales.forEach(mat => {
-              if (mat.nombre) materialesSet.add(mat.nombre);
-            });
-          }
-        });
-      }
-    });
-  }
-
+  catalogoData.forEach(cat => {
+    if(cat.subcategorias) {
+      cat.subcategorias.forEach(sub => {
+        if(sub.materiales) {
+          sub.materiales.forEach(m => materialesSet.add(m.nombre));
+        }
+      });
+    }
+  });
   listaMaterialesGlobal = Array.from(materialesSet);
-  crearDatalistHTML();
-}
-
-// Crea la etiqueta datalist en el cuerpo de la página
-function crearDatalistHTML() {
-  let datalist = document.getElementById('lista-materiales-excel');
+  
+  let datalist = document.getElementById('lista-mats');
   if (!datalist) {
     datalist = document.createElement('datalist');
-    datalist.id = 'lista-materiales-excel';
+    datalist.id = 'lista-mats';
     document.body.appendChild(datalist);
   }
-  
-  datalist.innerHTML = ''; // Limpiamos contenidos viejos
-  listaMaterialesGlobal.forEach(nombreMat => {
-    const option = document.createElement('option');
-    option.value = nombreMat;
-    datalist.appendChild(option);
-  });
-
-  // Forzar vinculación a todos los campos "Material..." existentes
-  aplicarAutocompletadoInputs();
+  datalist.innerHTML = listaMaterialesGlobal.map(m => `<option value="${m}"></option>`).join('');
+  vincularInputs();
 }
 
 function renderNivel1() {
-  const container = document.getElementById('cats-nivel1');
-  if (!container) return;
-  container.innerHTML = catalogoData.map((c,i) =>
-    `<button type="button" class="pill-cat ${i===0?'active':''}" onclick="selectCat(${i},this)">${c.icono || '📦'} ${c.nombre}</button>`
-  ).join('');
+  const c = document.getElementById('cats-nivel1');
+  if(c) c.innerHTML = catalogoData.map((cat, i) => `<button type="button" class="pill-cat ${i===0?'active':''}" onclick="selectCat(${i}, this)">${cat.icono} ${cat.nombre}</button>`).join('');
 }
 
 function selectCat(idx, btn) {
   catActivaIdx = idx;
-  subActivaIdx = 0;
   document.querySelectorAll('.pill-cat').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  else {
-    const pils = document.querySelectorAll('.pill-cat');
-    if (pils[idx]) pils[idx].classList.add('active');
-  }
-
-  const cat = catalogoData[idx];
-  const subs = (cat && cat.subcategorias) ? cat.subcategorias : [];
-  const containerNivel2 = document.getElementById('cats-nivel2');
-  if (containerNivel2) {
-    containerNivel2.innerHTML = subs.map((s,i) =>
-      `<button type="button" class="pill-sub ${i===0?'active':''}" onclick="selectSub(${i},this)">${s.nombre}</button>`
-    ).join('');
+  
+  const subContainer = document.getElementById('cats-nivel2');
+  const subs = catalogoData[idx]?.subcategorias || [];
+  if(subContainer) {
+    subContainer.innerHTML = subs.map((s, i) => `<button type="button" class="pill-sub ${i===0?'active':''}" onclick="selectSub(${i}, this)">${s.nombre}</button>`).join('');
   }
   renderMats(0);
 }
 
 function selectSub(idx, btn) {
-  subActivaIdx = idx;
   document.querySelectorAll('.pill-sub').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  if(btn) btn.classList.add('active');
   renderMats(idx);
 }
 
-function renderMats(idx) {
-  const cat = catalogoData[catActivaIdx];
-  const sub = (cat && cat.subcategorias) ? cat.subcategorias[idx] : null;
-  const mats = (sub && sub.materiales) ? sub.materiales : [];
-  
+function renderMats(subIdx) {
   const grid = document.getElementById('mats-grid');
-  if (!grid) return;
-  
-  grid.innerHTML = mats.length
-    ? mats.map(m => {
-        const nomEscaped = m.nombre.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-        const uniEscaped = (m.unidad || 'unidades').replace(/'/g,"\\'").replace(/"/g,'&quot;');
-        return `<button type="button" class="pill-mat" onclick="agregarMaterial('${nomEscaped}','${uniEscaped}')">${m.nombre}</button>`;
-      }).join('')
-    : '<span style="color:#bbb;font-size:12px;padding:4px">Sin materiales en esta categoría</span>';
+  const mats = catalogoData[catActivaIdx]?.subcategorias[subIdx]?.materiales || [];
+  if(grid) {
+    grid.innerHTML = mats.map(m => `<button type="button" class="pill-mat" onclick="agregarMaterial('${m.nombre}','${m.unidad}')">${m.nombre}</button>`).join('');
+  }
 }
 
 function agregarMaterial(nombre, unidad) {
-  const container = document.getElementById('items-container');
-  if (!container) return;
-  
-  const rows = container.querySelectorAll('.item-row');
+  const rows = document.querySelectorAll('.item-row');
   for(let row of rows) {
-    const inp = row.querySelectorAll('input');
-    if(inp[0] && !inp[0].value.trim()) { 
-        inp[0].value = nombre; 
-        if (inp[2]) inp[2].value = unidad; 
-        return; 
+    const inputs = row.querySelectorAll('input');
+    if(inputs[0] && !inputs[0].value.trim()) {
+      inputs[0].value = nombre;
+      if(inputs[2]) inputs[2].value = unidad;
+      return;
     }
   }
   addItem(nombre, '1', unidad);
 }
 
-// Agrega una fila nueva a la lista de materiales y le vincula el autocompletado automáticamente
 function addItem(mat='', cant='1', u='unidades') {
   const container = document.getElementById('items-container');
-  if (!container) return;
-  
+  if(!container) return;
   const row = document.createElement('div');
   row.className = 'item-row';
   row.innerHTML = `
@@ -422,109 +389,44 @@ function addItem(mat='', cant='1', u='unidades') {
     <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
   `;
   container.appendChild(row);
-  aplicarAutocompletadoInputs();
+  vincularInputs();
 }
 
 function removeItem(btn) {
   const rows = document.querySelectorAll('.item-row');
-  if(rows.length > 1) {
-    btn.closest('.item-row').remove();
-  } else {
+  if(rows.length > 1) btn.closest('.item-row').remove();
+  else {
     const inputs = btn.closest('.item-row').querySelectorAll('input');
-    if (inputs[0]) inputs[0].value = ''; 
-    if (inputs[1]) inputs[1].value = '1'; 
-    if (inputs[2]) inputs[2].value = 'unidades';
+    inputs[0].value = ''; inputs[1].value = '1'; inputs[2].value = 'unidades';
   }
 }
 
-// Inyecta el atributo 'list' a los inputs para habilitar las sugerencias del buscador
-function aplicarAutocompletadoInputs() {
-    const inputs = document.querySelectorAll('input[placeholder="Material..."]');
-    inputs.forEach(input => {
-        input.setAttribute('list', 'lista-materiales-excel');
-    });
+function vincularInputs() {
+  document.querySelectorAll('input[placeholder="Material..."]').forEach(inp => inp.setAttribute('list', 'lista-mats'));
 }
 
-// ── Inicialización general de la página ──
-document.addEventListener("DOMContentLoaded", function() {
-    cargarCatalogo();
-    addItem();
-
-    // Intentamos cargar de Sheets de forma segura sin romper el flujo principal si falla
-    fetch(`${URL_API}?accion=listarMateriales`)
-    .then(res => res.json())
-    .then(data => {
-        if(data && data.status === "success" && data.materiales && data.materiales.length > 0) {
-            listaMaterialesGlobal = Array.from(new Set([...listaMaterialesGlobal, ...data.materiales]));
-            crearDatalistHTML();
-        }
-    })
-    .catch(err => console.log("Nota: Se utiliza exclusivamente el catálogo predictivo local."));
-
-    // Procesar datos guardados desde los calculadores
-    const datos = sessionStorage.getItem('pedido_precargado');
-    if(!datos) return;
-    try {
-      const items = JSON.parse(datos);
-      sessionStorage.removeItem('pedido_precargado');
-      const container = document.getElementById('items-container');
-      if (container) {
-        container.innerHTML = '';
-        items.forEach(item => addItem(item.mat, item.cant, item.u));
-        const banner = document.getElementById('banner-calculador');
-        if (banner) {
-          banner.innerHTML = `<div class="banner-verde">✅ ${items.length} material${items.length>1?'es':''} cargado${items.length>1?'s':''} desde el calculador. Completá tus datos y enviá el pedido.</div>`;
-        }
-      }
-    } catch(e) { console.error(e); }
-});
-
-// ── Procesos de Navegación del Formulario ──
-function irPaso1() {
-  document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
-  const p1 = document.getElementById('paso1');
-  if (p1) p1.classList.add('active');
-}
-
-function irPaso2() {
-  const nomVal = document.getElementById('cli-nombre') ? document.getElementById('cli-nombre').value.trim() : '';
-  const zonaVal = document.getElementById('cli-zona') ? document.getElementById('cli-zona').value : '';
-  
-  if(!nomVal) { alert('Ingresá tu nombre para continuar.'); return; }
-  if(!zonaVal) { alert('Seleccioná tu zona para continuar.'); return; }
-  
-  document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
-  const p2 = document.getElementById('paso2');
-  if (p2) p2.classList.add('active');
-}
-
+// PROCESAR Y ENVIAR WHATSAPP (WS)
 function enviarPedido() {
   const rows = document.querySelectorAll('.item-row');
   const items = [];
-  
   rows.forEach(row => {
     const inputs = row.querySelectorAll('input');
-    if (inputs[0]) {
-      const mat = inputs[0].value.trim();
-      const cant = inputs[1] ? inputs[1].value : '1';
-      const u = (inputs[2] && inputs[2].value.trim()) ? inputs[2].value.trim() : 'unidades';
-      if(mat) items.push({mat, cant, u});
-    }
+    const mat = inputs[0]?.value.trim();
+    if(mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
   });
-  
-  if(items.length === 0) { alert('Agregá al menos un material al pedido.'); return; }
+
+  if(items.length === 0) { alert('Agregá al menos un material.'); return; }
 
   const codigo = 'MAT-' + Date.now().toString().slice(-6);
-  const codElem = document.getElementById('codigo-pedido');
-  if (codElem) codElem.textContent = codigo;
+  document.getElementById('codigo-pedido').textContent = codigo;
 
-  const nombre = document.getElementById('cli-nombre') ? document.getElementById('cli-nombre').value : '';
-  const tel = document.getElementById('cli-tel') ? document.getElementById('cli-tel').value : '';
-  const zona = document.getElementById('cli-zona') ? document.getElementById('cli-zona').value : '';
-  const dir = document.getElementById('cli-dir') ? document.getElementById('cli-dir').value : '';
+  const nombre = document.getElementById('cli-nombre').value;
+  const tel = document.getElementById('cli-tel').value;
+  const zona = document.getElementById('cli-zona').value;
+  const dir = document.getElementById('cli-dir').value;
   const urgSel = document.getElementById('cli-urgencia');
-  const urgencia = urgSel ? urgSel.options[urgSel.selectedIndex].text : 'No especificado';
-  const obs = document.getElementById('cli-obs') ? document.getElementById('cli-obs').value : '';
+  const urgencia = urgSel ? urgSel.options[urgSel.selectedIndex].text : '';
+  const obs = document.getElementById('cli-obs').value;
 
   let msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n`;
   msg += `👤 *Cliente:* ${nombre}\n`;
@@ -534,33 +436,40 @@ function enviarPedido() {
   msg += `📦 *Materiales:*\n`;
   items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
   if(obs) msg += `\n📝 *Obs:* ${obs}`;
-  msg += `\n\n_Pedido desde Materiales Ya_`;
 
-  const ADMIN_WS = '5491112345678'; // Reemplazá por tu número real de administración
-  const btnWsp = document.getElementById('btn-wsp');
-  if (btnWsp) btnWsp.href = `https://wa.me/${ADMIN_WS}?text=${encodeURIComponent(msg)}`;
+  // REEMPLAZÁ CON TU WHATSAPP DE ADMINISTRADOR REAL
+  const TEL_ADMIN = "5491112345678"; 
+  document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
 
-  document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
-  const p3 = document.getElementById('paso3');
-  if (p3) p3.classList.add('active');
+  document.getElementById('paso1').style.display = 'none';
+  document.getElementById('paso2').style.display = 'none';
+  document.getElementById('paso3').style.display = 'block';
 }
 
 function nuevoPedido() {
-  ['cli-nombre','cli-tel','cli-dir','cli-obs'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  const cz = document.getElementById('cli-zona');
-  if (cz) cz.value = '';
-  const ic = document.getElementById('items-container');
-  if (ic) ic.innerHTML = '';
-  const bc = document.getElementById('banner-calculador');
-  if (bc) bc.innerHTML = '';
-  
+  ['cli-nombre','cli-tel','cli-dir','cli-obs'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cli-zona').value = '';
+  document.getElementById('items-container').innerHTML = '';
   addItem();
   irPaso1();
 }
-</script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  cargarCatalogo();
+  addItem();
+  
+  // Procesar si viene información del calculador previo
+  const datos = sessionStorage.getItem('pedido_precargado');
+  if(datos) {
+    try {
+      const items = JSON.parse(datos);
+      sessionStorage.removeItem('pedido_precargado');
+      document.getElementById('items-container').innerHTML = '';
+      items.forEach(i => addItem(i.mat, i.cant, i.u));
+      document.getElementById('banner-calculador').innerHTML = `<div class="banner-verde">✅ Materiales cargados desde el calculador.</div>`;
+    } catch(e){}
+  }
+});
 </script>
 </body>
 </html>
