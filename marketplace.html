@@ -131,7 +131,6 @@
     .confirm-box { padding: 1.25rem .5rem; }
     .codigo { font-size: 1.1rem; }
   }
-
 </style>
 </head>
 <body>
@@ -146,7 +145,6 @@
 
 <main>
 
-  <!-- PASO 1: DATOS -->
   <div id="paso1" class="paso active">
     <div class="steps">
       <div class="step active"><div class="step-circle">1</div><div class="step-label">Tus datos</div></div>
@@ -221,7 +219,6 @@
     </div>
   </div>
 
-  <!-- PASO 2: PEDIDO -->
   <div id="paso2" class="paso">
     <div class="steps">
       <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
@@ -254,7 +251,6 @@
     </div>
   </div>
 
-  <!-- PASO 3: CONFIRMACIÓN -->
   <div id="paso3" class="paso">
     <div class="steps">
       <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
@@ -276,12 +272,68 @@
 </main>
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
+<div id="ws-chat" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+  <div id="ws-bubble" style="background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:14px 16px;max-width:260px;font-size:13px;color:#1a1a1a;line-height:1.5;display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong style="font-size:13px;">🏗 Materiales Ya</strong>
+      <button onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
+    </div>
+    <p style="margin:0 0 10px">¡Hola! 👋 ¿En qué te podemos ayudar?</p>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">📦 Quiero cotizar materiales</a>
+      <a href="https://wa.me/5491112345678?text=Hola%2C+soy+un+corral%C3%B3n+y+quiero+sumarme+a+la+plataforma" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">🏪 Soy corralón / ferretería</a>
+      <a href="https://wa.me/5491112345678?text=Hola%2C+tengo+una+consulta+general" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">💬 Consulta general</a>
+    </div>
+  </div>
+  <button onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </button>
+</div>
+
 <script>
+// VINCULAMOS TU URL DE APPS SCRIPT (Poné tu enlace de Sheets real acá)
+const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
+
 let catalogoData = [];
 let catActivaIdx = 0;
 let subActivaIdx = 0;
+let catalogoMaterialesExcel = []; // Sincronizado desde Sheets
 
-// ── Cargar catálogo ──
+function toggleBubble() {
+  const b = document.getElementById('ws-bubble');
+  b.style.display = b.style.display === 'none' ? 'block' : 'none';
+}
+setTimeout(() => {
+  document.getElementById('ws-bubble').style.display = 'block';
+}, 4000);
+
+// Menu Toggle
+(function() {
+  function initMenu() {
+    var btn = document.getElementById('menuToggle');
+    var nav = document.getElementById('navLinks');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = nav.classList.contains('open');
+      nav.classList.toggle('open');
+      btn.innerHTML = isOpen ? '&#9776;' : '&#x2715;';
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && e.target !== btn) {
+        nav.classList.remove('open');
+        btn.innerHTML = '&#9776;';
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenu);
+  } else {
+    initMenu();
+  }
+})();
+
+// ── Cargar catálogo desde JSON local ──
 async function cargarCatalogo() {
   try {
     const res = await fetch('materiales.json');
@@ -342,11 +394,16 @@ function agregarMaterial(nombre, unidad) {
   const container = document.getElementById('items-container');
   for(let row of container.querySelectorAll('.item-row')) {
     const inp = row.querySelectorAll('input');
-    if(!inp[0].value.trim()) { inp[0].value=nombre; inp[2].value=unidad; return; }
+    if(!inp[0].value.trim()) { 
+        inp[0].value=nombre; 
+        inp[2].value=unidad; 
+        return; 
+    }
   }
   addItem(nombre,'1',unidad);
 }
 
+// MODIFICADO: Ahora cada vez que agregamos un renglón, le inyectamos la vinculación al datalist
 function addItem(mat='',cant='1',u='unidades') {
   const container = document.getElementById('items-container');
   const row = document.createElement('div');
@@ -358,6 +415,9 @@ function addItem(mat='',cant='1',u='unidades') {
     <button class="btn-remove" onclick="removeItem(this)">×</button>
   `;
   container.appendChild(row);
+  
+  // Le aplicamos el autocompletado inmediatamente a los campos nuevos
+  aplicarAutocompletadoInputs();
 }
 
 function removeItem(btn) {
@@ -367,6 +427,55 @@ function removeItem(btn) {
     const inputs = btn.closest('.item-row').querySelectorAll('input');
     inputs[0].value=''; inputs[1].value='1'; inputs[2].value='unidades';
   }
+}
+
+// ── Sincronizar catálogo inteligente desde Google Sheets ──
+document.addEventListener("DOMContentLoaded", function() {
+    cargarCatalogo();
+    addItem();
+
+    fetch(`${URL_API}?accion=listarMateriales`)
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "success" && data.materiales.length > 0) {
+            catalogoMaterialesExcel = data.materiales;
+            
+            // Creamos el datalist nativo en el documento
+            const datalist = document.createElement('datalist');
+            datalist.id = 'lista-materiales-excel';
+            
+            catalogoMaterialesExcel.forEach(producto => {
+                const option = document.createElement('option');
+                option.value = producto;
+                datalist.appendChild(option);
+            });
+            document.body.appendChild(datalist);
+
+            // Vinculamos la primera tanda de inputs
+            aplicarAutocompletadoInputs();
+        }
+    })
+    .catch(err => console.error("Error sincronizando catálogo de Sheets:", err));
+
+    // Precargar desde calculadores
+    const datos = sessionStorage.getItem('pedido_precargado');
+    if(!datos) return;
+    try {
+      const items = JSON.parse(datos);
+      sessionStorage.removeItem('pedido_precargado');
+      document.getElementById('items-container').innerHTML = '';
+      items.forEach(item => addItem(item.mat, item.cant, item.u));
+      document.getElementById('banner-calculador').innerHTML =
+        `<div class="banner-verde">✅ ${items.length} material${items.length>1?'es':''} cargado${items.length>1?'s':''} desde el calculador. Completá tus datos y enviá el pedido.</div>`;
+    } catch(e) { console.error(e); }
+});
+
+// Función clave corregida para activar la lista en el navegador
+function aplicarAutocompletadoInputs() {
+    const inputs = document.querySelectorAll('input[placeholder="Material..."]');
+    inputs.forEach(input => {
+        input.setAttribute('list', 'lista-materiales-excel');
+    });
 }
 
 // ── Navegación ──
@@ -413,7 +522,6 @@ function enviarPedido() {
   if(obs) msg += `\n📝 *Obs:* ${obs}`;
   msg += `\n\n_Pedido desde Materiales Ya_`;
 
-  // ⚠️ Reemplazá este número por el tuyo: 549 + número sin 0 ni 15
   const ADMIN_WS = '5491112345678';
   document.getElementById('btn-wsp').href = `https://wa.me/${ADMIN_WS}?text=${encodeURIComponent(msg)}`;
 
@@ -429,125 +537,6 @@ function nuevoPedido() {
   addItem();
   irPaso1();
 }
-
-// ── Precargar desde calculadores ──
-window.addEventListener('DOMContentLoaded', function() {
-  cargarCatalogo();
-  addItem();
-
-  const datos = sessionStorage.getItem('pedido_precargado');
-  if(!datos) return;
-  try {
-    const items = JSON.parse(datos);
-    sessionStorage.removeItem('pedido_precargado');
-    document.getElementById('items-container').innerHTML = '';
-    items.forEach(item => addItem(item.mat, item.cant, item.u));
-    document.getElementById('banner-calculador').innerHTML =
-      `<div class="banner-verde">✅ ${items.length} material${items.length>1?'es':''} cargado${items.length>1?'s':''} desde el calculador. Completá tus datos y enviá el pedido.</div>`;
-  } catch(e) { console.error(e); }
-});
-</script>
-
-<!-- WHATSAPP FLOTANTE -->
-<div id="ws-chat" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-  <!-- Burbuja de bienvenida -->
-  <div id="ws-bubble" style="background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:14px 16px;max-width:260px;font-size:13px;color:#1a1a1a;line-height:1.5;display:none;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <strong style="font-size:13px;">🏗 Materiales Ya</strong>
-      <button onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
-    </div>
-    <p style="margin:0 0 10px">¡Hola! 👋 ¿En qué te podemos ayudar?</p>
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">📦 Quiero cotizar materiales</a>
-      <a href="https://wa.me/5491112345678?text=Hola%2C+soy+un+corral%C3%B3n+y+quiero+sumarme+a+la+plataforma" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">🏪 Soy corralón / ferretería</a>
-      <a href="https://wa.me/5491112345678?text=Hola%2C+tengo+una+consulta+general" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">💬 Consulta general</a>
-    </div>
-  </div>
-  <!-- Botón WhatsApp -->
-  <button onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  </button>
-</div>
-<script>
-function toggleBubble() {
-  const b = document.getElementById('ws-bubble');
-  b.style.display = b.style.display === 'none' ? 'block' : 'none';
-}
-// Mostrar burbuja automáticamente después de 4 segundos
-setTimeout(() => {
-  document.getElementById('ws-bubble').style.display = 'block';
-}, 4000);
-</script>
-
-
-<script>
-(function() {
-  function initMenu() {
-    var btn = document.getElementById('menuToggle');
-    var nav = document.getElementById('navLinks');
-    if (!btn || !nav) return;
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var isOpen = nav.classList.contains('open');
-      nav.classList.toggle('open');
-      btn.innerHTML = isOpen ? '&#9776;' : '&#x2715;';
-    });
-    document.addEventListener('click', function(e) {
-      if (!nav.contains(e.target) && e.target !== btn) {
-        nav.classList.remove('open');
-        btn.innerHTML = '&#9776;';
-      }
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMenu);
-  } else {
-    initMenu();
-  }
-})();
- // Variable global para guardar los productos una sola vez en memoria
-let catalogoMaterialesExcel = [];
-
-// 1. Al cargar la página, traemos todo el listado de Sheets
-document.addEventListener("DOMContentLoaded", function() {
-    fetch(`${URL_API}?accion=listarMateriales`)
-    .then(res => res.json())
-    .then(data => {
-        if(data.status === "success" && data.materiales.length > 0) {
-            catalogoMaterialesExcel = data.materiales;
-            
-            // Creamos el datalist invisible en el HTML
-            const datalist = document.createElement('datalist');
-            datalist.id = 'lista-materiales-excel';
-            
-            // Inyectamos los cientos de productos que me pasaste
-            catalogoMaterialesExcel.forEach(producto => {
-                const option = document.createElement('option');
-                option.value = producto;
-                datalist.appendChild(option);
-            });
-            document.body.appendChild(datalist);
-
-            // Se lo aplicamos a la primera fila que ya viene dibujada de entrada
-            aplicarAutocompletadoInputs();
-        }
-    })
-    .catch(err => console.error("Error al sincronizar el catálogo:", err));
-});
-
-// 2. Función para asignarle la lista a los campos de texto
-function aplicarAutocompletadoInputs() {
-    // Buscamos todos los inputs que tengan el marcador de "Material..."
-    const inputs = document.querySelectorAll('input[placeholder="Material..."]');
-    inputs.forEach(input => {
-        // Le vinculamos el datalist que creamos arriba
-        input.setAttribute('list', 'lista-materials-excel');
-    });
-}
-
-// 3. ¡Ojo acá! Buscá tu función actual que agrega filas (la que se ejecuta al tocar "+ Agregar manualmente")
-// Al final de esa función, justo antes de que termine su llave }, tenés que llamar a nuestra función:
-// aplicarAutocompletadoInputs();
 </script>
 </body>
 </html>
