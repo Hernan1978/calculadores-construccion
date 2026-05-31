@@ -3,273 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suma tu Negocio - Materiales Ya</title>
+    <title>Hacer Pedido - Materiales Ya</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #1e293b;
             --accent: #2563eb;
             --success: #16a34a;
-            --warning: #ca8a04;
-            --danger: #dc2626;
             --gray-light: #f8fafc;
             --gray-border: #e2e8f0;
             --text-main: #334155;
-            --sidebar-width: 260px;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: #f1f5f9; color: var(--text-main); min-height: 100vh; }
-
-        /* PANTALLA PÚBLICA */
-        #pantalla-publica { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 3rem 2rem; background-color: var(--primary); color: white; }
-        .btn-volver-landing { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 600; border-radius: 0.375rem; cursor: pointer; text-decoration: none; }
-        #pantalla-publica h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; }
-        .subtitle { color: #94a3b8; font-size: 1.1rem; max-width: 600px; margin-bottom: 2.5rem; line-height: 1.6; }
-
-        .boton-escondido { position: fixed; bottom: 20px; right: 20px; background: transparent; border: none; color: rgba(255, 255, 255, 0.2); font-size: 0.75rem; cursor: pointer; z-index: 1000; user-select: none; }
-
-        /* PANEL DE ADMINISTRACIÓN (DISEÑO ORIGINAL RECUPERADO) */
-        #panel-admin { display: none; }
-        .admin-layout { display: flex; min-height: 100vh; }
-        .sidebar { width: var(--sidebar-width); background-color: var(--primary); color: white; position: fixed; top: 0; bottom: 0; left: 0; display: flex; flex-direction: column; padding: 1.5rem 0; z-index: 100; border-right: 1px solid rgba(255, 255, 255, 0.1); }
-        .sidebar-brand { font-size: 1.25rem; font-weight: 700; padding: 0 1.5rem 1.5rem 1.5rem; border-bottom: 1px solid #334155; }
-        .sidebar-menu { list-style: none; margin-top: 1.5rem; flex-grow: 1; }
-        .sidebar-item a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; color: #cbd5e1; text-decoration: none; font-weight: 500; transition: all 0.2s; cursor: pointer; }
-        .sidebar-item a:hover, .sidebar-item.active a { background-color: #334155; color: white; border-left: 4px solid var(--accent); }
-        .sidebar-logout { border-top: 1px solid #334155; padding-top: 1rem; }
-        .sidebar-logout a { color: #f87171 !important; }
-
-        .main-content { margin-left: var(--sidebar-width); flex-grow: 1; padding: 2rem; min-width: 0; }
-        .panel-section { display: none; }
-        .panel-section.active { display: block; }
-        h2 { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem; }
-
-        /* CONTADORES ORIGINALES */
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-        .metric-card { background: white; padding: 1.25rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-top: 4px solid #94a3b8; }
-        .metric-card h3 { font-size: 0.875rem; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 0.5rem; }
-        .metric-card p { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
-        .metric-card.active-card { border-top-color: var(--success); }
-        .metric-card.debt-card { border-top-color: var(--danger); }
-        .metric-card.no-debt-card { border-top-color: var(--accent); }
-
-        /* TABLAS ORIGINALES */
-        .table-container { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow-x: auto; margin-bottom: 2rem; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        th { background-color: var(--gray-light); color: #64748b; padding: 0.85rem 1rem; font-weight: 600; border-bottom: 1px solid var(--gray-border); }
-        td { padding: 1rem; border-bottom: 1px solid var(--gray-border); vertical-align: middle; }
-
-        /* WS MENU EN TABLA */
-        .ws-main-badge { position: relative; display: inline-block; }
-        .ws-main-btn { background: #25d366; color: white; padding: 0.25rem 0.6rem; border-radius: 50px; font-weight: bold; font-size: 0.8rem; border: none; cursor: pointer; }
-        .ws-main-menu { display: none; position: absolute; top: 120%; left: 0; background: white; border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 220px; z-index: 200; border: 1px solid var(--gray-border); }
-        .ws-main-menu a { display: block; padding: 0.6rem 1rem; color: #1e293b; text-decoration: none; font-weight: 600; font-size: 0.8rem; border-bottom: 1px solid var(--gray-border); }
-        .ws-main-badge:hover .ws-main-menu { display: block; }
-
-        /* BOTONES ORIGINALES */
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 600; border-radius: 0.375rem; border: none; cursor: pointer; text-decoration: none; gap: 0.5rem; }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-outline { background: transparent; border: 1px solid var(--gray-border); color: var(--text-main); }
-        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 0.25rem; margin-right: 0.25rem; }
-
-        .badge { display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.25rem; }
-        .badge-success { background: #dcfce7; color: #166534; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-warning { background: #fef9c3; color: #854d0e; }
-        .badge-info { background: #e0f2fe; color: #0369a1; }
-
-        .form-control { padding: 0.5rem 0.75rem; border: 1px solid var(--gray-border); border-radius: 0.375rem; font-size: 0.9rem; outline: none; }
+        body { background-color: #f1f5f9; color: var(--text-main); padding: 2rem 1rem; }
+        .form-container { max-width: 500px; background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin: 0 auto; }
+        h1 { font-size: 1.75rem; color: var(--primary); margin-bottom: 0.5rem; text-align: center; }
+        p.subtitle { color: #64748b; font-size: 0.95rem; text-align: center; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--primary); }
+        .form-control { width: 100%; padding: 0.75rem; border: 1px solid var(--gray-border); border-radius: 0.375rem; font-size: 0.95rem; outline: none; }
+        .form-control:focus { border-color: var(--accent); }
+        textarea.form-control { resize: vertical; min-height: 100px; }
+        .btn-submit { width: 100%; background: var(--accent); color: white; padding: 0.75rem; border: none; border-radius: 0.375rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; }
+        .btn-submit:disabled { background: #94a3b8; }
+        .success-box { display: none; background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 1.5rem; border-radius: 0.5rem; text-align: center; margin-top: 1rem; }
     </style>
 </head>
 <body>
 
-    <div id="pantalla-publica">
-        <a href="index.html" class="btn-volver-landing">⬅️ Volver a Materiales Ya</a>
-        <h1>Sumá tu negocio a Materiales Ya</h1>
-        <p class="subtitle">Llegá a clientes que ya están buscando tus materiales. Sin cuota mensual — pagás solo por los contactos que recibís.</p>
-        <a href="https://wa.me/5491112345678" class="btn btn-primary">Contactar por WhatsApp</a>
-    </div>
-
-    <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
-
-    <div id="panel-admin" class="admin-layout">
-        <div class="sidebar">
-            <div class="sidebar-brand">🏗️ Materiales Ya Admin</div>
-            <ul class="sidebar-menu">
-                <li class="sidebar-item active" data-target="dashboard"><a onclick="navegar('dashboard')">📊 Dashboard</a></li>
-                <li class="sidebar-item" data-target="corralones"><a onclick="navegar('corralones')">🏗️ Corralones</a></li>
-                <li class="sidebar-item" data-target="deudas"><a onclick="navegar('deudas')">💰 Deudas</a></li>
-                <li class="sidebar-item" data-target="servicios"><a onclick="navegar('servicios')">📈 Seguimiento</a></li>
-                <li class="sidebar-item" data-target="mensajes"><a onclick="navegar('mensajes')">💬 Mensajes</a></li>
-                <li class="sidebar-item" data-target="ajustes"><a onclick="navegar('ajustes')">⚙️ Ajustes</a></li>
-                <li class="sidebar-item sidebar-logout"><a onclick="cerrarSesion()">🚪 Salir al Sitio</a></li>
-            </ul>
+    <div class="form-container">
+        <div id="form-pedido">
+            <h1>Solicitar Materiales</h1>
+            <p class="subtitle">Completá tus datos y recibí presupuestos de corralones en tu zona al instante.</p>
+            
+            <form id="nuevo-pedido-form" onsubmit="enviarPedidoASheets(event)">
+                <div class="form-group">
+                    <label for="cliente">Tu Nombre y Apellido</label>
+                    <input type="text" id="cliente" class="form-control" required placeholder="Ej: Juan Pérez">
+                </div>
+                
+                <div class="form-group">
+                    <label for="zona">Zona / Localidad de Entrega</label>
+                    <input type="text" id="zona" class="form-control" required placeholder="Ej: Avellaneda">
+                </div>
+                
+                <div class="form-group">
+                    <label for="materiales">¿Qué materiales necesitás?</label>
+                    <textarea id="materiales" class="form-control" required placeholder="Ej: 50 bolsas de cemento, 3 de cal, 1 camionada de arena..."></textarea>
+                </div>
+                
+                <button type="submit" id="btn-enviar" class="btn-submit">Enviar Solicitud 🚀</button>
+            </form>
         </div>
 
-        <div class="main-content">
-            <div id="dashboard" class="panel-section active">
-                <h2>Panel Principal</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card"><h3>Total Comercios</h3><p id="met-total">0</p></div>
-                    <div class="metric-card active-card"><h3>Activos</h3><p id="met-activos">0</p></div>
-                    <div class="metric-card debt-card"><h3>Con Deuda</h3><p id="met-deuda">0</p></div>
-                    <div class="metric-card no-debt-card"><h3>Sin Deuda</h3><p id="met-sin-deuda">0</p></div>
-                </div>
-                <h3>Últimos Cambios y Alertas</h3>
-                <div class="table-container" style="margin-top: 1rem;">
-                    <table>
-                        <thead><tr><th>Comercio</th><th>Alerta / Evento</th><th>Fecha</th></tr></thead>
-                        <tbody id="tabla-alertas">
-                            <tr><td colspan="3" style="text-align:center;">Sincronizando con Sheets...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="corralones" class="panel-section">
-                <h2>Corralones y Proveedores</h2>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Nombre</th><th>Tipo</th><th>Zona</th><th>WhatsApp</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead>
-                        <tbody id="tabla-corralones-body">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="servicios" class="panel-section">
-                <h2>Seguimiento de Pedidos</h2>
-                <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; background:white; padding:1rem; border-radius:0.5rem; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
-                    <input type="text" id="input-id-pedido" class="form-control" style="flex-grow:1;" placeholder="Ej: MY-9482">
-                    <button class="btn btn-primary" onclick="consultarPedidoSheets()">🔍 Buscar Pedido</button>
-                </div>
-                <div id="resultado-real" class="table-container" style="display:none; padding:1.5rem;">
-                    <h3 id="res-real-id" style="color:var(--accent); margin-bottom:1rem;">Pedido: #---</h3>
-                    <p style="margin-bottom:0.5rem;"><b>Estado:</b> <span id="res-real-estado" class="badge">---</span></p>
-                    <p style="margin-bottom:0.5rem;"><b>Cliente:</b> <span id="res-real-cliente">---</span></p>
-                    <p style="margin-bottom:0.5rem;"><b>Zona:</b> <span id="res-real-zona">---</span></p>
-                    <p style="margin-bottom:0.5rem;"><b>Materiales:</b></p>
-                    <div id="res-real-materiales" style="background:var(--gray-light); padding:1rem; border-left:4px solid var(--accent); margin-top:0.5rem; font-style:italic; white-space: pre-wrap;"></div>
-                </div>
-            </div>
-
-            <div id="mensajes" class="panel-section">
-                <h2>Mensajes Recibidos</h2>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Remitente</th><th>Contacto</th><th>Motivo</th><th>Acciones</th></tr></thead>
-                        <tbody>
-                            <tr><td>Carlos Mendoza</td><td>carlos.m@email.com</td><td><span class="badge badge-info">Consulta</span></td><td><button class="btn btn-outline btn-sm">Leer</button></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="deudas" class="panel-section"><h2>Control de Deudas</h2><p>Manejá los montos desde la pestaña Corralones en Sheets.</p></div>
-            <div id="ajustes" class="panel-section"><h2>Ajustes</h2><p>Configuración del sistema.</p></div>
+        <div id="box-exito" class="success-box">
+            <h2 style="margin-bottom: 0.5rem;">🎉 ¡Solicitud Enviada!</h2>
+            <p>Tu pedido fue registrado en el sistema con el identificador:</p>
+            <h3 id="codigo-pedido" style="margin: 1rem 0; color: var(--success); font-size: 1.5rem;">MY-0000</h3>
+            <p style="font-size: 0.85rem; color: #64748b;">Guardá este código para hacer el seguimiento en el panel.</p>
         </div>
     </div>
 
     <script>
-        // ==========================================
-        // ⚠️ PEGAR AQUÍ TU URL DE GOOGLE APPS SCRIPT
-        // ==========================================
-        const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec"; 
+        const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
-        function desbloquearPanel() {
-            const intento = prompt('Ingrese la clave de administrador:');
-            if (intento === '1234') {
-                document.getElementById('pantalla-publica').style.display = 'none';
-                document.getElementById('panel-admin').style.display = 'flex';
-                document.querySelector('.boton-escondido').style.display = 'none';
-                inicializarDatosPanel();
-            }
-        }
-
-        function cerrarSesion() {
-            document.getElementById('panel-admin').style.display = 'none';
-            document.getElementById('pantalla-publica').style.display = 'flex';
-            document.querySelector('.boton-escondido').style.display = 'block';
-        }
-
-        function navegar(targetId) {
-            const secciones = document.querySelectorAll('.panel-section');
-            secciones.forEach(sec => sec.classList.remove('active'));
-            document.getElementById(targetId).classList.add('active');
+        function enviarPedidoASheets(event) {
+            event.preventDefault();
             
-            const itemsMenu = document.querySelectorAll('.sidebar-item');
-            itemsMenu.forEach(item => item.classList.remove('active'));
-            const itemActivo = document.querySelector(`[data-target="${targetId}"]`);
-            if(itemActivo) itemActivo.classList.add('active');
-        }
+            const btn = document.getElementById('btn-enviar');
+            btn.disabled = true;
+            btn.innerText = "Procesando...";
 
-        function inicializarDatosPanel() {
-            if(!URL_API || URL_API.includes("TU_URL")) return;
+            const datosPedido = {
+                accion: "nuevoPedido",
+                cliente: document.getElementById('cliente').value.trim(),
+                zona: document.getElementById('zona').value.trim(),
+                materiales: document.getElementById('materiales').value.trim()
+            };
 
-            fetch(`${URL_API}?accion=cargarPanel`)
+            fetch(URL_API, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "text/plain"
+                },
+                body: JSON.stringify(datosPedido)
+            })
             .then(res => res.json())
-            .then(data => {
-                if(data.status === "success") {
-                    document.getElementById('met-total').innerText = data.metricas.total;
-                    document.getElementById('met-activos').innerText = data.metricas.activos;
-                    document.getElementById('met-deuda').innerText = data.metricas.conDeuda;
-                    document.getElementById('met-sin-deuda').innerText = data.metricas.total - data.metricas.conDeuda;
-
-                    var tbody = document.getElementById('tabla-corralones-body');
-                    var tbodyAlertas = document.getElementById('tabla-alertas');
-                    tbody.innerHTML = "";
-                    tbodyAlertas.innerHTML = "";
-
-                    data.corralones.forEach(corr => {
-                        // Badge de estado
-                        var bClass = "badge-success";
-                        if(corr.estado.toLowerCase().includes("revi")) bClass = "badge-warning";
-                        if(corr.estado.toLowerCase().includes("inac")) bClass = "badge-danger";
-
-                        var fila = `<tr>
-                            <td><b>${corr.nombre}</b></td>
-                            <td>${corr.tipo}</td>
-                            <td>${corr.zona}</td>
-                            <td>
-                                <div class="ws-main-badge">
-                                    <button class="ws-main-btn">📱 WS</button>
-                                    <div class="ws-main-menu">
-                                        <a href="https://wa.me/${corr.whatsapp}?text=Hola,%20quiero%20comprar%20materiales" target="_blank">🛒 Quiero comprar materiales</a>
-                                        <a href="https://wa.me/${corr.whatsapp}?text=Hola,%20tengo%20una%20consulta" target="_blank">💬 Consulta general</a>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="badge ${bClass}">${corr.estado}</span></td>
-                            <td style="color:${corr.deuda > 0 ? 'var(--danger)' : 'var(--success)'}; font-weight:700;">$${corr.deuda.toLocaleString('es-AR')}</td>
-                            <td><button class="btn btn-outline btn-sm">Ver</button></td>
-                        </tr>`;
-                        tbody.innerHTML += fila;
-
-                        if(corr.deuda > 0) {
-                            tbodyAlertas.innerHTML += `<tr><td><b>${corr.nombre}</b></td><td><span class="badge badge-danger">Deuda Pendiente</span></td><td>Hoy</td></tr>`;
-                        }
-                    });
-                    if(tbodyAlertas.innerHTML === "") tbodyAlertas.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No hay deudas pendientes</td></tr>";
+            .then(respuesta => {
+                if(respuesta.status === "success") {
+                    document.getElementById('form-pedido').style.display = 'none';
+                    document.getElementById('codigo-pedido').innerText = respuesta.id;
+                    document.getElementById('box-exito').style.display = 'block';
+                } else {
+                    alert("Hubo un problema al procesar el pedido: " + respuesta.message);
+                    btn.disabled = false;
+                    btn.innerText = "Enviar Solicitud 🚀";
                 }
-            });
-        }
-
-        function consultarPedidoSheets() {
-            var idInput = document.getElementById('input-id-pedido').value.trim().toUpperCase().replace('#','');
-            if(!idInput) return;
-
-            fetch(`${URL_API}?accion=buscarPedido&id=${idInput}`)
-            .then(res => res.json())
-            .then(data => {
-                if(data.status === "not_found") { alert("Pedido no encontrado."); return; }
-                
-                document.getElementById('res-real-id').innerText = "Pedido: #" + data.id;
-                document.getElementById('res-real-cliente').innerText = data.cliente;
-                document.getElementById('res-real-zona').innerText = data.zona;
-                document.getElementById('res-real-materiales').innerText = data.materiales;
-                document.getElementById('res-real-estado').innerText = data.estado;
-                document.getElementById('resultado-real').style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Error de conexión con el servidor de Sheets.");
+                btn.disabled = false;
+                btn.innerText = "Enviar Solicitud 🚀";
             });
         }
     </script>
