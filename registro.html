@@ -3,109 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacer Pedido - Materiales Ya</title>
+    <title>Panel de Control - Materiales Ya</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #1e293b;
             --accent: #2563eb;
             --success: #16a34a;
+            --warning: #ca8a04;
+            --danger: #dc2626;
             --gray-light: #f8fafc;
             --gray-border: #e2e8f0;
             --text-main: #334155;
+            --sidebar-width: 260px;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: #f1f5f9; color: var(--text-main); padding: 2rem 1rem; }
-        .form-container { max-width: 500px; background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin: 0 auto; }
-        h1 { font-size: 1.75rem; color: var(--primary); margin-bottom: 0.5rem; text-align: center; }
-        p.subtitle { color: #64748b; font-size: 0.95rem; text-align: center; margin-bottom: 2rem; }
-        .form-group { margin-bottom: 1.25rem; }
-        label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--primary); }
-        .form-control { width: 100%; padding: 0.75rem; border: 1px solid var(--gray-border); border-radius: 0.375rem; font-size: 0.95rem; outline: none; }
-        .form-control:focus { border-color: var(--accent); }
-        textarea.form-control { resize: vertical; min-height: 100px; }
-        .btn-submit { width: 100%; background: var(--accent); color: white; padding: 0.75rem; border: none; border-radius: 0.375rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; }
-        .btn-submit:disabled { background: #94a3b8; }
-        .success-box { display: none; background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 1.5rem; border-radius: 0.5rem; text-align: center; margin-top: 1rem; }
+        body { background-color: #f1f5f9; color: var(--text-main); min-height: 100vh; }
+
+        #pantalla-publica { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 3rem 2rem; background-color: var(--primary); color: white; }
+        .btn-volver-landing { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 600; border-radius: 0.375rem; cursor: pointer; text-decoration: none; }
+        #pantalla-publica h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; }
+        .subtitle { color: #94a3b8; font-size: 1.1rem; max-width: 600px; margin-bottom: 2.5rem; }
+
+        .boton-escondido { position: fixed; bottom: 20px; right: 20px; background: transparent; border: none; color: rgba(255, 255, 255, 0.2); font-size: 0.75rem; cursor: pointer; z-index: 1000; }
+
+        #panel-admin { display: none; }
+        .admin-layout { display: flex; min-height: 100vh; }
+        .sidebar { width: var(--sidebar-width); background-color: var(--primary); color: white; position: fixed; top: 0; bottom: 0; left: 0; display: flex; flex-direction: column; padding: 1.5rem 0; z-index: 100; }
+        .sidebar-brand { font-size: 1.25rem; font-weight: 700; padding: 0 1.5rem 1.5rem 1.5rem; border-bottom: 1px solid #334155; }
+        .sidebar-menu { list-style: none; margin-top: 1.5rem; flex-grow: 1; }
+        .sidebar-item a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; color: #cbd5e1; text-decoration: none; font-weight: 500; cursor: pointer; }
+        .sidebar-item:hover, .sidebar-item.active { background-color: #334155; border-left: 4px solid var(--accent); }
+        .main-content { margin-left: var(--sidebar-width); flex-grow: 1; padding: 2rem; }
+        .panel-section { display: none; }
+        .panel-section.active { display: block; }
+
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .metric-card { background: white; padding: 1.25rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-top: 4px solid #94a3b8; }
+        .metric-card h3 { font-size: 0.875rem; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 0.5rem; }
+        .metric-card p { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
+        .metric-card.active-card { border-top-color: var(--success); }
+        .metric-card.debt-card { border-top-color: var(--danger); }
+
+        .table-container { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow-x: auto; padding: 1rem; margin-bottom: 2rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background-color: var(--gray-light); padding: 0.75rem; text-align: left; color: #64748b; border-bottom: 1px solid var(--gray-border); }
+        td { padding: 1rem; border-bottom: 1px solid var(--gray-border); }
+        .form-control { padding: 0.6rem 1rem; border: 1px solid var(--gray-border); border-radius: 0.375rem; font-size: 0.9rem; }
+        .btn { padding: 0.6rem 1.2rem; font-weight: 600; border-radius: 0.375rem; border: none; cursor: pointer; }
+        .btn-primary { background: var(--accent); color: white; }
+        
+        .badge { padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.25rem; display: inline-block; }
+        .bg-activo { background: #dcfce7; color: #166534; }
+        .bg-revision { background: #fef9c3; color: #854d0e; }
+        .bg-inactivo { background: #fee2e2; color: #991b1b; }
+        
+        .deuda-alerta { color: var(--danger); font-weight: 700; }
+        .deuda-al dia { color: var(--success); font-weight: 600; }
+
+        .ws-main-badge { position: relative; display: inline-block; }
+        .ws-main-btn { background: #25d366; color: white; padding: 0.25rem 0.6rem; border-radius: 50px; font-weight: bold; font-size: 0.8rem; border: none; cursor: pointer; }
+        .ws-main-menu { display: none; position: absolute; top: 120%; left: 0; background: white; border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 220px; z-index: 200; border: 1px solid var(--gray-border); }
+        .ws-main-menu a { display: block; padding: 0.6rem 1rem; color: #1e293b; text-decoration: none; font-weight: 600; font-size: 0.8rem; border-bottom: 1px solid var(--gray-border); text-align: left; }
+        .ws-main-badge:hover .ws-main-menu { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="form-container">
-        <div id="form-pedido">
-            <h1>Solicitar Materiales</h1>
-            <p class="subtitle">Completá tus datos y recibí presupuestos de corralones en tu zona al instante.</p>
-            
-            <form id="nuevo-pedido-form" onsubmit="enviarPedidoASheets(event)">
-                <div class="form-group">
-                    <label for="cliente">Tu Nombre y Apellido</label>
-                    <input type="text" id="cliente" class="form-control" required placeholder="Ej: Juan Pérez">
-                </div>
-                
-                <div class="form-group">
-                    <label for="zona">Zona / Localidad de Entrega</label>
-                    <input type="text" id="zona" class="form-control" required placeholder="Ej: Avellaneda">
-                </div>
-                
-                <div class="form-group">
-                    <label for="materiales">¿Qué materiales necesitás?</label>
-                    <textarea id="materiales" class="form-control" required placeholder="Ej: 50 bolsas de cemento, 3 de cal, 1 camionada de arena..."></textarea>
-                </div>
-                
-                <button type="submit" id="btn-enviar" class="btn-submit">Enviar Solicitud 🚀</button>
-            </form>
+    <div id="pantalla-publica">
+        <a href="index.html" class="btn-volver-landing">⬅️ Volver a Materiales Ya</a>
+        <h1>Sumá tu negocio a Materiales Ya</h1>
+        <p class="subtitle">La forma más inteligente y automatizada de gestionar tus corralones asociados.</p>
+        <a href="https://wa.me/5491112345678" class="btn btn-primary">Contactar por WhatsApp</a>
+    </div>
+
+    <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
+
+    <div id="panel-admin" class="admin-layout">
+        <div class="sidebar">
+            <div class="sidebar-brand">🏗️ Materiales Ya Admin</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-item active" data-target="dashboard"><a onclick="navegar('dashboard')">📊 Dashboard</a></li>
+                <li class="sidebar-item" data-target="corralones"><a onclick="navegar('corralones')">🏗️ Corralones (Desde Sheets)</a></li>
+                <li class="sidebar-item" data-target="servicios"><a onclick="navegar('servicios')">追 Seguimiento Pedidos</a></li>
+                <li class="sidebar-item"><a onclick="cerrarSesion()">🚪 Salir</a></li>
+            </ul>
         </div>
 
-        <div id="box-exito" class="success-box">
-            <h2 style="margin-bottom: 0.5rem;">🎉 ¡Solicitud Enviada!</h2>
-            <p>Tu pedido fue registrado en el sistema con el identificador:</p>
-            <h3 id="codigo-pedido" style="margin: 1rem 0; color: var(--success); font-size: 1.5rem;">MY-0000</h3>
-            <p style="font-size: 0.85rem; color: #64748b;">Guardá este código para hacer el seguimiento en el panel.</p>
+        <div class="main-content">
+            <div id="dashboard" class="panel-section active">
+                <h2>Métricas Consolidadas (En tiempo real con Excel)</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card"><h3>Total Comercios</h3><p id="met-total">0</p></div>
+                    <div class="metric-card active-card"><h3>Comercios Activos</h3><p id="met-activos">0</p></div>
+                    <div class="metric-card debt-card"><h3>Comercios con Deuda</h3><p id="met-deuda">0</p></div>
+                </div>
+                <p style="color:#64748b;">Cada dato numérico de estas tarjetas se calcula recorriendo las filas de tu Google Sheet actual de forma automática.</p>
+            </div>
+
+            <div id="corralones" class="panel-section">
+                <h2>Listado de Corralones Vinculados</h2>
+                <p style="margin-bottom:1rem; color:#64748b;">⚠️ Toda modificación de datos, deudas o estados se realiza directo en tu Excel y impacta aquí.</p>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Nombre</th><th>Tipo</th><th>Zona</th><th>WhatsApp</th><th>Estado</th><th>Deuda</th></tr></thead>
+                        <tbody id="tabla-corralones-body">
+                            <tr><td colspan="6" style="text-align:center; color:#64748b;">Cargando información desde Google Sheets...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="servicios" class="panel-section">
+                <h2>Buscador de Pedidos de Clientes</h2>
+                <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem;">
+                    <input type="text" id="input-id-pedido" class="form-control" style="flex-grow:1;" placeholder="Ingresá código de pedido (Ej: MY-9482)">
+                    <button class="btn btn-primary" onclick="consultarPedidoSheets()">🔍 Buscar</button>
+                </div>
+                <div id="loading-status" style="display:none; color: var(--accent); font-weight:600; margin-bottom:1rem;">Buscando en tu Google Sheet...</div>
+                
+                <div id="resultado-real" class="table-container" style="display:none; padding:1.5rem;">
+                    <h3 id="res-real-id" style="color:var(--accent); margin-bottom:1rem;">Pedido: #---</h3>
+                    <p style="margin-bottom:0.5rem;"><b>Estado en el Excel:</b> <span id="res-real-estado" class="badge">---</span></p>
+                    <p style="margin-bottom:0.5rem;"><b>Cliente:</b> <span id="res-real-cliente">---</span></p>
+                    <p style="margin-bottom:0.5rem;"><b>Zona:</b> <span id="res-real-zona">---</span></p>
+                    <p style="margin-bottom:0.5rem;"><b>Materiales:</b></p>
+                    <div id="res-real-materiales" style="background:var(--gray-light); padding:1rem; border-left:4px solid var(--accent); margin-top:0.5rem; font-style:italic; white-space: pre-wrap;"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
+        // ==========================================
+        // ⚠️ PEGAR AQUÍ TU URL DE GOOGLE APPS SCRIPT
+        // ==========================================
+        const URL_API = "TU_URL_DE_APPS_SCRIPT_ACA"; 
 
-        function enviarPedidoASheets(event) {
-            event.preventDefault();
+        function desbloquearPanel() {
+            const intento = prompt('Ingrese la clave de administrador:');
+            if (intento === '1234') {
+                document.getElementById('pantalla-publica').style.display = 'none';
+                document.getElementById('panel-admin').style.display = 'flex';
+                document.querySelector('.boton-escondido').style.display = 'none';
+                inicializarDatosPanel();
+            }
+        }
+
+        function cerrarSesion() {
+            document.getElementById('panel-admin').style.display = 'none';
+            document.getElementById('pantalla-publica').style.display = 'flex';
+            document.querySelector('.boton-escondido').style.display = 'block';
+        }
+
+        function navegar(targetId) {
+            const secciones = document.querySelectorAll('.panel-section');
+            secciones.forEach(sec => sec.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
             
-            const btn = document.getElementById('btn-enviar');
-            btn.disabled = true;
-            btn.innerText = "Procesando...";
+            const itemsMenu = document.querySelectorAll('.sidebar-item');
+            itemsMenu.forEach(item => item.classList.remove('active'));
+            const itemActivo = document.querySelector(`[data-target="${targetId}"]`);
+            if(itemActivo) itemActivo.classList.add('active');
+        }
 
-            const datosPedido = {
-                accion: "nuevoPedido",
-                cliente: document.getElementById('cliente').value.trim(),
-                zona: document.getElementById('zona').value.trim(),
-                materiales: document.getElementById('materiales').value.trim()
-            };
-
-            fetch(URL_API, {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                    "Content-Type": "text/plain"
-                },
-                body: JSON.stringify(datosPedido)
-            })
+        // CARGA LAS MÉTRICAS Y LA TABLA DE CORRALONES DIRECTO DESDE EL SHEETS
+        function inicializarDatosPanel() {
+            fetch(`${URL_API}?accion=cargarPanel`)
             .then(res => res.json())
-            .then(respuesta => {
-                if(respuesta.status === "success") {
-                    document.getElementById('form-pedido').style.display = 'none';
-                    document.getElementById('codigo-pedido').innerText = respuesta.id;
-                    document.getElementById('box-exito').style.display = 'block';
-                } else {
-                    alert("Hubo un problema al procesar el pedido: " + respuesta.message);
-                    btn.disabled = false;
-                    btn.innerText = "Enviar Solicitud 🚀";
+            .then(data => {
+                if(data.status === "success") {
+                    // Cargar contadores de arriba
+                    document.getElementById('met-total').innerText = data.metricas.total;
+                    document.getElementById('met-activos').innerText = data.metricas.activos;
+                    document.getElementById('met-deuda').innerText = data.metricas.conDeuda;
+
+                    // Construir las filas de corralones de forma dinámica
+                    var tbody = document.getElementById('tabla-corralones-body');
+                    tbody.innerHTML = ""; // Vaciar cargando
+
+                    data.corralones.forEach(corr => {
+                        var fila = document.createElement('tr');
+                        
+                        var badgeClass = "bg-activo";
+                        if(corr.estado.toLowerCase().includes("revi")) badgeClass = "bg-revision";
+                        if(corr.estado.toLowerCase().includes("inac")) badgeClass = "bg-inactivo";
+
+                        var deudaTxt = corr.deuda > 0 ? `$${corr.deuda.toLocaleString('es-AR')}` : "$0";
+                        var deudaClass = corr.deuda > 0 ? "deuda-alerta" : "deuda-al-dia";
+
+                        fila.innerHTML = `
+                            <td><b>${corr.nombre}</b></td>
+                            <td>${corr.tipo}</td>
+                            <td>${corr.zona}</td>
+                            <td>
+                                <div class="ws-main-badge">
+                                    <button class="ws-main-btn">📱 Chat</button>
+                                    <div class="ws-main-menu">
+                                        <a href="https://wa.me/${corr.whatsapp}?text=Hola%20${encodeURIComponent(corr.nombre)},%20tenemos%20una%20consulta%20de%20deuda." target="_blank">💬 Reclamo Saldo</a>
+                                        <a href="https://wa.me/${corr.whatsapp}" target="_blank">⚙️ Soporte General</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge ${badgeClass}">${corr.estado}</span></td>
+                            <td><span class="${deudaClass}">${deudaTxt}</span></td>
+                        `;
+                        tbody.appendChild(fila);
+                    });
                 }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Error de conexión con el servidor de Sheets.");
-                btn.disabled = false;
-                btn.innerText = "Enviar Solicitud 🚀";
+            }).catch(err => console.error("Error al sincronizar corralones:", err));
+        }
+
+        // BUSCADOR EN TIEMPO REAL PARA SOLAPA PEDIDOS
+        function consultarPedidoSheets() {
+            var idInput = document.getElementById('input-id-pedido').value.trim().toUpperCase().replace('#','');
+            if(!idInput) return;
+
+            document.getElementById('loading-status').style.display = "block";
+            document.getElementById('resultado-real').style.display = "none";
+
+            fetch(`${URL_API}?accion=buscarPedido&id=${idInput}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading-status').style.display = "none";
+                if(data.status === "not_found") {
+                    alert("Pedido no encontrado. Verifique la solapa Pedidos en su Excel.");
+                    return;
+                }
+                document.getElementById('res-real-id').innerText = "Pedido: #" + data.id;
+                document.getElementById('res-real-cliente').innerText = data.cliente;
+                document.getElementById('res-real-zona').innerText = data.zona;
+                document.getElementById('res-real-materiales').innerText = data.materiales;
+                document.getElementById('res-real-estado').innerText = data.estado;
+                document.getElementById('resultado-real').style.display = "block";
             });
         }
     </script>
