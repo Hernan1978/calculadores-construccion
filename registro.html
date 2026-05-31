@@ -116,43 +116,53 @@
             line-height: 1.5;
         }
 
-        /* MENÚ DESPLEGABLE DE WHATSAPP (ESTILO POPUP) */
-        .ws-container {
+        /* ICONO DE WHATSAPP CON OPCIONES EN EL PANEL PRINCIPAL */
+        .ws-main-badge {
             position: relative;
             display: inline-block;
         }
 
-        .ws-menu {
-            display: none;
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            width: 260px;
-            z-index: 100;
-            overflow: hidden;
+        .ws-main-btn {
+            background: #25d366;
+            color: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            border: none;
+            cursor: pointer;
         }
 
-        .ws-menu a {
+        .ws-main-menu {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 240px;
+            z-index: 200;
+            overflow: hidden;
+            border: 1px solid var(--gray-border);
+        }
+
+        .ws-main-menu a {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 1rem;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
             color: #1e293b;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             text-align: left;
             border-bottom: 1px solid var(--gray-border);
-            transition: background 0.2s;
         }
-        .ws-menu a:last-child { border-bottom: none; }
-        .ws-menu a:hover { background: #f1f5f9; }
+        .ws-main-menu a:last-child { border-bottom: none; }
+        .ws-main-menu a:hover { background: #f1f5f9; }
 
-        .ws-container:hover .ws-menu {
+        .ws-main-badge:hover .ws-main-menu {
             display: block;
         }
 
@@ -358,16 +368,6 @@
             color: var(--text-main);
         }
 
-        .filters-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            background: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
         .form-control {
             padding: 0.5rem 0.75rem;
             border: 1px solid var(--gray-border);
@@ -392,18 +392,6 @@
             flex-direction: column;
             gap: 0.5rem;
         }
-
-        fieldset {
-            grid-column: 1 / -1;
-            border: 1px solid var(--gray-border);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        textarea.form-control { grid-column: 1 / -1; height: 80px; }
 
         .badge {
             display: inline-block;
@@ -439,13 +427,7 @@
             </div>
         </div>
 
-        <div class="ws-container">
-            <div class="ws-menu">
-                <a href="https://wa.me/5491112345678?text=Hola,%20quiero%20comprar%20materiales" target="_blank">🛒 Quiero comprar materiales</a>
-                <a href="https://wa.me/5491112345678?text=Hola,%20tengo%20un%20problema%20o%20consulta" target="_blank">💬 Problema / Consulta</a>
-            </div>
-            <button class="btn btn-primary">Contactar por WhatsApp</button>
-        </div>
+        <a href="https://wa.me/5491112345678?text=Hola,%20quiero%20sumar%20mi%20negocio" class="btn btn-primary">Contactar por WhatsApp</a>
     </div>
 
     <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
@@ -459,7 +441,7 @@
                 <li class="sidebar-item active" data-target="dashboard"><a onclick="navegar('dashboard')">📊 Dashboard</a></li>
                 <li class="sidebar-item" data-target="corralones"><a onclick="navegar('corralones')">🏗️ Corralones</a></li>
                 <li class="sidebar-item" data-target="deudas"><a onclick="navegar('deudas')">💰 Deudas</a></li>
-                <li class="sidebar-item" data-target="servicios"><a onclick="navegar('servicios')">📈 Servicios</a></li>
+                <li class="sidebar-item" data-target="servicios"><a onclick="navegar('servicios')">📈 Seguimiento</a></li>
                 <li class="sidebar-item" data-target="mensajes"><a onclick="navegar('mensajes')">💬 Mensajes</a></li>
                 <li class="sidebar-item" data-target="ajustes"><a onclick="navegar('ajustes')">⚙️ Ajustes</a></li>
                 <li class="sidebar-item sidebar-logout"><a onclick="cerrarSesion()">🚪 Salir al Sitio</a></li>
@@ -499,13 +481,57 @@
                             <tr><th>Nombre</th><th>Tipo</th><th>Zona</th><th>WhatsApp</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td><b>Corralón Sarandí</b></td><td>🏗️ Corralón</td><td>Sarandí</td><td>1123456789</td><td><span class="badge badge-success">Activo</span></td><td style="color:var(--danger); font-weight:600;">$15.000</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Corralón Sarandí')">Ver</button></td></tr>
-                            <tr><td><b>Placas Avellaneda</b></td><td>📐 Casa de Durlock</td><td>Avellaneda</td><td>1154321098</td><td><span class="badge badge-warning">En revisión</span></td><td style="color:var(--danger); font-weight:600;">$8.500</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Placas Avellaneda')">Ver</button></td></tr>
-                            <tr><td><b>Materiales Wilde</b></td><td>🏗️ Corralón</td><td>Wilde</td><td>1167890123</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Materiales Wilde')">Ver</button></td></tr>
-                            <tr><td><b>Maderera Wilde</b></td><td>🪵 Maderera</td><td>Wilde</td><td>1134567812</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Maderera Wilde')">Ver</button></td></tr>
-                            <tr><td><b>Durlock Mitre</b></td><td>📐 Casa de Durlock</td><td>Avellaneda</td><td>1178901234</td><td><span class="badge badge-success">Activo</span></td><td style="color:var(--danger); font-weight:600;">$22.000</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Durlock Mitre')">Ver</button></td></tr>
-                            <tr><td><b>Ferretería El Tornillo</b></td><td>🔩 Ferretería</td><td>Avellaneda</td><td>1198765432</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Ferretería El Tornillo')">Ver</button></td></tr>
-                            <tr><td><b>Yesería Centenario</b></td><td>📐 Casa de Durlock</td><td>Sarandí</td><td>1133221100</td><td><span class="badge badge-danger">Inactivo</span></td><td>$0</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Yesería Centenario')">Ver</button></td></tr>
+                            <tr>
+                                <td><b>Corralón Sarandí</b></td>
+                                <td>🏗️ Corralón</td>
+                                <td>Sarandí</td>
+                                <td>
+                                    <div class="ws-main-badge">
+                                        <button class="ws-main-btn">📱 WS</button>
+                                        <div class="ws-main-menu">
+                                            <a href="https://wa.me/5491123456789?text=Hola,%20quiero%20comprar%20materiales" target="_blank">🛒 Quiero comprar materiales</a>
+                                            <a href="https://wa.me/5491123456789?text=Hola,%20tengo%20un%20problema%20o%20consulta" target="_blank">💬 Problema / Consulta</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge badge-success">Activo</span></td>
+                                <td style="color:var(--danger); font-weight:600;">$15.000</td>
+                                <td><button class="btn btn-outline btn-sm" onclick="verFicha('Corralón Sarandí')">Ver</button></td>
+                            </tr>
+                            <tr>
+                                <td><b>Placas Avellaneda</b></td>
+                                <td>📐 Casa de Durlock</td>
+                                <td>Avellaneda</td>
+                                <td>
+                                    <div class="ws-main-badge">
+                                        <button class="ws-main-btn">📱 WS</button>
+                                        <div class="ws-main-menu">
+                                            <a href="https://wa.me/5491154321098?text=Hola,%20quiero%20comprar%20materiales" target="_blank">🛒 Quiero comprar materiales</a>
+                                            <a href="https://wa.me/5491154321098?text=Hola,%20tengo%20un%20problema%20o%20consulta" target="_blank">💬 Problema / Consulta</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge badge-warning">En revisión</span></td>
+                                <td style="color:var(--danger); font-weight:600;">$8.500</td>
+                                <td><button class="btn btn-outline btn-sm" onclick="verFicha('Placas Avellaneda')">Ver</button></td>
+                            </tr>
+                            <tr>
+                                <td><b>Materiales Wilde</b></td>
+                                <td>🏗️ Corralón</td>
+                                <td>Wilde</td>
+                                <td>
+                                    <div class="ws-main-badge">
+                                        <button class="ws-main-btn">📱 WS</button>
+                                        <div class="ws-main-menu">
+                                            <a href="https://wa.me/5491167890123?text=Hola,%20quiero%20comprar%20materiales" target="_blank">🛒 Quiero comprar materiales</a>
+                                            <a href="https://wa.me/5491167890123?text=Hola,%20tengo%20un%20problema%20o%20consulta" target="_blank">💬 Problema / Consulta</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge badge-success">Activo</span></td>
+                                <td>$0</td>
+                                <td><button class="btn btn-outline btn-sm" onclick="verFicha('Materiales Wilde')">Ver</button></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -540,8 +566,27 @@
             </div>
 
             <div id="servicios" class="panel-section">
-                <h2>Seguimiento</h2>
-                <p>Sección de analítica interna.</p>
+                <h2>Seguimiento de Pedidos del Sistema</h2>
+                <p style="margin-bottom: 1.5rem; color: #64748b;">Cada vez que un cliente genera una cotización en Materiales Ya, el sistema le asigna un código único.</p>
+                
+                <div class="filters-bar" style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="input-pedido" class="form-control" placeholder="Ej: MY-9482 o MY-1044">
+                    <button class="btn btn-primary" style="padding: 0.5rem 1.5rem;" onclick="buscarPedido()">🔍 Buscar</button>
+                </div>
+
+                <div id="resultado-pedido" class="table-container" style="margin-top: 1.5rem; display: none; padding: 1.5rem; background: white;">
+                    <h3 id="res-codigo" style="color: var(--accent); margin-bottom: 0.5rem;">Pedido: #MY-9482</h3>
+                    <p style="margin-bottom: 1rem;"><b>Estado:</b> <span class="badge badge-success" id="res-estado">Derivado al Corralón</span></p>
+                    <hr style="border: 0; border-top: 1px solid var(--gray-border); margin-bottom: 1rem;">
+                    <p style="margin-bottom: 0.5rem;"><b>Asignado a:</b> <span id="res-comercio">Corralón Sarandí</span></p>
+                    <p style="margin-bottom: 0.5rem;"><b>Zona del Cliente:</b> Avellaneda Centro</p>
+                    <p style="margin-bottom: 1rem;"><b>Detalle de Materiales solicitado:</b></p>
+                    <blockquote style="background: var(--gray-light); padding: 1rem; border-left: 4px solid var(--accent); font-style: italic;" id="res-materiales">
+                        - 50 Bolsas de Cemento Avellaneda<br>
+                        - 30 Bolsas de Cal Cacique<br>
+                        - 4 M3 de Arena Fina
+                    </blockquote>
+                </div>
             </div>
 
             <div id="mensajes" class="panel-section">
@@ -595,6 +640,18 @@
             document.getElementById('f-nombre').value = nombre;
             document.getElementById('f-tipo').value = nombre.includes("Placas") || nombre.includes("Durlock") ? "📐 Casa de Durlock" : "🏗️ Corralón";
             navegar('ficha-form');
+        }
+
+        // FUNCIÓN NUEVA PARA BUSCAR EL NÚMERO CORRELATIVO GENERADO
+        function buscarPedido() {
+            const codigo = document.getElementById('input-pedido').value.trim();
+            if(!codigo) {
+                alert("Por favor, ingrese un número de pedido.");
+                return;
+            }
+            
+            document.getElementById('res-codigo').innerText = "Pedido: #" + codigo.toUpperCase();
+            document.getElementById('resultado-pedido').style.display = "block";
         }
     </script>
 </body>
