@@ -207,4 +207,325 @@
 
         .metric-card {
             background: white;
-            padding: 1
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 4px solid #94a3b8;
+        }
+
+        .metric-card h3 {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card p {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-card.active-card { border-top-color: var(--success); }
+        .metric-card.debt-card { border-top-color: var(--danger); }
+        .metric-card.no-debt-card { border-top-color: var(--accent); }
+        .metric-card.pending-card { border-top-color: var(--warning); }
+
+        /* TABLAS */
+        .table-container {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: var(--gray-light);
+            color: #64748b;
+            padding: 0.85rem 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--gray-border);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-border);
+            vertical-align: middle;
+        }
+
+        /* BOTONES */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-gray { background: #64748b; color: white; }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 0.25rem;
+            margin-right: 0.25rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-border);
+            color: var(--text-main);
+        }
+
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-control {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray-border);
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        input[type="text"].form-control { flex-grow: 1; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        fieldset {
+            grid-column: 1 / -1;
+            border: 1px solid var(--gray-border);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        textarea.form-control { grid-column: 1 / -1; height: 80px; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 0.25rem;
+        }
+        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef9c3; color: #854d0e; }
+        .badge-info { background: #e0f2fe; color: #0369a1; }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-publica">
+        <h1>Sumá tu negocio a Materiales Ya</h1>
+        <p class="subtitle">Llegá a clientes que ya están buscando tus materiales. Sin cuota mensual — pagás solo por los contactos que recibís.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="icon">📦</span>
+                <h3>Pedidos directos</h3>
+                <p>Clientes de tu zona con la lista de materiales lista para presupuestar.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">📍</span>
+                <h3>En el mapa</h3>
+                <p>Tu negocio visible con datos de contacto directos y el botón de WhatsApp.</p>
+            </div>
+        </div>
+
+        <a href="https://wa.me/5491112345678?text=Hola,%20quiero%20sumar%20mi%20negocio" class="btn btn-primary">Contactar por WhatsApp</a>
+    </div>
+
+    <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
+
+
+    <div id="panel-admin" class="admin-layout">
+        
+        <div class="sidebar">
+            <div class="sidebar-brand">🏗️ Materiales Ya Admin</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-item active" data-target="dashboard"><a onclick="navegar('dashboard')">📊 Dashboard</a></li>
+                <li class="sidebar-item" data-target="corralones"><a onclick="navegar('corralones')">🏗️ Corralones</a></li>
+                <li class="sidebar-item" data-target="deudas"><a onclick="navegar('deudas')">💰 Deudas</a></li>
+                <li class="sidebar-item" data-target="servicios"><a onclick="navegar('servicios')">📈 Servicios</a></li>
+                <li class="sidebar-item" data-target="mensajes"><a onclick="navegar('mensajes')">💬 Mensajes</a></li>
+                <li class="sidebar-item" data-target="ajustes"><a onclick="navegar('ajustes')">⚙️ Ajustes</a></li>
+                <li class="sidebar-item sidebar-logout"><a onclick="cerrarSesion()">🚪 Salir al Sitio</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+
+            <div id="dashboard" class="panel-section active">
+                <h2>Panel Principal</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card"><h3>Total Comercios</h3><p>7</p></div>
+                    <div class="metric-card active-card"><h3>Activos</h3><p>5</p></div>
+                    <div class="metric-card debt-card"><h3>Con Deuda</h3><p>3</p></div>
+                    <div class="metric-card no-debt-card"><h3>Sin Deuda</h3><p>4</p></div>
+                </div>
+
+                <h3>Últimos Cambios y Alertas</h3>
+                <div class="table-container" style="margin-top: 1rem;">
+                    <table>
+                        <thead>
+                            <tr><th>Comercio</th><th>Alerta / Evento</th><th>Fecha</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><b>Corralón Sarandí</b></td><td><span class="badge badge-danger">Deuda Vencida</span></td><td>Hoy</td></tr>
+                            <tr><td><b>Placas Avellaneda</b></td><td><span class="badge badge-warning">En revisión técnica</span></td><td>Hoy</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="corralones" class="panel-section">
+                <h2>Corralones y Proveedores</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Nombre</th><th>Tipo</th><th>Zona</th><th>WhatsApp</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><b>Corralón Sarandí</b></td><td>🏗️ Corralón</td><td>Sarandí</td><td>1123456789</td><td><span class="badge badge-success">Activo</span></td><td style="color:var(--danger); font-weight:600;">$15.000</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Corralón Sarandí')">Ver</button></td></tr>
+                            <tr><td><b>Placas Avellaneda</b></td><td>📐 Casa de Durlock</td><td>Avellaneda</td><td>1154321098</td><td><span class="badge badge-warning">En revisión</span></td><td style="color:var(--danger); font-weight:600;">$8.500</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Placas Avellaneda')">Ver</button></td></tr>
+                            <tr><td><b>Materiales Wilde</b></td><td>🏗️ Corralón</td><td>Wilde</td><td>1167890123</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Materiales Wilde')">Ver</button></td></tr>
+                            <tr><td><b>Maderera Wilde</b></td><td>🪵 Maderera</td><td>Wilde</td><td>1134567812</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Maderera Wilde')">Ver</button></td></tr>
+                            <tr><td><b>Durlock Mitre</b></td><td>📐 Casa de Durlock</td><td>Avellaneda</td><td>1178901234</td><td><span class="badge badge-success">Activo</span></td><td style="color:var(--danger); font-weight:600;">$22.000</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Durlock Mitre')">Ver</button></td></tr>
+                            <tr><td><b>Ferretería El Tornillo</b></td><td>🔩 Ferretería</td><td>Avellaneda</td><td>1198765432</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Ferretería El Tornillo')">Ver</button></td></tr>
+                            <tr><td><b>Yesería Centenario</b></td><td>📐 Casa de Durlock</td><td>Sarandí</td><td>1133221100</td><td><span class="badge badge-danger">Inactivo</span></td><td>$0</td><td><button class="btn btn-outline btn-sm" onclick="verFicha('Yesería Centenario')">Ver</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ficha-form" class="panel-section">
+                <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
+                    <h2 id="ficha-titulo">Ficha de comercio</h2>
+                    <button class="btn btn-outline btn-sm" style="padding: 0.5rem 1rem; color: #f87171; border-color: rgba(248, 113, 113, 0.3);" onclick="cerrarSesion()">🚪 Salir al Sitio</button>
+                </div>
+                <form onsubmit="event.preventDefault(); navegar('corralones');">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombre comercial</label><input type="text" class="form-control" id="f-nombre" value=""></div>
+                        <div class="form-group"><label>Tipo de negocio</label><input type="text" class="form-control" id="f-tipo" value=""></div>
+                        <div class="form-group"><label>Zona</label><input type="text" class="form-control" value="Zona Sur"></div>
+                        <div class="form-group"><label>WhatsApp</label><input type="text" class="form-control" value="WhatsApp"></div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="deudas" class="panel-section">
+                <h2>Control de Deudas</h2>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Comercio</th><th>Monto</th><th>Estado</th></tr></thead>
+                        <tbody>
+                            <tr><td><b>Corralón Sarandí</b></td><td style="color:var(--danger); font-weight:600;">$15.000</td><td><span class="badge badge-danger">Vencida</span></td></tr>
+                            <tr><td><b>Durlock Mitre</b></td><td style="color:var(--danger); font-weight:600;">$22.000</td><td><span class="badge badge-danger">Vencida</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="servicios" class="panel-section">
+                <h2>Seguimiento</h2>
+                <p>Sección de analítica interna.</p>
+            </div>
+
+            <div id="mensajes" class="panel-section">
+                <h2>Mensajes</h2>
+                <p>Buzón de entrada de consultas.</p>
+            </div>
+
+            <div id="ajustes" class="panel-section">
+                <h2>Ajustes</h2>
+                <p>Configuración general.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const CLAVE_SECRETA = '1234';
+
+        function desbloquearPanel() {
+            const intento = prompt('Ingrese la clave de administrador:');
+            if (intento === CLAVE_SECRETA) {
+                document.getElementById('pantalla-publica').style.display = 'none';
+                document.getElementById('panel-admin').style.display = 'flex';
+                document.querySelector('.boton-escondido').style.display = 'none';
+                navegar('dashboard');
+            } else if (intento !== null) {
+                alert('Clave incorrecta.');
+            }
+        }
+
+        function cerrarSesion() {
+            document.getElementById('panel-admin').style.display = 'none';
+            document.getElementById('pantalla-publica').style.display = 'flex';
+            document.querySelector('.boton-escondido').style.display = 'block';
+        }
+
+        function navegar(targetId) {
+            const secciones = document.querySelectorAll('.panel-section');
+            secciones.forEach(sec => sec.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
+
+            const itemsMenu = document.querySelectorAll('.sidebar-item');
+            itemsMenu.forEach(item => item.classList.remove('active'));
+            
+            const itemActivo = document.querySelector(`[data-target="${targetId}"]`);
+            if(itemActivo) itemActivo.classList.add('active');
+        }
+
+        function verFicha(nombre) {
+            document.getElementById('ficha-titulo').innerText = "Ficha de: " + nombre;
+            document.getElementById('f-nombre').value = nombre;
+            document.getElementById('f-tipo').value = nombre.includes("Placas") || nombre.includes("Durlock") ? "📐 Casa de Durlock" : "🏗️ Corralón";
+            navegar('ficha-form');
+        }
+    </script>
+</body>
+</html>
