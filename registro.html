@@ -141,4 +141,569 @@
             font-size: 1.25rem;
             font-weight: 700;
             padding: 0 1.5rem 1.5rem 1.5rem;
-            border-bottom: 1px solid #3341
+            border-bottom: 1px solid #334155;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .sidebar-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .sidebar-item a:hover, .sidebar-item.active a {
+            background-color: #334155;
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        .sidebar-logout {
+            border-top: 1px solid #334155;
+            padding-top: 1rem;
+        }
+        .sidebar-logout a {
+            color: #f87171 !important;
+        }
+        .sidebar-logout a:hover {
+            background-color: #7f1d1d !important;
+            color: white !important;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 2rem;
+            min-width: 0;
+        }
+
+        .panel-section {
+            display: none;
+        }
+
+        .panel-section.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* CONTADORES */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-top: 4px solid #94a3b8;
+        }
+
+        .metric-card h3 {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card p {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-card.active-card { border-top-color: var(--success); }
+        .metric-card.debt-card { border-top-color: var(--danger); }
+        .metric-card.no-debt-card { border-top-color: var(--accent); }
+        .metric-card.pending-card { border-top-color: var(--warning); }
+
+        /* TABLAS */
+        .table-container {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: var(--gray-light);
+            color: #64748b;
+            padding: 0.85rem 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--gray-border);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-border);
+            vertical-align: middle;
+        }
+
+        /* BOTONES */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-gray { background: #64748b; color: white; }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 0.25rem;
+            margin-right: 0.25rem;
+            font-weight: 500;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-border);
+            color: var(--text-main);
+        }
+
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-control {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray-border);
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        input[type="text"].form-control { flex-grow: 1; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        fieldset {
+            grid-column: 1 / -1;
+            border: 1px solid var(--gray-border);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        textarea.form-control { grid-column: 1 / -1; height: 80px; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 0.25rem;
+        }
+        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef9c3; color: #854d0e; }
+        .badge-info { background: #e0f2fe; color: #0369a1; }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-publica">
+        <h1>Sumá tu negocio a Materiales Ya</h1>
+        <p class="subtitle">Llegá a clientes que ya están buscando tus materiales. Sin cuota mensual — pagás solo por los contactos que recibís.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="icon">📦</span>
+                <h3>Pedidos directos</h3>
+                <p>Clientes de tu zona con la lista de materiales lista para presupuestar.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon">📍</span>
+                <h3>En el mapa</h3>
+                <p>Tu negocio visible con datos de contacto directos y el botón de WhatsApp.</p>
+            </div>
+        </div>
+
+        <a href="https://wa.me/5491112345678?text=Hola,%20quiero%20sumar%20mi%20negocio%20a%20la%20plataforma" class="btn btn-primary">Contactar por WhatsApp</a>
+    </div>
+
+    <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
+
+
+    <div id="panel-admin" class="admin-layout">
+        
+        <div class="sidebar">
+            <div class="sidebar-brand">🏗️ Materiales Ya Admin</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-item active" data-target="dashboard"><a onclick="navegar('dashboard')">📊 Dashboard</a></li>
+                <li class="sidebar-item" data-target="corralones"><a onclick="navegar('corralones')">🏗️ Corralones</a></li>
+                <li class="sidebar-item" data-target="deudas"><a onclick="navegar('deudas')">💰 Deudas</a></li>
+                <li class="sidebar-item" data-target="servicios"><a onclick="navegar('servicios')">📈 Servicios</a></li>
+                <li class="sidebar-item" data-target="mensajes"><a onclick="navegar('mensajes')">💬 Mensajes</a></li>
+                <li class="sidebar-item" data-target="ajustes"><a onclick="navegar('ajustes')">⚙️ Ajustes</a></li>
+                <li class="sidebar-item sidebar-logout"><a onclick="cerrarSesion()">🚪 Salir al Sitio</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+
+            <div id="dashboard" class="panel-section active">
+                <h2>Panel Principal</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card"><h3>Total Comercios</h3><p id="count-total">7</p></div>
+                    <div class="metric-card active-card"><h3>Activos</h3><p id="count-activos">5</p></div>
+                    <div class="metric-card debt-card"><h3>Con Deuda</h3><p id="count-deuda">3</p></div>
+                    <div class="metric-card no-debt-card"><h3>Sin Deuda</h3><p id="count-sindeuda">4</p></div>
+                    <div class="metric-card pending-card"><h3>Pendientes Revisión</h3><p id="count-pendientes">1</p></div>
+                </div>
+
+                <h3>Últimos Cambios y Alertas</h3>
+                <div class="table-container" style="margin-top: 1rem;">
+                    <table>
+                        <thead>
+                            <tr><th>Comercio</th><th>Alerta / Evento</th><th>Fecha</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><b>Corralón Sarandí</b></td><td><span class="badge badge-danger">Deuda Vencida</span></td><td>Hoy, 18:45</td></tr>
+                            <tr><td><b>Placas Avellaneda</b></td><td><span class="badge badge-warning">En revisión técnica</span></td><td>Hoy, 14:10</td></tr>
+                            <tr><td><b>Maderera Wilde</b></td><td><span class="badge badge-success">Pago Registrado</span></td><td>Ayer, 09:30</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="corralones" class="panel-section">
+                <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
+                    <h2>Corralones y Proveedores</h2>
+                    <button class="btn btn-primary btn-sm" style="padding:0.5rem 1rem;" onclick="abrirFichaNueva()">➕ Agregar corralón</button>
+                </div>
+                <div class="filters-bar">
+                    <input type="text" class="form-control" placeholder="Buscar por nombre...">
+                    <select class="form-control"><option>Todas las zonas</option><option>Sarandí</option><option>Avellaneda</option><option>Wilde</option></select>
+                    <select class="form-control"><option>Todos los estados</option><option>Activo</option><option>Inactivo</option><option>En revisión</option></select>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th><th>Tipo</th><th>Zona</th><th>WhatsApp</th><th>Estado</th><th>Deuda</th><th>Última Update</th><th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Corralón Sarandí</b></td><td>🏗️ Corralón</td><td>Sarandí</td><td>1123456789</td><td><span class="badge badge-success">Activo</span></td><td style="color:var(--danger); font-weight:600;">$15.000</td><td>Hoy</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" onclick="verFicha('Corralón Sarandí')">Ver</button>
+                                    <button class="btn btn-outline btn-sm" onclick="editarFicha('Corralón Sarandí')">Editar</button>
+                                    <button class="btn btn-gray btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="alert('Marcado con deuda')">Marcar deuda</button>
+                                    <button class="btn btn-outline btn-sm" onclick="alert('Desactivado')">Desactivar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Placas Avellaneda</b></td><td>📐 Casa de Durlock</td><td>Avellaneda</td><td>1154321098</td><td><span class="badge badge-warning">En revisión</span></td><td style="color:var(--danger); font-weight:600;">$8.500</td><td>Hoy</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" onclick="verFicha('Placas Avellaneda')">Ver</button>
+                                    <button class="btn btn-outline btn-sm" onclick="editarFicha('Placas Avellaneda')">Editar</button>
+                                    <button class="btn btn-gray btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="alert('Marcado con deuda')">Marcar deuda</button>
+                                    <button class="btn btn-outline btn-sm" onclick="alert('Desactivado')">Desactivar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Materiales Wilde</b></td><td>🏗️ Corralón</td><td>Wilde</td><td>1167890123</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td>Ayer</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" onclick="verFicha('Materiales Wilde')">Ver</button>
+                                    <button class="btn btn-outline btn-sm" onclick="editarFicha('Materiales Wilde')">Editar</button>
+                                    <button class="btn btn-gray btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="alert('Marcado con deuda')">Marcar deuda</button>
+                                    <button class="btn btn-outline btn-sm" onclick="alert('Desactivado')">Desactivar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Maderera Wilde</b></td><td>🪵 Maderera</td><td>Wilde</td><td>1134567812</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td>Ayer</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" onclick="verFicha('Maderera Wilde')">Ver</button>
+                                    <button class="btn btn-outline btn-sm" onclick="editarFicha('Maderera Wilde')">Editar</button>
+                                    <button class="btn btn-gray btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="alert('Marcado con deuda')">Marcar deuda</button>
+                                    <button class="btn btn-outline btn-sm" onclick="alert('Desactivado')">Desactivar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Durlock Mitre</b></td><td>📐 Casa de Durlock</td><td>Avellaneda</td><td>1178901234</td><td><span class="badge badge-success">Activo</span></td><td style="color:var(--danger); font-weight:600;">$22.000</td><td>28/05/2026</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" onclick="verFicha('Durlock Mitre')">Ver</button>
+                                    <button class="btn btn-outline btn-sm" onclick="editarFicha('Durlock Mitre')">Editar</button>
+                                    <button class="btn btn-gray btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="alert('Marcado con deuda')">Marcar deuda</button>
+                                    <button class="btn btn-outline btn-sm" onclick="alert('Desactivado')">Desactivar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Ferretería El Tornillo</b></td><td>🔩 Ferretería</td><td>Avellaneda</td><td>1198765432</td><td><span class="badge badge-success">Activo</span></td><td>$0</td><td>27/05/2026</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" onclick="verFicha('Ferretería El Tornillo')">Ver</button>
+                                    <button class="btn btn-outline btn-sm" onclick="editarFicha('Ferretería El Tornillo')">Editar</button>
+                                    <button class="btn btn-gray btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="alert('Marcado con deuda')">Marcar deuda</button>
+                                    <button class="btn btn-outline btn-sm" onclick="alert('Desactivado')">Desactivar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Yesería Centenario</b></td><td>📐 Casa de Durlock</td><td>Sarandí</td><td>1133221100</td><td><span class="badge badge-danger" style="background:#fee2e2; color:#991b1b;">Inactivo</span></td><td>$0</td><td>25/05/2026</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" onclick="verFicha('Yesería Centenario')">Ver</button>
+                                    <button class="btn btn-outline btn-sm" onclick="editarFicha('Yesería Centenario')">Editar</button>
+                                    <button class="btn btn-gray btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                                    <button class="btn btn-danger btn-sm" onclick="alert('Marcado con deuda')">Marcar deuda</button>
+                                    <button class="btn btn-outline btn-sm" onclick="alert('Activado')">Activar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ficha-form" class="panel-section">
+                <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
+                    <h2 id="ficha-titulo">Ficha de corralón</h2>
+                    <button class="btn btn-outline btn-sm" onclick="navegar('corralones')">Volver</button>
+                </div>
+                <form onsubmit="event.preventDefault(); navegar('corralones');">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombre comercial</label><input type="text" class="form-control" id="f-nombre" value="Corralón Sarandí"></div>
+                        <div class="form-group"><label>Tipo de negocio</label><select class="form-control" id="f-tipo"><option>🏗️ Corralón</option><option>📐 Casa de Durlock</option><option>🪵 Maderera</option><option>🔩 Ferretería</option></select></div>
+                        <div class="form-group"><label>Dirección</label><input type="text" class="form-control" id="f-direccion" value="Av. Mitre 2900"></div>
+                        <div class="form-group"><label>Zona</label><input type="text" class="form-control" id="f-zona" value="Sarandí"></div>
+                        <div class="form-group"><label>Teléfono</label><input type="text" class="form-control" value="4204-1234"></div>
+                        <div class="form-group"><label>WhatsApp</label><input type="text" class="form-control" id="f-whatsapp" value="1123456789"></div>
+                        <div class="form-group"><label>Horario</label><input type="text" class="form-control" value="8 a 18hs"></div>
+                        <div class="form-group"><label>Coordenadas del mapa</label><input type="text" class="form-control" value="-34.67,-58.34"></div>
+                        <div class="form-group"><label>Estado</label><select class="form-control"><option>Activo</option><option>Inactivo</option><option>En revisión</option></select></div>
+                        <fieldset>
+                            <legend>Control de Cuenta y Datos Internos</legend>
+                            <div class="form-group"><label>Estado de deuda</label><select class="form-control"><option>Con deuda</option><option>Sin deuda</option></select></div>
+                            <div class="form-group"><label>Monto adeudado</label><input type="text" class="form-control" value="$15.000"></div>
+                            <div class="form-group"><label>Vencimiento</label><input type="date" class="form-control" value="2026-06-10"></div>
+                            <div class="form-group"><label>Último contacto</label><input type="date" class="form-control" value="2026-05-28"></div>
+                            <div class="form-group" style="grid-column:1/-1;"><label>Observaciones internas</label><textarea class="form-control"></textarea></div>
+                        </fieldset>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-sm" style="margin-top:1.5rem; padding:0.5rem 1rem;">Guardar Cambios</button>
+                </form>
+            </div>
+
+            <div id="deudas" class="panel-section">
+                <h2>Control de Deudas</h2>
+                <div class="filters-bar">
+                    <button class="btn btn-outline btn-sm">⚠️ Con deuda</button>
+                    <button class="btn btn-outline btn-sm">🚨 Vencida</button>
+                    <button class="btn btn-outline btn-sm">📅 Próxima a vencer</button>
+                    <button class="btn btn-outline btn-sm">✅ Pagada</button>
+                    <button class="btn btn-outline btn-sm">🔍 En revisión</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Comercio</th><th>Monto</th><th>Vencimiento</th><th>Estado</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Corralón Sarandí</b></td><td style="color:var(--danger); font-weight:600;">$15.000</td><td>10/06/2026</td><td><span class="badge badge-danger">Vencida</span></td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" onclick="alert('Pago registrado')">Registrar pago</button>
+                                    <button class="btn btn-outline btn-sm">Editar saldo</button>
+                                    <button class="btn btn-primary btn-sm">Enviar aviso</button>
+                                    <button class="btn btn-gray btn-sm">Ver historial</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Durlock Mitre</b></td><td style="color:var(--danger); font-weight:600;">$22.000</td><td>15/06/2026</td><td><span class="badge badge-danger">Vencida</span></td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" onclick="alert('Pago registrado')">Registrar pago</button>
+                                    <button class="btn btn-outline btn-sm">Editar saldo</button>
+                                    <button class="btn btn-primary btn-sm">Enviar aviso</button>
+                                    <button class="btn btn-gray btn-sm">Ver historial</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Placas Avellaneda</b></td><td style="color:var(--warning); font-weight:600;">$8.500</td><td>22/06/2026</td><td><span class="badge badge-warning">En revisión</span></td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" onclick="alert('Pago registrado')">Registrar pago</button>
+                                    <button class="btn btn-outline btn-sm">Editar saldo</button>
+                                    <button class="btn btn-primary btn-sm">Enviar aviso</button>
+                                    <button class="btn btn-gray btn-sm">Ver historial</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="servicios" class="panel-section">
+                <h2>Seguimiento del Servicio</h2>
+                <p style="margin-bottom:1.5rem; color:#64748b;">Métricas internas de control.</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>ID Pedido</th><th>Comercio</th><th>Estado</th><th>Fecha Alta</th><th>Última Resp.</th><th>Resultado</th><th>Prioridad</th><th>Notas</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>#1024</td><td>Corralón Sarandí</td><td><span class="badge badge-info">En proceso</span></td><td>29/05/2026</td><td>Hoy</td><td>Presupuestado</td><td><span class="badge badge-danger">ALTA</span></td><td>Nota interna.</td></tr>
+                            <tr><td>#1025</td><td>Placas Avellaneda</td><td><span class="badge badge-success">Cerrado</span></td><td>28/05/2026</td><td>Ayer</td><td>Vendido</td><td><span class="badge badge-info">MEDIA</span></td><td>Faltaban omegas, despachó perfiles pesados.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="mensajes" class="panel-section">
+                <h2>Mensajes</h2>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Remitente</th><th>Mensaje</th><th>Fecha</th><th>Acción</th></tr></thead>
+                        <tbody>
+                            <tr><td>Juan Pérez</td><td>"Consulta de stock de hierro del 8 en Sarandí..."</td><td>Hoy</td><td><button class="btn btn-outline btn-sm">Responder</button></td></tr>
+                            <tr><td>Fabián Gómez</td><td>"Necesito placas de durlock verde para baño en Wilde..."</td><td>Ayer</td><td><button class="btn btn-outline btn-sm">Responder</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ajustes" class="panel-section">
+                <h2>Ajustes</h2>
+                <p>Configuraciones de administración general.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const CLAVE_SECRETA = '1234';
+
+        function desbloquearPanel() {
+            const intento = prompt('Ingrese la clave de administrador:');
+            if (intento === CLAVE_SECRETA) {
+                document.getElementById('pantalla-publica').style.display = 'none';
+                document.getElementById('panel-admin').style.display = 'flex';
+                document.querySelector('.boton-escondido').style.display = 'none';
+                navegar('dashboard');
+            } else if (intento !== null) {
+                alert('Clave incorrecta.');
+            }
+        }
+
+        function cerrarSesion() {
+            document.getElementById('panel-admin').style.display = 'none';
+            document.getElementById('pantalla-publica').style.display = 'flex';
+            document.querySelector('.boton-escondido').style.display = 'block';
+        }
+
+        function navegar(targetId) {
+            const secciones = document.querySelectorAll('.panel-section');
+            secciones.forEach(sec => sec.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
+
+            const itemsMenu = document.querySelectorAll('.sidebar-item');
+            itemsMenu.forEach(item => item.classList.remove('active'));
+            
+            const itemActivo = document.querySelector(`[data-target="${targetId}"]`);
+            if(itemActivo) itemActivo.classList.add('active');
+        }
+
+        function abrirFichaNueva() {
+            document.getElementById('ficha-titulo').innerText = "Agregar corralón";
+            document.getElementById('f-nombre').value = "";
+            document.getElementById('f-direccion').value = "";
+            document.getElementById('f-zona').value = "";
+            document.getElementById('f-whatsapp').value = "";
+            navegar('ficha-form');
+        }
+
+        function verFicha(nombre) {
+            document.getElementById('ficha-titulo').innerText = "Ficha de: " + nombre;
+            document.getElementById('f-nombre').value = nombre;
+            
+            // Simulación rápida de carga de tipos según el nombre chusmeado
+            if(nombre.includes("Durlock") || nombre.includes("Placas")) {
+                document.getElementById('f-tipo').value = "📐 Casa de Durlock";
+            } else if(nombre.includes("Maderera")) {
+                document.getElementById('f-tipo').value = "🪵 Maderera";
+            } else {
+                document.getElementById('f-tipo').value = "🏗️ Corralón";
+            }
+            navegar('ficha-form');
+        }
+
+        function editarFicha(nombre) {
+            verFicha(nombre);
+            document.getElementById('ficha-titulo').innerText = "Editar: " + nombre;
+        }
+
+        function eliminarFila(boton) {
+            if(confirm('¿Estás seguro de que querés eliminar este corralón?')) {
+                const fila = boton.parentNode.parentNode;
+                fila.parentNode.removeChild(fila);
+            }
+        }
+    </script>
+</body>
+</html>
