@@ -505,6 +505,49 @@ setTimeout(() => {
     initMenu();
   }
 })();
+ // Variable global para guardar los productos una sola vez en memoria
+let catalogoMaterialesExcel = [];
+
+// 1. Al cargar la página, traemos todo el listado de Sheets
+document.addEventListener("DOMContentLoaded", function() {
+    fetch(`${URL_API}?accion=listarMateriales`)
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "success" && data.materiales.length > 0) {
+            catalogoMaterialesExcel = data.materiales;
+            
+            // Creamos el datalist invisible en el HTML
+            const datalist = document.createElement('datalist');
+            datalist.id = 'lista-materiales-excel';
+            
+            // Inyectamos los cientos de productos que me pasaste
+            catalogoMaterialesExcel.forEach(producto => {
+                const option = document.createElement('option');
+                option.value = producto;
+                datalist.appendChild(option);
+            });
+            document.body.appendChild(datalist);
+
+            // Se lo aplicamos a la primera fila que ya viene dibujada de entrada
+            aplicarAutocompletadoInputs();
+        }
+    })
+    .catch(err => console.error("Error al sincronizar el catálogo:", err));
+});
+
+// 2. Función para asignarle la lista a los campos de texto
+function aplicarAutocompletadoInputs() {
+    // Buscamos todos los inputs que tengan el marcador de "Material..."
+    const inputs = document.querySelectorAll('input[placeholder="Material..."]');
+    inputs.forEach(input => {
+        // Le vinculamos el datalist que creamos arriba
+        input.setAttribute('list', 'lista-materials-excel');
+    });
+}
+
+// 3. ¡Ojo acá! Buscá tu función actual que agrega filas (la que se ejecuta al tocar "+ Agregar manualmente")
+// Al final de esa función, justo antes de que termine su llave }, tenés que llamar a nuestra función:
+// aplicarAutocompletadoInputs();
 </script>
 </body>
 </html>
