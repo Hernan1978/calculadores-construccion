@@ -249,6 +249,7 @@
 </div>
 
 <script>
+<script>
 // CONFIGURACIÓN DE APIS
 const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
@@ -259,34 +260,24 @@ let listaMaterialesGlobal = []; // Array unificado para el buscador predictivo
 
 function toggleBubble() {
   const b = document.getElementById('ws-bubble');
-  b.style.display = b.style.display === 'none' ? 'block' : 'none';
+  if (b) b.style.display = b.style.display === 'none' ? 'block' : 'none';
 }
+
 setTimeout(() => {
-  document.getElementById('ws-bubble').style.display = 'block';
+  const b = document.getElementById('ws-bubble');
+  if (b) b.style.display = 'block';
 }, 4000);
 
 // ── Cargar catálogo desde JSON local e inicializar buscador predictivo ──
 async function cargarCatalogo() {
   try {
     const res = await fetch('materiales.json');
+    if (!res.ok) throw new Error("No se pudo cargar el JSON");
     const data = await res.json();
-    catalogoData = data.categorias;
+    catalogoData = data.categorias || [];
   } catch(e) {
-    // ── Cargar catálogo desde JSON local e inicializar buscador predictivo ──
-async function cargarCatalogo() {
-  try {
-    const res = await fetch('materiales.json');
-    const data = await res.json();
-    catalogoData = data.categorias;
-  } catch(e) {
-// ── Cargar catálogo desde JSON local e inicializar buscador predictivo ──
-async function cargarCatalogo() {
-  try {
-    const res = await fetch('materiales.json');
-    const data = await res.json();
-    catalogoData = data.categorias;
-  } catch(e) {
-    // CORREGIDO: Respaldo idéntico a tus necesidades reales por si falla el JSON local
+    console.log("Usando catálogo de respaldo por error en fetch:", e);
+    // Respaldo idéntico a tus necesidades reales por si falla el JSON local
     catalogoData = [{
       nombre:'General', icono:'📦',
       subcategorias:[{
@@ -305,18 +296,24 @@ async function cargarCatalogo() {
   selectCat(0);
   generarListadoAutocompletado();
 }
+
 // Extrae todos los materiales del JSON local para armar el autocompletado inteligente
 function generarListadoAutocompletado() {
   let materialesSet = new Set();
   
-  // Agregar materiales extraídos del JSON del catálogo
-  catalogoData.forEach(cat => {
-    cat.subcategorias.forEach(sub => {
-      sub.materiales.forEach(mat => {
-        materialesSet.add(mat.nombre);
-      });
+  if (Array.isArray(catalogoData)) {
+    catalogoData.forEach(cat => {
+      if (cat.subcategorias && Array.isArray(cat.subcategorias)) {
+        cat.subcategorias.forEach(sub => {
+          if (sub.materiales && Array.isArray(sub.materiales)) {
+            sub.materiales.forEach(mat => {
+              if (mat.nombre) materialesSet.add(mat.nombre);
+            });
+          }
+        });
+      }
     });
-  });
+  }
 
   listaMaterialesGlobal = Array.from(materialesSet);
   crearDatalistHTML();
@@ -343,8 +340,10 @@ function crearDatalistHTML() {
 }
 
 function renderNivel1() {
-  document.getElementById('cats-nivel1').innerHTML = catalogoData.map((c,i) =>
-    `<button class="pill-cat ${i===0?'active':''}" onclick="selectCat(${i},this)">${c.icono} ${c.nombre}</button>`
+  const container = document.getElementById('cats-nivel1');
+  if (!container) return;
+  container.innerHTML = catalogoData.map((c,i) =>
+    `<button type="button" class="pill-cat ${i===0?'active':''}" onclick="selectCat(${i},this)">${c.icono || '📦'} ${c.nombre}</button>`
   ).join('');
 }
 
@@ -353,65 +352,88 @@ function selectCat(idx, btn) {
   subActivaIdx = 0;
   document.querySelectorAll('.pill-cat').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  else document.querySelectorAll('.pill-cat')[idx]?.classList.add('active');
+  else {
+    const pils = document.querySelectorAll('.pill-cat');
+    if (pils[idx]) pils[idx].classList.add('active');
+  }
 
-  const subs = catalogoData[idx].subcategorias;
-  document.getElementById('cats-nivel2').innerHTML = subs.map((s,i) =>
-    `<button class="pill-sub ${i===0?'active':''}" onclick="selectSub(${i},this)">${s.nombre}</button>`
-  ).join('');
+  const cat = catalogoData[idx];
+  const subs = (cat && cat.subcategorias) ? cat.subcategorias : [];
+  const containerNivel2 = document.getElementById('cats-nivel2');
+  if (containerNivel2) {
+    containerNivel2.innerHTML = subs.map((s,i) =>
+      `<button type="button" class="pill-sub ${i===0?'active':''}" onclick="selectSub(${i},this)">${s.nombre}</button>`
+    ).join('');
+  }
   renderMats(0);
 }
 
 function selectSub(idx, btn) {
   subActivaIdx = idx;
   document.querySelectorAll('.pill-sub').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
   renderMats(idx);
 }
 
 function renderMats(idx) {
-  const mats = catalogoData[catActivaIdx]?.subcategorias[idx]?.materiales || [];
-  document.getElementById('mats-grid').innerHTML = mats.length
-    ? mats.map(m => `<button class="pill-mat" onclick="agregarMaterial('${m.nombre.replace(/'/g,"\\'").replace(/"/g,'&quot;')}','${m.unidad}')">${m.nombre}</button>`).join('')
+  const cat = catalogoData[catActivaIdx];
+  const sub = (cat && cat.subcategorias) ? cat.subcategorias[idx] : null;
+  const mats = (sub && sub.materiales) ? sub.materiales : [];
+  
+  const grid = document.getElementById('mats-grid');
+  if (!grid) return;
+  
+  grid.innerHTML = mats.length
+    ? mats.map(m => {
+        const nomEscaped = m.nombre.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        const uniEscaped = (m.unidad || 'unidades').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        return `<button type="button" class="pill-mat" onclick="agregarMaterial('${nomEscaped}','${uniEscaped}')">${m.nombre}</button>`;
+      }).join('')
     : '<span style="color:#bbb;font-size:12px;padding:4px">Sin materiales en esta categoría</span>';
 }
 
 function agregarMaterial(nombre, unidad) {
   const container = document.getElementById('items-container');
-  for(let row of container.querySelectorAll('.item-row')) {
+  if (!container) return;
+  
+  const rows = container.querySelectorAll('.item-row');
+  for(let row of rows) {
     const inp = row.querySelectorAll('input');
-    if(!inp[0].value.trim()) { 
-        inp[0].value=nombre; 
-        inp[2].value=unidad; 
+    if(inp[0] && !inp[0].value.trim()) { 
+        inp[0].value = nombre; 
+        if (inp[2]) inp[2].value = unidad; 
         return; 
     }
   }
-  addItem(nombre,'1',unidad);
+  addItem(nombre, '1', unidad);
 }
 
 // Agrega una fila nueva a la lista de materiales y le vincula el autocompletado automáticamente
-function addItem(mat='',cant='1',u='unidades') {
+function addItem(mat='', cant='1', u='unidades') {
   const container = document.getElementById('items-container');
+  if (!container) return;
+  
   const row = document.createElement('div');
   row.className = 'item-row';
   row.innerHTML = `
     <input type="text" placeholder="Material..." value="${mat}">
     <input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center">
     <input type="text" placeholder="Unidad" value="${u}">
-    <button class="btn-remove" onclick="removeItem(this)">×</button>
+    <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
   `;
   container.appendChild(row);
-  
-  // Vinculación inmediata en tiempo de ejecución
   aplicarAutocompletadoInputs();
 }
 
 function removeItem(btn) {
   const rows = document.querySelectorAll('.item-row');
-  if(rows.length > 1) btn.closest('.item-row').remove();
-  else {
+  if(rows.length > 1) {
+    btn.closest('.item-row').remove();
+  } else {
     const inputs = btn.closest('.item-row').querySelectorAll('input');
-    inputs[0].value=''; inputs[1].value='1'; inputs[2].value='unidades';
+    if (inputs[0]) inputs[0].value = ''; 
+    if (inputs[1]) inputs[1].value = '1'; 
+    if (inputs[2]) inputs[2].value = 'unidades';
   }
 }
 
@@ -423,23 +445,21 @@ function aplicarAutocompletadoInputs() {
     });
 }
 
-// ── Sincronización e Inicialización general de la página ──
+// ── Inicialización general de la página ──
 document.addEventListener("DOMContentLoaded", function() {
-    // Primero renderizamos con datos locales para asegurar funcionamiento instantáneo
     cargarCatalogo();
     addItem();
 
-    // Intentamos cargar de Sheets por si en el futuro agregás un endpoint específico para materiales
+    // Intentamos cargar de Sheets de forma segura sin romper el flujo principal si falla
     fetch(`${URL_API}?accion=listarMateriales`)
     .then(res => res.json())
     .then(data => {
-        if(data.status === "success" && data.materiales && data.materiales.length > 0) {
-            // Si la API responde con materiales válidos, se acoplan al listado global
+        if(data && data.status === "success" && data.materiales && data.materiales.length > 0) {
             listaMaterialesGlobal = Array.from(new Set([...listaMaterialesGlobal, ...data.materiales]));
             crearDatalistHTML();
         }
     })
-    .catch(err => console.log("Nota: Usando catálogo predictivo local incorporado."));
+    .catch(err => console.log("Nota: Se utiliza exclusivamente el catálogo predictivo local."));
 
     // Procesar datos guardados desde los calculadores
     const datos = sessionStorage.getItem('pedido_precargado');
@@ -447,46 +467,64 @@ document.addEventListener("DOMContentLoaded", function() {
     try {
       const items = JSON.parse(datos);
       sessionStorage.removeItem('pedido_precargado');
-      document.getElementById('items-container').innerHTML = '';
-      items.forEach(item => addItem(item.mat, item.cant, item.u));
-      document.getElementById('banner-calculador').innerHTML =
-        `<div class="banner-verde">✅ ${items.length} material${items.length>1?'es':''} cargado${items.length>1?'s':''} desde el calculador. Completá tus datos y enviá el pedido.</div>`;
+      const container = document.getElementById('items-container');
+      if (container) {
+        container.innerHTML = '';
+        items.forEach(item => addItem(item.mat, item.cant, item.u));
+        const banner = document.getElementById('banner-calculador');
+        if (banner) {
+          banner.innerHTML = `<div class="banner-verde">✅ ${items.length} material${items.length>1?'es':''} cargado${items.length>1?'s':''} desde el calculador. Completá tus datos y enviá el pedido.</div>`;
+        }
+      }
     } catch(e) { console.error(e); }
 });
 
 // ── Procesos de Navegación del Formulario ──
 function irPaso1() {
   document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
-  document.getElementById('paso1').classList.add('active');
+  const p1 = document.getElementById('paso1');
+  if (p1) p1.classList.add('active');
 }
 
 function irPaso2() {
-  if(!document.getElementById('cli-nombre').value.trim()) { alert('Ingresá tu nombre para continuar.'); return; }
-  if(!document.getElementById('cli-zona').value) { alert('Seleccioná tu zona para continuar.'); return; }
+  const nomVal = document.getElementById('cli-nombre') ? document.getElementById('cli-nombre').value.trim() : '';
+  const zonaVal = document.getElementById('cli-zona') ? document.getElementById('cli-zona').value : '';
+  
+  if(!nomVal) { alert('Ingresá tu nombre para continuar.'); return; }
+  if(!zonaVal) { alert('Seleccioná tu zona para continuar.'); return; }
+  
   document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
-  document.getElementById('paso2').classList.add('active');
+  const p2 = document.getElementById('paso2');
+  if (p2) p2.classList.add('active');
 }
 
 function enviarPedido() {
   const rows = document.querySelectorAll('.item-row');
   const items = [];
+  
   rows.forEach(row => {
     const inputs = row.querySelectorAll('input');
-    const mat = inputs[0].value.trim();
-    if(mat) items.push({mat, cant: inputs[1].value||'1', u: inputs[2].value.trim()||'unidades'});
+    if (inputs[0]) {
+      const mat = inputs[0].value.trim();
+      const cant = inputs[1] ? inputs[1].value : '1';
+      const u = (inputs[2] && inputs[2].value.trim()) ? inputs[2].value.trim() : 'unidades';
+      if(mat) items.push({mat, cant, u});
+    }
   });
+  
   if(items.length === 0) { alert('Agregá al menos un material al pedido.'); return; }
 
   const codigo = 'MAT-' + Date.now().toString().slice(-6);
-  document.getElementById('codigo-pedido').textContent = codigo;
+  const codElem = document.getElementById('codigo-pedido');
+  if (codElem) codElem.textContent = codigo;
 
-  const nombre = document.getElementById('cli-nombre').value;
-  const tel = document.getElementById('cli-tel').value;
-  const zona = document.getElementById('cli-zona').value;
-  const dir = document.getElementById('cli-dir').value;
+  const nombre = document.getElementById('cli-nombre') ? document.getElementById('cli-nombre').value : '';
+  const tel = document.getElementById('cli-tel') ? document.getElementById('cli-tel').value : '';
+  const zona = document.getElementById('cli-zona') ? document.getElementById('cli-zona').value : '';
+  const dir = document.getElementById('cli-dir') ? document.getElementById('cli-dir').value : '';
   const urgSel = document.getElementById('cli-urgencia');
-  const urgencia = urgSel.options[urgSel.selectedIndex].text;
-  const obs = document.getElementById('cli-obs').value;
+  const urgencia = urgSel ? urgSel.options[urgSel.selectedIndex].text : 'No especificado';
+  const obs = document.getElementById('cli-obs') ? document.getElementById('cli-obs').value : '';
 
   let msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n`;
   msg += `👤 *Cliente:* ${nombre}\n`;
@@ -498,21 +536,31 @@ function enviarPedido() {
   if(obs) msg += `\n📝 *Obs:* ${obs}`;
   msg += `\n\n_Pedido desde Materiales Ya_`;
 
-  const ADMIN_WS = '5491112345678';
-  document.getElementById('btn-wsp').href = `https://wa.me/${ADMIN_WS}?text=${encodeURIComponent(msg)}`;
+  const ADMIN_WS = '5491112345678'; // Reemplazá por tu número real de administración
+  const btnWsp = document.getElementById('btn-wsp');
+  if (btnWsp) btnWsp.href = `https://wa.me/${ADMIN_WS}?text=${encodeURIComponent(msg)}`;
 
   document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
-  document.getElementById('paso3').classList.add('active');
+  const p3 = document.getElementById('paso3');
+  if (p3) p3.classList.add('active');
 }
 
 function nuevoPedido() {
-  ['cli-nombre','cli-tel','cli-dir','cli-obs'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('cli-zona').value='';
-  document.getElementById('items-container').innerHTML='';
-  document.getElementById('banner-calculador').innerHTML='';
+  ['cli-nombre','cli-tel','cli-dir','cli-obs'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const cz = document.getElementById('cli-zona');
+  if (cz) cz.value = '';
+  const ic = document.getElementById('items-container');
+  if (ic) ic.innerHTML = '';
+  const bc = document.getElementById('banner-calculador');
+  if (bc) bc.innerHTML = '';
+  
   addItem();
   irPaso1();
 }
+</script>
 </script>
 </body>
 </html>
