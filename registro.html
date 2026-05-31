@@ -31,7 +31,7 @@
             min-height: 100vh;
         }
 
-        /* PANTALLA PÚBLICA */
+        /* PANTALLA PÚBLICA PRESENTACIÓN */
         #pantalla-publica {
             display: flex;
             flex-direction: column;
@@ -75,9 +75,24 @@
             text-align: center;
         }
 
-        .feature-card .icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
-        .feature-card h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: white; }
-        .feature-card p { color: #94a3b8; font-size: 0.95rem; line-height: 1.5; }
+        .feature-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
 
         /* EL BOTÓN ESCONDIDO */
         .boton-escondido {
@@ -92,326 +107,104 @@
             z-index: 1000;
             user-select: none;
         }
-        .boton-escondido:hover { color: rgba(255, 255, 255, 0.5); }
+        .boton-escondido:hover {
+            color: rgba(255, 255, 255, 0.5);
+        }
 
         /* PANEL DE ADMINISTRACIÓN */
-        #panel-admin { display: none; }
-        .admin-layout { display: flex; min-height: 100vh; }
+        #panel-admin {
+            display: none;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
 
         .sidebar {
             width: var(--sidebar-width);
             background-color: var(--primary);
             color: white;
             position: fixed;
-            top: 0; bottom: 0; left: 0;
-            display: flex; flex-direction: column;
-            padding: 1.5rem 0; z-index: 100;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 0;
+            z-index: 100;
             border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .sidebar-brand { font-size: 1.25rem; font-weight: 700; padding: 0 1.5rem 1.5rem 1.5rem; border-bottom: 1px solid #334155; }
-        .sidebar-menu { list-style: none; margin-top: 1.5rem; flex-grow: 1; }
-        .sidebar-item a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; color: #cbd5e1; text-decoration: none; font-weight: 500; transition: all 0.2s; cursor: pointer; }
-        .sidebar-item a:hover, .sidebar-item.active a { background-color: #334155; color: white; border-left: 4px solid var(--accent); }
-        .sidebar-logout { border-top: 1px solid #334155; padding-top: 1rem; }
-        .sidebar-logout a { color: #f87171 !important; }
+        .sidebar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            border-bottom: 1px solid #334155;
+        }
 
-        .main-content { margin-left: var(--sidebar-width); flex-grow: 1; padding: 2rem; min-width: 0; }
-        .panel-section { display: none; }
-        .panel-section.active { display: block; }
-        h2 { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem; }
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .sidebar-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .sidebar-item a:hover, .sidebar-item.active a {
+            background-color: #334155;
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        .sidebar-logout {
+            border-top: 1px solid #334155;
+            padding-top: 1rem;
+        }
+        .sidebar-logout a {
+            color: #f87171 !important;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 2rem;
+            min-width: 0;
+        }
+
+        .panel-section {
+            display: none;
+        }
+
+        .panel-section.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
 
         /* CONTADORES */
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-        .metric-card { background: white; padding: 1.25rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-top: 4px solid #94a3b8; }
-        .metric-card h3 { font-size: 0.875rem; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 0.5rem; }
-        .metric-card p { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
-        .metric-card.active-card { border-top-color: var(--success); }
-        .metric-card.debt-card { border-top-color: var(--danger); }
-        .metric-card.no-debt-card { border-top-color: var(--accent); }
-
-        /* TABLAS */
-        .table-container { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow-x: auto; margin-bottom: 2rem; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        th { background-color: var(--gray-light); color: #64748b; padding: 0.85rem 1rem; font-weight: 600; border-bottom: 1px solid var(--gray-border); }
-        td { padding: 1rem; border-bottom: 1px solid var(--gray-border); vertical-align: middle; }
-
-        /* BOTONES */
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 600; border-radius: 0.375rem; border: none; cursor: pointer; transition: background 0.2s; text-decoration: none; gap: 0.5rem; }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-gray { background: #64748b; color: white; }
-        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 0.25rem; margin-right: 0.25rem; }
-        .btn-outline { background: transparent; border: 1px solid var(--gray-border); color: var(--text-main); }
-
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; background: white; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-        .form-control { padding: 0.5rem 0.75rem; border: 1px solid var(--gray-border); border-radius: 0.375rem; font-size: 0.9rem; outline: none; }
-
-        .badge { display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.25rem; }
-        .badge-success { background: #dcfce7; color: #166534; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-warning { background: #fef9c3; color: #854d0e; }
-    </style>
-</head>
-<body>
-
-    <div id="pantalla-publica">
-        <h1>Sumá tu negocio a Materiales Ya</h1>
-        <p class="subtitle">Llegá a clientes que ya están buscando tus materiales. Sin cuota mensual — pagás solo por los contactos que recibís.</p>
-        <div class="features-grid">
-            <div class="feature-card"><span class="icon">📦</span><h3>Pedidos directos</h3><p>Clientes de tu zona con la lista de materiales lista.</p></div>
-            <div class="feature-card"><span class="icon">📍</span><h3>En el mapa</h3><p>Tu negocio visible con datos de contacto directos.</p></div>
-        </div>
-        <a href="https://wa.me/5491112345678" class="btn btn-primary">Contactar por WhatsApp</a>
-    </div>
-
-    <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
-
-    <div id="panel-admin" class="admin-layout">
-        <div class="sidebar">
-            <div class="sidebar-brand">🏗️ Materiales Ya Admin</div>
-            <ul class="sidebar-menu">
-                <li class="sidebar-item active" data-target="dashboard"><a onclick="navegar('dashboard')">📊 Dashboard</a></li>
-                <li class="sidebar-item" data-target="corralones"><a onclick="navegar('corralones')">🏗️ Corralones</a></li>
-                <li class="sidebar-item" data-target="deudas"><a onclick="navegar('deudas')">💰 Deudas</a></li>
-                <li class="sidebar-item sidebar-logout"><a onclick="cerrarSesion()">🚪 Salir al Sitio</a></li>
-            </ul>
-        </div>
-
-        <div class="main-content">
-            <div id="dashboard" class="panel-section active">
-                <h2>Panel Principal</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card"><h3>Total Comercios</h3><p id="m-total">0</p></div>
-                    <div class="metric-card active-card"><h3>Activos</h3><p id="m-activos">0</p></div>
-                    <div class="metric-card debt-card"><h3>Con Deuda</h3><p id="m-deuda">0</p></div>
-                </div>
-                <h3>Avisos Importantes</h3>
-                <p style="margin-top:1rem; color:#64748b;">Los cambios realizados en las pestañas se guardan de forma local en este navegador.</p>
-            </div>
-
-            <div id="corralones" class="panel-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
-                    <h2>Corralones y Proveedores</h2>
-                    <button class="btn btn-primary btn-sm" style="padding:0.5rem 1rem;" onclick="abrirFichaNueva()">➕ Sumar negocio</button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>Nombre</th><th>Tipo</th><th>Zona</th><th>WhatsApp</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr>
-                        </thead>
-                        <tbody id="tabla-comercios-body">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="ficha-form" class="panel-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem;">
-                    <h2 id="ficha-titulo">Ficha de comercio</h2>
-                    <button class="btn btn-outline btn-sm" onclick="navegar('corralones')">⬅️ Volver a Corralones</button>
-                </div>
-                <form id="comercio-form" onsubmit="guardarComercio(event)">
-                    <input type="hidden" id="f-id">
-                    <div class="form-grid">
-                        <div class="form-group"><label>Nombre comercial</label><input type="text" class="form-control" id="f-nombre" required></div>
-                        <div class="form-group"><label>Tipo de negocio</label><select class="form-control" id="f-tipo"><option>🏗️ Corralón</option><option>📐 Casa de Durlock</option><option>🪵 Maderera</option></select></div>
-                        <div class="form-group"><label>Zona</label><input type="text" class="form-control" id="f-zona" required></div>
-                        <div class="form-group"><label>WhatsApp</label><input type="text" class="form-control" id="f-whatsapp" required></div>
-                        <div class="form-group"><label>Estado</label><select class="form-control" id="f-estado"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option><option value="En revisión">En revisión</option></select></div>
-                        <div class="form-group"><label>Monto Deuda ($)</label><input type="number" class="form-control" id="f-deuda-monto" value="0"></div>
-                    </div>
-                    <div style="margin-top:1.5rem; display:flex; gap:1rem;">
-                        <button type="submit" class="btn btn-success btn-sm" style="padding:0.5rem 1rem;">Guardar Cambios</button>
-                        <button type="button" class="btn btn-gray btn-sm" onclick="navegar('corralones')">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-
-            <div id="deudas" class="panel-section">
-                <h2>Control de Deudas</h2>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Comercio</th><th>Monto adeudado</th><th>Acción Rápida</th></tr></thead>
-                        <tbody id="tabla-deudas-body">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const CLAVE_SECRETA = '1234';
-        
-        // Base de datos inicial (si no existe una guardada en el navegador)
-        const comerciosPredefinidos = [
-            { id: 1, nombre: "Corralón Sarandí", tipo: "🏗️ Corralón", zona: "Sarandí", whatsapp: "1123456789", estado: "Activo", deuda: 15000 },
-            { id: 2, nombre: "Placas Avellaneda", tipo: "📐 Casa de Durlock", zona: "Avellaneda", whatsapp: "1154321098", estado: "En revisión", deuda: 8500 },
-            { id: 3, nombre: "Materiales Wilde", tipo: "🏗️ Corralón", zona: "Wilde", whatsapp: "1167890123", estado: "Activo", deuda: 0 },
-            { id: 4, nombre: "Maderera Wilde", tipo: "🪵 Maderera", zona: "Wilde", whatsapp: "1134567812", estado: "Activo", deuda: 0 },
-            { id: 5, nombre: "Durlock Mitre", tipo: "📐 Casa de Durlock", zona: "Avellaneda", whatsapp: "1178901234", estado: "Activo", deuda: 22000 },
-            { id: 6, nombre: "Ferretería El Tornillo", tipo: "🏗️ Corralón", zona: "Avellaneda", whatsapp: "1198765432", estado: "Activo", deuda: 0 },
-            { id: 7, nombre: "Yesería Centenario", tipo: "📐 Casa de Durlock", zona: "Sarandí", whatsapp: "Inactivo", estado: "Inactivo", deuda: 0 }
-        ];
-
-        let baseDatos = JSON.parse(localStorage.getItem('materiales_ya_db')) || comerciosPredefinidos;
-
-        function guardarEnLocalStorage() {
-            localStorage.setItem('materiales_ya_db', JSON.stringify(baseDatos));
-            renderizarTodo();
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        function renderizarTodo() {
-            const tbodyComercios = document.getElementById('tabla-comercios-body');
-            const tbodyDeudas = document.getElementById('tabla-deudas-body');
-            
-            tbodyComercios.innerHTML = '';
-            tbodyDeudas.innerHTML = '';
-
-            let activos = 0, deudores = 0;
-
-            baseDatos.forEach(c => {
-                if (c.estado === 'Activo') activos++;
-                if (c.deuda > 0) deudores++;
-
-                // Badge de color según estado
-                let badgeClass = 'badge-success';
-                if (c.estado === 'Inactivo') badgeClass = 'badge-danger';
-                if (c.estado === 'En revisión') badgeClass = 'badge-warning';
-
-                // Fila Listado General
-                tbodyComercios.innerHTML += `
-                    <tr>
-                        <td><b>${c.nombre}</b></td>
-                        <td>${c.tipo}</td>
-                        <td>${c.zona}</td>
-                        <td>${c.whatsapp}</td>
-                        <td><span class="badge ${badgeClass}">${c.estado}</span></td>
-                        <td style="color:${c.deuda > 0 ? 'var(--danger)' : 'inherit'}; font-weight:600;">$${c.deuda}</td>
-                        <td>
-                            <button class="btn btn-outline btn-sm" onclick="editarComercio(${c.id})">Editar / Ver</button>
-                            <button class="btn btn-gray btn-sm" onclick="eliminarComercio(${c.id})">Borrar</button>
-                        </td>
-                    </tr>
-                `;
-
-                // Fila Deudas si corresponde
-                if (c.deuda > 0) {
-                    tbodyDeudas.innerHTML += `
-                        <tr>
-                            <td><b>${c.nombre}</b></td>
-                            <td style="color:var(--danger); font-weight:600;">$${c.deuda}</td>
-                            <td><button class="btn btn-success btn-sm" onclick="saldarDeuda(${c.id})">✅ Marcar Pagado</button></td>
-                        </tr>
-                    `;
-                }
-            });
-
-            // Actualizar contadores del Dashboard
-            document.getElementById('m-total').innerText = baseDatos.length;
-            document.getElementById('m-activos').innerText = activos;
-            document.getElementById('m-deuda').innerText = deudores;
-        }
-
-        function abrirFichaNueva() {
-            document.getElementById('ficha-titulo').innerText = "Sumar Nuevo Comercio";
-            document.getElementById('f-id').value = "";
-            document.getElementById('f-nombre').value = "";
-            document.getElementById('f-zona').value = "";
-            document.getElementById('f-whatsapp').value = "";
-            document.getElementById('f-deuda-monto').value = "0";
-            document.getElementById('f-estado').value = "Activo";
-            navegar('ficha-form');
-        }
-
-        function editarComercio(id) {
-            const c = baseDatos.find(item => item.id === id);
-            if (!c) return;
-            document.getElementById('ficha-titulo').innerText = "Editar: " + c.nombre;
-            document.getElementById('f-id').value = c.id;
-            document.getElementById('f-nombre').value = c.nombre;
-            document.getElementById('f-tipo').value = c.tipo;
-            document.getElementById('f-zona').value = c.zona;
-            document.getElementById('f-whatsapp').value = c.whatsapp;
-            document.getElementById('f-estado').value = c.estado;
-            document.getElementById('f-deuda-monto').value = c.deuda;
-            navegar('ficha-form');
-        }
-
-        function guardarComercio(e) {
-            e.preventDefault();
-            const id = document.getElementById('f-id').value;
-            const nombre = document.getElementById('f-nombre').value;
-            const tipo = document.getElementById('f-tipo').value;
-            const zona = document.getElementById('f-zona').value;
-            const whatsapp = document.getElementById('f-whatsapp').value;
-            const estado = document.getElementById('f-estado').value;
-            const deuda = parseFloat(document.getElementById('f-deuda-monto').value) || 0;
-
-            if (id) {
-                // Editar existente
-                const index = baseDatos.findIndex(item => item.id == id);
-                if (index !== -1) baseDatos[index] = { id: Number(id), nombre, tipo, zona, whatsapp, estado, deuda };
-            } else {
-                // Agregar nuevo
-                const nuevoId = baseDatos.length > 0 ? Math.max(...baseDatos.map(o => o.id)) + 1 : 1;
-                baseDatos.push({ id: nuevoId, nombre, tipo, zona, whatsapp, estado, deuda });
-            }
-
-            guardarEnLocalStorage();
-            navegar('corralones');
-        }
-
-        function eliminarComercio(id) {
-            if (confirm("¿Seguro que querés eliminar este comercio?")) {
-                baseDatos = baseDatos.filter(item => item.id !== id);
-                guardarEnLocalStorage();
-            }
-        }
-
-        function saldarDeuda(id) {
-            const index = baseDatos.findIndex(item => item.id === id);
-            if (index !== -1) {
-                baseDatos[index].deuda = 0;
-                guardarEnLocalStorage();
-            }
-        }
-
-        function desbloquearPanel() {
-            const intento = prompt('Ingrese la clave de administrador:');
-            if (intento === CLAVE_SECRETA) {
-                document.getElementById('pantalla-publica').style.display = 'none';
-                document.getElementById('panel-admin').style.display = 'flex';
-                document.querySelector('.boton-escondido').style.display = 'none';
-                navegar('dashboard');
-            } else if (intento !== null) {
-                alert('Clave incorrecta.');
-            }
-        }
-
-        function cerrarSesion() {
-            document.getElementById('panel-admin').style.display = 'none';
-            document.getElementById('pantalla-publica').style.display = 'flex';
-            document.querySelector('.boton-escondido').style.display = 'block';
-        }
-
-        function navegar(targetId) {
-            const secciones = document.querySelectorAll('.panel-section');
-            secciones.forEach(sec => sec.classList.remove('active'));
-            document.getElementById(targetId).classList.add('active');
-
-            const itemsMenu = document.querySelectorAll('.sidebar-item');
-            itemsMenu.forEach(item => item.classList.remove('active'));
-            
-            const itemActivo = document.querySelector(`[data-target="${targetId}"]`);
-            if(itemActivo) itemActivo.classList.add('active');
-        }
-
-        // Ejecutar carga inicial
-        renderizarTodo();
-    </script>
-</body>
-</html>
+        .metric-card {
+            background: white;
+            padding: 1
