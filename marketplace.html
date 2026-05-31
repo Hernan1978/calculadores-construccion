@@ -272,13 +272,28 @@ async function cargarCatalogo() {
     const data = await res.json();
     catalogoData = data.categorias;
   } catch(e) {
-    // Respaldo en caso de error
+    // ── Cargar catálogo desde JSON local e inicializar buscador predictivo ──
+async function cargarCatalogo() {
+  try {
+    const res = await fetch('materiales.json');
+    const data = await res.json();
+    catalogoData = data.categorias;
+  } catch(e) {
+// ── Cargar catálogo desde JSON local e inicializar buscador predictivo ──
+async function cargarCatalogo() {
+  try {
+    const res = await fetch('materiales.json');
+    const data = await res.json();
+    catalogoData = data.categorias;
+  } catch(e) {
+    // CORREGIDO: Respaldo idéntico a tus necesidades reales por si falla el JSON local
     catalogoData = [{
       nombre:'General', icono:'📦',
       subcategorias:[{
         nombre:'Materiales',
         materiales:[
-          {nombre:'Cemento Portland 50kg', unidad:'bolsas'},
+          {nombre:'Cemento Portland 25kg', unidad:'bolsas'},
+          {nombre:'Cemento de albañilería 20kg', unidad:'bolsas'},
           {nombre:'Arena gruesa', unidad:'m³'},
           {nombre:'Ladrillo común', unidad:'unidades'},
         ]
@@ -290,7 +305,6 @@ async function cargarCatalogo() {
   selectCat(0);
   generarListadoAutocompletado();
 }
-
 // Extrae todos los materiales del JSON local para armar el autocompletado inteligente
 function generarListadoAutocompletado() {
   let materialesSet = new Set();
