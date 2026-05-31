@@ -89,48 +89,6 @@
   .paso.active { display: block; }
 
   footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
-
-  .menu-toggle {
-    display: none;
-    background: none;
-    border: 1px solid #2e4a7a;
-    border-radius: 7px;
-    color: #90afd4;
-    font-size: 18px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  .nav-links.open { 
-    display: flex !important; 
-    flex-direction: column; 
-    position: absolute; 
-    top: 56px; left: 0; right: 0; 
-    background: #1a2744; 
-    padding: 1rem; gap: 8px;
-    z-index: 100;
-    border-top: 1px solid #2e4a7a;
-  }
-  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
-  @media(max-width:600px) {
-    nav { padding: .875rem 1rem; position: relative; }
-    nav .logo span { display: none; }
-    .nav-links { display: none !important; }
-    .menu-toggle { display: flex !important; }
-  }
-
-  @media(max-width:600px) {
-    header { padding: .875rem 1rem; }
-    header h1 { font-size: 1rem; }
-    main { padding: 0 .75rem; margin: 1rem auto; }
-    .card { padding: 1rem; }
-    .step-label { font-size: 10px; }
-    .cat-nivel1 { gap: 5px; }
-    .pill-cat { padding: 5px 10px; font-size: 12px; }
-    .pill-sub { padding: 4px 8px; font-size: 11px; }
-    .item-header, .item-row { grid-template-columns: 1.5fr 52px 68px 26px; }
-    .confirm-box { padding: 1.25rem .5rem; }
-    .codigo { font-size: 1.1rem; }
-  }
 </style>
 </head>
 <body>
@@ -291,13 +249,13 @@
 </div>
 
 <script>
-// VINCULAMOS TU URL DE APPS SCRIPT (Poné tu enlace de Sheets real acá)
+// CONFIGURACIÓN DE APIS
 const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
 let catalogoData = [];
 let catActivaIdx = 0;
 let subActivaIdx = 0;
-let catalogoMaterialesExcel = []; // Sincronizado desde Sheets
+let listaMaterialesGlobal = []; // Array unificado para el buscador predictivo
 
 function toggleBubble() {
   const b = document.getElementById('ws-bubble');
@@ -307,39 +265,14 @@ setTimeout(() => {
   document.getElementById('ws-bubble').style.display = 'block';
 }, 4000);
 
-// Menu Toggle
-(function() {
-  function initMenu() {
-    var btn = document.getElementById('menuToggle');
-    var nav = document.getElementById('navLinks');
-    if (!btn || !nav) return;
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var isOpen = nav.classList.contains('open');
-      nav.classList.toggle('open');
-      btn.innerHTML = isOpen ? '&#9776;' : '&#x2715;';
-    });
-    document.addEventListener('click', function(e) {
-      if (!nav.contains(e.target) && e.target !== btn) {
-        nav.classList.remove('open');
-        btn.innerHTML = '&#9776;';
-      }
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMenu);
-  } else {
-    initMenu();
-  }
-})();
-
-// ── Cargar catálogo desde JSON local ──
+// ── Cargar catálogo desde JSON local e inicializar buscador predictivo ──
 async function cargarCatalogo() {
   try {
     const res = await fetch('materiales.json');
     const data = await res.json();
     catalogoData = data.categorias;
   } catch(e) {
+    // Respaldo en caso de error
     catalogoData = [{
       nombre:'General', icono:'📦',
       subcategorias:[{
@@ -352,8 +285,47 @@ async function cargarCatalogo() {
       }]
     }];
   }
+  
   renderNivel1();
   selectCat(0);
+  generarListadoAutocompletado();
+}
+
+// Extrae todos los materiales del JSON local para armar el autocompletado inteligente
+function generarListadoAutocompletado() {
+  let materialesSet = new Set();
+  
+  // Agregar materiales extraídos del JSON del catálogo
+  catalogoData.forEach(cat => {
+    cat.subcategorias.forEach(sub => {
+      sub.materiales.forEach(mat => {
+        materialesSet.add(mat.nombre);
+      });
+    });
+  });
+
+  listaMaterialesGlobal = Array.from(materialesSet);
+  crearDatalistHTML();
+}
+
+// Crea la etiqueta datalist en el cuerpo de la página
+function crearDatalistHTML() {
+  let datalist = document.getElementById('lista-materiales-excel');
+  if (!datalist) {
+    datalist = document.createElement('datalist');
+    datalist.id = 'lista-materiales-excel';
+    document.body.appendChild(datalist);
+  }
+  
+  datalist.innerHTML = ''; // Limpiamos contenidos viejos
+  listaMaterialesGlobal.forEach(nombreMat => {
+    const option = document.createElement('option');
+    option.value = nombreMat;
+    datalist.appendChild(option);
+  });
+
+  // Forzar vinculación a todos los campos "Material..." existentes
+  aplicarAutocompletadoInputs();
 }
 
 function renderNivel1() {
@@ -403,7 +375,7 @@ function agregarMaterial(nombre, unidad) {
   addItem(nombre,'1',unidad);
 }
 
-// MODIFICADO: Ahora cada vez que agregamos un renglón, le inyectamos la vinculación al datalist
+// Agrega una fila nueva a la lista de materiales y le vincula el autocompletado automáticamente
 function addItem(mat='',cant='1',u='unidades') {
   const container = document.getElementById('items-container');
   const row = document.createElement('div');
@@ -416,7 +388,7 @@ function addItem(mat='',cant='1',u='unidades') {
   `;
   container.appendChild(row);
   
-  // Le aplicamos el autocompletado inmediatamente a los campos nuevos
+  // Vinculación inmediata en tiempo de ejecución
   aplicarAutocompletadoInputs();
 }
 
@@ -429,35 +401,33 @@ function removeItem(btn) {
   }
 }
 
-// ── Sincronizar catálogo inteligente desde Google Sheets ──
+// Inyecta el atributo 'list' a los inputs para habilitar las sugerencias del buscador
+function aplicarAutocompletadoInputs() {
+    const inputs = document.querySelectorAll('input[placeholder="Material..."]');
+    inputs.forEach(input => {
+        input.setAttribute('list', 'lista-materiales-excel');
+    });
+}
+
+// ── Sincronización e Inicialización general de la página ──
 document.addEventListener("DOMContentLoaded", function() {
+    // Primero renderizamos con datos locales para asegurar funcionamiento instantáneo
     cargarCatalogo();
     addItem();
 
+    // Intentamos cargar de Sheets por si en el futuro agregás un endpoint específico para materiales
     fetch(`${URL_API}?accion=listarMateriales`)
     .then(res => res.json())
     .then(data => {
-        if(data.status === "success" && data.materiales.length > 0) {
-            catalogoMaterialesExcel = data.materiales;
-            
-            // Creamos el datalist nativo en el documento
-            const datalist = document.createElement('datalist');
-            datalist.id = 'lista-materiales-excel';
-            
-            catalogoMaterialesExcel.forEach(producto => {
-                const option = document.createElement('option');
-                option.value = producto;
-                datalist.appendChild(option);
-            });
-            document.body.appendChild(datalist);
-
-            // Vinculamos la primera tanda de inputs
-            aplicarAutocompletadoInputs();
+        if(data.status === "success" && data.materiales && data.materiales.length > 0) {
+            // Si la API responde con materiales válidos, se acoplan al listado global
+            listaMaterialesGlobal = Array.from(new Set([...listaMaterialesGlobal, ...data.materiales]));
+            crearDatalistHTML();
         }
     })
-    .catch(err => console.error("Error sincronizando catálogo de Sheets:", err));
+    .catch(err => console.log("Nota: Usando catálogo predictivo local incorporado."));
 
-    // Precargar desde calculadores
+    // Procesar datos guardados desde los calculadores
     const datos = sessionStorage.getItem('pedido_precargado');
     if(!datos) return;
     try {
@@ -470,15 +440,7 @@ document.addEventListener("DOMContentLoaded", function() {
     } catch(e) { console.error(e); }
 });
 
-// Función clave corregida para activar la lista en el navegador
-function aplicarAutocompletadoInputs() {
-    const inputs = document.querySelectorAll('input[placeholder="Material..."]');
-    inputs.forEach(input => {
-        input.setAttribute('list', 'lista-materiales-excel');
-    });
-}
-
-// ── Navegación ──
+// ── Procesos de Navegación del Formulario ──
 function irPaso1() {
   document.querySelectorAll('.paso').forEach(p => p.classList.remove('active'));
   document.getElementById('paso1').classList.add('active');
