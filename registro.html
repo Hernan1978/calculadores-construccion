@@ -174,24 +174,22 @@
 
     <script>
      <script>
-        // 🌐 URL GLOBAL DE TU GOOGLE APPS SCRIPT
+   <script>
+        // 🌐 URL de tu Google Apps Script
         const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
-        // 🔐 FUNCIÓN DE ACCESO DIRECTA (Contraseña: 1234)
+        // 🔐 FUNCIÓN DE ACCESO (Aislada para que no falle jamás)
         function desbloquearPanel() {
-            const claveIngresada = prompt("Introduce la contraseña de Administrador:");
-            
-            if (claveIngresada === "1234") {
-                // Abre el panel visualmente al toque sin esperar nada externo
+            var clave = prompt("Introduce la contraseña de Administrador:");
+            if (clave === "1234") {
                 document.getElementById('pantalla-publica').style.display = 'none';
                 document.getElementById('panel-admin').style.display = 'flex';
-                
-                const btnEscondido = document.querySelector('.boton-escondido');
-                if(btnEscondido) btnEscondido.style.display = 'none';
-                
-                // Carga los datos después de abrir
-                inicializarDatosPanel();
-            } else if (claveIngresada !== null) {
+                if(document.querySelector('.boton-escondido')) {
+                    document.querySelector('.boton-escondido').style.display = 'none';
+                }
+                // Llamamos a la carga de datos de forma segura
+                setTimeout(inicializarDatosPanel, 200);
+            } else if (clave !== null) {
                 alert("❌ Contraseña incorrecta.");
             }
         }
@@ -200,38 +198,37 @@
         function cerrarSesion() {
             document.getElementById('panel-admin').style.display = 'none';
             document.getElementById('pantalla-publica').style.display = 'flex';
-            const btnEscondido = document.querySelector('.boton-escondido');
-            if(btnEscondido) btnEscondido.style.display = 'block';
+            if(document.querySelector('.boton-escondido')) {
+                document.querySelector('.boton-escondido').style.display = 'block';
+            }
         }
 
         // 🗺️ NAVEGACIÓN ENTRE PESTAÑAS
         function navegar(targetId) {
-            const secciones = document.querySelectorAll('.panel-section');
-            secciones.forEach(sec => sec.classList.remove('active'));
+            var secciones = document.querySelectorAll('.panel-section');
+            secciones.forEach(function(sec) { sec.classList.remove('active'); });
             
-            const seccionDestino = document.getElementById(targetId);
+            var seccionDestino = document.getElementById(targetId);
             if(seccionDestino) seccionDestino.classList.add('active');
             
-            const itemsMenu = document.querySelectorAll('.sidebar-item');
-            itemsMenu.forEach(item => item.classList.remove('active'));
+            var itemsMenu = document.querySelectorAll('.sidebar-item');
+            itemsMenu.forEach(function(item) { item.classList.remove('active'); });
             
-            const itemActivo = document.querySelector(`[data-target="${targetId}"]`);
+            var itemActivo = document.querySelector('[data-target="' + targetId + '"]');
             if(itemActivo) itemActivo.classList.add('active');
         }
 
-        // 📊 CARGAR DATOS DEL SHEETS (Sincronizado con tu acción 'cargarPanel')
-        async function inicializarDatosPanel() {
+        // 📊 CARGAR DATOS DEL SHEETS
+        function inicializarDatosPanel() {
             if(!URL_API) return;
-            try {
-                // 🛠️ LLAMADO CORREGIDO: Usamos 'accion=cargarPanel' tal como lo pide tu script de Google
-                const res = await fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`);
-                const data = await res.json();
-                
+            
+            fetch(URL_API + "?accion=cargarPanel&t=" + Date.now())
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
                 if(data && data.status === "success") {
-                    const lista = data.corralones || [];
-                    const metricas = data.metricas || {};
+                    var lista = data.corralones || [];
+                    var metricas = data.metricas || {};
 
-                    // Dibujar tarjetas numéricas usando las métricas exactas calculadas por tu Google Script
                     if(document.getElementById('met-total')) document.getElementById('met-total').innerText = metricas.total || 0;
                     if(document.getElementById('met-activos')) document.getElementById('met-activos').innerText = metricas.activos || 0;
                     if(document.getElementById('met-deuda')) document.getElementById('met-deuda').innerText = metricas.conDeuda || 0;
@@ -239,73 +236,66 @@
                         document.getElementById('met-sin-deuda').innerText = (metricas.total - metricas.conDeuda) || 0;
                     }
 
-                    // Dibujar tablas
                     var tbody = document.getElementById('tabla-corralones-body');
                     var tbodyAlertas = document.getElementById('tabla-alertas');
                     
                     if(tbody) tbody.innerHTML = "";
                     if(tbodyAlertas) tbodyAlertas.innerHTML = "";
 
-                    if(lista.length === 0 && tbody) {
-                        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No hay datos disponibles en este momento.</td></tr>`;
-                    }
-
-                    lista.forEach(corr => {
+                    lista.forEach(function(corr) {
                         var bClass = "badge-success";
-                        const estNormalizado = corr.estado ? corr.estado.toLowerCase() : '';
+                        var estNormalizado = corr.estado ? corr.estado.toLowerCase() : '';
                         if(estNormalizado.includes("revi")) bClass = "badge-warning";
                         if(estNormalizado.includes("inac") || estNormalizado.includes("baja")) bClass = "badge-danger";
 
-                        const numDeuda = corr.deuda ? parseFloat(corr.deuda) : 0;
+                        var numDeuda = corr.deuda ? parseFloat(corr.deuda) : 0;
 
                         if(tbody) {
-                            var fila = `<tr>
-                                <td><b>${corr.nombre || 'Sin Nombre'}</b></td>
-                                <td>${corr.tipo || 'Corralón'}</td>
-                                <td>${corr.zona || 'No Asignada'}</td>
-                                <td>
-                                    <div class="ws-main-badge">
-                                        <button class="ws-main-btn">📱 WS</button>
-                                        <div class="ws-main-menu">
-                                            <a href="https://wa.me/${corr.whatsapp}?text=Hola" target="_blank">🛒 Mensaje</a>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><span class="badge ${bClass}">${corr.estado || 'Activo'}</span></td>
-                                <td style="color:${numDeuda > 0 ? 'var(--danger)' : 'var(--success)'}; font-weight:700;">$${numDeuda.toLocaleString('es-AR')}</td>
-                                <td><button class="btn btn-outline btn-sm">Ver</button></td>
-                            </tr>`;
+                            var fila = '<tr>' +
+                                '<td><b>' + (corr.nombre || 'Sin Nombre') + '</b></td>' +
+                                '<td>' + (corr.tipo || 'Corralón') + '</td>' +
+                                '<td>' + (corr.zona || 'No Asignada') + '</td>' +
+                                '<td>' +
+                                    '<div class="ws-main-badge">' +
+                                        '<button class="ws-main-btn">📱 WS</button>' +
+                                        '<div class="ws-main-menu">' +
+                                            '<a href="https://wa.me/' + corr.whatsapp + '?text=Hola" target="_blank">🛒 Mensaje</a>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</td>' +
+                                '<td><span class="badge ' + bClass + '">' + (corr.estado || 'Activo') + '</span></td>' +
+                                '<td style="color:' + (numDeuda > 0 ? 'var(--danger)' : 'var(--success)') + '; font-weight:700;">$' + numDeuda.toLocaleString('es-AR') + '</td>' +
+                                '<td><button class="btn btn-outline btn-sm">Ver</button></td>' +
+                            '</tr>';
                             tbody.innerHTML += fila;
                         }
 
                         if(numDeuda > 0 && tbodyAlertas) {
-                            tbodyAlertas.innerHTML += `<tr><td><b>${corr.nombre}</b></td><td><span class="badge badge-danger">Deuda Pendiente</span></td><td>Hoy</td></tr>`;
+                            tbodyAlertas.innerHTML += '<tr><td><b>' + corr.nombre + '</b></td><td><span class="badge badge-danger">Deuda Pendiente</span></td><td>Hoy</td></tr>';
                         }
                     });
 
                     if(tbodyAlertas && tbodyAlertas.innerHTML === "") {
-                        tbodyAlertas.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#16a34a; font-weight:600;">🟢 Sincronizado. Sin alertas de deudas.</td></tr>`;
+                        tbodyAlertas.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#16a34a; font-weight:600;">🟢 Sincronizado. Sin alertas de deudas.</td></tr>';
                     }
-                } else {
-                    throw new Error(data.message || "Estructura incorrecta");
                 }
-            } catch (error) {
-                console.error("Error cargando Sheets:", error);
+            })
+            .catch(function(error) {
+                console.error("Error en Sheets:", error);
                 if(document.getElementById('tabla-alertas')) {
-                    document.getElementById('tabla-alertas').innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--danger); font-weight:600;">⚠️ Error de conexión con Sheets. Revisa la publicación en Google.</td></tr>`;
+                    document.getElementById('tabla-alertas').innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--danger); font-weight:600;">⚠️ Error de conexión con Sheets.</td></tr>';
                 }
-            }
+            });
         }
 
-        // CONSULTAR PEDIDO INDIVIDUAL (Apuntando a tu endpoint de Pedidos)
+        // 🔍 CONSULTAR PEDIDO
         function consultarPedidoSheets() {
             var idInput = document.getElementById('input-id-pedido').value.trim().toUpperCase().replace('#','');
             if(!idInput) return;
 
-            // Buscamos dinámicamente usando los parámetros correctos
-            fetch(`${URL_API}?accion=buscarPedido&id=${idInput}`)
-            .then(res => res.json())
-            .then(data => {
+            fetch(URL_API + "?accion=buscarPedido&id=" + idInput)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
                 if(data.status === "error" || data.status === "not_found") { alert("Pedido no encontrado."); return; }
                 document.getElementById('res-real-id').innerText = "Pedido: #" + data.id;
                 document.getElementById('res-real-cliente').innerText = data.cliente;
@@ -314,9 +304,8 @@
                 document.getElementById('res-real-estado').innerText = data.estado;
                 document.getElementById('resultado-real').style.display = "block";
             })
-            .catch(err => {
-                console.error("Error buscando pedido:", err);
-                alert("Asegúrate de agregar la acción buscarPedido en tu Google Apps Script si vas a usar esta sección.");
+            .catch(function(err) {
+                console.error("Error:", err);
             });
         }
     </script>
