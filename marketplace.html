@@ -290,20 +290,39 @@ async function cargarCatalogo() {
     const data = await res.json();
     catalogoData = data.categorias || [];
   } catch(e) {
-    // Si falla el fetch local, usamos el catálogo con los pesajes corregidos (25kg y 20kg)
     catalogoData = [{
       nombre:'Obra Gruesa', icono:'🏗',
       subcategorias:[{
-        nombre:'Áridos y sueltos',
-        materiales:[
-          {nombre:'Cemento Portland 25kg', unidad:'bolsas'},
-          {nombre:'Cemento de albañilería 20kg', unidad:'bolsas'},
-          {nombre:'Arena fina', unidad:'bolsas'},
-          {nombre:'Arena gruesa', unidad:'m³'}
-        ]
+        nombre:'Áridos',
+        materiales:[{nombre:'Cemento Portland 25kg', unidad:'bolsas'}]
       }]
     }];
   }
+  renderNivel1();
+  selectCat(0);
+
+  // 📥 ESTA ES LA PARTE QUE LEE DEL SHEETS: Asegurate que tenga el &t=${Date.now()} al final
+  try {
+    const resSheets = await fetch(`${URL_API}?accion=listarMateriales&t=${Date.now()}`);
+    const dataSheets = await resSheets.json();
+    if(dataSheets && dataSheets.status === "success" && dataSheets.materiales) {
+      listaMaterialesGlobal = dataSheets.materiales;
+      console.log("Materiales reales cargados desde Sheets:", listaMaterialesGlobal);
+    }
+  } catch(err) {
+    console.log("Error leyendo materiales del Sheets, usando catálogo local por seguridad", err);
+    let materialesSet = new Set();
+    catalogoData.forEach(cat => {
+      if(cat.subcategorias) {
+        cat.subcategorias.forEach(sub => {
+          if(sub.materiales) sub.materiales.forEach(m => materialesSet.add(m.nombre));
+        });
+      }
+    });
+    listaMaterialesGlobal = Array.from(materialesSet);
+  }
+  actualizarDatalistHTML();
+}
   renderNivel1();
   selectCat(0);
   generarAutocompletado();
