@@ -173,8 +173,9 @@
     </div>
 
     <script>
+     <script>
         // 🌐 URL GLOBAL DE TU GOOGLE APPS SCRIPT
-        const URL_API = "https://script.google.com/macros/s/AKfycbzPvTPYyw-kn4gXJGmRVKGQImKo8mLTs3VEcUrZShtMuZkIDqAhg54kKHhaMY-WOmo54A/exec";
+        const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
         // 🔐 FUNCIÓN DE ACCESO DIRECTA (Contraseña: 1234)
         function desbloquearPanel() {
@@ -218,28 +219,25 @@
             if(itemActivo) itemActivo.classList.add('active');
         }
 
-        // 📊 CARGAR DATOS DEL SHEETS
+        // 📊 CARGAR DATOS DEL SHEETS (Sincronizado con tu acción 'cargarPanel')
         async function inicializarDatosPanel() {
             if(!URL_API) return;
             try {
-                // Buscamos la acción nativa 'listar'
-                const res = await fetch(`${URL_API}?accion=listar&t=${Date.now()}`);
+                // 🛠️ LLAMADO CORREGIDO: Usamos 'accion=cargarPanel' tal como lo pide tu script de Google
+                const res = await fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`);
                 const data = await res.json();
                 
-                if(data) {
-                    const lista = Array.isArray(data) ? data : (data.corralones || []);
+                if(data && data.status === "success") {
+                    const lista = data.corralones || [];
+                    const metricas = data.metricas || {};
 
-                    // Cálculos rápidos
-                    const total = lista.length;
-                    const activos = lista.filter(c => c.estado && c.estado.toUpperCase() === 'ACTIVO').length;
-                    const conDeuda = lista.filter(c => c.deuda && parseFloat(c.deuda) > 0).length;
-                    const sinDeuda = total - conDeuda;
-
-                    // Dibujar tarjetas numéricas
-                    if(document.getElementById('met-total')) document.getElementById('met-total').innerText = total;
-                    if(document.getElementById('met-activos')) document.getElementById('met-activos').innerText = activos;
-                    if(document.getElementById('met-deuda')) document.getElementById('met-deuda').innerText = conDeuda;
-                    if(document.getElementById('met-sin-deuda')) document.getElementById('met-sin-deuda').innerText = sinDeuda;
+                    // Dibujar tarjetas numéricas usando las métricas exactas calculadas por tu Google Script
+                    if(document.getElementById('met-total')) document.getElementById('met-total').innerText = metricas.total || 0;
+                    if(document.getElementById('met-activos')) document.getElementById('met-activos').innerText = metricas.activos || 0;
+                    if(document.getElementById('met-deuda')) document.getElementById('met-deuda').innerText = metricas.conDeuda || 0;
+                    if(document.getElementById('met-sin-deuda')) {
+                        document.getElementById('met-sin-deuda').innerText = (metricas.total - metricas.conDeuda) || 0;
+                    }
 
                     // Dibujar tablas
                     var tbody = document.getElementById('tabla-corralones-body');
@@ -247,6 +245,10 @@
                     
                     if(tbody) tbody.innerHTML = "";
                     if(tbodyAlertas) tbodyAlertas.innerHTML = "";
+
+                    if(lista.length === 0 && tbody) {
+                        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No hay datos disponibles en este momento.</td></tr>`;
+                    }
 
                     lista.forEach(corr => {
                         var bClass = "badge-success";
@@ -282,26 +284,29 @@
                     });
 
                     if(tbodyAlertas && tbodyAlertas.innerHTML === "") {
-                        tbodyAlertas.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#16a34a; font-weight:600;">🟢 Sincronizado. Sin alertas.</td></tr>`;
+                        tbodyAlertas.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#16a34a; font-weight:600;">🟢 Sincronizado. Sin alertas de deudas.</td></tr>`;
                     }
+                } else {
+                    throw new Error(data.message || "Estructura incorrecta");
                 }
             } catch (error) {
                 console.error("Error cargando Sheets:", error);
                 if(document.getElementById('tabla-alertas')) {
-                    document.getElementById('tabla-alertas').innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--danger); font-weight:600;">⚠️ Error de conexión con Sheets</td></tr>`;
+                    document.getElementById('tabla-alertas').innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--danger); font-weight:600;">⚠️ Error de conexión con Sheets. Revisa la publicación en Google.</td></tr>`;
                 }
             }
         }
 
-        // CONSULTAR PEDIDO INDIVIDUAL
+        // CONSULTAR PEDIDO INDIVIDUAL (Apuntando a tu endpoint de Pedidos)
         function consultarPedidoSheets() {
             var idInput = document.getElementById('input-id-pedido').value.trim().toUpperCase().replace('#','');
             if(!idInput) return;
 
+            // Buscamos dinámicamente usando los parámetros correctos
             fetch(`${URL_API}?accion=buscarPedido&id=${idInput}`)
             .then(res => res.json())
             .then(data => {
-                if(data.status === "not_found") { alert("Pedido no encontrado."); return; }
+                if(data.status === "error" || data.status === "not_found") { alert("Pedido no encontrado."); return; }
                 document.getElementById('res-real-id').innerText = "Pedido: #" + data.id;
                 document.getElementById('res-real-cliente').innerText = data.cliente;
                 document.getElementById('res-real-zona').innerText = data.zona;
@@ -309,8 +314,9 @@
                 document.getElementById('res-real-estado').innerText = data.estado;
                 document.getElementById('resultado-real').style.display = "block";
             })
-            .catch(err => console.error("Error buscando pedido:", err));
+            .catch(err => {
+                console.error("Error buscando pedido:", err);
+                alert("Asegúrate de agregar la acción buscarPedido en tu Google Apps Script si vas a usar esta sección.");
+            });
         }
     </script>
-</body>
-</html>
