@@ -83,6 +83,7 @@
   .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
 
   .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
+  .tip { font-size: 12px; color: #888; background: #f5f8fc; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #90afd4; margin-top: 1rem; }
 
   /* CONTROL DE PASOS */
   .paso { display: none; }
@@ -251,9 +252,6 @@
 </div>
 
 <script>
-// ⚠️ REEMPLAZÁ ESTA URL POR LA QUE COPIASTE EN EL PASO 1 ⚠️
-const URL_API = "https://script.google.com/macros/s/AKfycbzHTF5IgjlIy3ifVNzTh1mRoGDxWMh6KL5XToIZNFApNcj-uJBpFTCbPhPxhFZ_vhvjRA/exec";
-
 let catalogoData = [];
 let listaMaterialesGlobal = [];
 let catActivaIdx = 0;
@@ -267,6 +265,7 @@ setTimeout(() => {
   if (b) b.style.display = 'block';
 }, 4000);
 
+// NAVEGACIÓN DIRECTA ENTRE PANTALLAS
 function irPaso1() {
   document.getElementById('paso1').style.display = 'block';
   document.getElementById('paso2').style.display = 'none';
@@ -284,57 +283,45 @@ function irPaso2() {
   document.getElementById('paso3').style.display = 'none';
 }
 
-// CARGA DESDE EL EXCEL REAL Y CATÁLOGO LOCAL
+// CARGA DEL CATÁLOGO LOCAL
 async function cargarCatalogo() {
-  // 1. Cargamos el diseño visual de botones desde tu materiales.json local
   try {
     const res = await fetch('materiales.json');
     const data = await res.json();
     catalogoData = data.categorias || [];
   } catch(e) {
+    // Si falla el fetch local, usamos el catálogo con los pesajes corregidos (25kg y 20kg)
     catalogoData = [{
       nombre:'Obra Gruesa', icono:'🏗',
       subcategorias:[{
-        nombre:'Áridos',
+        nombre:'Áridos y sueltos',
         materiales:[
           {nombre:'Cemento Portland 25kg', unidad:'bolsas'},
           {nombre:'Cemento de albañilería 20kg', unidad:'bolsas'},
-          {nombre:'Arena fina', unidad:'bolsas'}
+          {nombre:'Arena fina', unidad:'bolsas'},
+          {nombre:'Arena gruesa', unidad:'m³'}
         ]
       }]
     }];
   }
   renderNivel1();
   selectCat(0);
-
-  // 2. Traemos tu listado del Excel real para inyectarlo en el buscador predictivo
-  try {
-    const resSheets = await fetch(`${URL_API}?accion=listarMateriales`);
-    const dataSheets = await resSheets.json();
-    if(dataSheets && dataSheets.status === "success" && dataSheets.materiales && dataSheets.materiales.length > 0) {
-      console.log("¡Éxito! Materiales cargados desde Sheets.");
-      listaMaterialesGlobal = dataSheets.materiales;
-    } else {
-      throw new Error("Estructura de Sheets incompleta");
-    }
-  } catch(err) {
-    console.log("Aviso: No se pudo conectar a Sheets o la URL es vieja. Usando listado del JSON local.");
-    // Si falla, armamos la lista predictiva con lo que haya en materiales.json
-    let materialesSet = new Set();
-    catalogoData.forEach(cat => {
-      if(cat.subcategorias) {
-        cat.subcategorias.forEach(sub => {
-          if(sub.materiales) sub.materiales.forEach(m => materialesSet.add(m.nombre));
-        });
-      }
-    });
-    listaMaterialesGlobal = Array.from(materialesSet);
-  }
-  
-  actualizarDatalistHTML();
+  generarAutocompletado();
 }
 
-function actualizarDatalistHTML() {
+function generarAutocompletado() {
+  let materialesSet = new Set();
+  catalogoData.forEach(cat => {
+    if(cat.subcategorias) {
+      cat.subcategorias.forEach(sub => {
+        if(sub.materiales) {
+          sub.materiales.forEach(m => materialesSet.add(m.nombre));
+        }
+      });
+    }
+  });
+  listaMaterialesGlobal = Array.from(materialesSet);
+  
   let datalist = document.getElementById('lista-mats');
   if (!datalist) {
     datalist = document.createElement('datalist');
@@ -418,6 +405,7 @@ function vincularInputs() {
   document.querySelectorAll('input[placeholder="Material..."]').forEach(inp => inp.setAttribute('list', 'lista-mats'));
 }
 
+// PROCESAR Y ENVIAR WHATSAPP (WS)
 function enviarPedido() {
   const rows = document.querySelectorAll('.item-row');
   const items = [];
@@ -449,6 +437,7 @@ function enviarPedido() {
   items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
   if(obs) msg += `\n📝 *Obs:* ${obs}`;
 
+  // REEMPLAZÁ CON TU WHATSAPP DE ADMINISTRADOR REAL
   const TEL_ADMIN = "5491112345678"; 
   document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
 
@@ -469,6 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
   cargarCatalogo();
   addItem();
   
+  // Procesar si viene información del calculador previo
   const datos = sessionStorage.getItem('pedido_precargado');
   if(datos) {
     try {
