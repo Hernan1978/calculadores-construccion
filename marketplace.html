@@ -302,30 +302,38 @@ function inicializarMapa() {
 
 async function cargarMapaDesdeSheets() {
   try {
+    // Buscamos los corralones activos en tu Apps Script
     const res = await fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`);
     const data = await res.json();
     
     if(data && data.status === "success" && data.corralones) {
-      markersLayer.clearLayers();
+      markersLayer.clearLayers(); // Limpiamos pines viejos
       
       data.corralones.forEach(corralon => {
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(corralon.zona + ', Buenos Aires, Argentina')}`)
+        // Limpiamos el texto de la zona por si tiene guiones como "CABA — Zona Norte..."
+        let zonaLimpia = corralon.zona.split('—').pop().split('(')[0].trim();
+        
+        // Le sumamos Buenos Aires, Argentina para que el mapa no se vaya a otro país
+        const consultaQuery = `${zonaLimpia}, Buenos Aires, Argentina`;
+
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(consultaQuery)}`)
           .then(r => r.json())
           .then(geo => {
             if(geo && geo.length > 0) {
               const lat = geo[0].lat;
               const lon = geo[0].lon;
+              
+              // Dibujamos el pin en el mapita flotante con los datos del Sheets
               L.marker([lat, lon]).addTo(markersLayer)
-               .bindPopup(`<b>${corralon.nombre}</b><br>📍 ${corralon.zona}`);
+               .bindPopup(`<b>🏢 ${corralon.nombre}</b><br>📍 ${corralon.zona}`);
             }
-          }).catch(e => console.log("Error ubicando zona", e));
+          }).catch(e => console.log("Error ubicando comercio en mapa:", e));
       });
     }
   } catch(err) {
-    console.log("No se cargaron los corralones del mapa:", err);
+    console.log("No se pudieron sincronizar los comercios con el mapa:", err);
   }
 }
-
 async function cargarCatalogo() {
   try {
     const res = await fetch('materiales.json');
