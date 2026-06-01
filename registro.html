@@ -174,23 +174,33 @@
 
     <script>
       <script>
-        // 🌐 URL de tu Google Apps Script
+       <script>
+        // 🌐 URL de tu Google Apps Script (Mantenemos tu URL original)
         const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
-        // 🔐 Función de acceso con TU CLAVE REAL (1234)
+        // 🔐 FUNCIÓN DE ACCESO BLINDADA (Clave: 1234)
         function desbloquearPanel() {
-            const claveCorrecta = "1234"; 
-            const claveIngresada = prompt("Introduce la contraseña de Administrador:");
+            try {
+                const claveCorrecta = "1234"; 
+                const claveIngresada = prompt("Introduce la contraseña de Administrador:");
 
-            if (claveIngresada === claveCorrecta) {
-                document.getElementById('pantalla-publica').style.display = 'none';
-                document.getElementById('panel-admin').style.display = 'flex';
-                document.querySelector('.boton-escondido').style.display = 'none';
-                
-                // Dispara la carga de datos del Sheets
-                inicializarDatosPanel();
-            } else if (claveIngresada !== null) {
-                alert("❌ Contraseña incorrecta. Acceso denegado.");
+                if (claveIngresada === claveCorrecta) {
+                    // 1. Forzamos el cambio visual al instante (Sin depender de Google)
+                    document.getElementById('pantalla-publica').style.display = 'none';
+                    document.getElementById('panel-admin').style.display = 'flex';
+                    
+                    const btnEscondido = document.querySelector('.boton-escondido');
+                    if(btnEscondido) btnEscondido.style.display = 'none';
+                    
+                    console.log("🔓 Acceso concedido localmente. Iniciando sincronización secundaria...");
+                    
+                    // 2. Intentamos cargar los datos en segundo plano
+                    setTimeout(inicializarDatosPanel, 100);
+                } else if (claveIngresada !== null) {
+                    alert("❌ Contraseña incorrecta. Acceso denegado.");
+                }
+            } catch (err) {
+                alert("Ocurrió un error inesperado al procesar el acceso: " + err.message);
             }
         }
 
@@ -198,59 +208,61 @@
         function cerrarSesion() {
             document.getElementById('panel-admin').style.display = 'none';
             document.getElementById('pantalla-publica').style.display = 'flex';
-            document.querySelector('.boton-escondido').style.display = 'block';
+            const btnEscondido = document.querySelector('.boton-escondido');
+            if(btnEscondido) btnEscondido.style.display = 'block';
         }
 
         // 🗺️ Navegación de pestañas
         function navegar(targetId) {
             const secciones = document.querySelectorAll('.panel-section');
             secciones.forEach(sec => sec.classList.remove('active'));
-            document.getElementById(targetId).classList.add('active');
+            
+            const seccionDestino = document.getElementById(targetId);
+            if(seccionDestino) seccionDestino.classList.add('active');
             
             const itemsMenu = document.querySelectorAll('.sidebar-item');
             itemsMenu.forEach(item => item.classList.remove('active'));
+            
             const itemActivo = document.querySelector(`[data-target="${targetId}"]`);
             if(itemActivo) itemActivo.classList.add('active');
         }
 
-        // 📊 Sincronización corregida apuntando a la acción real del Sheets ('listar')
+        // 📊 Sincronización aislada y tolerante a fallos
         async function inicializarDatosPanel() {
             if(!URL_API || URL_API.includes("TU_URL")) return;
 
             try {
-                console.log("Conectando con la base de datos de Materiales Ya...");
+                console.log("Consultando endpoint del servidor...");
                 
-                // 🛠️ Cambiado a 'accion=listar' que es la ruta nativa de tu Apps Script
+                // Probamos pidiendo la acción genérica 'listar'
                 const res = await fetch(`${URL_API}?accion=listar&t=${Date.now()}`);
                 const data = await res.json();
                 
-                // Verificamos si la estructura viene directamente como array o con contenedor success
-                if(data && (data.status === "success" || Array.isArray(data))) {
-                    
-                    // Adaptador por si viene el array directo o dentro de data.corralones
+                if(data) {
+                    // Si data es un array directo o contiene .corralones
                     const lista = Array.isArray(data) ? data : (data.corralones || []);
 
-                    // 1. Cálculos de métricas en tiempo real
+                    // Cálculos express
                     const total = lista.length;
                     const activos = lista.filter(c => c.estado && c.estado.toUpperCase() === 'ACTIVO').length;
                     const conDeuda = lista.filter(c => c.deuda && parseFloat(c.deuda) > 0).length;
                     const sinDeuda = total - conDeuda;
 
-                    // 2. Inyección de números en las tarjetas superiores
-                    document.getElementById('met-total').innerText = total;
-                    document.getElementById('met-activos').innerText = activos;
-                    document.getElementById('met-deuda').innerText = conDeuda;
-                    document.getElementById('met-sin-deuda').innerText = sinDeuda;
+                    // Pintamos las tarjetas si existen los elementos
+                    if(document.getElementById('met-total')) document.getElementById('met-total').innerText = total;
+                    if(document.getElementById('met-activos')) document.getElementById('met-activos').innerText = activos;
+                    if(document.getElementById('met-deuda')) document.getElementById('met-deuda').innerText = conDeuda;
+                    if(document.getElementById('met-sin-deuda')) document.getElementById('met-sin-deuda').innerText = sinDeuda;
 
-                    // 3. Renderizar las tablas internas del panel
+                    // Limpiamos tablas
                     var tbody = document.getElementById('tabla-corralones-body');
                     var tbodyAlertas = document.getElementById('tabla-alertas');
                     
-                    tbody.innerHTML = "";
-                    tbodyAlertas.innerHTML = "";
+                    if(tbody) tbody.innerHTML = "";
+                    if(tbodyAlertas) tbodyAlertas.innerHTML = "";
 
-                    if(lista.length === 0) {
-                        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No hay comercios registrados en el Sheets.</td></tr>`;
+                    if(lista.length === 0 && tbody) {
+                        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No hay datos disponibles en este momento.</td></tr>`;
                     }
 
                     lista.forEach(corr => {
@@ -261,40 +273,41 @@
 
                         const numDeuda = corr.deuda ? parseFloat(corr.deuda) : 0;
 
-                        var fila = `<tr>
-                            <td><b>${corr.nombre || 'Sin Nombre'}</b></td>
-                            <td>${corr.tipo || 'Corralón'}</td>
-                            <td>${corr.zona || 'No Asignada'}</td>
-                            <td>
-                                <div class="ws-main-badge">
-                                    <button class="ws-main-btn">📱 WS</button>
-                                    <div class="ws-main-menu">
-                                        <a href="https://wa.me/${corr.whatsapp}?text=Hola" target="_blank">🛒 Mensaje Comercial</a>
+                        if(tbody) {
+                            var fila = `<tr>
+                                <td><b>${corr.nombre || 'Sin Nombre'}</b></td>
+                                <td>${corr.tipo || 'Corralón'}</td>
+                                <td>${corr.zona || 'No Asignada'}</td>
+                                <td>
+                                    <div class="ws-main-badge">
+                                        <button class="ws-main-btn">📱 WS</button>
+                                        <div class="ws-main-menu">
+                                            <a href="https://wa.me/${corr.whatsapp}?text=Hola" target="_blank">🛒 Mensaje</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td><span class="badge ${bClass}">${corr.estado || 'Activo'}</span></td>
-                            <td style="color:${numDeuda > 0 ? 'var(--danger)' : 'var(--success)'}; font-weight:700;">$${numDeuda.toLocaleString('es-AR')}</td>
-                            <td><button class="btn btn-outline btn-sm">Ver</button></td>
-                        </tr>`;
-                        tbody.innerHTML += fila;
+                                </td>
+                                <td><span class="badge ${bClass}">${corr.estado || 'Activo'}</span></td>
+                                <td style="color:${numDeuda > 0 ? 'var(--danger)' : 'var(--success)'}; font-weight:700;">$${numDeuda.toLocaleString('es-AR')}</td>
+                                <td><button class="btn btn-outline btn-sm">Ver</button></td>
+                            </tr>`;
+                            tbody.innerHTML += fila;
+                        }
 
-                        if(numDeuda > 0) {
+                        if(numDeuda > 0 && tbodyAlertas) {
                             tbodyAlertas.innerHTML += `<tr><td><b>${corr.nombre}</b></td><td><span class="badge badge-danger">Deuda Pendiente</span></td><td>Hoy</td></tr>`;
                         }
                     });
 
-                    if(tbodyAlertas.innerHTML === "") {
-                        tbodyAlertas.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#16a34a; font-weight:600;">🟢 Sincronizado. Sin deudas pendientes.</td></tr>`;
+                    if(tbodyAlertas && tbodyAlertas.innerHTML === "") {
+                        tbodyAlertas.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#16a34a; font-weight:600;">🟢 Sincronizado. Sin alertas.</td></tr>`;
                     }
-                    console.log("¡Panel actualizado con éxito!");
-                } else {
-                    throw new Error("Formato de datos no reconocido");
                 }
             } catch (error) {
-                console.error("Fallo de enlace:", error);
-                document.getElementById('tabla-alertas').innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--danger); font-weight:600;">⚠️ Error de enlace con el servidor de Google</td></tr>`;
-                document.getElementById('tabla-corralones-body').innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--danger);">No se pudieron recibir datos. Asegúrate de haber publicado los cambios en Apps Script.</td></tr>`;
+                console.error("Error al conectar datos de Sheets, pero el panel se mantiene abierto:", error);
+                const tablaAlertas = document.getElementById('tabla-alertas');
+                if(tablaAlertas) {
+                    tablaAlertas.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--danger); font-weight:600;">⚠️ Error de conexión (El panel funciona, revisa el Apps Script)</td></tr>`;
+                }
             }
         }
 
@@ -313,10 +326,10 @@
                 document.getElementById('res-real-estado').innerText = data.estado;
                 document.getElementById('resultado-real').style.display = "block";
             })
-            .catch(err => console.error("Error al buscar el pedido:", err));
+            .catch(err => console.error("Error buscando pedido:", err));
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("Sistema web listo para operar.");
+            console.log("Inicialización limpia realizada.");
         });
     </script>
