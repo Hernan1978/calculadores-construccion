@@ -175,17 +175,75 @@
         // ==========================================
         // ⚠️ PEGAR AQUÍ TU URL DE GOOGLE APPS SCRIPT
         // ==========================================
-        const URL_API = "https://script.google.com/macros/s/AKfycbzHTF5IgjlIy3ifVNzTh1mRoGDxWMh6KL5XToIZNFApNcj-uJBpFTCbPhPxhFZ_vhvjRA/exec"; 
+        (function() {
+  const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
-        function desbloquearPanel() {
-            const intento = prompt('Ingrese la clave de administrador:');
-            if (intento === '1234') {
-                document.getElementById('pantalla-publica').style.display = 'none';
-                document.getElementById('panel-admin').style.display = 'flex';
-                document.querySelector('.boton-escondido').style.display = 'none';
-                inicializarDatosPanel();
-            }
-        }
+  async function despertarDashboard() {
+    try {
+      console.log("Conectando con Sheets...");
+      const res = await fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`);
+      const data = await res.json();
+      
+      if (data && data.status === "success" && data.corralones) {
+        const lista = data.corralones;
+        
+        // 1. Calculamos los números reales
+        const total = lista.length;
+        const activos = lista.filter(c => c.estado && c.estado.toUpperCase() === 'ACTIVO').length;
+        // Si no tenés columna deuda todavía, simulamos 0 para que no rompa
+        const conDeuda = lista.filter(c => c.deuda && parseFloat(c.deuda) > 0).length;
+        const sinDeuda = total - conDeuda;
+
+        // 2. Buscador inteligente de tarjetas (Fuerza Bruta)
+        const divs = document.querySelectorAll('div');
+        divs.forEach(div => {
+          const texto = div.innerText.toUpperCase().trim();
+          
+          // Buscamos la tarjeta de TOTAL COMERCIOS
+          if (texto.includes("TOTAL COMERCIOS")) {
+            const valor = div.parentElement.querySelector('.stat-value') || div.nextElementSibling || div;
+            if(valor) valor.innerText = total;
+          }
+          // Buscamos la tarjeta de ACTIVOS
+          if (texto.includes("ACTIVOS")) {
+            const valor = div.parentElement.querySelector('.stat-value') || div.nextElementSibling || div;
+            if(valor) valor.innerText = activos;
+          }
+          // Buscamos la tarjeta de CON DEUDA
+          if (texto.includes("CON DEUDA")) {
+            const valor = div.parentElement.querySelector('.stat-value') || div.nextElementSibling || div;
+            if(valor) valor.innerText = conDeuda;
+          }
+          // Buscamos la tarjeta de SIN DEUDA
+          if (texto.includes("SIN DEUDA")) {
+            const valor = div.parentElement.querySelector('.stat-value') || div.nextElementSibling || div;
+            if(valor) valor.innerText = sinDeuda;
+          }
+        });
+
+        // 3. Limpiamos el cartel de "Sincronizando..."
+        // Buscamos cualquier elemento que tenga ese texto molesto y lo cambiamos
+        const elementos = document.querySelectorAll('td, div, p, span');
+        elementos.forEach(el => {
+          if(el.innerText && el.innerText.includes("Sincronizando con Sheets")) {
+            el.innerHTML = `<span style="color:#2d8a4e; font-weight:bold;">🟢 Conectado con Google Sheets exitosamente</span>`;
+          }
+        });
+        
+        console.log("Dashboard actualizado con éxito.");
+      }
+    } catch (e) {
+      console.error("Error crítico en dashboard:", e);
+    }
+  }
+
+  // Se ejecuta apenas carga la página
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', despertarDashboard);
+  } else {
+    desperdarDashboard();
+  }
+})();
 
         function cerrarSesion() {
             document.getElementById('panel-admin').style.display = 'none';
