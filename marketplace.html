@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Materiales Ya — Pedí cotización a corralones</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
@@ -24,7 +25,7 @@
   .step.done .step-circle { background: #1a6a3e; color: #fff; }
   .step-label { font-size: 11px; color: #888; }
   .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
-  .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #d0dcea; z-index: 0; }
+  .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #d0dcea; z-index: 0; transition: all .3s; }
   .step:last-child::after { display: none; }
 
   /* CARDS */
@@ -83,7 +84,9 @@
   .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
 
   .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
-  .tip { font-size: 12px; color: #888; background: #f5f8fc; border-radius: 8px; padding: 8px 12px; border-left: 3px solid #90afd4; margin-top: 1rem; }
+
+  /* MAPA DINÁMICO INTEGRADO */
+  #map { width: 100%; height: 140px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; z-index: 1; }
 
   /* CONTROL DE PASOS */
   .paso { display: none; }
@@ -165,7 +168,6 @@
             <option>La Plata</option>
             <option>Ensenada</option>
             <option>Berisso</option>
-          </optgroup>
         </select>
       </div>
       <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. Corrientes 1234"></div>
@@ -206,7 +208,7 @@
 
       <hr class="divider">
       <div class="field"><label>Observaciones (opcional)</label>
-        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta, tengo acceso por rampa..."></textarea>
+        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta..."></textarea>
       </div>
       <button type="button" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
       <button type="button" class="btn-secondary" onclick="irPaso1()">← Volver</button>
@@ -235,37 +237,46 @@
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
 <div id="ws-chat" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-  <div id="ws-bubble" style="background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:14px 16px;max-width:260px;font-size:13px;color:#1a1a1a;line-height:1.5;display:none;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <strong style="font-size:13px;">🏗 Materiales Ya</strong>
+  <div id="ws-bubble" style="background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:14px 16px;width:280px;font-size:13px;color:#1a1a1a;line-height:1.5;display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:13px;">🏗 Red de Cobertura</strong>
       <button type="button" onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
     </div>
-    <p style="margin:0 0 10px">¡Hola! 👋 ¿En qué te podemos ayudar?</p>
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">📦 Quiero cotizar materiales</a>
-      <a href="https://wa.me/5491112345678?text=Hola%2C+soy+un+corral%C3%B3n+y+quiero+sumarme+a+la+plataforma" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">🏪 Soy corralón / ferretería</a>
+    <p style="margin:0 0 6px; font-size:11px; color:#666;">Corralones activos en tu zona:</p>
+    
+    <div id="map"></div>
+    
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px;">
+      <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:11px;font-weight:500;text-align:center;">💬 Soporte / Sumar mi Corralón</a>
     </div>
   </div>
-  <button type="button" onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+  <button type="button" onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 166px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   </button>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
+// Recuerda poner aquí la nueva URL generada por el Apps Script al actualizar la implementación
+const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
+
 let catalogoData = [];
 let listaMaterialesGlobal = [];
 let catActivaIdx = 0;
+let map, markersLayer;
 
 function toggleBubble() {
   const b = document.getElementById('ws-bubble');
-  if (b) b.style.display = b.style.display === 'none' ? 'block' : 'none';
+  if (b) {
+    const isHidden = b.style.display === 'none';
+    b.style.display = isHidden ? 'block' : 'none';
+    if (isHidden && map) {
+      setTimeout(() => map.invalidateSize(), 200);
+    }
+  }
 }
-setTimeout(() => {
-  const b = document.getElementById('ws-bubble');
-  if (b) b.style.display = 'block';
-}, 4000);
 
-// NAVEGACIÓN DIRECTA ENTRE PANTALLAS
 function irPaso1() {
   document.getElementById('paso1').style.display = 'block';
   document.getElementById('paso2').style.display = 'none';
@@ -283,7 +294,38 @@ function irPaso2() {
   document.getElementById('paso3').style.display = 'none';
 }
 
-// CARGA DEL CATÁLOGO LOCAL
+function inicializarMapa() {
+  map = L.map('map', { attributionControl: false }).setView([-34.66, -58.37], 10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  markersLayer = L.layerGroup().addTo(map);
+}
+
+async function cargarMapaDesdeSheets() {
+  try {
+    const res = await fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`);
+    const data = await res.json();
+    
+    if(data && data.status === "success" && data.corralones) {
+      markersLayer.clearLayers();
+      
+      data.corralones.forEach(corralon => {
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(corralon.zona + ', Buenos Aires, Argentina')}`)
+          .then(r => r.json())
+          .then(geo => {
+            if(geo && geo.length > 0) {
+              const lat = geo[0].lat;
+              const lon = geo[0].lon;
+              L.marker([lat, lon]).addTo(markersLayer)
+               .bindPopup(`<b>${corralon.nombre}</b><br>📍 ${corralon.zona}`);
+            }
+          }).catch(e => console.log("Error ubicando zona", e));
+      });
+    }
+  } catch(err) {
+    console.log("No se cargaron los corralones del mapa:", err);
+  }
+}
+
 async function cargarCatalogo() {
   try {
     const res = await fetch('materiales.json');
@@ -301,16 +343,13 @@ async function cargarCatalogo() {
   renderNivel1();
   selectCat(0);
 
-  // 📥 ESTA ES LA PARTE QUE LEE DEL SHEETS: Asegurate que tenga el &t=${Date.now()} al final
   try {
     const resSheets = await fetch(`${URL_API}?accion=listarMateriales&t=${Date.now()}`);
     const dataSheets = await resSheets.json();
     if(dataSheets && dataSheets.status === "success" && dataSheets.materiales) {
       listaMaterialesGlobal = dataSheets.materiales;
-      console.log("Materiales reales cargados desde Sheets:", listaMaterialesGlobal);
     }
   } catch(err) {
-    console.log("Error leyendo materiales del Sheets, usando catálogo local por seguridad", err);
     let materialesSet = new Set();
     catalogoData.forEach(cat => {
       if(cat.subcategorias) {
@@ -323,24 +362,8 @@ async function cargarCatalogo() {
   }
   actualizarDatalistHTML();
 }
-  renderNivel1();
-  selectCat(0);
-  generarAutocompletado();
-}
 
-function generarAutocompletado() {
-  let materialesSet = new Set();
-  catalogoData.forEach(cat => {
-    if(cat.subcategorias) {
-      cat.subcategorias.forEach(sub => {
-        if(sub.materiales) {
-          sub.materiales.forEach(m => materialesSet.add(m.nombre));
-        }
-      });
-    }
-  });
-  listaMaterialesGlobal = Array.from(materialesSet);
-  
+function actualizarDatalistHTML() {
   let datalist = document.getElementById('lista-mats');
   if (!datalist) {
     datalist = document.createElement('datalist');
@@ -424,7 +447,6 @@ function vincularInputs() {
   document.querySelectorAll('input[placeholder="Material..."]').forEach(inp => inp.setAttribute('list', 'lista-mats'));
 }
 
-// PROCESAR Y ENVIAR WHATSAPP (WS)
 function enviarPedido() {
   const rows = document.querySelectorAll('.item-row');
   const items = [];
@@ -456,7 +478,6 @@ function enviarPedido() {
   items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
   if(obs) msg += `\n📝 *Obs:* ${obs}`;
 
-  // REEMPLAZÁ CON TU WHATSAPP DE ADMINISTRADOR REAL
   const TEL_ADMIN = "5491112345678"; 
   document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
 
@@ -473,11 +494,11 @@ function nuevoPedido() {
   irPaso1();
 }
 
+// ARRANQUE SEGURO: Carga las funciones principales primero y aísla el mapa
 document.addEventListener('DOMContentLoaded', () => {
   cargarCatalogo();
   addItem();
   
-  // Procesar si viene información del calculador previo
   const datos = sessionStorage.getItem('pedido_precargado');
   if(datos) {
     try {
@@ -488,6 +509,24 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('banner-calculador').innerHTML = `<div class="banner-verde">✅ Materiales cargados desde el calculador.</div>`;
     } catch(e){}
   }
+
+  // Encapsulamos el mapa para que corra de fondo sin congelar los botones
+  setTimeout(() => {
+    try {
+      inicializarMapa();
+      cargarMapaDesdeSheets();
+    } catch(err) {
+      console.log("El mapa cargará al desplegarse la burbuja flotante", err);
+    }
+  }, 500);
+
+  setTimeout(() => {
+    const b = document.getElementById('ws-bubble');
+    if (b) {
+      b.style.display = 'block';
+      if(typeof map !== 'undefined' && map) map.invalidateSize();
+    }
+  }, 4000);
 });
 </script>
 </body>
