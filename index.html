@@ -207,7 +207,7 @@
         <div class="card-main-body">
           <div class="card-main-tag">Marketplace</div>
           <div class="card-main-titulo">Pedí cotización a corralones</div>
-          <div class="card-main-desc">Cargá tu lista de materiales and recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
+          <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
           <div class="card-main-link">Pedir materiales →</div>
         </div>
       </a>
@@ -371,10 +371,22 @@ setTimeout(() => {
   };
   let homeMap, homeMarkers = [], homeNegocios = [];
 
+  // Función interna para crear pines lindos y personalizados con emojis
+  function crearIconoHome(tipo) {
+    const conf = TIPOS_HOME[tipo] || { color: '#4b5563', pin: '📍' };
+    return L.divIcon({
+      html: `<div style="background:${conf.color}; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.3); font-size:16px;">${conf.pin}</div>`,
+      className: '',
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -16]
+    });
+  }
+
   function initHomeMap() {
     if(!document.getElementById('home-map')) return;
     
-    // Inicializa el mapa centrado en Buenos Aires por defecto
+    // Inicializa el mapa centrado en Buenos Aires
     homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.62, -58.44], 10);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap', maxZoom: 19
@@ -397,7 +409,6 @@ setTimeout(() => {
             const longitud = parseFloat(n.lng);
             return estadoComercio === "activo" && !isNaN(latitud) && !isNaN(longitud);
           }).map(n => {
-            // Estandarizamos los tipos para los filtros de botones del Home
             let tipoNormalizado = (n.tipo || "").toLowerCase().trim();
             if (tipoNormalizado.includes("madera")) tipoNormalizado = "maderera";
             if (tipoNormalizado.includes("seco") || tipoNormalizado.includes("yeso")) tipoNormalizado = "durlock";
@@ -421,31 +432,24 @@ setTimeout(() => {
           `<div style="padding:2rem; text-align:center; color:#f87171; font-size:14px;">⚠️ Error de conexión con Sheets. Revisá la Web App.</div>`;
       });
   }
+
   function renderHomeMarkers(lista) {
     homeMarkers.forEach(m => homeMap.removeLayer(m));
     homeMarkers = [];
+    
     lista.forEach(n => {
-      // Limpiamos el número de WhatsApp quitando espacios o guiones si los hay
-      const telf = n.whatsapp.replace(/[^0-9]/g, '');
+      const telf = String(n.whatsapp).replace(/[^0-9]/g, '');
       const numDestino = telf.startsWith('54') ? telf : '549' + telf;
-      
       const wsMsg = encodeURIComponent('📍 ¡Hola! Vi a ' + n.nombre + ' en Materiales Ya y quería hacer una consulta.');
       
       const m = L.marker([n.lat, n.lng], {icon: crearIconoHome(n.tipo)})
         .addTo(homeMap)
-        .bindPopup(`<strong>${n.nombre}</strong><br><small>${n.direccion}</small><br><a href="https://wa.me/${numDestino}?text=${wsMsg}" target="_blank" style="color:#1a2744;font-weight:600">Contactar por WhatsApp →</a>`);
-      homeMarkers.push(m);
-    });
-    if(homeMarkers.length > 0) {
-      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.15));
-    }
-  }
-      
+        .bindPopup(`<strong>${n.nombre}</strong><br><small>${n.direccion}</small><br><br><a href="https://wa.me/${numDestino}?text=${wsMsg}" target="_blank" style="color:#1a2744;font-weight:600;text-decoration:none;">💬 Contactar por WhatsApp →</a>`);
       homeMarkers.push(m);
     });
 
     if(homeMarkers.length > 0) {
-      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.2));
+      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.15));
     }
   }
 
