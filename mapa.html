@@ -184,19 +184,18 @@ function initMap() {
 
 // ── Sincronizar y Normalizar Datos desde Google Sheets ──
 function cargarDatosDesdeSheets() {
-  fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`)
+  // CAMBIADO: Antes decía ?accion=listarCorralones, ahora dice ?accion=cargarPanel 🚀
+  fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`)
     .then(res => res.json())
     .then(data => {
       if (data && data.status === "success" && data.corralones) {
         
         todosNegocios = data.corralones.filter(c => {
-          // Normalización inteligente de propiedades por si cambian en el Sheets
           c.latitude = c.lat || c.LATITUD || c.latitud;
           c.longitude = c.lng || c.LONGITUD || c.longitud;
           c.actualEstado = c.estado || c.ESTADO || "activo";
           return c.actualEstado.toLowerCase() === "activo" && c.latitude && c.longitude;
         }).map((c, index) => {
-          // Clasificación automática basada en palabras clave del negocio
           let tipoDetectado = 'corralon';
           const nomLower = c.nombre.toLowerCase();
           if (nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
