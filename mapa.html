@@ -182,45 +182,57 @@ function initMap() {
   cargarDatosDesdeSheets();
 }
 
-// ── Sincronizar y Normalizar Datos desde Google Sheets ──
 function cargarDatosDesdeSheets() {
-  // CAMBIADO: Antes decía ?accion=listarCorralones, ahora dice ?accion=cargarPanel 🚀
+  // Le pegamos a la acción real de tu script: cargarPanel
   fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error("Error en la respuesta del servidor");
+      return res.json();
+    })
     .then(data => {
-      if (data && data.status === "success" && data.corralones) {
+      // Validamos que la Web App responda con éxito y traiga el array correcto
+      if (data && data.status === "success" && Array.isArray(data.corralones)) {
         
         todosNegocios = data.corralones.filter(c => {
-          c.latitude = c.lat || c.LATITUD || c.latitud;
-          c.longitude = c.lng || c.LONGITUD || c.longitud;
-          c.actualEstado = c.estado || c.ESTADO || "activo";
-          return c.actualEstado.toLowerCase() === "activo" && c.latitude && c.longitude;
+          if (!c) return false;
+          
+          // Forzamos la lectura segura de las variables del JSON de tu script
+          const estadoComercio = (c.estado || "").toString().toLowerCase().trim();
+          const latitud = parseFloat(c.lat);
+          const longitud = parseFloat(c.lng);
+          
+          // REGLA: Solo pasa si está activo y tiene coordenadas numéricas válidas
+          return estadoComercio === "activo" && !isNaN(latitud) && !isNaN(longitud);
         }).map((c, index) => {
+          // Clasificación por palabra clave en el nombre
           let tipoDetectado = 'corralon';
-          const nomLower = c.nombre.toLowerCase();
+          const nomLower = (c.nombre || "").toLowerCase();
           if (nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
           else if (nomLower.includes('durlock') || nomLower.includes('yeseria') || nomLower.includes('yeso')) tipoDetectado = 'durlock';
           else if (nomLower.includes('maderera') || nomLower.includes('madera')) tipoDetectado = 'maderera';
 
           return {
             id: index,
-            nombre: c.nombre,
-            zona: c.zona || "Buenos Aires",
-            direccion: c.direccion || "Dirección no especificada",
+            nombre: c.nombre || "Comercio sin nombre",
+            zona: c.zona || "No Asignada",
+            direccion: c.direccion || "Dirección no especificada", // Si no tenés columna de dirección, usará este fallback
             tipo: tipoDetectado,
             whatsapp: c.whatsapp || "",
-            lat: parseFloat(c.latitude),
-            lng: parseFloat(c.longitude)
+            lat: parseFloat(c.lat),
+            lng: parseFloat(c.lng)
           };
         });
 
         listaActual = [...todosNegocios];
         renderizarMapaYLista();
+      } else {
+        throw new Error(data.message || "Estructura JSON no reconocida");
       }
     })
     .catch(err => {
-      console.error("Error cargando mapa:", err);
-      document.getElementById('lista-negocios').innerHTML = '<div class="sin-resultados">No se pudieron sincronizar los datos en este momento.</div>';
+      console.error("Detalle técnico del error:", err);
+      document.getElementById('lista-negocios').innerHTML = 
+        `<div class="sin-resultados">⚠️ Error al procesar datos del Sheets.<br><small style="color:#f87171">${err.message}</small></div>`;
     });
 }
 
