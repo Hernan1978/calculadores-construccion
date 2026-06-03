@@ -10,15 +10,26 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; }
 
+  /* NAV */
   nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
   nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
   nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
   .nav-links { display: flex; gap: 8px; }
   .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
   .nav-link:hover, .nav-link.active { background: #fff; color: #1a2744; border-color: #fff; }
-  @media(max-width:520px) { .nav-links { display: none; } }
+  .menu-toggle { display: none; background: none; border: 1px solid #2e4a7a; border-radius: 7px; color: #90afd4; font-size: 18px; padding: 5px 10px; cursor: pointer; }
+  
+  @media(max-width:600px) {
+    nav { padding: .875rem 1rem; position: relative; }
+    nav .logo span { display: none; }
+    .nav-links { display: none !important; }
+    .menu-toggle { display: flex !important; }
+    .nav-links.open { display: flex !important; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: #1a2744; padding: 1rem; gap: 8px; z-index: 100; border-top: 1px solid #2e4a7a; }
+    .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
+  }
 
-  .page-header { background: #1a2744; color: #fff; padding: 1.5rem 2rem; flex-shrink: 0; }
+  /* HEADER Y FILTROS */
+  .page-header { background: #1a2744; color: #fff; padding: 1.5rem 2rem; flex-shrink: 0; border-top: 1px solid #2e4a7a; }
   .page-header h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
   .page-header p { font-size: 13px; color: #90afd4; }
 
@@ -28,89 +39,62 @@
   .filtro:hover:not(.active) { background: #eef2f7; }
   .filtro-label { font-size: 12px; color: #888; margin-right: 4px; }
 
-  .contenido { display: flex; flex: 1; min-height: 0; }
+  /* CONTENIDO PRINCIPAL split */
+  .contenido { display: flex; flex: 1; min-height: 0; position: relative; }
 
-  /* LISTA */
-  .lista { width: 340px; flex-shrink: 0; overflow-y: auto; background: #fff; border-right: 1px solid #d0dcea; }
-  @media(max-width:700px) { .lista { display: none; } }
-  .lista-header { padding: 12px 16px; border-bottom: 1px solid #eef2f7; font-size: 12px; color: #888; font-weight: 500; }
+  /* LISTA LATERAL */
+  .lista { width: 340px; flex-shrink: 0; overflow-y: auto; background: #fff; border-right: 1px solid #d0dcea; display: flex; flex-direction: column; }
+  .lista-header { padding: 12px 16px; border-bottom: 1px solid #eef2f7; font-size: 12px; color: #888; font-weight: 500; background: #fafafa; flex-shrink: 0; }
+  #lista-negocios { flex: 1; overflow-y: auto; }
+  
   .negocio-card { padding: 14px 16px; border-bottom: 1px solid #eef2f7; cursor: pointer; transition: background .15s; }
   .negocio-card:hover, .negocio-card.selected { background: #eef2f7; }
-  .neg-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+  .neg-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; }
   .neg-nombre { font-size: 14px; font-weight: 600; color: #1a2744; }
-  .neg-tipo { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+  .neg-tipo { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; white-space: nowrap; }
+  
   .tipo-corralon { background: #dbeafe; color: #1e40af; }
   .tipo-ferreteria { background: #fef3c7; color: #92400e; }
   .tipo-durlock { background: #d1fae5; color: #065f46; }
   .tipo-maderera { background: #ede9fe; color: #5b21b6; }
-  .neg-dir { font-size: 12px; color: #666; margin-bottom: 3px; }
-  .neg-tel { font-size: 12px; color: #5a8abf; }
-  .neg-horario { font-size: 11px; color: #aaa; margin-top: 3px; }
+  
+  .neg-dir { font-size: 12px; color: #666; margin-bottom: 4px; }
+  .neg-zona { font-size: 11px; color: #888; margin-bottom: 6px; }
   .neg-btns { display: flex; gap: 6px; margin-top: 8px; }
-  .neg-btn { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: all .15s; }
-  .neg-btn-ws { background: #25d366; color: #fff; }
-  .neg-btn-map { background: #eef2f7; color: #1a2744; border: 1px solid #d0dcea; }
-  .neg-btn-map:hover { background: #1a2744; color: #fff; }
+  .neg-btn { padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; text-align: center; }
+  .neg-btn-ws { background: #25d366; color: #fff; flex: 1; }
+  .neg-btn-map { background: #eef2f7; color: #1a2744; border: 1px solid #d0dcea; flex: 1; }
+  .neg-btn-map:hover { background: #1a2744; color: #fff; border-color: #1a2744; }
 
-  /* MAPA */
-  #map { flex: 1; min-height: 400px; }
+  /* CONTENEDOR MAPA */
+  #map { flex: 1; min-height: 100%; }
 
-  /* POPUP */
-  .leaflet-popup-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; min-width: 200px; }
+  /* POPUPS LEAFLET */
+  .leaflet-popup-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; min-width: 200px; margin: 12px; }
   .popup-nombre { font-size: 14px; font-weight: 700; color: #1a2744; margin-bottom: 4px; }
   .popup-tipo { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; display: inline-block; margin-bottom: 8px; }
-  .popup-dir { font-size: 12px; color: #555; margin-bottom: 3px; }
-  .popup-tel { font-size: 12px; color: #5a8abf; margin-bottom: 3px; }
-  .popup-horario { font-size: 11px; color: #aaa; margin-bottom: 10px; }
+  .popup-dir { font-size: 12px; color: #555; margin-bottom: 4px; }
+  .popup-zona { font-size: 11px; color: #888; margin-bottom: 10px; }
   .popup-btns { display: flex; gap: 6px; }
   .popup-btn { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; text-decoration: none; text-align: center; flex: 1; }
   .popup-btn-ws { background: #25d366; color: #fff; }
   .popup-btn-cot { background: #1a2744; color: #fff; }
 
-  /* SIN RESULTADOS */
   .sin-resultados { padding: 2rem; text-align: center; color: #aaa; font-size: 14px; }
-
   footer { text-align: center; padding: 1rem; font-size: 12px; color: #aaa; flex-shrink: 0; background: #fff; border-top: 1px solid #d0dcea; }
   footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
 
-  .menu-toggle {
-    display: none;
-    background: none;
-    border: 1px solid #2e4a7a;
-    border-radius: 7px;
-    color: #90afd4;
-    font-size: 18px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  .nav-links.open { 
-    display: flex !important; 
-    flex-direction: column; 
-    position: absolute; 
-    top: 56px; left: 0; right: 0; 
-    background: #1a2744; 
-    padding: 1rem; gap: 8px;
-    z-index: 100;
-    border-top: 1px solid #2e4a7a;
-  }
-  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
-  @media(max-width:600px) {
-    nav { padding: .875rem 1rem; position: relative; }
-    nav .logo span { display: none; }
-    .nav-links { display: none !important; }
-    .menu-toggle { display: flex !important; }
-  }
-
+  /* RESPONSIVE MAPA COMPLETAMENTE MÓVIL */
   @media(max-width:700px) {
     .lista { display: none !important; }
-    #map { min-height: calc(100vh - 210px); }
+    .contenido { height: calc(100vh - 210px); }
+    #map { min-height: 100%; }
     .filtros { padding: .6rem 1rem; gap: 5px; }
     .filtro { padding: 5px 10px; font-size: 11px; }
     .filtro-label { display: none; }
     .page-header { padding: .875rem 1rem; }
     .page-header h1 { font-size: .95rem; }
   }
-
 </style>
 </head>
 <body>
@@ -122,27 +106,26 @@
     <a href="marketplace.html" class="nav-link">Pedir materiales</a>
     <a href="mapa.html" class="nav-link active">Mapa</a>
   </div>
-
   <button class="menu-toggle" id="menuToggle">&#9776;</button>
 </nav>
 
 <div class="page-header">
   <h1>📍 Corralones y ferreterías cerca tuyo</h1>
-  <p>Encontrá negocios de materiales en tu zona. Hacé clic en un pin para ver los datos.</p>
+  <p>Encontrá negocios de materiales en tu zona. Filtra por rubro o elegí desde la lista lateral.</p>
 </div>
 
 <div class="filtros">
   <span class="filtro-label">Filtrar:</span>
-  <button class="filtro active" onclick="filtrar('todos', this)">Todos</button>
-  <button class="filtro" onclick="filtrar('corralon', this)">🏗 Corralones</button>
-  <button class="filtro" onclick="filtrar('ferreteria', this)">🔩 Ferreterías</button>
-  <button class="filtro" onclick="filtrar('durlock', this)">📐 Durlock / Yeso</button>
-  <button class="filtro" onclick="filtrar('maderera', this)">🪵 Maderas</button>
+  <button class="filtro active" id="f-todos" onclick="filtrarMapa('todos', this)">Todos</button>
+  <button class="filtro" id="f-corralon" onclick="filtrarMapa('corralon', this)">🏗 Corralones</button>
+  <button class="filtro" id="f-ferreteria" onclick="filtrarMapa('ferreteria', this)">🔩 Ferreterías</button>
+  <button class="filtro" id="f-durlock" onclick="filtrarMapa('durlock', this)">📐 Durlock / Yeso</button>
+  <button class="filtro" id="f-maderera" onclick="filtrarMapa('maderera', this)">🪵 Maderas</button>
 </div>
 
 <div class="contenido">
   <div class="lista">
-    <div class="lista-header" id="lista-header">Cargando...</div>
+    <div class="lista-header" id="lista-header">Cargando comercios...</div>
     <div id="lista-negocios"></div>
   </div>
   <div id="map"></div>
@@ -155,7 +138,6 @@
   <span style="margin-left:8px">¿Querés aparecer acá? <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+agregar+mi+negocio+al+mapa+de+Materiales+Ya" target="_blank">Escribinos por WhatsApp</a></span>
 </footer>
 
-<!-- WhatsApp flotante -->
 <div id="ws-chat" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
   <div id="ws-bubble" style="background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:14px 16px;max-width:260px;font-size:13px;color:#1a1a1a;line-height:1.5;display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -175,153 +157,187 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// ── Config tipos ──
-const TIPOS = {
-  corralon:   { label: '🏗 Corralón',       color: '#1e40af', bg: '#dbeafe', pin: '🏗' },
-  ferreteria: { label: '🔩 Ferretería',     color: '#92400e', bg: '#fef3c7', pin: '🔩' },
-  durlock:    { label: '📐 Durlock / Yeso', color: '#065f46', bg: '#d1fae5', pin: '📐' },
-  maderera:   { label: '🪵 Maderera',       color: '#5b21b6', bg: '#ede9fe', pin: '🪵' },
+// ── Configuración Visual de Rubros ──
+const MAPA_TIPOS = {
+  corralon:   { label: '🏗 Corralón',         color: '#1e40af', bg: '#dbeafe', pin: '🏗' },
+  ferreteria: { label: '🔩 Ferretería',        color: '#92400e', bg: '#fef3c7', pin: '🔩' },
+  durlock:    { label: '📐 Durlock / Yeso',    color: '#065f46', bg: '#d1fae5', pin: '📐' },
+  maderera:   { label: '🪵 Maderera',          color: '#5b21b6', bg: '#ede9fe', pin: '🪵' },
 };
 
+const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
+let mainMap;
 let todosNegocios = [];
-let markers = [];
-let filtroActivo = 'todos';
-let map;
+let listaActual = [];
+let mapMarkers = [];
 
-// ── Inicializar mapa ──
-map = L.map('map').setView([-34.62, -58.44], 11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  maxZoom: 19
-}).addTo(map);
+// ── Inicializar Mapa General ──
+function initMap() {
+  mainMap = L.map('map', {zoomControl: true}).setView([-34.6612, -58.3241], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(mainMap);
 
-// ── Crear icono personalizado ──
-function crearIcono(tipo) {
-  const t = TIPOS[tipo] || TIPOS.corralon;
+  cargarDatosDesdeSheets();
+}
+
+// ── Sincronizar y Normalizar Datos desde Google Sheets ──
+function cargarDatosDesdeSheets() {
+  fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.status === "success" && data.corralones) {
+        
+        todosNegocios = data.corralones.filter(c => {
+          // Normalización inteligente de propiedades por si cambian en el Sheets
+          c.latitude = c.lat || c.LATITUD || c.latitud;
+          c.longitude = c.lng || c.LONGITUD || c.longitud;
+          c.actualEstado = c.estado || c.ESTADO || "activo";
+          return c.actualEstado.toLowerCase() === "activo" && c.latitude && c.longitude;
+        }).map((c, index) => {
+          // Clasificación automática basada en palabras clave del negocio
+          let tipoDetectado = 'corralon';
+          const nomLower = c.nombre.toLowerCase();
+          if (nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
+          else if (nomLower.includes('durlock') || nomLower.includes('yeseria') || nomLower.includes('yeso')) tipoDetectado = 'durlock';
+          else if (nomLower.includes('maderera') || nomLower.includes('madera')) tipoDetectado = 'maderera';
+
+          return {
+            id: index,
+            nombre: c.nombre,
+            zona: c.zona || "Buenos Aires",
+            direccion: c.direccion || "Dirección no especificada",
+            tipo: tipoDetectado,
+            whatsapp: c.whatsapp || "",
+            lat: parseFloat(c.latitude),
+            lng: parseFloat(c.longitude)
+          };
+        });
+
+        listaActual = [...todosNegocios];
+        renderizarMapaYLista();
+      }
+    })
+    .catch(err => {
+      console.error("Error cargando mapa:", err);
+      document.getElementById('lista-negocios').innerHTML = '<div class="sin-resultados">No se pudieron sincronizar los datos en este momento.</div>';
+    });
+}
+
+// ── Crear Icono de Pin Personalizado ──
+function crearIconoMarker(tipo) {
+  const cfg = MAPA_TIPOS[tipo] || MAPA_TIPOS.corralon;
   return L.divIcon({
-    html: `<div style="background:${t.color};color:white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;">${t.pin}</div>`,
-    className: '',
-    iconSize: [36, 36],
-    iconAnchor: [18, 18],
-    popupAnchor: [0, -20]
+    html: `<div style="background:${cfg.color};color:white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;">${cfg.pin}</div>`,
+    className: '', iconSize: [36, 36], iconAnchor: [18, 18], popupAnchor: [0, -20]
   });
 }
 
-// ── Popup HTML ──
-function popupHTML(n) {
-  const t = TIPOS[n.tipo] || TIPOS.corralon;
-  const wsMsg = encodeURIComponent(`Hola ${n.nombre}, los vi en Materiales Ya y quiero consultar precios`);
-  return `
-    <div class="popup-nombre">${n.nombre}</div>
-    <span class="popup-tipo" style="background:${t.bg};color:${t.color}">${t.label}</span>
-    <div class="popup-dir">📍 ${n.direccion}</div>
-    <div class="popup-tel">📞 ${n.telefono}</div>
-    <div class="popup-horario">🕐 ${n.horario}</div>
-    <div class="popup-btns">
-      <a href="https://wa.me/54${n.telefono.replace(/\D/g,'')}&text=${wsMsg}" target="_blank" class="popup-btn popup-btn-ws">WhatsApp</a>
-      <a href="marketplace.html" class="popup-btn popup-btn-cot">Pedir cotización</a>
-    </div>
-  `;
-}
+// ── Dibujar Pines y Lista Lateral Simultáneamente ──
+function renderizarMapaYLista() {
+  // Limpiar capas anteriores
+  mapMarkers.forEach(m => mainMap.removeLayer(m));
+  mapMarkers = [];
 
-// ── Card lista HTML ──
-function cardHTML(n, idx) {
-  const t = TIPOS[n.tipo] || TIPOS.corralon;
-  const wsMsg = encodeURIComponent(`Hola ${n.nombre}, los vi en Materiales Ya y quiero consultar precios`);
-  return `
-    <div class="negocio-card" id="card-${n.id}" onclick="seleccionarNegocio(${idx})">
-      <div class="neg-header">
-        <div class="neg-nombre">${n.nombre}</div>
-        <span class="neg-tipo tipo-${n.tipo}">${t.label}</span>
-      </div>
-      <div class="neg-dir">📍 ${n.direccion}</div>
-      <div class="neg-tel">📞 ${n.telefono}</div>
-      <div class="neg-horario">🕐 ${n.horario}</div>
-      <div class="neg-btns">
-        <a href="https://wa.me/54${n.telefono.replace(/\D/g,'')}&text=${wsMsg}" target="_blank" class="neg-btn neg-btn-ws">WhatsApp</a>
-        <button class="neg-btn neg-btn-map" onclick="event.stopPropagation();verEnMapa(${idx})">Ver en mapa</button>
-      </div>
-    </div>
-  `;
-}
+  const containerLista = document.getElementById('lista-negocios');
+  const headerLista = document.getElementById('lista-header');
 
-// ── Cargar datos ──
-async function cargarNegocios() {
-  try {
-    const res = await fetch('materiales.json');
-    const data = await res.json();
-    todosNegocios = (data.negocios || []).filter(n => n.activo);
-    renderizar(todosNegocios);
-  } catch(e) {
-    document.getElementById('lista-negocios').innerHTML = '<div class="sin-resultados">No se pudieron cargar los negocios.</div>';
-  }
-}
+  headerLista.textContent = `${listaActual.length} negocio${listaActual.length !== 1 ? 's' : ''} encontrado${listaActual.length !== 1 ? 's' : ''}`;
 
-function renderizar(lista) {
-  // Limpiar markers
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
-
-  // Lista
-  const listaEl = document.getElementById('lista-negocios');
-  document.getElementById('lista-header').textContent = `${lista.length} negocio${lista.length !== 1 ? 's' : ''} encontrado${lista.length !== 1 ? 's' : ''}`;
-
-  if (lista.length === 0) {
-    listaEl.innerHTML = '<div class="sin-resultados">No hay negocios en esta categoría todavía.</div>';
+  if (listaActual.length === 0) {
+    containerLista.innerHTML = '<div class="sin-resultados">No hay comercios cargados en esta categoría.</div>';
     return;
   }
 
-  listaEl.innerHTML = lista.map((n, i) => cardHTML(n, i)).join('');
+  let htmlLista = '';
 
-  // Markers
-  lista.forEach((n, i) => {
-    const marker = L.marker([n.lat, n.lng], { icon: crearIcono(n.tipo) })
-      .addTo(map)
-      .bindPopup(popupHTML(n), { maxWidth: 260 });
+  listaActual.forEach((n, idx) => {
+    const cfg = MAPA_TIPOS[n.tipo] || MAPA_TIPOS.corralon;
+    const wsMsg = encodeURIComponent(`📍 ¡Hola! Vi su comercio "${n.nombre}" en Materiales Ya. Les quiero hacer una consulta de materiales.`);
+    
+    // 1. Armar HTML para la lista lateral izquierda
+    htmlLista += `
+      <div class="negocio-card" id="card-${n.id}" onclick="enfocarComercio(${idx}, true)">
+        <div class="neg-header">
+          <div class="neg-nombre">${n.nombre}</div>
+          <span class="neg-tipo" style="background:${cfg.bg};color:${cfg.color};">${cfg.label}</span>
+        </div>
+        <div class="neg-dir">📍 ${n.direccion}</div>
+        <div class="neg-zona">🌆 Cobertura: ${n.zona}</div>
+        <div class="neg-btns">
+          <a href="https://wa.me/${n.whatsapp}?text=${wsMsg}" target="_blank" class="neg-btn neg-btn-ws" onclick="event.stopPropagation();">WhatsApp</a>
+          <button class="neg-btn neg-btn-map">Ver mapa</button>
+        </div>
+      </div>
+    `;
+
+    // 2. Generar el pin correspondiente en el Mapa
+    const marker = L.marker([n.lat, n.lng], { icon: crearIconoMarker(n.tipo) })
+      .addTo(mainMap)
+      .bindPopup(`
+        <div class="popup-nombre">${n.nombre}</div>
+        <span class="popup-tipo" style="background:${cfg.bg};color:${cfg.color}">${cfg.label}</span>
+        <div class="popup-dir">📍 ${n.direccion}</div>
+        <div class="popup-zona">🌆 Zona: ${n.zona}</div>
+        <div class="popup-btns">
+          <a href="https://wa.me/${n.whatsapp}?text=${wsMsg}" target="_blank" class="popup-btn popup-btn-ws">WhatsApp</a>
+          <a href="marketplace.html" class="popup-btn popup-btn-cot">Cotizar</a>
+        </div>
+      `, { maxWidth: 260 });
+
+    // Vincular evento clic del marcador físico al scroll del panel izquierdo
     marker.on('click', () => {
-      document.querySelectorAll('.negocio-card').forEach(c => c.classList.remove('selected'));
-      const card = document.getElementById('card-' + n.id);
-      if (card) { card.classList.add('selected'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+      enfocarComercio(idx, false);
     });
-    markers.push(marker);
+
+    mapMarkers.push(marker);
   });
 
-  // Ajustar vista al grupo
-  if (markers.length > 0) {
-    const group = L.featureGroup(markers);
-    map.fitBounds(group.getBounds().pad(0.15));
+  containerLista.innerHTML = htmlLista;
+
+  // Ajustar encuadre de zoom dinámico
+  if (mapMarkers.length > 0) {
+    mainMap.fitBounds(L.featureGroup(mapMarkers).getBounds().pad(0.15));
   }
 }
 
-function seleccionarNegocio(idx) {
-  const marker = markers[idx];
-  if (!marker) return;
-  map.setView(marker.getLatLng(), 15);
-  marker.openPopup();
+// ── Acción de Selección Cruzada (Lista <-> Mapa) ──
+window.enfocarComercio = function(idx, centrarMapa) {
+  const marker = mapMarkers[idx];
+  const negocio = listaActual[idx];
+  if (!marker || !negocio) return;
+
+  if (centrarMapa) {
+    mainMap.setView(marker.getLatLng(), 15);
+    marker.openPopup();
+  }
+
+  // Resaltar visualmente la tarjeta en el scroll lateral
   document.querySelectorAll('.negocio-card').forEach(c => c.classList.remove('selected'));
-  document.querySelectorAll('.negocio-card')[idx]?.classList.add('selected');
-}
+  const cardElement = document.getElementById('card-' + negocio.id);
+  if (cardElement) {
+    cardElement.classList.add('selected');
+    cardElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+};
 
-function verEnMapa(idx) {
-  seleccionarNegocio(idx);
-}
-
-function filtrar(tipo, btn) {
-  filtroActivo = tipo;
+// ── Lógica del Filtro de Rubros ──
+window.filtrarMapa = function(tipo, btn) {
   document.querySelectorAll('.filtro').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const lista = tipo === 'todos' ? todosNegocios : todosNegocios.filter(n => n.tipo === tipo);
-  renderizar(lista);
-}
 
+  listaActual = tipo === 'todos' ? todosNegocios : todosNegocios.filter(n => n.tipo === tipo);
+  renderizarMapaYLista();
+};
+
+// ── Utilidades de Interfaz (Menús/Chats) ──
 function toggleBubble() {
   const b = document.getElementById('ws-bubble');
   b.style.display = b.style.display === 'none' ? 'block' : 'none';
 }
 
-cargarNegocios();
-</script>
-<script>
+// Menú Móvil Hamburguesa
 (function() {
   function initMenu() {
     var btn = document.getElementById('menuToggle');
@@ -346,116 +362,13 @@ cargarNegocios();
     initMenu();
   }
 })();
-</script>
 
- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-(function() {
-  // 🌐 URL de tu proyecto moderno de Google Apps Script con V8
-  const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
-
-  const TIPOS_HOME = {
-    corralon:   { color: '#1e40af', pin: '🏗' },
-    ferreteria: { color: '#92400e', pin: '🔩' },
-    durlock:    { color: '#065f46', pin: '📐' },
-    maderera:   { color: '#5b21b6', pin: '🪵' },
-  };
-  let homeMap, homeMarkers = [], homeNegocios = [];
-
-  function initHomeMap() {
-    if(!document.getElementById('home-map')) return;
-    
-    // Centramos el mapa por defecto en el AMBA
-    homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.6612, -58.3241], 11);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap', maxZoom: 19
-    }).addTo(homeMap);
-
-    // 🔄 LEEMOS TU SPREADSHEET EN TIEMPO REAL
-    fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`)
-      .then(r => r.json())
-      .then(data => {
-        if(data && data.status === "success" && data.corralones) {
-          
-          // Procesamos los corralones activos que tengan coordenadas asignadas
-          homeNegocios = data.corralones.filter(c => {
-            // REGLA: Obligatorio estar Activo y tener números en lat y lng
-            return c.estado.toLowerCase() === "activo" && c.lat && c.lng;
-          }).map(c => {
-            // Clasificación automática por palabras clave en el nombre
-            let tipoDetectado = 'corralon';
-            const nomLower = c.nombre.toLowerCase();
-            if(nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
-            else if(nomLower.includes('durlock') || nomLower.includes('yeseria') || nomLower.includes('yeso')) tipoDetectado = 'durlock';
-            else if(nomLower.includes('maderera') || nomLower.includes('madera')) tipoDetectado = 'maderera';
-
-            return {
-              nombre: c.nombre,
-              zona: c.zona,
-              tipo: tipoDetectado,
-              whatsapp: c.whatsapp,
-              lat: c.lat,
-              lng: c.lng
-            };
-          });
-
-          // Pintamos los pines exactos
-          renderHomeMarkers(homeNegocios);
-        }
-      }).catch(e => console.log("Error sincronizando mapa de Home:", e));
-  }
-
-  function crearIconoHome(tipo) {
-    const t = TIPOS_HOME[tipo] || TIPOS_HOME.corralon;
-    return L.divIcon({
-      html: `<div style="background:${t.color};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;">${t.pin}</div>`,
-      className:'', iconSize:[32,32], iconAnchor:[16,16], popupAnchor:[0,-18]
-    });
-  }
-
-  function renderHomeMarkers(lista) {
-    // Limpiamos pines previos
-    homeMarkers.forEach(m => homeMap.removeLayer(m));
-    homeMarkers = [];
-    
-    lista.forEach(n => {
-      const wsMsg = encodeURIComponent('📍 ¡Hola! Vi su comercio "' + n.nombre + '" en Materiales Ya. Les quiero hacer una consulta de materiales.');
-      
-      // 🎯 USAMOS LA LATITUD Y LONGITUD REAL DEL SHEETS (Sin demoras ni fallos de búsqueda)
-      const m = L.marker([n.lat, n.lng], {icon: crearIconoHome(n.tipo)})
-        .addTo(homeMap)
-        .bindPopup(`
-          <div style="font-family:sans-serif; min-width:140px;">
-            <strong style="color:#1a2744;font-size:14px;">${n.nombre}</strong><br>
-            <span style="color:#666;font-size:12px;">📍 Cobertura: ${n.zona}</span><br>
-            <a href="https://wa.me/${n.whatsapp}?text=${wsMsg}" target="_blank" style="display:inline-block;margin-top:6px;color:#25d366;font-weight:600;text-decoration:none;">Contactar por WhatsApp →</a>
-          </div>
-        `);
-      
-      homeMarkers.push(m);
-    });
-
-    // Encuadramos el zoom automáticamente si hay comercios activos cargados
-    if(homeMarkers.length > 0) {
-      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.2));
-    }
-  }
-
-  window.filtrarHome = function(tipo, btn) {
-    document.querySelectorAll('[id^="hf-"]').forEach(b => {
-      b.style.background='#fff'; b.style.color='#555'; b.style.borderColor='#d0dcea';
-    });
-    btn.style.background='#1a2744'; btn.style.color='#fff'; btn.style.borderColor='#1a2744';
-    const lista = tipo === 'todos' ? homeNegocios : homeNegocios.filter(n => n.tipo === tipo);
-    renderHomeMarkers(lista);
-  };
-
-  if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHomeMap);
-  } else {
-    initHomeMap();
-  }
-})();
+// Disparador del Mapa al cargar el documento
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMap);
+} else {
+  initMap();
+}
 </script>
 </body>
 </html>
