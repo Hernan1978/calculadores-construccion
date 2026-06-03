@@ -361,7 +361,7 @@ setTimeout(() => {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function() {
-  const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
+  const URL_API = "https://script.google.com/macros/s/AKfycbxhzkAtIUmL_LFNqibnWtH3lb38f0mRVGjrfsBfYF7fE3UeGjw5ARijBzrv55TH4eEBzg/exec";
 
   const TIPOS_HOME = {
     corralon:   { color: '#1e40af', pin: '🏗' },
@@ -374,70 +374,72 @@ setTimeout(() => {
   function initHomeMap() {
     if(!document.getElementById('home-map')) return;
     
-    homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.6612, -58.3241], 11);
+    // Inicializa el mapa centrado en Buenos Aires por defecto
+    homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.62, -58.44], 10);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap', maxZoom: 19
     }).addTo(homeMap);
-
-    // 🔄 Petición blindada con control de parámetros flexible
-    fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`)
-      .then(r => r.json())
+    
+    // Levantamos los datos reales desde tu Google Sheets 🚀
+    fetch(`${URL_API}?t=${Date.now()}`)
+      .then(r => {
+        if (!r.ok) throw new Error("Error de red");
+        return r.json();
+      })
       .then(data => {
-        if(data && data.status === "success" && data.corralones) {
+        if (data && data.status === "success" && Array.isArray(data.corralones)) {
           
-          homeNegocios = data.corralones.filter(c => {
-            // Mapeo tolerante a mayúsculas/minúsculas del Excel
-            c.latitude = c.lat || c.LATITUD || c.latitud;
-            c.longitude = c.lng || c.LONGITUD || c.longitud;
-            c.actualEstado = c.estado || c.ESTADO || "activo";
-
-            return c.actualEstado.toLowerCase() === "activo" && c.latitude && c.longitude;
-          }).map(c => {
-            let tipoDetectado = 'corralon';
-            const nomLower = c.nombre.toLowerCase();
-            if(nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
-            else if(nomLower.includes('durlock') || nomLower.includes('yeseria') || nomLower.includes('yeso')) tipoDetectado = 'durlock';
-            else if(nomLower.includes('maderera') || nomLower.includes('madera')) tipoDetectado = 'maderera';
+          // Filtramos y estandarizamos para que Leaflet dibuje sin romperse
+          homeNegocios = data.corralones.filter(n => {
+            if (!n) return false;
+            const estadoComercio = (n.estado || "").toString().toLowerCase().trim();
+            const latitud = parseFloat(n.lat);
+            const longitud = parseFloat(n.lng);
+            return estadoComercio === "activo" && !isNaN(latitud) && !isNaN(longitud);
+          }).map(n => {
+            // Estandarizamos los tipos para los filtros de botones del Home
+            let tipoNormalizado = (n.tipo || "").toLowerCase().trim();
+            if (tipoNormalizado.includes("madera")) tipoNormalizado = "maderera";
+            if (tipoNormalizado.includes("seco") || tipoNormalizado.includes("yeso")) tipoNormalizado = "durlock";
 
             return {
-              nombre: c.nombre,
-              zona: c.zona || "Buenos Aires",
-              tipo: tipoDetectado,
-              whatsapp: c.whatsapp || "",
-              lat: parseFloat(c.latitude),
-              lng: parseFloat(c.longitude)
+              nombre: n.nombre,
+              direccion: n.direccion || "Dirección no especificada",
+              tipo: tipoNormalizado,
+              whatsapp: n.whatsapp || "",
+              lat: parseFloat(n.lat),
+              lng: parseFloat(n.lng)
             };
           });
-
+          
           renderHomeMarkers(homeNegocios);
         }
-      }).catch(e => console.log("Error sincronizando mapa de Home:", e));
+      })
+      .catch(err => {
+        console.error("Error en mini-mapa:", err);
+        document.getElementById('home-map').innerHTML = 
+          `<div style="padding:2rem; text-align:center; color:#f87171; font-size:14px;">⚠️ Error de conexión con Sheets. Revisá la Web App.</div>`;
+      });
   }
-
-  function crearIconoHome(tipo) {
-    const t = TIPOS_HOME[tipo] || TIPOS_HOME.corralon;
-    return L.divIcon({
-      html: `<div style="background:${t.color};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;">${t.pin}</div>`,
-      className:'', iconSize:[32,32], iconAnchor:[16,16], popupAnchor:[0,-18]
-    });
-  }
-
   function renderHomeMarkers(lista) {
     homeMarkers.forEach(m => homeMap.removeLayer(m));
     homeMarkers = [];
-    
     lista.forEach(n => {
-      const wsMsg = encodeURIComponent('📍 ¡Hola! Vi su comercio "' + n.nombre + '" en Materiales Ya. Les quiero hacer una consulta de materiales.');
+      // Limpiamos el número de WhatsApp quitando espacios o guiones si los hay
+      const telf = n.whatsapp.replace(/[^0-9]/g, '');
+      const numDestino = telf.startsWith('54') ? telf : '549' + telf;
+      
+      const wsMsg = encodeURIComponent('📍 ¡Hola! Vi a ' + n.nombre + ' en Materiales Ya y quería hacer una consulta.');
       
       const m = L.marker([n.lat, n.lng], {icon: crearIconoHome(n.tipo)})
         .addTo(homeMap)
-        .bindPopup(`
-          <div style="font-family:sans-serif; min-width:140px; line-height:1.4;">
-            <strong style="color:#1a2744;font-size:14px;">${n.nombre}</strong><br>
-            <span style="color:#666;font-size:12px;">📍 Cobertura: ${n.zona}</span><br>
-            <a href="https://wa.me/${n.whatsapp}?text=${wsMsg}" target="_blank" style="display:inline-block;margin-top:6px;color:#25d366;font-weight:600;text-decoration:none;">Contactar por WhatsApp →</a>
-          </div>
-        `);
+        .bindPopup(`<strong>${n.nombre}</strong><br><small>${n.direccion}</small><br><a href="https://wa.me/${numDestino}?text=${wsMsg}" target="_blank" style="color:#1a2744;font-weight:600">Contactar por WhatsApp →</a>`);
+      homeMarkers.push(m);
+    });
+    if(homeMarkers.length > 0) {
+      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.15));
+    }
+  }
       
       homeMarkers.push(m);
     });
