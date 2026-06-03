@@ -347,5 +347,115 @@ cargarNegocios();
   }
 })();
 </script>
+
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function() {
+  // 🌐 URL de tu proyecto moderno de Google Apps Script con V8
+  const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
+
+  const TIPOS_HOME = {
+    corralon:   { color: '#1e40af', pin: '🏗' },
+    ferreteria: { color: '#92400e', pin: '🔩' },
+    durlock:    { color: '#065f46', pin: '📐' },
+    maderera:   { color: '#5b21b6', pin: '🪵' },
+  };
+  let homeMap, homeMarkers = [], homeNegocios = [];
+
+  function initHomeMap() {
+    if(!document.getElementById('home-map')) return;
+    
+    // Centramos el mapa por defecto en el AMBA
+    homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.6612, -58.3241], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap', maxZoom: 19
+    }).addTo(homeMap);
+
+    // 🔄 LEEMOS TU SPREADSHEET EN TIEMPO REAL
+    fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`)
+      .then(r => r.json())
+      .then(data => {
+        if(data && data.status === "success" && data.corralones) {
+          
+          // Procesamos los corralones activos que tengan coordenadas asignadas
+          homeNegocios = data.corralones.filter(c => {
+            // REGLA: Obligatorio estar Activo y tener números en lat y lng
+            return c.estado.toLowerCase() === "activo" && c.lat && c.lng;
+          }).map(c => {
+            // Clasificación automática por palabras clave en el nombre
+            let tipoDetectado = 'corralon';
+            const nomLower = c.nombre.toLowerCase();
+            if(nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
+            else if(nomLower.includes('durlock') || nomLower.includes('yeseria') || nomLower.includes('yeso')) tipoDetectado = 'durlock';
+            else if(nomLower.includes('maderera') || nomLower.includes('madera')) tipoDetectado = 'maderera';
+
+            return {
+              nombre: c.nombre,
+              zona: c.zona,
+              tipo: tipoDetectado,
+              whatsapp: c.whatsapp,
+              lat: c.lat,
+              lng: c.lng
+            };
+          });
+
+          // Pintamos los pines exactos
+          renderHomeMarkers(homeNegocios);
+        }
+      }).catch(e => console.log("Error sincronizando mapa de Home:", e));
+  }
+
+  function crearIconoHome(tipo) {
+    const t = TIPOS_HOME[tipo] || TIPOS_HOME.corralon;
+    return L.divIcon({
+      html: `<div style="background:${t.color};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;">${t.pin}</div>`,
+      className:'', iconSize:[32,32], iconAnchor:[16,16], popupAnchor:[0,-18]
+    });
+  }
+
+  function renderHomeMarkers(lista) {
+    // Limpiamos pines previos
+    homeMarkers.forEach(m => homeMap.removeLayer(m));
+    homeMarkers = [];
+    
+    lista.forEach(n => {
+      const wsMsg = encodeURIComponent('📍 ¡Hola! Vi su comercio "' + n.nombre + '" en Materiales Ya. Les quiero hacer una consulta de materiales.');
+      
+      // 🎯 USAMOS LA LATITUD Y LONGITUD REAL DEL SHEETS (Sin demoras ni fallos de búsqueda)
+      const m = L.marker([n.lat, n.lng], {icon: crearIconoHome(n.tipo)})
+        .addTo(homeMap)
+        .bindPopup(`
+          <div style="font-family:sans-serif; min-width:140px;">
+            <strong style="color:#1a2744;font-size:14px;">${n.nombre}</strong><br>
+            <span style="color:#666;font-size:12px;">📍 Cobertura: ${n.zona}</span><br>
+            <a href="https://wa.me/${n.whatsapp}?text=${wsMsg}" target="_blank" style="display:inline-block;margin-top:6px;color:#25d366;font-weight:600;text-decoration:none;">Contactar por WhatsApp →</a>
+          </div>
+        `);
+      
+      homeMarkers.push(m);
+    });
+
+    // Encuadramos el zoom automáticamente si hay comercios activos cargados
+    if(homeMarkers.length > 0) {
+      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.2));
+    }
+  }
+
+  window.filtrarHome = function(tipo, btn) {
+    document.querySelectorAll('[id^="hf-"]').forEach(b => {
+      b.style.background='#fff'; b.style.color='#555'; b.style.borderColor='#d0dcea';
+    });
+    btn.style.background='#1a2744'; btn.style.color='#fff'; btn.style.borderColor='#1a2744';
+    const lista = tipo === 'todos' ? homeNegocios : homeNegocios.filter(n => n.tipo === tipo);
+    renderHomeMarkers(lista);
+  };
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHomeMap);
+  } else {
+    initHomeMap();
+  }
+})();
+</script>
 </body>
 </html>
