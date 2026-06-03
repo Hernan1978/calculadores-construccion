@@ -183,39 +183,38 @@ function initMap() {
 }
 
 function cargarDatosDesdeSheets() {
-  // Le pegamos a la acción real de tu script: cargarPanel
-  fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`)
+  fetch(`${URL_API}?t=${Date.now()}`) // Trae el JSON limpio
     .then(res => {
-      if (!res.ok) throw new Error("Error en la respuesta del servidor");
+      if (!res.ok) throw new Error("Error de red");
       return res.json();
     })
     .then(data => {
-      // Validamos que la Web App responda con éxito y traiga el array correcto
       if (data && data.status === "success" && Array.isArray(data.corralones)) {
         
+        // Filtrar y mapear de forma segura según tu nuevo JSON
         todosNegocios = data.corralones.filter(c => {
           if (!c) return false;
           
-          // Forzamos la lectura segura de las variables del JSON de tu script
           const estadoComercio = (c.estado || "").toString().toLowerCase().trim();
           const latitud = parseFloat(c.lat);
           const longitud = parseFloat(c.lng);
           
-          // REGLA: Solo pasa si está activo y tiene coordenadas numéricas válidas
+          // REGLA: Pasa solo si está ACTIVO y tiene coordenadas numéricas válidas
           return estadoComercio === "activo" && !isNaN(latitud) && !isNaN(longitud);
         }).map((c, index) => {
-          // Clasificación por palabra clave en el nombre
+          
+          // Clasificación por palabra clave en el nombre para los iconos
           let tipoDetectado = 'corralon';
           const nomLower = (c.nombre || "").toLowerCase();
           if (nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
-          else if (nomLower.includes('durlock') || nomLower.includes('yeseria') || nomLower.includes('yeso')) tipoDetectado = 'durlock';
+          else if (nomLower.includes('durlock') || nomLower.includes('yeseria')) tipoDetectado = 'durlock';
           else if (nomLower.includes('maderera') || nomLower.includes('madera')) tipoDetectado = 'maderera';
 
           return {
             id: index,
             nombre: c.nombre || "Comercio sin nombre",
             zona: c.zona || "No Asignada",
-            direccion: c.direccion || "Dirección no especificada", // Si no tenés columna de dirección, usará este fallback
+            direccion: c.direccion || "Dirección no especificada",
             tipo: tipoDetectado,
             whatsapp: c.whatsapp || "",
             lat: parseFloat(c.lat),
@@ -224,18 +223,18 @@ function cargarDatosDesdeSheets() {
         });
 
         listaActual = [...todosNegocios];
-        renderizarMapaYLista();
+        renderizarMapaYLista(); // Dibuja todo en pantalla
       } else {
-        throw new Error(data.message || "Estructura JSON no reconocida");
+        throw new Error("Formato de respuesta inválido");
       }
     })
     .catch(err => {
-      console.error("Detalle técnico del error:", err);
+      console.error("Error en mapa:", err);
       document.getElementById('lista-negocios').innerHTML = 
-        `<div class="sin-resultados">⚠️ Error al procesar datos del Sheets.<br><small style="color:#f87171">${err.message}</small></div>`;
+        `<div class="sin-resultados">⚠️ Error de conexión con Sheets.<br><small style="color:#f87171">${err.message}</small></div>`;
     });
 }
-// ── Crear Icono de Pin Personalizado ──
+ // ── Crear Icono de Pin Personalizado ──
 function crearIconoMarker(tipo) {
   const cfg = MAPA_TIPOS[tipo] || MAPA_TIPOS.corralon;
   return L.divIcon({
