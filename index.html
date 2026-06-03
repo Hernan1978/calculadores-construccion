@@ -361,7 +361,7 @@ setTimeout(() => {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function() {
-  // Tu URL global de Google Apps Script para sincronizar en vivo
+  // 🌐 URL de tu proyecto moderno de Google Apps Script con V8
   const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
   const TIPOS_HOME = {
@@ -374,20 +374,25 @@ setTimeout(() => {
 
   function initHomeMap() {
     if(!document.getElementById('home-map')) return;
-    homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.62, -58.44], 10);
+    
+    // Centramos el mapa por defecto en el AMBA
+    homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.6612, -58.3241], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap', maxZoom: 19
     }).addTo(homeMap);
 
-    // 🔄 CONEXIÓN EN VIVO: Llamamos a tu Sheets en lugar del archivo JSON local
-    fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`)
+    // 🔄 LEEMOS TU SPREADSHEET EN TIEMPO REAL
+    fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`)
       .then(r => r.json())
       .then(data => {
         if(data && data.status === "success" && data.corralones) {
           
-          // Mapeamos los datos que vienen del Sheets al formato que necesita el mapa
-          homeNegocios = data.corralones.map(c => {
-            // Evaluamos el tipo de negocio por su nombre o dejamos 'corralon' por defecto
+          // Procesamos los corralones activos que tengan coordenadas asignadas
+          homeNegocios = data.corralones.filter(c => {
+            // REGLA: Obligatorio estar Activo y tener números en lat y lng
+            return c.estado.toLowerCase() === "activo" && c.lat && c.lng;
+          }).map(c => {
+            // Clasificación automática por palabras clave en el nombre
             let tipoDetectado = 'corralon';
             const nomLower = c.nombre.toLowerCase();
             if(nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
@@ -397,15 +402,17 @@ setTimeout(() => {
             return {
               nombre: c.nombre,
               zona: c.zona,
-              direccion: "Zona de Cobertura: " + c.zona,
-              tipo: tipoDetectado
+              tipo: tipoDetectado,
+              whatsapp: c.whatsapp,
+              lat: c.lat,
+              lng: c.lng
             };
           });
 
-          // Geocodificamos y renderizamos los pines en el mapa grande
+          // Pintamos los pines exactos
           renderHomeMarkers(homeNegocios);
         }
-      }).catch(e => console.log("Error trayendo comercios desde Sheets:", e));
+      }).catch(e => console.log("Error sincronizando mapa de Home:", e));
   }
 
   function crearIconoHome(tipo) {
@@ -417,37 +424,31 @@ setTimeout(() => {
   }
 
   function renderHomeMarkers(lista) {
+    // Limpiamos pines previos
     homeMarkers.forEach(m => homeMap.removeLayer(m));
     homeMarkers = [];
     
     lista.forEach(n => {
-      // Limpiamos el nombre de la zona por si tiene guiones o anotaciones complejas
-      let zonaLimpia = n.zona.split('—').pop().split('(')[0].trim();
-      const consultaQuery = `${zonaLimpia}, Buenos Aires, Argentina`;
-
-      // Consultamos las coordenadas espaciales en base al barrio de cobertura
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(consultaQuery)}`)
-        .then(r => r.json())
-        .then(geo => {
-          if(geo && geo.length > 0) {
-            const lat = geo[0].lat;
-            const lon = geo[0].lon;
-            
-            const wsMsg = encodeURIComponent('📍 Hola! Vi *'+n.nombre+'* en Materiales Ya. Quiero consultar.');
-            
-            const m = L.marker([lat, lon], {icon: crearIconoHome(n.tipo)})
-              .addTo(homeMap)
-              .bindPopup(`<strong>${n.nombre}</strong><br><small>${n.direccion}</small><br><a href="https://wa.me/5491112345678?text=${wsMsg}" target="_blank" style="color:#1a2744;font-weight:600">Contactar →</a>`);
-            
-            homeMarkers.push(m);
-
-            // Ajustamos el zoom del mapa para encuadrar todos los pines que van cargando
-            if(homeMarkers.length > 0) {
-              homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.15));
-            }
-          }
-        }).catch(e => console.log("Error ubicando comercio en la home:", e));
+      const wsMsg = encodeURIComponent('📍 ¡Hola! Vi su comercio "' + n.nombre + '" en Materiales Ya. Les quiero hacer una consulta de materiales.');
+      
+      // 🎯 USAMOS LA LATITUD Y LONGITUD REAL DEL SHEETS (Sin demoras ni fallos de búsqueda)
+      const m = L.marker([n.lat, n.lng], {icon: crearIconoHome(n.tipo)})
+        .addTo(homeMap)
+        .bindPopup(`
+          <div style="font-family:sans-serif; min-width:140px;">
+            <strong style="color:#1a2744;font-size:14px;">${n.nombre}</strong><br>
+            <span style="color:#666;font-size:12px;">📍 Cobertura: ${n.zona}</span><br>
+            <a href="https://wa.me/${n.whatsapp}?text=${wsMsg}" target="_blank" style="display:inline-block;margin-top:6px;color:#25d366;font-weight:600;text-decoration:none;">Contactar por WhatsApp →</a>
+          </div>
+        `);
+      
+      homeMarkers.push(m);
     });
+
+    // Encuadramos el zoom automáticamente si hay comercios activos cargados
+    if(homeMarkers.length > 0) {
+      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.2));
+    }
   }
 
   window.filtrarHome = function(tipo, btn) {
@@ -466,5 +467,3 @@ setTimeout(() => {
   }
 })();
 </script>
-</body>
-</html>
