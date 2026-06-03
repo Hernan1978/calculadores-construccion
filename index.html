@@ -207,7 +207,7 @@
         <div class="card-main-body">
           <div class="card-main-tag">Marketplace</div>
           <div class="card-main-titulo">Pedí cotización a corralones</div>
-          <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
+          <div class="card-main-desc">Cargá tu lista de materiales and recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
           <div class="card-main-link">Pedir materiales →</div>
         </div>
       </a>
@@ -286,7 +286,7 @@
 
   <div class="cta-final">
     <h2>¿Listo para empezar?</h2>
-    <p>Calculá tus materiales and pedí cotización a los corralones de tu zona. Es gratis.</p>
+    <p>Calculá tus materiales y pedí cotización a los corralones de tu zona. Es gratis.</p>
     <div class="cta-btns">
       <a href="marketplace.html" class="btn-cta-w">Pedir materiales ahora →</a>
       <a href="calculadores.html" class="btn-cta-o">Ver calculadores</a>
@@ -361,7 +361,6 @@ setTimeout(() => {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function() {
-  // 🌐 URL de tu proyecto moderno de Google Apps Script con V8
   const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
 
   const TIPOS_HOME = {
@@ -375,24 +374,25 @@ setTimeout(() => {
   function initHomeMap() {
     if(!document.getElementById('home-map')) return;
     
-    // Centramos el mapa por defecto en el AMBA
     homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.6612, -58.3241], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap', maxZoom: 19
     }).addTo(homeMap);
 
-    // 🔄 LEEMOS TU SPREADSHEET EN TIEMPO REAL
-    fetch(`${URL_API}?accion=cargarPanel&t=${Date.now()}`)
+    // 🔄 Petición blindada con control de parámetros flexible
+    fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`)
       .then(r => r.json())
       .then(data => {
         if(data && data.status === "success" && data.corralones) {
           
-          // Procesamos los corralones activos que tengan coordenadas asignadas
           homeNegocios = data.corralones.filter(c => {
-            // REGLA: Obligatorio estar Activo y tener números en lat y lng
-            return c.estado.toLowerCase() === "activo" && c.lat && c.lng;
+            // Mapeo tolerante a mayúsculas/minúsculas del Excel
+            c.latitude = c.lat || c.LATITUD || c.latitud;
+            c.longitude = c.lng || c.LONGITUD || c.longitud;
+            c.actualEstado = c.estado || c.ESTADO || "activo";
+
+            return c.actualEstado.toLowerCase() === "activo" && c.latitude && c.longitude;
           }).map(c => {
-            // Clasificación automática por palabras clave en el nombre
             let tipoDetectado = 'corralon';
             const nomLower = c.nombre.toLowerCase();
             if(nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
@@ -401,15 +401,14 @@ setTimeout(() => {
 
             return {
               nombre: c.nombre,
-              zona: c.zona,
+              zona: c.zona || "Buenos Aires",
               tipo: tipoDetectado,
-              whatsapp: c.whatsapp,
-              lat: c.lat,
-              lng: c.lng
+              whatsapp: c.whatsapp || "",
+              lat: parseFloat(c.latitude),
+              lng: parseFloat(c.longitude)
             };
           });
 
-          // Pintamos los pines exactos
           renderHomeMarkers(homeNegocios);
         }
       }).catch(e => console.log("Error sincronizando mapa de Home:", e));
@@ -424,18 +423,16 @@ setTimeout(() => {
   }
 
   function renderHomeMarkers(lista) {
-    // Limpiamos pines previos
     homeMarkers.forEach(m => homeMap.removeLayer(m));
     homeMarkers = [];
     
     lista.forEach(n => {
       const wsMsg = encodeURIComponent('📍 ¡Hola! Vi su comercio "' + n.nombre + '" en Materiales Ya. Les quiero hacer una consulta de materiales.');
       
-      // 🎯 USAMOS LA LATITUD Y LONGITUD REAL DEL SHEETS (Sin demoras ni fallos de búsqueda)
       const m = L.marker([n.lat, n.lng], {icon: crearIconoHome(n.tipo)})
         .addTo(homeMap)
         .bindPopup(`
-          <div style="font-family:sans-serif; min-width:140px;">
+          <div style="font-family:sans-serif; min-width:140px; line-height:1.4;">
             <strong style="color:#1a2744;font-size:14px;">${n.nombre}</strong><br>
             <span style="color:#666;font-size:12px;">📍 Cobertura: ${n.zona}</span><br>
             <a href="https://wa.me/${n.whatsapp}?text=${wsMsg}" target="_blank" style="display:inline-block;margin-top:6px;color:#25d366;font-weight:600;text-decoration:none;">Contactar por WhatsApp →</a>
@@ -445,7 +442,6 @@ setTimeout(() => {
       homeMarkers.push(m);
     });
 
-    // Encuadramos el zoom automáticamente si hay comercios activos cargados
     if(homeMarkers.length > 0) {
       homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.2));
     }
@@ -467,3 +463,5 @@ setTimeout(() => {
   }
 })();
 </script>
+</body>
+</html>
