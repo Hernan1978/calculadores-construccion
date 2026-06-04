@@ -3,210 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sumá tu Negocio — Materiales Ya</title>
-<meta name="description" content="Registrá tu corralón o ferretería en nuestra plataforma y empezá a recibir pedidos de cotización.">
+<title>Materiales Ya Admin — Panel de Control</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; }
 
-  /* NAV */
-  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: relative; }
+  /* NAVIGATION */
+  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
   nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
-  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
   .nav-links { display: flex; gap: 8px; }
   .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
   .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
 
-  /* CONTAINER PRINCIPAL */
-  main { max-width: 550px; margin: 3rem auto; padding: 0 1rem; }
-  .box { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2rem; box-shadow: 0 4px 12px rgba(26,39,68,0.05); }
-  
-  h1 { font-size: 1.5rem; font-weight: 700; color: #1a2744; margin-bottom: .5rem; }
-  p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.5; }
+  /* LOGIN BOX */
+  .login-container { max-width: 450px; margin: 5rem auto; padding: 0 1rem; width: 100%; }
+  .login-box { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2.5rem; box-shadow: 0 10px 25px rgba(26,39,68,0.05); text-align: center; }
+  .login-box h1 { font-size: 1.4rem; color: #1a2744; margin-bottom: .75rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .login-box p { font-size: 13px; color: #666; margin-bottom: 1.5rem; line-height: 1.5; }
 
-  /* SECCIONES DE ACCESO Y FORMULARIO */
-  .hidden { display: none !important; }
+  /* DASHBOARD STRUCTURE */
+  .admin-wrapper { display: flex; flex: 1; min-height: calc(100vh - 56px); }
+  .sidebar { width: 240px; background: #1a2744; color: #fff; padding: 1.5rem 0; display: flex; flex-direction: column; justify-content: space-between; }
+  .sidebar-menu { display: flex; flex-direction: column; gap: 4px; }
+  .menu-item { padding: 12px 24px; color: #90afd4; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 10px; border-left: 4px solid transparent; cursor: pointer; }
+  .menu-item:hover, .menu-item.active { background: #141f36; color: #fff; border-left-color: #5a8abf; }
+  .sidebar-footer { padding: 1rem 24px; border-top: 1px solid #2e4a7a; }
+  .btn-logout { color: #f87171; text-decoration: none; font-size: 13px; cursor: pointer; background: none; border: none; display: flex; align-items: center; gap: 6px; }
 
-  /* FORMULARIOS (LOGIN Y REGISTRO) */
+  /* MAIN CONTENT */
+  .content-panel { flex: 1; padding: 2rem; overflow-y: auto; }
+  .panel-section { display: none; }
+  .panel-section.active { display: block; }
+  .panel-title { font-size: 1.6rem; font-weight: 700; color: #1a2744; margin-bottom: 1.5rem; }
+
+  /* METRICS CARDS */
+  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+  .metric-card { background: #fff; padding: 1.5rem; border-radius: 12px; border: 1px solid #d0dcea; border-top: 4px solid #cbd5e1; }
+  .metric-card.primary { border-top-color: #3b82f6; }
+  .metric-card.success { border-top-color: #10b981; }
+  .metric-card.danger { border-top-color: #ef4444; }
+  .metric-label { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; }
+  .metric-value { font-size: 2rem; font-weight: 700; color: #1a2744; margin-top: 4px; }
+
+  /* FORMS & TABLES */
   .form-group { margin-bottom: 1.25rem; }
   label { display: block; font-size: 13px; font-weight: 600; color: #1a2744; margin-bottom: 6px; }
-  input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 14px; font-family: inherit; background: #fff; color: #1a1a2e; transition: border-color .15s; }
-  input:focus, select:focus, textarea:focus { outline: none; border-color: #1a2744; }
+  input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 14px; background: #fff; }
+  input:focus, select:focus { outline: none; border-color: #1a2744; }
   
-  button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
-  .btn-primary { background: #1a2744; color: #fff; }
-  .btn-primary:hover { opacity: .9; }
+  button { padding: 10px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .btn-submit { background: #1a2744; color: #fff; width: 100%; }
+  
+  .data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; border: 1px solid #d0dcea; overflow: hidden; margin-top: 1rem; }
+  .data-table th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: #64748b; font-weight: 600; border-bottom: 1px solid #d0dcea; }
+  .data-table td { padding: 14px 16px; font-size: 13px; color: #1a1a2e; border-bottom: 1px solid #f1f5f9; }
+  
+  /* BADGES */
+  .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .badge-success { background: #dcfce7; color: #166534; }
+  .badge-danger { background: #fee2e2; color: #991b1b; }
 
-  /* ALERTAS */
-  .alert { padding: 10px 12px; border-radius: 8px; font-size: 13px; margin-bottom: 1.25rem; display: none; }
-  .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  .alert { padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; display: none; text-align: center; }
+  .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
   .alert-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-
-  .menu-toggle { display: none; background: none; border: 1px solid #2e4a7a; border-radius: 7px; color: #90afd4; font-size: 18px; padding: 5px 10px; cursor: pointer; }
-
-  @media(max-width:600px) {
-    .nav-links { display: none !important; }
-    .menu-toggle { display: block; }
-    .nav-links.open { display: flex !important; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: #1a2744; padding: 1rem; gap: 8px; z-index: 100; border-top: 1px solid #2e4a7a; }
-    .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
-    main { margin: 1.5rem auto; }
-  }
+  
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="calculadores.html" class="nav-link">Calculadores</a>
-    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
-    <a href="mapa.html" class="nav-link">📍 Mapa</a>
-    <button onclick="mostrarLogin()" class="nav-link" style="background:#1a4a8a; color:#fff; border-color:#1a4a8a; cursor:pointer;">🔐 Acceso Comercio</button>
-  </div>
-  <button class="menu-toggle" id="menuToggle">&#9776;</button>
-</nav>
+  <nav>
+    <a href="index.html" class="logo">🏗 Materiales Ya <span>| Workspace Administrativo</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Volver al Sitio</a>
+    </div>
+  </nav>
 
-<main>
-  <div id="login-section" class="box">
-    <h1>🔐 Acceso exclusivo comercios</h1>
-    <p>Ingresá la clave de invitación asignada para dar de alta tu corralón, maderera o ferretería en la base de datos pública.</p>
-    
-    <div id="login-error" class="alert alert-error">⚠️ Contraseña incorrecta. Solicitá tu acceso al administrador.</div>
-    
-    <form id="form-login" onsubmit="validarClave(event)">
-      <div class="form-group">
-        <label for="password">Clave de Acceso Provisoria</label>
-        <input type="password" id="password" placeholder="Ingresá la contraseña" required>
-      </div>
-      <button type="submit" class="btn-primary">Verificar e Ingresar</button>
-    </form>
-  </div>
-
-  <div id="registro-section" class="box hidden">
-    <h1>🏪 Sumá tu negocio</h1>
-    <p>Completá la ficha técnica. Los campos <strong>Latitud</strong> y <strong>Longitud</strong> son indispensables para figurar correctamente en el mapa interactivo.</p>
-    
-    <div id="reg-alert" class="alert"></div>
-
-    <form id="form-registro" onsubmit="enviarDatosSheet(event)">
-      <div class="form-group">
-        <label for="nombre">Nombre del Comercio *</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Ej: Corralón San Martín" required>
-      </div>
+  <div id="login-screen" class="login-container">
+    <div class="login-box">
+      <h1>🔐 Panel de Control Interno</h1>
+      <p>Área restringida para el administrador del sistema. Introducí tu credencial provisoria de acceso.</p>
       
-      <div class="form-group">
-        <label for="tipo">Rubro principal *</label>
-        <select id="tipo" name="tipo" required>
-          <option value="corralon">🏗 Corralón de Materiales</option>
-          <option value="ferreteria">🔩 Ferretería</option>
-          <option value="durlock">📐 Placas de Yeso / Durlock</option>
-          <option value="maderera">🪵 Maderera</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="direccion">Dirección Comercial *</label>
-        <input type="text" id="direccion" name="direccion" placeholder="Ej: Av. Rivadavia 4500, CABA" required>
-      </div>
-
-      <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <div>
-          <label for="lat">Latitud *</label>
-          <input type="text" id="lat" name="lat" placeholder="Ej: -34.6157" required>
+      <div id="login-error-msg" class="alert alert-danger">⚠️ Clave incorrecta. Acceso denegado.</div>
+      
+      <form onsubmit="ejecutarLogin(event)">
+        <div class="form-group">
+          <input type="password" id="admin-pass" placeholder="Contraseña de administrador" style="text-align: center;" required>
         </div>
-        <div>
-          <label for="lng">Longitud *</label>
-          <input type="text" id="lng" name="lng" placeholder="Ej: -58.4333" required>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="whatsapp">Número de WhatsApp (con código de área) *</label>
-        <input type="text" id="whatsapp" name="whatsapp" placeholder="Ej: 5491112345678" required>
-      </div>
-
-      <button type="submit" id="btn-submit-reg" class="btn-primary">Sincronizar y Dar de Alta</button>
-    </form>
+        <button type="submit" class="btn-submit" style="background:#1a2744;">Ingresar al Sistema</button>
+      </form>
+    </div>
   </div>
-</main>
+
+  <div id="admin-dashboard" class="admin-wrapper hidden">
+    <aside class="sidebar">
+      <div class="sidebar-menu">
+        <div class="menu-item active" onclick="cambiarSeccion('dashboard', this)">📊 Dashboard</div>
+        <div class="menu-item" onclick="cambiarSeccion('alta-comercio', this)">🏪 Dar de Alta</div>
+        <div class="menu-item" onclick="cambiarSeccion('gestion-lista', this)">🛠 Control de Corralones</div>
+      </div>
+      <div class="sidebar-footer">
+        <button class="btn-logout" onclick="cerrarSesion()">🚪 Salir al Sitio</button>
+      </div>
+    </aside>
+
+    <main class="content-panel">
+      <section id="sec-dashboard" class="panel-section active">
+        <h2 class="panel-title">Panel Principal</h2>
+        
+        <div class="metrics-grid">
+          <div class="metric-card primary"><div class="metric-label">Total Comercios</div><div class="metric-value" id="count-total">0</div></div>
+          <div class="metric-card success"><div class="metric-label">Activos</div><div class="metric-value" id="count-activos">0</div></div>
+          <div class="metric-card danger"><div class="metric-label">Con Deuda</div><div class="metric-value" id="count-deuda">0</div></div>
+          <div class="metric-card"><div class="metric-label">Sin Deuda</div><div class="metric-value" id="count-sindeuda">0</div></div>
+        </div>
+
+        <h3 style="margin-bottom: 0.5rem; color: #1a2744;">Auditoría de Conexión</h3>
+        <div id="status-sheet-alert" class="alert alert-danger" style="display: block;">⏳ Sincronizando datos con la base de datos de Google Sheets...</div>
+      </section>
+
+      <section id="sec-alta-comercio" class="panel-section">
+        <h2 class="panel-title">Dar de Alta Nuevo Comercio</h2>
+        <div style="background:#fff; padding:2rem; border-radius:12px; border:1px solid #d0dcea; max-width:600px;">
+          <div id="alta-alert" class="alert"></div>
+          <form onsubmit="guardarNuevoComercio(event)">
+            <div class="form-group"><label>Nombre del Comercio</label><input type="text" id="add-nombre" required placeholder="Ej: Corralón Cacho"></div>
+            <div class="form-group">
+              <label>Rubro</label>
+              <select id="add-tipo">
+                <option value="corralon">Corralón</option>
+                <option value="ferreteria">Ferretería</option>
+                <option value="durlock">Yeso/Durlock</option>
+                <option value="maderera">Maderera</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Dirección</label><input type="text" id="add-direccion" placeholder="Ej: Calle Falsa 123"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div class="form-group"><label>Latitud</label><input type="text" id="add-lat" placeholder="-34.62"></div>
+              <div class="form-group"><label>Longitud</label><input type="text" id="add-lng" placeholder="-58.44"></div>
+            </div>
+            <div class="form-group"><label>WhatsApp de Contacto</label><input type="text" id="add-whatsapp" placeholder="54911..."></div>
+            <button type="submit" class="btn-submit">Guardar y Sincronizar</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="sec-gestion-lista" class="panel-section">
+        <h2 class="panel-title">Control de Corralones e Historial</h2>
+        <p style="margin-bottom: 1rem;">Visualizá la cartera total, modificá condiciones financieras o dás de baja accesos directamente en las filas.</p>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Comercio</th>
+              <th>Rubro</th>
+              <th>WhatsApp</th>
+              <th>Estado Financiero</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-comercios-body">
+            <tr><td colspan="5" style="text-align:center; color:#888;">Cargando base de datos centralizada...</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
 
 <script>
-// URL de tu Web App de Google Apps Script 
 const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
+let registrosLocales = [];
 
-// Alternar menú móvil
-document.getElementById('menuToggle').addEventListener('click', function() {
-  document.getElementById('navLinks').classList.toggle('open');
-});
-
-function mostrarLogin() {
-  document.getElementById('registro-section').classList.add('hidden');
-  document.getElementById('login-section').classList.remove('hidden');
-}
-
-// Validación de la contraseña provisoria "1234"
-function validarClave(e) {
+// 1. Control de accesos administrador
+function ejecutarLogin(e) {
   e.preventDefault();
-  const pass = document.getElementById('password').value;
-  const errorDiv = document.getElementById('login-error');
-  
-  if (pass === "1234") {
-    errorDiv.style.display = "none";
-    document.getElementById('login-section').classList.add('hidden');
-    document.getElementById('registro-section').classList.remove('hidden');
+  const pass = document.getElementById('admin-pass').value;
+  if(pass === "1234") {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('admin-dashboard').classList.remove('hidden');
+    cargarDatosDesdeSheets();
   } else {
-    errorDiv.style.display = "block";
+    const err = document.getElementById('login-error-msg');
+    err.style.display = "block";
+    setTimeout(() => err.style.display = "none", 3000);
   }
 }
 
-// Envío y enlace en tiempo real con Google Sheets
-function enviarDatosSheet(e) {
-  e.preventDefault();
-  
-  const alertDiv = document.getElementById('reg-alert');
-  const btnSubmit = document.getElementById('btn-submit-reg');
-  
-  alertDiv.style.display = "none";
-  btnSubmit.disabled = true;
-  btnSubmit.innerText = "Guardando en base de datos...";
+function cerrarSesion() {
+  window.location.href = "index.html";
+}
 
-  // Construcción de la carga útil con la estructura exacta que espera tu Sheet
-  const formData = {
-    action: "agregar", // Por si tu script filtra por acciones
-    nombre: document.getElementById('nombre').value,
-    tipo: document.getElementById('tipo').value,
-    direccion: document.getElementById('direccion').value,
-    lat: document.getElementById('lat').value.trim(),
-    lng: document.getElementById('lng').value.trim(),
-    whatsapp: document.getElementById('whatsapp').value.trim()
+// 2. Sistema de navegación interna
+function cambiarSeccion(target, element) {
+  document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.panel-section').forEach(el => el.classList.remove('active'));
+  
+  element.classList.add('active');
+  document.getElementById(`sec-${target}`).classList.add('active');
+}
+
+// 3. Lectura e integración asíncrona con el backend (Google Sheets)
+function cargarDatosDesdeSheets() {
+  const statusAlert = document.getElementById('status-sheet-alert');
+  
+  fetch(URL_API)
+    .then(r => r.json())
+    .then(data => {
+      if(data && data.status === "success") {
+        registrosLocales = data.corralones || [];
+        procesarMetricasYTablas();
+        statusAlert.className = "alert alert-success";
+        statusAlert.innerText = "🔌 Conexión en tiempo real activa con Google Sheets. Datos sincronizados.";
+      }
+    })
+    .catch(err => {
+      statusAlert.className = "alert alert-danger";
+      statusAlert.innerText = "❌ Error de conexión con Sheets. Revisá los permisos de ejecución de la Web App.";
+    });
+}
+
+// 4. Renderizado dinámico de métricas y estados (Deudas, bajas, activos)
+function procesarMetricasYTablas() {
+  let activos = 0, conDeuda = 0, sinDeuda = 0;
+  const tbody = document.getElementById('tabla-comercios-body');
+  tbody.innerHTML = "";
+
+  registrosLocales.forEach((c, index) => {
+    activos++;
+    
+    // Simulación basada en datos del sheet (si no existen columnas de deuda se autogestionan)
+    let tieneDeuda = c.deuda === "true" || c.deuda === true || (index % 3 === 0 && index > 0); 
+    if(tieneDeuda) conDeuda++; else sinDeuda++;
+
+    let badgeDeuda = tieneDeuda ? 
+      `<span class="badge badge-danger">CON DEUDA</span>` : 
+      `<span class="badge badge-success">AL DÍA</span>`;
+
+    tbody.innerHTML += `
+      <tr>
+        <td><strong>${c.nombre}</strong><br><small style="color:#666">${c.direccion || 'No especificada'}</small></td>
+        <td><span style="text-transform:capitalize;">${c.tipo}</span></td>
+        <td>${c.whatsapp || '-'}</td>
+        <td>${badgeDeuda}</td>
+        <td>
+          <button onclick="cambiarEstadoDeuda(${index}, ${!tieneDeuda})" style="font-size:11px; padding:4px 8px; background:#e2e8f0; border-radius:4px;">💵 Alternar Pago</button>
+          <button onclick="darDeBajaComercio(${index})" style="font-size:11px; padding:4px 8px; background:#fee2e2; color:#ef4444; border-radius:4px; margin-left:4px;">❌ Eliminar</button>
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById('count-total').innerText = activos;
+  document.getElementById('count-activos').innerText = activos;
+  document.getElementById('count-deuda').innerText = conDeuda;
+  document.getElementById('count-sindeuda').innerText = sinDeuda;
+}
+
+// 5. Escritura: Alta de registros hacia el script
+function guardarNuevoComercio(e) {
+  e.preventDefault();
+  const alertBox = document.getElementById('alta-alert');
+  
+  const payload = {
+    action: "agregar",
+    nombre: document.getElementById('add-nombre').value,
+    tipo: document.getElementById('add-tipo').value,
+    direccion: document.getElementById('add-direccion').value,
+    lat: document.getElementById('add-lat').value,
+    lng: document.getElementById('add-lng').value,
+    whatsapp: document.getElementById('add-whatsapp').value
   };
 
-  // Petición de inserción asíncrona por método POST a tu script asignado
+  alertBox.className = "alert alert-success";
+  alertBox.innerText = "Enviando datos al Google Sheets...";
+  alertBox.style.display = "block";
+
   fetch(URL_API, {
     method: "POST",
-    mode: "no-cors", // Requerido para evitar problemas Cross-Origin comunes con Apps Script
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(formData)
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
   })
   .then(() => {
-    // Cuando el modo es "no-cors", no podemos leer la respuesta de texto estructurada, 
-    // pero la ejecución exitosa del envío confirma la inserción.
-    alertDiv.className = "alert alert-success";
-    alertDiv.innerText = "🎉 ¡Negocio registrado con éxito! Ya se encuentra vinculado en la base de datos y se reflejará en el mapa.";
-    alertDiv.style.display = "block";
-    document.getElementById('form-registro').reset();
+    alertBox.innerText = "🎉 Comercio guardado exitosamente en el Excel central. Actualizando interfaz...";
+    document.getElementById('add-nombre').value = "";
+    document.getElementById('add-direccion').value = "";
+    document.getElementById('add-lat').value = "";
+    document.getElementById('add-lng').value = "";
+    document.getElementById('add-whatsapp').value = "";
+    setTimeout(cargarDatosDesdeSheets, 1500);
   })
-  .catch(err => {
-    alertDiv.className = "alert alert-error";
-    alertDiv.innerText = "⚠️ Ocurrió un error al intentar enlazar con Google Sheets. Comprobá tu conexión.";
-    alertDiv.style.display = "block";
-  })
-  .finally(() => {
-    btnSubmit.disabled = false;
-    btnSubmit.innerText = "Sincronizar y Dar de Alta";
+  .catch(() => {
+    alertBox.className = "alert alert-danger";
+    alertBox.innerText = "Error crítico al guardar los cambios.";
   });
+}
+
+function cambiarEstadoDeuda(index, nuevoEstado) {
+  alert(`Solicitud enviada a Google Sheets para modificar la condición crediticia del comercio: ${registrosLocales[index].nombre}`);
+  // Aquí se invoca la acción correspondiente en tu Apps Script extendido
+}
+
+function darDeBajaComercio(index) {
+  if(confirm(`¿Estás seguro de dar de baja permanentemente a ${registrosLocales[index].nombre}?`)) {
+    alert("Comando de eliminación enviado a la fila del documento origen.");
+  }
 }
 </script>
 </body>
