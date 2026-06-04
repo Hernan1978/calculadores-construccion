@@ -165,25 +165,14 @@ const MAPA_TIPOS = {
   maderera:   { label: '🪵 Maderera',          color: '#5b21b6', bg: '#ede9fe', pin: '🪵' },
 };
 
+// CONFIGURACIÓN DE TU API PROPIA CONECTADA AL EXCEL
 const URL_API = "https://script.google.com/macros/s/AKfycbxhzkAtIUmL_LFNqibnWtH3lb38f0mRVGjrfsBfYF7fE3UeGjw5ARijBzrv55TH4eEBzg/exec";
-let mainMap;
+
 let todosNegocios = [];
 let listaActual = [];
-let mapMarkers = [];
-
-// ── Inicializar Mapa General ──
-function initMap() {
-  mainMap = L.map('map', {zoomControl: true}).setView([-34.6612, -58.3241], 11);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-    maxZoom: 19
-  }).addTo(mainMap);
-
-  cargarDatosDesdeSheets();
-}
 
 function cargarDatosDesdeSheets() {
-  fetch(`${URL_API}?t=${Date.now()}`) // Trae el JSON limpio
+  fetch(`${URL_API}?t=${Date.now()}`)
     .then(res => {
       if (!res.ok) throw new Error("Error de red");
       return res.json();
@@ -191,23 +180,20 @@ function cargarDatosDesdeSheets() {
     .then(data => {
       if (data && data.status === "success" && Array.isArray(data.corralones)) {
         
-        // Filtrar y mapear de forma segura según tu nuevo JSON
+        // Filtramos y mapeamos según tu nuevo orden de Sheets
         todosNegocios = data.corralones.filter(c => {
           if (!c) return false;
-          
           const estadoComercio = (c.estado || "").toString().toLowerCase().trim();
           const latitud = parseFloat(c.lat);
           const longitud = parseFloat(c.lng);
-          
-          // REGLA: Pasa solo si está ACTIVO y tiene coordenadas numéricas válidas
+          // Solo pasan los corralones que están activos y tienen coordenadas
           return estadoComercio === "activo" && !isNaN(latitud) && !isNaN(longitud);
         }).map((c, index) => {
           
-          // Clasificación por palabra clave en el nombre para los iconos
           let tipoDetectado = 'corralon';
           const nomLower = (c.nombre || "").toLowerCase();
           if (nomLower.includes('ferreteria') || nomLower.includes('bulonera')) tipoDetectado = 'ferreteria';
-          else if (nomLower.includes('durlock') || nomLower.includes('yeseria')) tipoDetectado = 'durlock';
+          else if (nomLower.includes('durlock') || nomLower.includes('yeseria') || nomLower.includes('seco')) tipoDetectado = 'durlock';
           else if (nomLower.includes('maderera') || nomLower.includes('madera')) tipoDetectado = 'maderera';
 
           return {
