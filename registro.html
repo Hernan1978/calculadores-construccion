@@ -1,306 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suma tu Negocio - Materiales Ya</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1e293b;
-            --accent: #2563eb;
-            --success: #16a34a;
-            --warning: #ca8a04;
-            --danger: #dc2626;
-            --gray-light: #f8fafc;
-            --gray-border: #e2e8f0;
-            --text-main: #334155;
-            --sidebar-width: 260px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Materiales Ya</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f1f5f9; color: #1e293b; display: flex; min-height: 100vh; }
+  
+  .sidebar { width: 240px; background: #0f172a; color: white; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .logo-panel { font-size: 1.1rem; font-weight: 800; border-bottom: 1px solid #334155; padding-bottom: 1rem; color: #f8fafc; }
+  .menu-btn { padding: 10px 12px; color: #94a3b8; text-decoration: none; border-radius: 6px; font-size: 14px; display: block; }
+  .menu-btn.active { background: #1e293b; color: white; font-weight: 600; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: #f1f5f9; color: var(--text-main); min-height: 100vh; }
+  .main-content { flex: 1; padding: 2.5rem; }
+  .header-dashboard { margin-bottom: 2rem; }
+  .header-dashboard h1 { font-size: 1.5rem; color: #0f172a; }
 
-        /* PANTALLA PÚBLICA */
-        #pantalla-publica { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 3rem 2rem; background-color: var(--primary); color: white; }
-        .btn-volver-landing { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 600; border-radius: 0.375rem; cursor: pointer; text-decoration: none; }
-        #pantalla-publica h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; }
-        .subtitle { color: #94a3b8; font-size: 1.1rem; max-width: 600px; margin-bottom: 2.5rem; line-height: 1.6; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem; }
+  .card-metric { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .metric-label { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
+  .metric-num { font-size: 2rem; font-weight: 700; color: #0f172a; }
 
-        .boton-escondido { position: fixed; bottom: 20px; right: 20px; background: transparent; border: none; color: rgba(255, 255, 255, 0.2); font-size: 0.75rem; cursor: pointer; z-index: 1000; user-select: none; }
-
-        /* PANEL DE ADMINISTRACIÓN */
-        #panel-admin { display: none; }
-        .admin-layout { display: flex; min-height: 100vh; }
-        .sidebar { width: var(--sidebar-width); background-color: var(--primary); color: white; position: fixed; top: 0; bottom: 0; left: 0; display: flex; flex-direction: column; padding: 1.5rem 0; z-index: 100; border-right: 1px solid rgba(255, 255, 255, 0.1); }
-        .sidebar-brand { font-size: 1.25rem; font-weight: 700; padding: 0 1.5rem 1.5rem 1.5rem; border-bottom: 1px solid #334155; }
-        .sidebar-menu { list-style: none; margin-top: 1.5rem; flex-grow: 1; }
-        .sidebar-item a { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; color: #cbd5e1; text-decoration: none; font-weight: 500; transition: all 0.2s; cursor: pointer; }
-        .sidebar-item a:hover, .sidebar-item.active a { background-color: #334155; color: white; border-left: 4px solid var(--accent); }
-        .sidebar-logout { border-top: 1px solid #334155; padding-top: 1rem; }
-        .sidebar-logout a { color: #f87171 !important; }
-
-        .main-content { margin-left: var(--sidebar-width); flex-grow: 1; padding: 2rem; min-width: 0; }
-        .panel-section { display: none; }
-        .panel-section.active { display: block; }
-        h2 { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem; }
-
-        /* CONTADORES */
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-        .metric-card { background: white; padding: 1.25rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-top: 4px solid #94a3b8; }
-        .metric-card h3 { font-size: 0.875rem; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 0.5rem; }
-        .metric-card p { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
-        .metric-card.active-card { border-top-color: var(--success); }
-        .metric-card.debt-card { border-top-color: var(--danger); }
-        .metric-card.no-debt-card { border-top-color: var(--accent); }
-
-        /* TABLAS */
-        .table-container { background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow-x: auto; margin-bottom: 2rem; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        th { background-color: var(--gray-light); color: #64748b; padding: 0.85rem 1rem; font-weight: 600; border-bottom: 1px solid var(--gray-border); }
-        td { padding: 1rem; border-bottom: 1px solid var(--gray-border); vertical-align: middle; }
-
-        /* WS MENU */
-        .ws-main-badge { position: relative; display: inline-block; }
-        .ws-main-btn { background: #25d366; color: white; padding: 0.25rem 0.6rem; border-radius: 50px; font-weight: bold; font-size: 0.8rem; border: none; cursor: pointer; }
-        .ws-main-menu { display: none; position: absolute; top: 120%; left: 0; background: white; border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 220px; z-index: 200; border: 1px solid var(--gray-border); }
-        .ws-main-menu a { display: block; padding: 0.6rem 1rem; color: #1e293b; text-decoration: none; font-weight: 600; font-size: 0.8rem; border-bottom: 1px solid var(--gray-border); }
-        .ws-main-badge:hover .ws-main-menu { display: block; }
-
-        /* BOTONES */
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 600; border-radius: 0.375rem; border: none; cursor: pointer; text-decoration: none; gap: 0.5rem; }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-outline { background: transparent; border: 1px solid var(--gray-border); color: var(--text-main); }
-        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 0.25rem; margin-right: 0.25rem; }
-
-        .badge { display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.25rem; }
-        .badge-success { background: #dcfce7; color: #166534; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-warning { background: #fef9c3; color: #854d0e; }
-        .badge-info { background: #e0f2fe; color: #0369a1; }
-
-        .form-control { padding: 0.5rem 0.75rem; border: 1px solid var(--gray-border); border-radius: 0.375rem; font-size: 0.9rem; outline: none; }
-    </style>
+  .table-box { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 1.5rem; }
+  .table-title { font-size: 14px; font-weight: 700; margin-bottom: 1rem; color: #0f172a; }
+</style>
 </head>
 <body>
 
-    <div id="pantalla-publica">
-        <a href="index.html" class="btn-volver-landing">⬅️ Volver a Materiales Ya</a>
-        <h1>Sumá tu negocio a Materiales Ya</h1>
-        <p class="subtitle">Llegá a clientes que ya están buscando tus materiales. Sin cuota mensual — pagás solo por los contactos que recibís.</p>
-        <a href="https://wa.me/5491112345678" class="btn btn-primary">Contactar por WhatsApp</a>
-    </div>
+<div class="sidebar">
+  <div class="logo-panel">🏗 Materiales Ya Admin</div>
+  <a href="#" class="menu-btn active">📊 Dashboard</a>
+  <a href="index.html" class="menu-btn" style="color:#ef4444;margin-top:auto;">← Salir al Sitio</a>
+</div>
 
-    <button class="boton-escondido" onclick="desbloquearPanel()">⚙️ Acceso</button>
+<div class="main-content">
+  <div class="header-dashboard">
+    <h1>Panel Principal</h1>
+  </div>
 
-    <div id="panel-admin" class="admin-layout">
-        <div class="sidebar">
-            <div class="sidebar-brand">🏗️ Materiales Ya Admin</div>
-            <ul class="sidebar-menu">
-                <li class="sidebar-item active" data-target="dashboard"><a onclick="navegar('dashboard')">📊 Dashboard</a></li>
-                <li class="sidebar-item" data-target="corralones"><a onclick="navegar('corralones')">🏗️ Corralones</a></li>
-                <li class="sidebar-item" data-target="deudas"><a onclick="navegar('deudas')">💰 Deudas</a></li>
-                <li class="sidebar-item" data-target="servicios"><a onclick="navegar('servicios')">📈 Seguimiento</a></li>
-                <li class="sidebar-item" data-target="mensajes"><a onclick="navegar('mensajes')">💬 Mensajes</a></li>
-                <li class="sidebar-item" data-target="ajustes"><a onclick="navegar('ajustes')">⚙️ Ajustes</a></li>
-                <li class="sidebar-item sidebar-logout"><a onclick="cerrarSesion()">🚪 Salir al Sitio</a></li>
-            </ul>
-        </div>
+  <div class="cards-grid">
+    <div class="card-metric"><div class="metric-label">Total Comercios</div><div class="metric-num" id="c-total">0</div></div>
+    <div class="card-metric"><div class="metric-label">Activos</div><div class="metric-num" id="c-activos" style="color:#10b981;">0</div></div>
+    <div class="card-metric"><div class="metric-label">Con Deuda</div><div class="metric-num" id="c-deuda" style="color:#ef4444;">0</div></div>
+    <div class="card-metric"><div class="metric-label">Sin Deuda</div><div class="metric-num" id="c-sindeuda" style="color:#3b82f6;">0</div></div>
+  </div>
 
-        <div class="main-content">
-            <div id="dashboard" class="panel-section active">
-                <h2>Panel Principal</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card"><h3>Total Comercio</h3><p id="met-total">0</p></div>
-                    <div class="metric-card active-card"><h3>Activos</h3><p id="met-activos">0</p></div>
-                    <div class="metric-card debt-card"><h3>Con Deuda</h3><p id="met-deuda">0</p></div>
-                    <div class="metric-card no-debt-card"><h3>Sin Deuda</h3><p id="met-sin-deuda">0</p></div>
-                </div>
-                <h3>Últimos Cambios y Alertas</h3>
-                <div class="table-container" style="margin-top: 1rem;">
-                    <table>
-                        <thead><tr><th>Comercio</th><th>Alerta / Evento</th><th>Fecha</th></tr></thead>
-                        <tbody id="tabla-alertas">
-                            <tr><td colspan="3" style="text-align:center;">Inicia sesión para sincronizar...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+  <div class="table-box">
+    <div class="table-title">Estado de Sincronización Directa</div>
+    <div id="status-msg" style="font-size:13px; color:#64748b;">Conectando con Google Sheets...</div>
+  </div>
+</div>
 
-            <div id="corralones" class="panel-section">
-                <h2>Corralones y Proveedores</h2>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Nombre</th><th>Tipo</th><th>Zona</th><th>WhatsApp</th><th>Estado</th><th>Deuda</th><th>Acciones</th></tr></thead>
-                        <tbody id="tabla-corralones-body">
-                            <tr><td colspan="7" style="text-align: center;">Cargando lista de comercios...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<script>
+(function() {
+  const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
 
-            <div id="servicios" class="panel-section">
-                <h2>Seguimiento de Pedidos</h2>
-                <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; background:white; padding:1rem; border-radius:0.5rem; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
-                    <input type="text" id="input-id-pedido" class="form-control" style="flex-grow:1;" placeholder="Ej: MY-1">
-                    <button class="btn btn-primary" onclick="consultarPedidoSheets()">🔍 Buscar Pedido</button>
-                </div>
-                <div id="resultado-real" class="table-container" style="display:none; padding:1.5rem;">
-                    <h3 id="res-real-id" style="color:var(--accent); margin-bottom:1rem;">Pedido: #---</h3>
-                    <p style="margin-bottom:0.5rem;"><b>Estado:</b> <span id="res-real-estado" class="badge">---</span></p>
-                    <p style="margin-bottom:0.5rem;"><b>Cliente:</b> <span id="res-real-cliente">---</span></p>
-                    <p style="margin-bottom:0.5rem;"><b>Zona:</b> <span id="res-real-zona">---</span></p>
-                    <p style="margin-bottom:0.5rem;"><b>Materiales:</b></p>
-                    <div id="res-real-materiales" style="background:var(--gray-light); padding:1rem; border-left:4px solid var(--accent); margin-top:0.5rem; font-style:italic; white-space: pre-wrap;"></div>
-                </div>
-            </div>
+  fetch(`${URL_API}?t=${Date.now()}`)
+    .then(r => r.json())
+    .then(data => {
+      if(data && data.status === "success" && Array.isArray(data.corralones)) {
+        const total = data.corralones.length;
+        const activos = data.corralones.filter(n => (n.estado||"").toString().toLowerCase().trim() === "activo").length;
+        const deudores = data.corralones.filter(n => (n.deuda||"").toString().toLowerCase().trim() === "si").length;
+        const alDia = total - deudores;
 
-            <div id="mensajes" class="panel-section">
-                <h2>Mensajes Recibidos</h2>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Remitente</th><th>Contacto</th><th>Motivo</th><th>Acciones</th></tr></thead>
-                        <tbody>
-                            <tr><td>Carlos Mendoza</td><td>carlos.m@email.com</td><td><span class="badge badge-info">Consulta</span></td><td><button class="btn btn-outline btn-sm">Leer</button></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        document.getElementById('c-total').innerText = total;
+        document.getElementById('c-activos').innerText = activos;
+        document.getElementById('c-deuda').innerText = deudores;
+        document.getElementById('c-sindeuda').innerText = alDia;
 
-            <div id="deudas" class="panel-section"><h2>Control de Deudas</h2><p>Manejá los montos desde la pestaña Corralones en Sheets.</p></div>
-            <div id="ajustes" class="panel-section"><h2>Ajustes</h2><p>Configuración del sistema.</p></div>
-        </div>
-    </div>
-
-    <script>
-        // 🌐 URL GLOBAL DE TU GOOGLE APPS SCRIPT
-        var URL_API = "https://script.google.com/macros/s/AKfycbwVyitv6CIPhOIeavkC3yc-A4e77i7td1ZyEGMZ5sf2G_S8exbqEB3y5oQlaYq2i55Lfw/exec";
-
-        // 🔐 FUNCIÓN DE ACCESO (Clave: 1234)
-        function desbloquearPanel() {
-            var claveIngresada = prompt("Introduce la contraseña de Administrador:");
-            if (claveIngresada === "1234") {
-                document.getElementById('pantalla-publica').style.display = 'none';
-                document.getElementById('panel-admin').style.display = 'flex';
-                
-                var btnEscondido = document.querySelector('.boton-escondido');
-                if(btnEscondido) btnEscondido.style.display = 'none';
-                
-                inicializarDatosPanel();
-            } else if (claveIngresada !== null) {
-                alert("❌ Contraseña incorrecta.");
-            }
-        }
-
-        // 🚪 CERRAR SESIÓN
-        function cerrarSesion() {
-            document.getElementById('panel-admin').style.display = 'none';
-            document.getElementById('pantalla-publica').style.display = 'flex';
-            var btnEscondido = document.querySelector('.boton-escondido');
-            if(btnEscondido) btnEscondido.style.display = 'block';
-        }
-
-        // 🗺️ NAVEGACIÓN ENTRE PESTAÑAS
-        function navegar(targetId) {
-            var secciones = document.querySelectorAll('.panel-section');
-            for (var i = 0; i < secciones.length; i++) {
-                secciones[i].classList.remove('active');
-            }
-            var seccionDestino = document.getElementById(targetId);
-            if(seccionDestino) seccionDestino.classList.add('active');
-            
-            var itemsMenu = document.querySelectorAll('.sidebar-item');
-            for (var j = 0; j < itemsMenu.length; j++) {
-                itemsMenu[j].classList.remove('active');
-            }
-            var itemActivo = document.querySelector('[data-target="' + targetId + '"]');
-            if(itemActivo) itemActivo.classList.add('active');
-        }
-
-        // 📊 CARGAR DATOS DEL SHEETS (Usa 'cargarPanel' nativo de tu Apps Script)
-        function inicializarDatosPanel() {
-            if(!URL_API) return;
-            
-            var tablaAlertas = document.getElementById('tabla-alertas');
-            if(tablaAlertas) tablaAlertas.innerHTML = '<tr><td colspan="3" style="text-align:center;">Sincronizando con Google Sheets...</td></tr>';
-
-            fetch(URL_API + "?accion=cargarPanel&t=" + Date.now())
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if(data && data.status === "success") {
-                    var lista = data.corralones || [];
-                    var metricas = data.metricas || {};
-
-                    if(document.getElementById('met-total')) document.getElementById('met-total').innerText = metricas.total || 0;
-                    if(document.getElementById('met-activos')) document.getElementById('met-activos').innerText = metricas.activos || 0;
-                    if(document.getElementById('met-deuda')) document.getElementById('met-deuda').innerText = metricas.conDeuda || 0;
-                    if(document.getElementById('met-sin-deuda')) {
-                        document.getElementById('met-sin-deuda').innerText = (metricas.total - metricas.conDeuda) || 0;
-                    }
-
-                    var tbody = document.getElementById('tabla-corralones-body');
-                    if(tbody) tbody.innerHTML = "";
-                    if(tablaAlertas) tablaAlertas.innerHTML = "";
-
-                    lista.forEach(function(corr) {
-                        var bClass = "badge-success";
-                        var estNormalizado = corr.estado ? corr.estado.toLowerCase() : '';
-                        if(estNormalizado.includes("revi")) bClass = "badge-warning";
-                        if(estNormalizado.includes("inac") || estNormalizado.includes("baja")) bClass = "badge-danger";
-
-                        var numDeuda = corr.deuda ? parseFloat(corr.deuda) : 0;
-
-                        if(tbody) {
-                            var fila = '<tr>' +
-                                '<td><b>' + (corr.nombre || 'Sin Nombre') + '</b></td>' +
-                                '<td>' + (corr.tipo || 'Corralón') + '</td>' +
-                                '<td>' + (corr.zona || 'No Asignada') + '</td>' +
-                                '<td>' +
-                                    '<div class="ws-main-badge">' +
-                                        '<button class="ws-main-btn">📱 WS</button>' +
-                                        '<div class="ws-main-menu">' +
-                                            '<a href="https://wa.me/' + corr.whatsapp + '?text=Hola" target="_blank">🛒 Mensaje</a>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</td>' +
-                                '<td><span class="badge ' + bClass + '">' + (corr.estado || 'Activo') + '</span></td>' +
-                                '<td style="color:' + (numDeuda > 0 ? 'var(--danger)' : 'var(--success)') + '; font-weight:700;">$' + numDeuda.toLocaleString('es-AR') + '</td>' +
-                                '<td><button class="btn btn-outline btn-sm">Ver</button></td>' +
-                            '</tr>';
-                            tbody.innerHTML += fila;
-                        }
-
-                        if(numDeuda > 0 && tablaAlertas) {
-                            tablaAlertas.innerHTML += '<tr><td><b>' + corr.nombre + '</b></td><td><span class="badge badge-danger">Deuda Pendiente</span></td><td>Hoy</td></tr>';
-                        }
-                    });
-
-                    if(tablaAlertas && tablaAlertas.innerHTML === "") {
-                        tablaAlertas.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#16a34a; font-weight:600;">🟢 Sincronizado. Sin alertas de deudas.</td></tr>';
-                    }
-                } else {
-                    if(tablaAlertas) tablaAlertas.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--danger);">⚠️ El servidor no retornó datos válidos.</td></tr>';
-                }
-            })
-            .catch(function(error) {
-                console.error("Error en Sheets:", error);
-                if(tablaAlertas) {
-                    tablaAlertas.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--danger); font-weight:600;">⚠️ Error de conexión con Sheets. Revisá la Web App.</td></tr>';
-                }
-            });
-        }
-
-        // 🔍 CONSULTAR PEDIDO 
-        function consultarPedidoSheets() {
-            var idInput = document.getElementById('input-id-pedido').value.trim().toUpperCase().replace('#','');
-            if(!idInput) return;
-
-            var resultadoBox = document.getElementById('resultado-real');
-            
-            // Usamos un truco seguro: cargamos la hoja completa de pedidos usando una simulación local 
-            // ya que buscarPedido no está programado en tu doGet.
-            alert("Buscando en Sheets... Recuerda añadir la acción buscarPedido en tu Google Script si necesitas persistencia.");
-        }
-    </script>
+        document.getElementById('status-msg').innerHTML = `<span style="color:#10b981; font-weight:600;">✔️ Conexión exitosa.</span> Los datos se están leyendo en tiempo real desde tu planilla corporativa.`;
+      } else {
+        throw new Error();
+      }
+    }).catch(() => {
+      document.getElementById('status-msg').innerHTML = `<span style="color:#ef4444; font-weight:600;">⚠️ Error de conexión.</span> Revisá que la Web App en Google Sheets mantenga los accesos públicos para 'Cualquiera'.`;
+    });
+})();
+</script>
 </body>
 </html>
