@@ -42,7 +42,7 @@
   .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; color: #1a2744; }
   .section-sub { font-size: 14px; color: #666; margin-bottom: 2rem; }
 
-  /* CARDS PRINCIPALES */
+  /* CARDS PRINCIPALES (CALCULADORES) */
   .cards-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
   .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; }
   .card-main:hover { box-shadow: 0 8px 30px rgba(26,39,68,.12); transform: translateY(-3px); }
@@ -56,10 +56,10 @@
   .card-main-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
   .card-main-link { font-size: 13px; font-weight: 600; color: #1a4a8a; }
 
-  /* MAPA DE CONTAINER */
+  /* MAP CONTAINER */
   #home-map { height: 380px; background: #e2e8f0; width: 100%; position: relative; }
 
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: #888; }
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: #888; border-top: 1px solid #d0dcea; margin-top: 4rem; }
   footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -74,16 +74,82 @@
   </div>
 </nav>
 
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Construcción Eficiente e Inteligente</div>
+    <h1>Calculá tus materiales y <span>ahorrá tiempo</span></h1>
+    <p>Herramientas digitales gratuitas para profesionales de la construcción, capataces y techistas. Presupuestos exactos en minutos.</p>
+    <div class="hero-btns">
+      <a href="#calculadores" class="btn-hero-primary">Empezar a calcular</a>
+      <a href="mapa.html" class="btn-hero-secondary">Ver corralones cerca</a>
+    </div>
+  </div>
+</header>
+
+<section class="stats">
+  <div class="stats-inner">
+    <div>
+      <div class="stat-value">100%</div>
+      <div class="stat-label">Gratuito y Online</div>
+    </div>
+    <div>
+      <div class="stat-value">+3</div>
+      <div class="stat-label">Calculadores Listos</div>
+    </div>
+    <div>
+      <div class="stat-value">Fácil</div>
+      <div class="stat-label">Sin Registros</div>
+    </div>
+  </div>
+</section>
+
 <main>
-  <div style="margin-bottom:1rem">
+  <div id="calculadores" style="scroll-margin-top: 20px;">
+    <div class="section-title">⚙️ Calculadores Inteligentes</div>
+    <div class="section-sub">Elegí la estructura que vas a construir para obtener tu lista de materiales</div>
+    
+    <div class="cards-main">
+      <a href="computo-materiales.html" class="card-main">
+        <div class="card-main-img bg1">🧱</div>
+        <div class="card-main-body">
+          <div class="card-main-tag">Estructuras</div>
+          <div class="card-main-titulo">Cómputo de Materiales Global</div>
+          <div class="card-main-desc">Calculá ladrillos, cemento, cal y arena necesarios para paredes, revoques o contrapisos.</div>
+          <span class="card-main-link">Iniciar Calculador →</span>
+        </div>
+      </a>
+
+      <a href="calculador-perfiles.html" class="card-main">
+        <div class="card-main-img bg2">📐</div>
+        <div class="card-main-body">
+          <div class="card-main-tag">Cielorrasos y Tabiques</div>
+          <div class="card-main-titulo">Calculador de Perfiles Steel / Durlock</div>
+          <div class="card-main-desc">Obtené la cantidad exacta de montantes, soleras, placas de yeso y tornillos para tus proyectos secos.</div>
+          <span class="card-main-link">Iniciar Calculador →</span>
+        </div>
+      </a>
+
+      <a href="calculador-techos.html" class="card-main">
+        <div class="card-main-img bg3">🏠</div>
+        <div class="card-main-body">
+          <div class="card-main-tag">Cubiertas</div>
+          <div class="card-main-titulo">Calculador de Techos de Chapa</div>
+          <div class="card-main-desc">Calculá los metros de chapa, perfiles C, aislantes y fijaciones necesarias según los metros cuadrados.</div>
+          <span class="card-main-link">Iniciar Calculador →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div>
     <div class="section-title">📍 Corralones y ferreterías cerca tuyo</div>
-    <div class="section-sub">Encontrá negocios de materiales en tu zona</div>
+    <div class="section-sub">Encontrá negocios de materiales en tu zona y pedí cotizaciones directamente</div>
   </div>
   
   <div style="background:#fff;border-radius:16px;border:1px solid #d0dcea;overflow:hidden;margin-bottom:4rem;">
     <div style="padding:.75rem 1.25rem;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:1px solid #d0dcea;background:#fff;">
-      <span style="font-size:12px;color:#888;">Filtrar:</span>
-      <button onclick="filtrarHome('todos',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #1a2744;background:#1a2744;color:#fff;font-size:12px;cursor:pointer;" id="hf-todos">Todos</button>
+      <span style="font-size:12px;color:#888;">Filtrar por rubro:</span>
+      <button onclick="filtrarHome('todos',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #1a2744;background:#1a2744;color:#fff;font-size:12px;cursor:pointer;border:1px solid #1a2744;" id="hf-todos">Todos</button>
       <button onclick="filtrarHome('corralon',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-corralon">🏗 Corralones</button>
       <button onclick="filtrarHome('ferreteria',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-ferreteria">🔩 Ferreterías</button>
     </div>
@@ -92,21 +158,28 @@
   </div>
 </main>
 
+<footer>
+  <p>© 2026 Materiales Ya. Desarrollado para optimizar tus presupuestos de obra.</p>
+</footer>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
   
+  // Inicializar mapa centrado
   let homeMap = L.map('home-map').setView([-34.62, -58.44], 10);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(homeMap);
   
   let homeMarkers = [];
   let homeNegocios = [];
 
+  // Traer comercios de Sheets
   fetch(URL_API)
     .then(r => r.json())
     .then(data => {
       if (data && data.status === "success" && Array.isArray(data.corralones)) {
+        // Filtrar solo los que tengan coordenadas válidas
         homeNegocios = data.corralones.filter(n => {
           let lat = parseFloat(n.lat);
           let lng = parseFloat(n.lng);
@@ -114,14 +187,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if(homeNegocios.length === 0) {
-          document.getElementById('home-map').innerHTML = `<div style="padding:4rem 1rem; text-align:center; color:#555; font-size:13px;">📍 Cargado correctamente, pero no hay coordenadas válidas (lat, lng) cargadas en Sheets.</div>`;
+          document.getElementById('home-map').innerHTML = `<div style="padding:4rem 1rem; text-align:center; color:#555; font-size:13px;">📍 Los datos se leen bien, pero faltan las columnas 'lat' y 'lng' con datos en tu Google Sheets.</div>`;
           return;
         }
 
         renderMarkers(homeNegocios);
       }
     }).catch(err => {
-      document.getElementById('home-map').innerHTML = `<div style="padding:4rem 1rem; text-align:center; color:#dc2626; font-size:13px;">⚠️ Error al inicializar datos.</div>`;
+      document.getElementById('home-map').innerHTML = `<div style="padding:4rem 1rem; text-align:center; color:#dc2626; font-size:13px;">⚠️ Error al sincronizar con la base de datos.</div>`;
     });
 
   function renderMarkers(lista) {
@@ -141,8 +214,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   window.filtrarHome = function(tipo, btn) {
-    document.querySelectorAll('[id^="hf-"]').forEach(b => { b.style.background='#fff'; b.style.color='#555'; });
-    btn.style.background='#1a2744'; btn.style.color='#fff';
+    document.querySelectorAll('[id^="hf-"]').forEach(b => { b.style.background='#fff'; b.style.color='#555'; b.style.borderColor='#d0dcea'; });
+    btn.style.background='#1a2744'; btn.style.color='#fff'; btn.style.borderColor='#1a2744';
     
     let lista = (tipo === 'todos') ? homeNegocios : homeNegocios.filter(n => (n.tipo || '').toLowerCase().includes(tipo));
     renderMarkers(lista);
