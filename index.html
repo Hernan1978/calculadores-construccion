@@ -44,7 +44,7 @@
 
   /* CARDS PRINCIPALES */
   .cards-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
-  .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; }
+  .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; position: relative; }
   .card-main:hover { box-shadow: 0 8px 30px rgba(26,39,68,.12); transform: translateY(-3px); }
   .card-main-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
   .card-main-img.bg1 { background: linear-gradient(135deg, #1a2744, #1e3a6e); }
@@ -56,11 +56,28 @@
   .card-main-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
   .card-main-link { font-size: 13px; font-weight: 600; color: #1a4a8a; }
 
+  .panel-dot{
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#1a2744;
+    border:1px solid #90afd4;
+    display:block;
+    text-decoration:none;
+    z-index:5;
+  }
+  .panel-dot:hover{
+    transform:scale(1.15);
+  }
+
   /* CÓMO FUNCIONA */
   .como-funciona { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2rem; margin-bottom: 4rem; }
   .como-funciona h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: #1a2744; }
   .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
-  .como-funciona .paso { text-align: center; }
+  .paso { text-align: center; }
   .paso-num { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #1a2744, #1e4a8a); color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
   .paso-titulo { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a2744; }
   .paso-desc { font-size: 12px; color: #888; line-height: 1.5; }
@@ -130,18 +147,8 @@
     .btn-cta-w, .btn-cta-o { text-align: center; }
     main { margin: 1.5rem auto; padding: 0 1rem; }
   }
-
-  /* ESTILOS FIJOS PARA LEAFLET */
-  #home-map { 
-    height: 380px; 
-    width: 100%; 
-    background: #e5e7eb; 
-    position: relative; 
-    z-index: 1; 
-  }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
 
@@ -193,15 +200,20 @@
         <div class="card-main-link">Abrir calculadores →</div>
       </div>
     </a>
-    <a href="marketplace.html" class="card-main">
-      <div class="card-main-img bg2">🏗</div>
-      <div class="card-main-body">
-        <div class="card-main-tag">Marketplace</div>
-        <div class="card-main-titulo">Pedí cotización a corralones</div>
-        <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
-        <div class="card-main-link">Pedir materiales →</div>
-      </div>
-    </a>
+
+    <div class="card-main" style="position:relative;">
+      <a href="marketplace.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="card-main-img bg2">🏗</div>
+        <div class="card-main-body">
+          <div class="card-main-tag">Marketplace</div>
+          <div class="card-main-titulo">Pedí cotización a corralones</div>
+          <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
+          <div class="card-main-link">Pedir materiales →</div>
+        </div>
+      </a>
+      <a href="panel-privado.html" class="panel-dot" aria-label="Acceso al panel privado"></a>
+    </div>
+
     <a href="mapa.html" class="card-main">
       <div class="card-main-img bg3">📍</div>
       <div class="card-main-body">
@@ -262,11 +274,11 @@
       <button onclick="filtrarHome('durlock',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-durlock">📐 Durlock/Yeso</button>
       <button onclick="filtrarHome('maderera',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-maderera">🪵 Maderas</button>
     </div>
-    <div id="home-map"></div>
+    <div id="home-map" style="height:380px;"></div>
     <div style="padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #d0dcea;flex-wrap:wrap;gap:10px;">
       <div>
         <div style="font-size:14px;font-weight:600;color:#1a2744;">Corralones, ferreterías, casas de Durlock y maderas</div>
-        <div style="font-size:12px;color:#888;margin-top:2px;">Hacé clic en un pin para ver datos y contacto directo</div>
+        <div style="font-size:12px;color:#888;margin-top:2px;">Hacé clic en un pin para ver datos y contacto</div>
       </div>
       <a href="mapa.html" style="padding:10px 20px;border-radius:8px;background:#1a2744;color:#fff;font-size:13px;font-weight:500;text-decoration:none;">Ver mapa completo →</a>
     </div>
@@ -346,9 +358,9 @@ setTimeout(() => {
 })();
 </script>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function() {
-  // CONFIGURACIÓN DE TU API PROPIA CONECTADA AL EXCEL
   const URL_API = "https://script.google.com/macros/s/AKfycbxhzkAtIUmL_LFNqibnWtH3lb38f0mRVGjrfsBfYF7fE3UeGjw5ARijBzrv55TH4eEBzg/exec";
 
   const TIPOS_HOME = {
@@ -359,65 +371,66 @@ setTimeout(() => {
   };
   let homeMap, homeMarkers = [], homeNegocios = [];
 
+  // Función interna para crear pines lindos y personalizados con emojis
+  function crearIconoHome(tipo) {
+    const conf = TIPOS_HOME[tipo] || { color: '#4b5563', pin: '📍' };
+    return L.divIcon({
+      html: `<div style="background:${conf.color}; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.3); font-size:16px;">${conf.pin}</div>`,
+      className: '',
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -16]
+    });
+  }
+
   function initHomeMap() {
     if(!document.getElementById('home-map')) return;
     
-    // Inicializa el mapa centrado en Buenos Aires de forma nativa
+    // Inicializa el mapa centrado en Buenos Aires
     homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.62, -58.44], 10);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap', maxZoom: 19
     }).addTo(homeMap);
     
-    // Consultamos directo tu Web App de Google Sheets sin archivos intermediarios
+    // Levantamos los datos reales desde tu Google Sheets 🚀
     fetch(`${URL_API}?t=${Date.now()}`)
       .then(r => {
-        if(!r.ok) throw new Error("Error en red");
+        if (!r.ok) throw new Error("Error de red");
         return r.json();
       })
       .then(data => {
         if (data && data.status === "success" && Array.isArray(data.corralones)) {
           
-          // Mapeamos los datos reales del JSON para adaptarlos al mapa
+          // Filtramos y estandarizamos para que Leaflet dibuje sin romperse
           homeNegocios = data.corralones.filter(n => {
-            if(!n) return false;
+            if (!n) return false;
             const estadoComercio = (n.estado || "").toString().toLowerCase().trim();
             const latitud = parseFloat(n.lat);
             const longitud = parseFloat(n.lng);
-            // Solo pasan los corralones que están activos y tienen coordenadas
             return estadoComercio === "activo" && !isNaN(latitud) && !isNaN(longitud);
           }).map(n => {
             let tipoNormalizado = (n.tipo || "").toLowerCase().trim();
-            if (tipoNormalizado.includes("madera") || tipoNormalizado.includes("maderera")) tipoNormalizado = "maderera";
-            else if (tipoNormalizado.includes("seco") || tipoNormalizado.includes("yeso") || tipoNormalizado.includes("durlock")) tipoNormalizado = "durlock";
-            else if (tipoNormalizado.includes("ferreteria") || tipoNormalizado.includes("bulonera")) tipoNormalizado = "ferreteria";
-            else tipoNormalizado = "corralon";
+            if (tipoNormalizado.includes("madera")) tipoNormalizado = "maderera";
+            if (tipoNormalizado.includes("seco") || tipoNormalizado.includes("yeso")) tipoNormalizado = "durlock";
 
             return {
               nombre: n.nombre,
-              direccion: n.direccion || "Dirección no disponible",
+              direccion: n.direccion || "Dirección no especificada",
               tipo: tipoNormalizado,
               whatsapp: n.whatsapp || "",
               lat: parseFloat(n.lat),
               lng: parseFloat(n.lng)
             };
           });
-
+          
           renderHomeMarkers(homeNegocios);
         }
       })
       .catch(err => {
-        console.error("Error cargando mapa:", err);
+        console.error("Error en mini-mapa:", err);
         document.getElementById('home-map').innerHTML = 
-          `<div style="padding:4rem 1rem; text-align:center; color:#dc2626; font-size:14px; font-weight:600;">⚠️ Error de conexión con Sheets. Revisá la Web App.</div>`;
+          `<div style="padding:2rem; text-align:center; color:#f87171; font-size:14px;">⚠️ Error de conexión con Sheets. Revisá la Web App.</div>`;
       });
-  }
-
-  function crearIconoHome(tipo) {
-    const t = TIPOS_HOME[tipo] || TIPOS_HOME.corralon;
-    return L.divIcon({
-      html: `<div style="background:${t.color};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;">${t.pin}</div>`,
-      className:'', iconSize:[32,32], iconAnchor:[16,16], popupAnchor:[0,-18]
-    });
   }
 
   function renderHomeMarkers(lista) {
@@ -425,17 +438,16 @@ setTimeout(() => {
     homeMarkers = [];
     
     lista.forEach(n => {
-      // Limpiamos el número de whatsapp para armar el link directo
-      const telf = n.whatsapp.toString().replace(/[^0-9]/g, '');
+      const telf = String(n.whatsapp).replace(/[^0-9]/g, '');
       const numDestino = telf.startsWith('54') ? telf : '549' + telf;
-      const wsMsg = encodeURIComponent('📍 ¡Hola! Vi a ' + n.nombre + ' en Materiales Ya y quería consultar por materiales.');
+      const wsMsg = encodeURIComponent('📍 ¡Hola! Vi a ' + n.nombre + ' en Materiales Ya y quería hacer una consulta.');
       
       const m = L.marker([n.lat, n.lng], {icon: crearIconoHome(n.tipo)})
         .addTo(homeMap)
-        .bindPopup(`<strong>${n.nombre}</strong><br><small>${n.direccion}</small><br><br><a href="https://wa.me/${numDestino}?text=${wsMsg}" target="_blank" style="display:inline-block; padding:5px 10px; background:#25d366; color:white; font-size:11px; font-weight:700; text-decoration:none; border-radius:4px;">Enviar WhatsApp 💬</a>`);
+        .bindPopup(`<strong>${n.nombre}</strong><br><small>${n.direccion}</small><br><br><a href="https://wa.me/${numDestino}?text=${wsMsg}" target="_blank" style="color:#1a2744;font-weight:600;text-decoration:none;">💬 Contactar por WhatsApp →</a>`);
       homeMarkers.push(m);
     });
-    
+
     if(homeMarkers.length > 0) {
       homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.15));
     }
