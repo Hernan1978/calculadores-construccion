@@ -58,10 +58,14 @@
   .data-table th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: #64748b; font-weight: 600; border-bottom: 1px solid #d0dcea; }
   .data-table td { padding: 14px 16px; font-size: 13px; color: #1a1a2e; border-bottom: 1px solid #f1f5f9; }
   
-  /* BADGES */
+  /* BADGES & CAMPAIGN BUTTONS */
   .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
   .badge-success { background: #dcfce7; color: #166534; }
   .badge-danger { background: #fee2e2; color: #991b1b; }
+
+  .btn-campaña { font-size: 11px; padding: 4px 8px; border-radius: 4px; text-decoration: none; display: inline-block; font-weight: 600; margin-bottom: 4px; }
+  .btn-campaña-wa { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+  .btn-campaña-mail { background: #f0f9ff; color: #075985; border: 1px solid #bae6fd; }
 
   .alert { padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; display: none; text-align: center; }
   .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
@@ -142,7 +146,12 @@
               <div class="form-group"><label>Latitud</label><input type="text" id="add-lat" placeholder="-34.62"></div>
               <div class="form-group"><label>Longitud</label><input type="text" id="add-lng" placeholder="-58.44"></div>
             </div>
-            <div class="form-group"><label>WhatsApp de Contacto</label><input type="text" id="add-whatsapp" placeholder="54911..."></div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div class="form-group"><label>WhatsApp de Contacto</label><input type="text" id="add-whatsapp" placeholder="54911..."></div>
+              <div class="form-group"><label>Email de Contacto</label><input type="email" id="add-email" placeholder="contacto@corralon.com"></div>
+            </div>
+            
             <button type="submit" class="btn-submit">Guardar y Sincronizar</button>
           </form>
         </div>
@@ -150,20 +159,21 @@
 
       <section id="sec-gestion-lista" class="panel-section">
         <h2 class="panel-title">Control de Corralones e Historial</h2>
-        <p style="margin-bottom: 1rem;">Visualizá la cartera total, modificá condiciones financieras o dás de baja accesos directamente en las filas.</p>
+        <p style="margin-bottom: 1rem;">Visualizá la cartera total, gestioná deudas o lanzá las campañas del servicio de intermediación.</p>
         
         <table class="data-table">
           <thead>
             <tr>
               <th>Comercio</th>
               <th>Rubro</th>
-              <th>WhatsApp</th>
+              <th>Datos de Contacto</th>
+              <th>Campañas del Servicio</th>
               <th>Estado Financiero</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody id="tabla-comercios-body">
-            <tr><td colspan="5" style="text-align:center; color:#888;">Cargando base de datos centralizada...</td></tr>
+            <tr><td colspan="6" style="text-align:center; color:#888;">Cargando base de datos centralizada...</td></tr>
           </tbody>
         </table>
       </section>
@@ -174,7 +184,11 @@
 const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
 let registrosLocales = [];
 
-// 1. Control de accesos administrador
+// Redacción base para promocionar tu plataforma de intermediación
+const MENSAJE_WS_SERVICIO = "Hola! Te escribo desde la administración de Materiales Ya. Te dejamos un informe sobre las solicitudes de cotización recibidas esta semana en tu zona a través de nuestra plataforma de intermediación.";
+const ASUNTO_MAIL_SERVICIO = "Novedades y Rendimiento — Materiales Ya Intermediación";
+const CUERPO_MAIL_SERVICIO = "Estimado asociado,\n\nTe contactamos desde la administración de Materiales Ya para acercarte las nuevas métricas del servicio de intermediación y los pedidos procesados correspondientes a tu rubro.\n\nQuedamos a tu disposición.";
+
 function ejecutarLogin(e) {
   e.preventDefault();
   const pass = document.getElementById('admin-pass').value;
@@ -193,7 +207,6 @@ function cerrarSesion() {
   window.location.href = "index.html";
 }
 
-// 2. Sistema de navegación interna
 function cambiarSeccion(target, element) {
   document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.panel-section').forEach(el => el.classList.remove('active'));
@@ -202,7 +215,6 @@ function cambiarSeccion(target, element) {
   document.getElementById(`sec-${target}`).classList.add('active');
 }
 
-// 3. Lectura e integración asíncrona con el backend (Google Sheets)
 function cargarDatosDesdeSheets() {
   const statusAlert = document.getElementById('status-sheet-alert');
   
@@ -222,7 +234,6 @@ function cargarDatosDesdeSheets() {
     });
 }
 
-// 4. Renderizado dinámico de métricas y estados (Deudas, bajas, activos)
 function procesarMetricasYTablas() {
   let activos = 0, conDeuda = 0, sinDeuda = 0;
   const tbody = document.getElementById('tabla-comercios-body');
@@ -231,7 +242,6 @@ function procesarMetricasYTablas() {
   registrosLocales.forEach((c, index) => {
     activos++;
     
-    // Simulación basada en datos del sheet (si no existen columnas de deuda se autogestionan)
     let tieneDeuda = c.deuda === "true" || c.deuda === true || (index % 3 === 0 && index > 0); 
     if(tieneDeuda) conDeuda++; else sinDeuda++;
 
@@ -239,15 +249,29 @@ function procesarMetricasYTablas() {
       `<span class="badge badge-danger">CON DEUDA</span>` : 
       `<span class="badge badge-success">AL DÍA</span>`;
 
+    let mailVisual = c.email || "No registrado";
+    let wsVisual = c.whatsapp || "";
+
+    // Armado de enlaces directos para tus campañas sin tocar tu Excel
+    let urlWhatsApp = wsVisual ? `https://wa.me/${wsVisual}?text=${encodeURIComponent(MENSAJE_WS_SERVICIO)}` : "#";
+    let urlEmail = `mailto:${mailVisual}?subject=${encodeURIComponent(ASUNTO_MAIL_SERVICIO)}&body=${encodeURIComponent(CUERPO_MAIL_SERVICIO)}`;
+
     tbody.innerHTML += `
       <tr>
         <td><strong>${c.nombre}</strong><br><small style="color:#666">${c.direccion || 'No especificada'}</small></td>
         <td><span style="text-transform:capitalize;">${c.tipo}</span></td>
-        <td>${c.whatsapp || '-'}</td>
+        <td>
+          📱 ${wsVisual || '-'}<br>
+          <small style="color:#475569;">📧 ${mailVisual}</small>
+        </td>
+        <td>
+          <a href="${urlWhatsApp}" target="_blank" class="btn-campaña btn-campaña-wa">💬 Campaña WS</a><br>
+          <a href="${urlEmail}" class="btn-campaña btn-campaña-mail">📩 Campaña Mail</a>
+        </td>
         <td>${badgeDeuda}</td>
         <td>
-          <button onclick="cambiarEstadoDeuda(${index}, ${!tieneDeuda})" style="font-size:11px; padding:4px 8px; background:#e2e8f0; border-radius:4px;">💵 Alternar Pago</button>
-          <button onclick="darDeBajaComercio(${index})" style="font-size:11px; padding:4px 8px; background:#fee2e2; color:#ef4444; border-radius:4px; margin-left:4px;">❌ Eliminar</button>
+          <button onclick="cambiarEstadoDeuda(${index}, ${!tieneDeuda})" style="font-size:11px; padding:4px 8px; background:#e2e8f0; border-radius:4px; display:block; margin-bottom:4px; width:100%;">💵 Deuda</button>
+          <button onclick="darDeBajaComercio(${index})" style="font-size:11px; padding:4px 8px; background:#fee2e2; color:#ef4444; border-radius:4px; width:100%;">❌ Eliminar</button>
         </td>
       </tr>
     `;
@@ -259,7 +283,6 @@ function procesarMetricasYTablas() {
   document.getElementById('count-sindeuda').innerText = sinDeuda;
 }
 
-// 5. Escritura: Alta de registros hacia el script
 function guardarNuevoComercio(e) {
   e.preventDefault();
   const alertBox = document.getElementById('alta-alert');
@@ -271,7 +294,8 @@ function guardarNuevoComercio(e) {
     direccion: document.getElementById('add-direccion').value,
     lat: document.getElementById('add-lat').value,
     lng: document.getElementById('add-lng').value,
-    whatsapp: document.getElementById('add-whatsapp').value
+    whatsapp: document.getElementById('add-whatsapp').value,
+    email: document.getElementById('add-email').value
   };
 
   alertBox.className = "alert alert-success";
@@ -291,6 +315,7 @@ function guardarNuevoComercio(e) {
     document.getElementById('add-lat').value = "";
     document.getElementById('add-lng').value = "";
     document.getElementById('add-whatsapp').value = "";
+    document.getElementById('add-email').value = "";
     setTimeout(cargarDatosDesdeSheets, 1500);
   })
   .catch(() => {
@@ -301,7 +326,6 @@ function guardarNuevoComercio(e) {
 
 function cambiarEstadoDeuda(index, nuevoEstado) {
   alert(`Solicitud enviada a Google Sheets para modificar la condición crediticia del comercio: ${registrosLocales[index].nombre}`);
-  // Aquí se invoca la acción correspondiente en tu Apps Script extendido
 }
 
 function darDeBajaComercio(index) {
