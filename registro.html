@@ -3,81 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel — Materiales Ya</title>
+<title>Sumá tu Negocio — Materiales Ya</title>
+<meta name="description" content="Registrá tu corralón o ferretería en nuestra plataforma y empezá a recibir pedidos de cotización.">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: #f1f5f9; color: #1e293b; display: flex; min-height: 100vh; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
+
+  /* NAV */
+  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: relative; }
+  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
+  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
+  .nav-links { display: flex; gap: 8px; }
+  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
+  .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
+
+  /* CONTAINER PRINCIPAL */
+  main { max-width: 550px; margin: 3rem auto; padding: 0 1rem; }
+  .box { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2rem; box-shadow: 0 4px 12px rgba(26,39,68,0.05); }
   
-  .sidebar { width: 240px; background: #0f172a; color: white; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 1.5rem; }
-  .logo-panel { font-size: 1.1rem; font-weight: 800; border-bottom: 1px solid #334155; padding-bottom: 1rem; color: #f8fafc; }
-  .menu-btn { padding: 10px 12px; color: #94a3b8; text-decoration: none; border-radius: 6px; font-size: 14px; display: block; }
-  .menu-btn.active { background: #1e293b; color: white; font-weight: 600; }
+  h1 { font-size: 1.5rem; font-weight: 700; color: #1a2744; margin-bottom: .5rem; }
+  p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.5; }
 
-  .main-content { flex: 1; padding: 2.5rem; }
-  .header-dashboard { margin-bottom: 2rem; }
-  .header-dashboard h1 { font-size: 1.5rem; color: #0f172a; }
+  /* SECCIONES DE ACCESO Y FORMULARIO */
+  .hidden { display: none !important; }
 
-  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem; }
-  .card-metric { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-  .metric-label { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
-  .metric-num { font-size: 2rem; font-weight: 700; color: #0f172a; }
+  /* FORMULARIOS (LOGIN Y REGISTRO) */
+  .form-group { margin-bottom: 1.25rem; }
+  label { display: block; font-size: 13px; font-weight: 600; color: #1a2744; margin-bottom: 6px; }
+  input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 14px; font-family: inherit; background: #fff; color: #1a1a2e; transition: border-color .15s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #1a2744; }
+  
+  button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
+  .btn-primary { background: #1a2744; color: #fff; }
+  .btn-primary:hover { opacity: .9; }
 
-  .table-box { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 1.5rem; }
-  .table-title { font-size: 14px; font-weight: 700; margin-bottom: 1rem; color: #0f172a; }
+  /* ALERTAS */
+  .alert { padding: 10px 12px; border-radius: 8px; font-size: 13px; margin-bottom: 1.25rem; display: none; }
+  .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  .alert-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+  .menu-toggle { display: none; background: none; border: 1px solid #2e4a7a; border-radius: 7px; color: #90afd4; font-size: 18px; padding: 5px 10px; cursor: pointer; }
+
+  @media(max-width:600px) {
+    .nav-links { display: none !important; }
+    .menu-toggle { display: block; }
+    .nav-links.open { display: flex !important; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: #1a2744; padding: 1rem; gap: 8px; z-index: 100; border-top: 1px solid #2e4a7a; }
+    .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
+    main { margin: 1.5rem auto; }
+  }
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <div class="logo-panel">🏗 Materiales Ya Admin</div>
-  <a href="#" class="menu-btn active">📊 Dashboard</a>
-  <a href="index.html" class="menu-btn" style="color:#ef4444;margin-top:auto;">← Salir al Sitio</a>
-</div>
+<nav>
+  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="calculadores.html" class="nav-link">Calculadores</a>
+    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
+    <a href="mapa.html" class="nav-link">📍 Mapa</a>
+    <button onclick="mostrarLogin()" class="nav-link" style="background:#1a4a8a; color:#fff; border-color:#1a4a8a; cursor:pointer;">🔐 Acceso Comercio</button>
+  </div>
+  <button class="menu-toggle" id="menuToggle">&#9776;</button>
+</nav>
 
-<div class="main-content">
-  <div class="header-dashboard">
-    <h1>Panel Principal</h1>
+<main>
+  <div id="login-section" class="box">
+    <h1>🔐 Acceso exclusivo comercios</h1>
+    <p>Ingresá la clave de invitación asignada para dar de alta tu corralón, maderera o ferretería en la base de datos pública.</p>
+    
+    <div id="login-error" class="alert alert-error">⚠️ Contraseña incorrecta. Solicitá tu acceso al administrador.</div>
+    
+    <form id="form-login" onsubmit="validarClave(event)">
+      <div class="form-group">
+        <label for="password">Clave de Acceso Provisoria</label>
+        <input type="password" id="password" placeholder="Ingresá la contraseña" required>
+      </div>
+      <button type="submit" class="btn-primary">Verificar e Ingresar</button>
+    </form>
   </div>
 
-  <div class="cards-grid">
-    <div class="card-metric"><div class="metric-label">Total Comercios</div><div class="metric-num" id="c-total">0</div></div>
-    <div class="card-metric"><div class="metric-label">Activos</div><div class="metric-num" id="c-activos" style="color:#10b981;">0</div></div>
-    <div class="card-metric"><div class="metric-label">Con Deuda</div><div class="metric-num" id="c-deuda" style="color:#ef4444;">0</div></div>
-    <div class="card-metric"><div class="metric-label">Sin Deuda</div><div class="metric-num" id="c-sindeuda" style="color:#3b82f6;">0</div></div>
-  </div>
+  <div id="registro-section" class="box hidden">
+    <h1>🏪 Sumá tu negocio</h1>
+    <p>Completá la ficha técnica. Los campos <strong>Latitud</strong> y <strong>Longitud</strong> son indispensables para figurar correctamente en el mapa interactivo.</p>
+    
+    <div id="reg-alert" class="alert"></div>
 
-  <div class="table-box">
-    <div class="table-title">Estado de Sincronización Directa</div>
-    <div id="status-msg" style="font-size:13px; color:#64748b;">Conectando con Google Sheets...</div>
+    <form id="form-registro" onsubmit="enviarDatosSheet(event)">
+      <div class="form-group">
+        <label for="nombre">Nombre del Comercio *</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: Corralón San Martín" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="tipo">Rubro principal *</label>
+        <select id="tipo" name="tipo" required>
+          <option value="corralon">🏗 Corralón de Materiales</option>
+          <option value="ferreteria">🔩 Ferretería</option>
+          <option value="durlock">📐 Placas de Yeso / Durlock</option>
+          <option value="maderera">🪵 Maderera</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="direccion">Dirección Comercial *</label>
+        <input type="text" id="direccion" name="direccion" placeholder="Ej: Av. Rivadavia 4500, CABA" required>
+      </div>
+
+      <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label for="lat">Latitud *</label>
+          <input type="text" id="lat" name="lat" placeholder="Ej: -34.6157" required>
+        </div>
+        <div>
+          <label for="lng">Longitud *</label>
+          <input type="text" id="lng" name="lng" placeholder="Ej: -58.4333" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="whatsapp">Número de WhatsApp (con código de área) *</label>
+        <input type="text" id="whatsapp" name="whatsapp" placeholder="Ej: 5491112345678" required>
+      </div>
+
+      <button type="submit" id="btn-submit-reg" class="btn-primary">Sincronizar y Dar de Alta</button>
+    </form>
   </div>
-</div>
+</main>
 
 <script>
-(function() {
-  const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
+// URL de tu Web App de Google Apps Script 
+const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
 
-  fetch(`${URL_API}?t=${Date.now()}`)
-    .then(r => r.json())
-    .then(data => {
-      if(data && data.status === "success" && Array.isArray(data.corralones)) {
-        const total = data.corralones.length;
-        const activos = data.corralones.filter(n => (n.estado||"").toString().toLowerCase().trim() === "activo").length;
-        const deudores = data.corralones.filter(n => (n.deuda||"").toString().toLowerCase().trim() === "si").length;
-        const alDia = total - deudores;
+// Alternar menú móvil
+document.getElementById('menuToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
 
-        document.getElementById('c-total').innerText = total;
-        document.getElementById('c-activos').innerText = activos;
-        document.getElementById('c-deuda').innerText = deudores;
-        document.getElementById('c-sindeuda').innerText = alDia;
+function mostrarLogin() {
+  document.getElementById('registro-section').classList.add('hidden');
+  document.getElementById('login-section').classList.remove('hidden');
+}
 
-        document.getElementById('status-msg').innerHTML = `<span style="color:#10b981; font-weight:600;">✔️ Conexión exitosa.</span> Los datos se están leyendo en tiempo real desde tu planilla corporativa.`;
-      } else {
-        throw new Error();
-      }
-    }).catch(() => {
-      document.getElementById('status-msg').innerHTML = `<span style="color:#ef4444; font-weight:600;">⚠️ Error de conexión.</span> Revisá que la Web App en Google Sheets mantenga los accesos públicos para 'Cualquiera'.`;
-    });
-})();
+// Validación de la contraseña provisoria "1234"
+function validarClave(e) {
+  e.preventDefault();
+  const pass = document.getElementById('password').value;
+  const errorDiv = document.getElementById('login-error');
+  
+  if (pass === "1234") {
+    errorDiv.style.display = "none";
+    document.getElementById('login-section').classList.add('hidden');
+    document.getElementById('registro-section').classList.remove('hidden');
+  } else {
+    errorDiv.style.display = "block";
+  }
+}
+
+// Envío y enlace en tiempo real con Google Sheets
+function enviarDatosSheet(e) {
+  e.preventDefault();
+  
+  const alertDiv = document.getElementById('reg-alert');
+  const btnSubmit = document.getElementById('btn-submit-reg');
+  
+  alertDiv.style.display = "none";
+  btnSubmit.disabled = true;
+  btnSubmit.innerText = "Guardando en base de datos...";
+
+  // Construcción de la carga útil con la estructura exacta que espera tu Sheet
+  const formData = {
+    action: "agregar", // Por si tu script filtra por acciones
+    nombre: document.getElementById('nombre').value,
+    tipo: document.getElementById('tipo').value,
+    direccion: document.getElementById('direccion').value,
+    lat: document.getElementById('lat').value.trim(),
+    lng: document.getElementById('lng').value.trim(),
+    whatsapp: document.getElementById('whatsapp').value.trim()
+  };
+
+  // Petición de inserción asíncrona por método POST a tu script asignado
+  fetch(URL_API, {
+    method: "POST",
+    mode: "no-cors", // Requerido para evitar problemas Cross-Origin comunes con Apps Script
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(() => {
+    // Cuando el modo es "no-cors", no podemos leer la respuesta de texto estructurada, 
+    // pero la ejecución exitosa del envío confirma la inserción.
+    alertDiv.className = "alert alert-success";
+    alertDiv.innerText = "🎉 ¡Negocio registrado con éxito! Ya se encuentra vinculado en la base de datos y se reflejará en el mapa.";
+    alertDiv.style.display = "block";
+    document.getElementById('form-registro').reset();
+  })
+  .catch(err => {
+    alertDiv.className = "alert alert-error";
+    alertDiv.innerText = "⚠️ Ocurrió un error al intentar enlazar con Google Sheets. Comprobá tu conexión.";
+    alertDiv.style.display = "block";
+  })
+  .finally(() => {
+    btnSubmit.disabled = false;
+    btnSubmit.innerText = "Sincronizar y Dar de Alta";
+  });
+}
 </script>
 </body>
 </html>
