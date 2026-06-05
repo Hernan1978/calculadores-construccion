@@ -627,7 +627,6 @@ function pedirMateriales(btn) {
 function calcHormigon() {
   const v = (parseFloat(document.getElementById('h-largo').value)||0)*(parseFloat(document.getElementById('h-ancho').value)||0)*(parseFloat(document.getElementById('h-alto').value)||0)*1.10;
   renderResults('res-hormigon',[{label:'Volumen',value:v.toFixed(2),unit:'m³'},{label:'Cemento',value:Math.ceil(v*14),unit:'bolsas 25 kg'},{label:'Arena',value:(v*0.42).toFixed(2),unit:'m³'},{label:'Piedra',value:(v*0.83).toFixed(2),unit:'m³'},{label:'Agua aprox.',value:Math.ceil(v*140),unit:'litros'}]);
-  tipHormigon(v, Math.ceil(v*14));
 }
 function calcHierros() {
   const m=(parseFloat(document.getElementById('hi-metros').value)||0)*(parseFloat(document.getElementById('hi-barras-n').value)||0)*1.10;
@@ -792,10 +791,6 @@ function tipCemento(bolsas, tipo) {
     carpeta: `<strong>${bolsas}</strong> bolsas para la carpeta. Esperá 28 días antes de colocar cerámico encima — aunque parezca seca en 3 días, la resistencia final la alcanza al mes.`
   };
   showTip('cemento', msgs[tipo] || `Comprá <strong>${bolsas}</strong> bolsas.`);
-}
-
-function tipHormigon(vol, bolsas) {
-  showTip('hormigon', `Para <strong>${vol.toFixed(2)}m³</strong> de hormigón necesitás <strong>${bolsas}</strong> bolsas. Consejo clave: si el volumen supera 3m³, conviene pedir hormigón elaborado en camión — sale más barato y la calidad es superior a la mezcla manual.`);
 }
 
 function tipHierros(metros, barras) {
