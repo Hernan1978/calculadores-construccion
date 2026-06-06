@@ -3,520 +3,361 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Materiales Ya — Todo para tu obra</title>
- <link rel="icon" type="image/gif" href="favicon.gif">
-<meta name="description" content="Calculá materiales, pedí cotización a corralones de tu zona y leé guías de construcción. Todo en un solo lugar.">
+<title>Materiales Ya — Pedí cotización a corralones</title>
+<link rel="icon" type="image/gif" href="favicon.gif">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
+  header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  header h1 { font-size: 1.3rem; font-weight: 600; }
+  header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
+  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
+  .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
+  main { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
 
-  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
-  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
-  .nav-links { display: flex; gap: 8px; }
-  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
-  .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
+  .steps { display: flex; margin-bottom: 2rem; }
+  .step { flex: 1; text-align: center; position: relative; }
+  .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #d0dcea; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
+  .step.active .step-circle { background: #1a2744; color: #fff; }
+  .step.done .step-circle { background: #1a6a3e; color: #fff; }
+  .step-label { font-size: 11px; color: #888; }
+  .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
+  .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #d0dcea; z-index: 0; transition: all .3s; }
+  .step:last-child::after { display: none; }
 
-  .hero { background: linear-gradient(135deg, #1a2744 0%, #1e3a6e 60%, #1a4a8a 100%); color: #fff; padding: 5rem 2rem 4rem; text-align: center; }
-  .hero-content { max-width: 620px; margin: 0 auto; }
-  .hero-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; border: 1px solid #2e5a9a; color: #90afd4; font-size: 12px; margin-bottom: 1.5rem; }
-  .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
-  .hero h1 span { color: #90afd4; }
-  .hero p { font-size: 1.05rem; color: #b0c8e8; margin-bottom: 2rem; line-height: 1.6; }
-  .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .btn-hero-primary { padding: 13px 28px; border-radius: 8px; background: #fff; color: #1a2744; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity .15s; }
-  .btn-hero-primary:hover { opacity: .9; }
-  .btn-hero-secondary { padding: 13px 28px; border-radius: 8px; border: 1px solid #2e5a9a; color: #b0c8e8; font-size: 14px; text-decoration: none; transition: all .15s; }
-  .btn-hero-secondary:hover { border-color: #fff; color: #fff; }
+  .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; margin-bottom: 1rem; }
+  .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; }
+  .card h3 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; color: #555; text-transform: uppercase; letter-spacing: .05em; }
 
-  .stats { background: #fff; border-bottom: 1px solid #d0dcea; padding: 1.5rem 2rem; }
-  .stats-inner { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; text-align: center; }
-  .stat-value { font-size: 1.8rem; font-weight: 700; color: #1a2744; }
-  .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+  .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: #fafbfd; outline: none; transition: border .15s; resize: vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a2744; background: #fff; }
 
-  main { max-width: 960px; margin: 3rem auto; padding: 0 1rem; }
-  .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; color: #1a2744; }
-  .section-sub { font-size: 14px; color: #666; margin-bottom: 2rem; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
 
-  .cards-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
-  .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; position: relative; }
-  .card-main:hover { box-shadow: 0 8px 30px rgba(26,39,68,.12); transform: translateY(-3px); }
-  .card-main-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
-  .card-main-img.bg1 { background: linear-gradient(135deg, #1a2744, #1e3a6e); }
-  .card-main-img.bg2 { background: linear-gradient(135deg, #1a3a5c, #1e5a8e); }
-  .card-main-img.bg3 { background: linear-gradient(135deg, #1a4060, #1e6090); }
-  .card-main-body { padding: 1.5rem; }
-  .card-main-tag { font-size: 11px; font-weight: 600; color: #5a8abf; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
-  .card-main-titulo { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #1a2744; }
-  .card-main-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
-  .card-main-link { font-size: 13px; font-weight: 600; color: #1a4a8a; }
+  .cat-nivel1 { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .cat-nivel2 { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; min-height: 30px; }
+  .pill-cat { padding: 6px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 13px; color: #444; cursor: pointer; transition: all .15s; font-weight: 500; }
+  .pill-cat.active { background: #1a2744; color: #fff; border-color: #1a1a1a; }
+  .pill-sub { padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #eef2f7; font-size: 12px; color: #555; cursor: pointer; transition: all .15s; }
+  .pill-sub.active { background: #1a3a6e; color: #fff; border-color: #444; }
+  .pill-sub:hover:not(.active) { border-color: #999; background: #fff; }
+  .mats-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; min-height: 36px; padding: 8px; background: #f5f8fc; border-radius: 8px; border: 1px solid #eee; }
+  .pill-mat { padding: 5px 12px; border-radius: 6px; border: 1px solid #d0dcea; background: #fff; font-size: 12px; color: #333; cursor: pointer; transition: all .15s; }
+  .pill-mat:hover { border-color: #1a1a1a; background: #1a2744; color: #fff; }
 
-  .como-funciona { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2rem; margin-bottom: 4rem; }
-  .como-funciona h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: #1a2744; }
-  .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
-  .paso { text-align: center; }
-  .paso-num { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #1a2744, #1e4a8a); color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
-  .paso-titulo { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a2744; }
-  .paso-desc { font-size: 12px; color: #888; line-height: 1.5; }
+  .item-header { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; margin-bottom: 4px; padding: 0 2px; }
+  .item-header span { font-size: 11px; color: #aaa; }
+  .item-row { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
+  @media(max-width:480px) { .item-row, .item-header { grid-template-columns: 1fr 55px 75px 28px; } }
+  .item-row input { padding: 7px 10px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; width: 100%; background: #fafafa; outline: none; }
+  .item-row input:focus { border-color: #1a2744; background: #fff; }
+  .btn-remove { background: none; border: none; color: #ddd; font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 5px; line-height: 1; }
+  .btn-remove:hover { color: #e53e3e; background: #fff0f0; }
+  .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all .15s; }
+  .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f5f8fc; }
 
-  .articulos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-  .art-card { background: #fff; border-radius: 10px; border: 1px solid #d0dcea; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow .2s; }
-  .art-card:hover { box-shadow: 0 4px 16px rgba(26,39,68,.1); }
-  .art-card-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: #eef2f7; overflow: hidden; }
-  .art-card-img img { width: 100%; height: 100%; object-fit: cover; }
-  .art-card-body { padding: .875rem; }
-  .art-card-cat { font-size: 11px; color: #5a8abf; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
-  .art-card-titulo { font-size: 13px; font-weight: 600; line-height: 1.3; color: #1a2744; }
+  .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
+  .btn-primary:hover { opacity: .85; }
+  .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
+  .btn-secondary:hover { background: #eef2f7; }
 
-  .cta-final { background: linear-gradient(135deg, #1a2744, #1e4a8a); color: #fff; border-radius: 16px; padding: 3rem 2rem; text-align: center; margin-bottom: 3rem; }
-  .cta-final h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: .75rem; }
-  .cta-final p { font-size: 14px; color: #b0c8e8; margin-bottom: 1.5rem; }
-  .cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .btn-cta-w { padding: 12px 24px; border-radius: 8px; background: #fff; color: #1a2744; font-size: 14px; font-weight: 600; text-decoration: none; }
-  .btn-cta-o { padding: 12px 24px; border-radius: 8px; border: 1px solid #2e5a9a; color: #b0c8e8; font-size: 14px; text-decoration: none; }
-  .btn-cta-o:hover { border-color: #fff; color: #fff; }
+  .confirm-box { text-align: center; padding: 2rem 1rem; }
+  .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
+  .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
+  .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #eef2f7; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
+  .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; text-align: center; }
+  .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
 
-  #home-map { height: 380px; background: #e2e8f0; width: 100%; position: relative; }
+  .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
+  .paso { display: none; }
+  .paso.active { display: block; }
 
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: #888; }
-  footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
-  footer a:hover { color: #1a2744; }
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
 
-  .menu-toggle {
-    display: none;
-    background: none;
-    border: 1px solid #2e4a7a;
-    border-radius: 7px;
-    color: #90afd4;
-    font-size: 18px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-
-  .nav-links.open { 
-    display: flex !important; 
-    flex-direction: column; 
-    position: absolute; 
-    top: 56px; left: 0; right: 0; 
-    background: #1a2744; 
-    padding: 1rem; gap: 8px;
-    z-index: 100;
-    border-top: 1px solid #2e4a7a;
-  }
-
-  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
-
-  @media(max-width:600px) {
-    nav { padding: .875rem 1rem; position: relative; }
-    nav .logo span { display: none; }
-    .nav-links { display: none !important; }
-    .menu-toggle { display: flex !important; }
-    .hero { padding: 2.5rem 1.25rem 2rem; }
-    .hero h1 { font-size: 1.8rem; }
-    .hero p { font-size: 0.9rem; }
-    .hero-btns { flex-direction: column; }
-    .btn-hero-primary, .btn-hero-secondary { width: 100%; text-align: center; padding: 12px; }
-    .stats-inner { grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .cards-main { grid-template-columns: 1fr; }
-    .pasos { grid-template-columns: 1fr 1fr; }
-    .articulos-grid { grid-template-columns: 1fr 1fr; }
-    .cta-btns { flex-direction: column; }
-    .btn-cta-w, .btn-cta-o { text-align: center; }
-    main { margin: 1.5rem auto; padding: 0 1rem; }
-  }
+  #ws-chat { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  #ws-bubble { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.15); padding:14px 16px; width:280px; font-size:13px; color:#1a1a1a; line-height:1.5; display:none; }
 </style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="calculadores.html" class="nav-link">Calculadores</a>
-    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
-    <a href="mapa.html" class="nav-link">📍 Mapa</a>
-    <a href="registro.html" class="nav-link" style="background:#1a4a8a;border-color:#1a4a8a;">Control Interno</a>
+<header>
+  <div>
+    <h1>🏗 Materiales Ya</h1>
+    <p>Cotizá en varios corralones de tu zona</p>
   </div>
-  <button class="menu-toggle" id="menuToggle">&#9776;</button>
-</nav>
-
-<div class="hero">
-  <div class="hero-content">
-    <div class="hero-badge">🏗 Plataforma de materiales de construcción</div>
-    <h1>Todo para tu obra<br><span>en un solo lugar</span></h1>
-    <p>Calculá los materiales que necesitás, pedí cotización a corralones de tu zona y aprendé con guías y fotos.</p>
-    <div class="hero-btns">
-      <a href="marketplace.html" class="btn-hero-primary">Pedir materiales →</a>
-      <a href="calculadores.html" class="btn-hero-secondary">Ver calculadores</a>
-    </div>
+  <div>
+    <a href="index.html" class="hbtn">← Inicio</a>
+    <a href="calculadores.html" class="hbtn">Calculadores</a>
   </div>
-</div>
-
-<div class="stats">
-  <div class="stats-inner">
-    <div><div class="stat-value">24</div><div class="stat-label">Calculadores</div></div>
-    <div><div class="stat-value">120+</div><div class="stat-label">Materiales en catálogo</div></div>
-    <div><div class="stat-value">6</div><div class="stat-label">Artículos publicados</div></div>
-    <div><div class="stat-value">100%</div><div class="stat-label">Gratis para clientes</div></div>
-  </div>
-</div>
+</header>
 
 <main>
-  <div style="margin-bottom:1rem">
-    <div class="section-title">¿Qué podés hacer acá?</div>
-    <div class="section-sub">Tres herramientas pensadas para facilitar tu obra</div>
-  </div>
-
-  <div class="cards-main">
-    <a href="calculadores.html" class="card-main">
-      <div class="card-main-img bg1">🧮</div>
-      <div class="card-main-body">
-        <div class="card-main-tag">Herramienta</div>
-        <div class="card-main-titulo">Calculadores de materiales</div>
-        <div class="card-main-desc">24 calculadores para saber exactamente cuánto material necesitás: ladrillos, cemento, hormigón, hierros, Durlock, pintura y más.</div>
-        <div class="card-main-link">Abrir calculadores →</div>
-      </div>
-    </a>
-    <a href="marketplace.html" class="card-main">
-      <div class="card-main-img bg2">🏗</div>
-      <div class="card-main-body">
-        <div class="card-main-tag">Marketplace</div>
-        <div class="card-main-titulo">Pedí cotización a corralones</div>
-        <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
-        <div class="card-main-link">Pedir materiales →</div>
-      </div>
-    </a>
-    <a href="mapa.html" class="card-main">
-      <div class="card-main-img bg3">📍</div>
-      <div class="card-main-body">
-        <div class="card-main-tag">Mapa</div>
-        <div class="card-main-titulo">Corralones y ferreterías</div>
-        <div class="card-main-desc">Encontrá corralones, ferreterías, casas de Durlock y maderas cerca tuyo. Contacto directo por WhatsApp.</div>
-        <div class="card-main-link">Ver mapa →</div>
-      </div>
-    </a>
-  </div>
-
-  <div style="margin-bottom:1rem">
-    <div class="section-title">Buscá tu zona</div>
-    <div class="section-sub">Escribí un barrio, localidad o dirección y te mostramos los corralones más cercanos</div>
-  </div>
-
-  <div style="background:#fff;border-radius:16px;border:1px solid #d0dcea;overflow:hidden;margin-bottom:4rem;">
-    <div style="padding:1rem 1.25rem;border-bottom:1px solid #d0dcea;background:#fff;display:flex;gap:8px;flex-wrap:wrap;">
-      <input id="busqueda-zona" type="text" placeholder="Ej: Palermo, Lomas de Zamora, Av. Cabildo 1200"
-        style="flex:1;min-width:220px;padding:10px 12px;border:1px solid #d0dcea;border-radius:8px;font-size:13px;">
-      <button onclick="buscarZona()"
-        style="padding:10px 18px;border:none;border-radius:8px;background:#1a2744;color:#fff;font-size:13px;cursor:pointer;">
-        Buscar corralones cercanos
-      </button>
+  <div id="paso1" class="paso active">
+    <div class="steps">
+      <div class="step active"><div class="step-circle">1</div><div class="step-label">Tus datos</div></div>
+      <div class="step"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
     </div>
 
-    <div style="padding:.75rem 1.25rem;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:1px solid #d0dcea;background:#fff;">
-      <span style="font-size:12px;color:#888;">Filtrar:</span>
-      <button onclick="filtrarHome('todos',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #1a2744;background:#1a2744;color:#fff;font-size:12px;cursor:pointer;" id="hf-todos">Todos</button>
-      <button onclick="filtrarHome('corralon',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-corralon">🏗 Corralones</button>
-      <button onclick="filtrarHome('ferreteria',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-ferreteria">🔩 Ferreterías</button>
-      <button onclick="filtrarHome('durlock',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-durlock">📐 Durlock/Yeso</button>
-      <button onclick="filtrarHome('maderera',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #d0dcea;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-maderera">🪵 Maderas</button>
-    </div>
-
-    <div id="home-map"></div>
-
-    <div style="padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #d0dcea;flex-wrap:wrap;gap:10px;">
-      <div>
-        <div style="font-size:14px;font-weight:600;color:#1a2744;">Corralones, ferreterías, casas de Durlock y maderas</div>
-        <div style="font-size:12px;color:#888;margin-top:2px;">Hacé clic en un pin para ver datos y contacto</div>
+    <div class="card">
+      <h2>¿Dónde entregamos?</h2>
+      <div class="grid-2">
+        <div class="field"><label>Tu nombre</label><input type="text" id="cli-nombre" placeholder="Juan García"></div>
+        <div class="field"><label>WhatsApp</label><input type="tel" id="cli-tel" placeholder="11 1234-5678"></div>
       </div>
-      <a href="mapa.html" style="padding:10px 20px;border-radius:8px;background:#1a2744;color:#fff;font-size:13px;font-weight:500;text-decoration:none;">Ver mapa completo →</a>
+
+      <div class="field">
+        <label>Barrio / Zona</label>
+        <select id="cli-zona">
+          <option value="">Seleccioná tu zona...</option>
+          <option>CABA — Zona Norte (Palermo, Belgrano, Núñez, Coghlan)</option>
+          <option>CABA — Zona Centro (Almagro, Caballito, Villa Crespo, Flores)</option>
+          <option>CABA — Zona Sur (Boca, Barracas, Pompeya, Parque Patricios)</option>
+          <option>CABA — Zona Oeste (Liniers, Mataderos, Villa Lugano, Versalles)</option>
+        </select>
+      </div>
+
+      <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. Corrientes 1234"></div>
+
+      <div class="field">
+        <label>¿Cuándo necesitás los materiales?</label>
+        <select id="cli-urgencia">
+          <option value="urgente">Lo antes posible (24-48hs)</option>
+          <option value="semana">Esta semana</option>
+          <option value="quincena">Esta quincena</option>
+          <option value="mes">Este mes</option>
+        </select>
+      </div>
+
+      <button type="button" class="btn-primary" onclick="irPaso2()">Continuar → Cargar pedido</button>
     </div>
   </div>
 
-  <div class="como-funciona">
-    <h2>¿Cómo funciona?</h2>
-    <div class="pasos">
-      <div class="paso"><div class="paso-num">1</div><div class="paso-titulo">Calculá</div><div class="paso-desc">Usá los calculadores para saber exactamente cuánto material necesitás sin desperdiciar.</div></div>
-      <div class="paso"><div class="paso-num">2</div><div class="paso-titulo">Pedí cotización</div><div class="paso-desc">Cargá tu lista de materiales. Tu pedido llega a los corralones de tu zona.</div></div>
-      <div class="paso"><div class="paso-num">3</div><div class="paso-titulo">Comparás</div><div class="paso-desc">Recibís las cotizaciones por WhatsApp y elegís el corralón que más te conviene.</div></div>
-      <div class="paso"><div class="paso-num">4</div><div class="paso-titulo">Comprás</div><div class="paso-desc">Confirmás con el corralón elegido y coordinás entrega o retiro. Sin complicaciones.</div></div>
+  <div id="paso2" class="paso">
+    <div class="steps">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
+      <div class="step active"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
+    </div>
+
+    <div class="card">
+      <h2>¿Qué materiales necesitás?</h2>
+
+      <h3>Agregar desde catálogo</h3>
+      <div class="cat-nivel1" id="cats-nivel1"></div>
+      <div class="cat-nivel2" id="cats-nivel2"></div>
+      <div class="mats-grid" id="mats-grid"></div>
+
+      <hr class="divider">
+
+      <h3>Lista de materiales</h3>
+      <div class="item-header">
+        <span>Material</span><span>Cantidad</span><span>Unidad</span><span></span>
+      </div>
+      <div id="items-container"></div>
+      <button type="button" class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
+
+      <hr class="divider">
+
+      <div class="field">
+        <label>Observaciones (opcional)</label>
+        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta..."></textarea>
+      </div>
+
+      <button type="button" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
+      <button type="button" class="btn-secondary" onclick="irPaso1()">← Volver</button>
     </div>
   </div>
 
-  <div style="margin-bottom:1rem">
-    <div class="section-title">Últimos artículos</div>
-    <div class="section-sub">Guías y consejos para tu obra</div>
-  </div>
-  <div class="articulos-grid">
-    <a href="revista.html" class="art-card">
-      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Ladrillos" onerror="this.parentElement.innerHTML='🧱'"></div>
-      <div class="art-card-body"><div class="art-card-cat">Obra Gruesa</div><div class="art-card-titulo">Ladrillos: tipos y cuándo usar cada uno</div></div>
-    </a>
-    <a href="revista.html" class="art-card">
-      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=80" alt="Cemento" onerror="this.parentElement.innerHTML='🏗'"></div>
-      <div class="art-card-body"><div class="art-card-cat">Obra Gruesa</div><div class="art-card-titulo">Cemento: diferencias entre Portland, albañilería y premezclado</div></div>
-    </a>
-    <a href="revista.html" class="art-card">
-      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=400&q=80" alt="Membrana" onerror="this.parentElement.innerHTML='🎨'"></div>
-      <div class="art-card-body"><div class="art-card-cat">Obra Fina</div><div class="art-card-titulo">Membrana asfáltica: cómo colocarla correctamente</div></div>
-    </a>
-    <a href="revista.html" class="art-card">
-      <div class="art-card-img"><img src="https://images.unsplash.com/photo-1533158326339-7f3cf2404354?w=400&q=80" alt="Consejos" onerror="this.parentElement.innerHTML='💡'"></div>
-      <div class="art-card-body"><div class="art-card-cat">Consejos</div><div class="art-card-titulo">10 errores comunes al comprar materiales</div></div>
-    </a>
-  </div>
-  <div style="text-align:center;margin-bottom:4rem">
-    <a href="revista.html" style="padding:10px 24px;border-radius:8px;border:1px solid #d0dcea;background:#fff;color:#1a2744;font-size:14px;text-decoration:none;">Ver todos los artículos →</a>
-  </div>
+  <div id="paso3" class="paso">
+    <div class="steps">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tu pedido</div></div>
+      <div class="step active"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
+    </div>
 
-  <div class="cta-final">
-    <h2>¿Listo para empezar?</h2>
-    <p>Calculá tus materiales y pedí cotización a los corralones de tu zona. Es gratis.</p>
-    <div class="cta-btns">
-      <a href="marketplace.html" class="btn-cta-w">Pedir materiales ahora →</a>
-      <a href="calculadores.html" class="btn-cta-o">Ver calculadores</a>
+    <div class="card">
+      <div class="confirm-box">
+        <div class="confirm-icon">✅</div>
+        <h2>¡Pedido enviado!</h2>
+        <div class="codigo" id="codigo-pedido"></div>
+        <p>Tu pedido fue enviado a los corralones de tu zona.<br>Te van a contactar por WhatsApp con sus cotizaciones.<br><strong>Guardá el código para hacer el seguimiento.</strong></p>
+        <a id="btn-wsp" href="#" class="btn-whatsapp" target="_blank">📲 Confirmar por WhatsApp</a>
+        <button type="button" class="btn-nuevo" onclick="nuevoPedido()">Hacer otro pedido</button>
+      </div>
     </div>
   </div>
 </main>
 
-<footer>
-  <p>© 2026 Materiales Ya</p>
-  <p style="margin-top:8px">
-    <a href="calculadores.html">Calculadores</a>
-    <a href="marketplace.html">Marketplace</a>
-    <a href="revista.html">Revista</a>
-  </p>
-</footer>
+<footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
-<div id="ws-chat" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-  <div id="ws-bubble" style="background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);padding:14px 16px;max-width:260px;font-size:13px;color:#1a1a1a;line-height:1.5;display:none;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <strong style="font-size:13px;">🏗 Materiales Ya</strong>
-      <button onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
+<div id="ws-chat">
+  <div id="ws-bubble">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:13px;">🏗 Red de Cobertura</strong>
+      <button type="button" onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
     </div>
-    <p style="margin:0 0 10px">¡Hola! 👋 ¿En qué te podemos ayudar?</p>
-    <div style="display:flex;flex-direction:column;gap:6px;">
-  <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">📦 Quiero cotizar materiales</a>
-  <a href="https://wa.me/5491112345678?text=Hola%2C+tengo+una+consulta+general" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;">💬 Consulta general</a>
-</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px;">
+      <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:11px;font-weight:500;text-align:center;">💬 Soporte / Sumar mi Corralón</a>
+    </div>
   </div>
-  <button onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+  <button type="button" onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 166px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
   </button>
 </div>
 
+<datalist id="lista-mats"></datalist>
+
 <script>
+const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
+
+let materialesData = [];
+let corralonesData = [];
+
 function toggleBubble() {
   const b = document.getElementById('ws-bubble');
   b.style.display = b.style.display === 'none' ? 'block' : 'none';
 }
-setTimeout(() => {
-  document.getElementById('ws-bubble').style.display = 'block';
-}, 4000);
-</script>
 
-<script>
-(function() {
-  function initMenu() {
-    var btn = document.getElementById('menuToggle');
-    var nav = document.getElementById('navLinks');
-    if (!btn || !nav) return;
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var isOpen = nav.classList.contains('open');
-      nav.classList.toggle('open');
-      btn.innerHTML = isOpen ? '&#9776;' : '&#x2715;';
-    });
-    document.addEventListener('click', function(e) {
-      if (!nav.contains(e.target) && e.target !== btn) {
-        nav.classList.remove('open');
-        btn.innerHTML = '&#9776;';
-      }
-    });
+function irPaso1() {
+  document.getElementById('paso1').style.display = 'block';
+  document.getElementById('paso2').style.display = 'none';
+  document.getElementById('paso3').style.display = 'none';
+}
+
+function irPaso2() {
+  const nombre = document.getElementById('cli-nombre').value.trim();
+  const zona = document.getElementById('cli-zona').value;
+  if (!nombre) { alert('Ingresá tu nombre para continuar.'); return; }
+  if (!zona) { alert('Seleccioná tu zona para continuar.'); return; }
+  document.getElementById('paso1').style.display = 'none';
+  document.getElementById('paso2').style.display = 'block';
+  document.getElementById('paso3').style.display = 'none';
+}
+
+function addItem(mat = '', cant = '1', u = 'unidades') {
+  const container = document.getElementById('items-container');
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Material..." value="${mat}" list="lista-mats">
+    <input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center">
+    <input type="text" placeholder="Unidad" value="${u}">
+    <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
+  `;
+  container.appendChild(row);
+}
+
+function removeItem(btn) {
+  const rows = document.querySelectorAll('.item-row');
+  if (rows.length > 1) btn.closest('.item-row').remove();
+  else {
+    const inputs = btn.closest('.item-row').querySelectorAll('input');
+    inputs[0].value = '';
+    inputs[1].value = '1';
+    inputs[2].value = 'unidades';
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMenu);
-  } else {
-    initMenu();
-  }
-})();
-</script>
+}
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-(function() {
-  const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
-  const TIPOS_HOME = {
-    corralon:   { color: '#1e40af', pin: '🏗' },
-    ferreteria: { color: '#92400e', pin: '🔩' },
-    durlock:    { color: '#065f46', pin: '📐' },
-    maderera:   { color: '#5b21b6', pin: '🪵' },
-  };
+function asegurarDatalist() {
+  const dl = document.getElementById('lista-mats');
+  dl.innerHTML = '';
+  const unicos = [...new Set(materialesData.map(x => String(x).trim()).filter(Boolean))];
+  unicos.forEach(txt => {
+    const opt = document.createElement('option');
+    opt.value = txt;
+    dl.appendChild(opt);
+  });
+}
 
-  let homeMap, homeMarkers = [], homeNegocios = [], consultaMarker = null, consultaLayer = null;
-
-  function initHomeMap() {
-    if(!document.getElementById('home-map')) return;
-    homeMap = L.map('home-map', {zoomControl:true, scrollWheelZoom:false}).setView([-34.62, -58.44], 10);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap', maxZoom: 19
-    }).addTo(homeMap);
-
-    fetch(URL_API)
-      .then(r => r.json())
-      .then(data => {
-        const lista = Array.isArray(data.corralones) ? data.corralones : (Array.isArray(data.negocios) ? data.negocios : []);
-        homeNegocios = lista.filter(n => {
-          const lat = parseFloat(n.lat), lng = parseFloat(n.lng);
-          return n.activo !== false && isFinite(lat) && isFinite(lng);
-        });
-        renderHomeMarkers(homeNegocios);
-      })
-      .catch(() => {});
-  }
-
-  function crearIconoHome(tipo, isQuery=false) {
-    const t = TIPOS_HOME[tipo] || TIPOS_HOME.corralon;
-    const color = isQuery ? '#ef4444' : t.color;
-    const pin = isQuery ? '📍' : t.pin;
-    return L.divIcon({
-      html: `<div style="background:${color};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;">${pin}</div>`,
-      className:'',
-      iconSize:[32,32],
-      iconAnchor:[16,16],
-      popupAnchor:[0,-18]
-    });
-  }
-
-  function renderHomeMarkers(lista) {
-    if (!homeMap) return;
-    homeMarkers.forEach(m => homeMap.removeLayer(m));
-    homeMarkers = [];
-    lista.forEach(n => {
-      const lat = parseFloat(n.lat), lng = parseFloat(n.lng);
-      if (!isFinite(lat) || !isFinite(lng)) return;
-      const wsMsg = encodeURIComponent('📍 Hola! Vi *' + (n.nombre || 'negocio') + '* en Materiales Ya. Quiero consultar.');
-      const popup = `<strong>${n.nombre || ''}</strong><br><small>${n.direccion || ''}</small><br><a href="https://wa.me/5491112345678?text=${wsMsg}" target="_blank" style="color:#1a2744;font-weight:600">Contactar →</a>`;
-      const m = L.marker([lat, lng], {icon: crearIconoHome(n.tipo)})
-        .addTo(homeMap)
-        .bindPopup(popup);
-      homeMarkers.push(m);
-    });
-    if(homeMarkers.length > 0) {
-      homeMap.fitBounds(L.featureGroup(homeMarkers).getBounds().pad(0.15));
-    }
-  }
-
-  function haversine(lat1, lon1, lat2, lon2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a =
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon/2) * Math.sin(dLon/2);
-    return 2 * R * Math.asin(Math.sqrt(a));
-  }
-
-  async function geocodeQuery(q) {
-    const url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" + encodeURIComponent(q + ", Argentina");
-    const res = await fetch(url, {
-      headers: { 'Accept-Language': 'es' }
-    });
+async function cargarCatalogo() {
+  try {
+    const res = await fetch(`${URL_API}?t=${Date.now()}`);
     const data = await res.json();
-    if (!data || !data.length) return null;
-    return {
-      lat: parseFloat(data[0].lat),
-      lng: parseFloat(data[0].lon),
-      display: data[0].display_name
-    };
-  }
 
-  function limpiarConsultaMarker() {
-    if (consultaMarker && homeMap) {
-      homeMap.removeLayer(consultaMarker);
-      consultaMarker = null;
-    }
-  }
+    corralonesData = Array.isArray(data.corralones) ? data.corralones : [];
+    const mats = Array.isArray(data.materiales) ? data.materiales : [];
 
-  function marcarConsulta(lat, lng, label) {
-    limpiarConsultaMarker();
-    consultaMarker = L.marker([lat, lng], {
-      icon: crearIconoHome('corralon', true)
-    }).addTo(homeMap).bindPopup(`<strong>${label || 'Zona buscada'}</strong>`).openPopup();
-  }
+    materialesData = mats
+      .map(m => m.material || m.nombre || m.Material || m.Nombre || '')
+      .filter(Boolean);
 
-  function mostrarCercanos(lat, lng, cantidad = 6) {
-    const cercanos = [...homeNegocios]
-      .map(n => ({
-        ...n,
-        distancia: haversine(lat, lng, parseFloat(n.lat), parseFloat(n.lng))
-      }))
-      .sort((a, b) => a.distancia - b.distancia)
-      .slice(0, cantidad);
-
-    renderHomeMarkers(cercanos);
-    marcarConsulta(lat, lng, 'Zona buscada');
-
-    const puntos = [[lat, lng], ...cercanos.map(n => [parseFloat(n.lat), parseFloat(n.lng)])];
-    if (puntos.length > 1) {
-      homeMap.fitBounds(L.latLngBounds(puntos).pad(0.25));
-    } else {
-      homeMap.setView([lat, lng], 13);
-    }
-
-    return cercanos;
-  }
-
-  window.buscarZona = async function() {
-    const input = document.getElementById('busqueda-zona');
-    const query = (input.value || '').trim();
-    if (!query) return;
-
-    const btn = document.querySelector('button[onclick="buscarZona()"]');
-    const original = btn ? btn.textContent : '';
-    if (btn) {
-      btn.disabled = true;
-      btn.textContent = 'Buscando...';
-    }
-
+    if (!materialesData.length) throw new Error('sin materiales');
+  } catch (e) {
     try {
-      const lugar = await geocodeQuery(query);
-      if (!lugar) {
-        alert('No encontré esa zona. Probá con barrio, localidad o dirección más precisa.');
-        return;
-      }
-
-      const cercanos = mostrarCercanos(lugar.lat, lugar.lng, 6);
-
-      if (cercanos.length === 0) {
-        alert('Encontré la zona, pero no hay corralones cargados cerca de ese lugar.');
-      }
-    } catch (e) {
-      alert('Hubo un problema al buscar la zona.');
-    } finally {
-      if (btn) {
-        btn.disabled = false;
-        btn.textContent = original;
-      }
+      const resLocal = await fetch('materiales.json');
+      const local = await resLocal.json();
+      const arr = Array.isArray(local) ? local : (local.materiales || []);
+      materialesData = arr
+        .map(m => m.material || m.nombre || m.Material || m.Nombre || m)
+        .filter(Boolean);
+    } catch (err) {
+      materialesData = [];
     }
-  };
+  }
 
-  window.filtrarHome = function(tipo, btn) {
-    document.querySelectorAll('[id^="hf-"]').forEach(b => {
-      b.style.background='#fff';
-      b.style.color='#555';
-      b.style.borderColor='#d0dcea';
-    });
-    btn.style.background='#1a2744';
-    btn.style.color='#fff';
-    btn.style.borderColor='#1a2744';
-    const lista = tipo === 'todos' ? homeNegocios : homeNegocios.filter(n => n.tipo === tipo);
-    renderHomeMarkers(lista);
-    limpiarConsultaMarker();
-  };
+  asegurarDatalist();
+}
 
-  document.addEventListener('DOMContentLoaded', initHomeMap);
-})();
+function enviarPedido() {
+  const rows = document.querySelectorAll('.item-row');
+  const items = [];
+
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const mat = inputs[0]?.value.trim();
+    if (mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
+  });
+
+  if (!items.length) {
+    alert('Agregá al menos un material.');
+    return;
+  }
+
+  const codigo = 'MAT-' + Date.now().toString().slice(-6);
+  document.getElementById('codigo-pedido').textContent = codigo;
+
+  const nombre = document.getElementById('cli-nombre').value;
+  const tel = document.getElementById('cli-tel').value;
+  const zona = document.getElementById('cli-zona').value;
+  const dir = document.getElementById('cli-dir').value;
+  const urgSel = document.getElementById('cli-urgencia');
+  const urgencia = urgSel ? urgSel.options[urgSel.selectedIndex].text : '';
+  const obs = document.getElementById('cli-obs').value;
+
+  let msg = `🏗 *NUEVO PEDIDO ${codigo}*\\n\\n`;
+  msg += `👤 *Cliente:* ${nombre}\\n`;
+  if (tel) msg += `📱 *WhatsApp:* ${tel}\\n`;
+  msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\\n`;
+  msg += `⏰ *Urgencia:* ${urgencia}\\n\\n`;
+  msg += `📦 *Materiales:*\\n`;
+  items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\\n`; });
+  if (obs) msg += `\\n📝 *Obs:* ${obs}`;
+
+  const TEL_ADMIN = '5491112345678';
+  document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
+
+  document.getElementById('paso1').style.display = 'none';
+  document.getElementById('paso2').style.display = 'none';
+  document.getElementById('paso3').style.display = 'block';
+}
+
+function nuevoPedido() {
+  ['cli-nombre','cli-tel','cli-dir','cli-obs'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cli-zona').value = '';
+  document.getElementById('items-container').innerHTML = '';
+  addItem();
+  irPaso1();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  addItem();
+  cargarCatalogo();
+});
 </script>
 </body>
 </html>
