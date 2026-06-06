@@ -269,13 +269,7 @@ let map, markersLayer;
 
 function toggleBubble() {
   const b = document.getElementById('ws-bubble');
-  if (b) {
-    const isHidden = b.style.display === 'none';
-    b.style.display = isHidden ? 'block' : 'none';
-    if (isHidden && map) {
-      setTimeout(() => map.invalidateSize(), 200);
-    }
-  }
+  b.style.display = b.style.display === 'none' ? 'block' : 'none';
 }
 
 function irPaso1() {
