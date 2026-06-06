@@ -4,21 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Materiales Ya — Pedí cotización a corralones</title>
- <link rel="icon" type="image/gif" href="favicon.gif">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="icon" type="image/gif" href="favicon.gif">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
-
   header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 1.3rem; font-weight: 600; }
   header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
   .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
   .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
-
   main { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
-
-  /* STEPS */
   .steps { display: flex; margin-bottom: 2rem; }
   .step { flex: 1; text-align: center; position: relative; }
   .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #d0dcea; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
@@ -28,21 +23,15 @@
   .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
   .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #d0dcea; z-index: 0; transition: all .3s; }
   .step:last-child::after { display: none; }
-
-  /* CARDS */
   .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; margin-bottom: 1rem; }
   .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; }
   .card h3 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; color: #555; text-transform: uppercase; letter-spacing: .05em; }
-
-  /* FORM */
   .field { margin-bottom: 1rem; }
   .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
   .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: #fafbfd; outline: none; transition: border .15s; resize: vertical; }
   .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a2744; background: #fff; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
-
-  /* CATÁLOGO DOS NIVELES */
   .cat-nivel1 { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   .cat-nivel2 { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; min-height: 30px; }
   .pill-cat { padding: 6px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 13px; color: #444; cursor: pointer; transition: all .15s; font-weight: 500; }
@@ -53,8 +42,6 @@
   .mats-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; min-height: 36px; padding: 8px; background: #f5f8fc; border-radius: 8px; border: 1px solid #eee; }
   .pill-mat { padding: 5px 12px; border-radius: 6px; border: 1px solid #d0dcea; background: #fff; font-size: 12px; color: #333; cursor: pointer; transition: all .15s; }
   .pill-mat:hover { border-color: #1a1a1a; background: #1a2744; color: #fff; }
-
-  /* ITEMS */
   .item-header { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; margin-bottom: 4px; padding: 0 2px; }
   .item-header span { font-size: 11px; color: #aaa; }
   .item-row { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
@@ -65,17 +52,11 @@
   .btn-remove:hover { color: #e53e3e; background: #fff0f0; }
   .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all .15s; }
   .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f5f8fc; }
-
-  /* BOTONES */
   .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
   .btn-primary:hover { opacity: .85; }
   .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
   .btn-secondary:hover { background: #eef2f7; }
-
-  /* BANNER */
   .banner-verde { background: #e6f4ea; border: 1px solid #2d8a4e; border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: #2d8a4e; font-weight: 500; }
-
-  /* CONFIRMACIÓN */
   .confirm-box { text-align: center; padding: 2rem 1rem; }
   .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
   .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
@@ -83,34 +64,25 @@
   .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #eef2f7; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
   .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; text-align: center; }
   .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
-
   .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
-
-  /* MAPA DINÁMICO INTEGRADO */
-  #map { width: 100%; height: 140px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; z-index: 1; }
-
-  /* CONTROL DE PASOS */
   .paso { display: none; }
   .paso.active { display: block; }
-
   footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
 </style>
 </head>
 <body>
-
 <header>
   <div>
     <h1>🏗 Materiales Ya</h1>
     <p>Cotizá en varios corralones de tu zona</p>
   </div>
   <div>
-    <a href="index.html" class="hbtn">← Inicio</a> 
+    <a href="index.html" class="hbtn">← Inicio</a>
     <a href="calculadores.html" class="hbtn">Calculadores</a>
   </div>
 </header>
 
 <main>
-
   <div id="paso1" class="paso active">
     <div class="steps">
       <div class="step active"><div class="step-circle">1</div><div class="step-label">Tus datos</div></div>
@@ -126,49 +98,10 @@
       <div class="field"><label>Barrio / Zona</label>
         <select id="cli-zona">
           <option value="">Seleccioná tu zona...</option>
-          <optgroup label="Ciudad Autónoma de Buenos Aires">
-            <option>CABA — Zona Norte (Palermo, Belgrano, Núñez, Coghlan)</option>
-            <option>CABA — Zona Centro (Almagro, Caballito, Villa Crespo, Flores)</option>
-            <option>CABA — Zona Sur (Boca, Barracas, Pompeya, Parque Patricios)</option>
-            <option>CABA — Zona Oeste (Liniers, Mataderos, Villa Lugano, Versalles)</option>
-          </optgroup>
-          <optgroup label="GBA Zona Norte">
-            <option>San Isidro</option>
-            <option>Vicente López</option>
-            <option>San Martín</option>
-            <option>Tres de Febrero</option>
-            <option>Tigre</option>
-            <option>San Fernando</option>
-            <option>Escobar</option>
-            <option>Pilar</option>
-            <option>Malvinas Argentinas</option>
-            <option>José C. Paz</option>
-            <option>San Miguel</option>
-            <option>Hurlingham</option>
-            <option>Ituzaingó</option>
-          </optgroup>
-          <optgroup label="GBA Zona Oeste">
-            <option>Morón</option>
-            <option>Merlo</option>
-            <option>Moreno</option>
-            <option>La Matanza</option>
-            <option>Marcos Paz</option>
-            <option>General Rodríguez</option>
-            <option>Luján</option>
-          </optgroup>
-          <optgroup label="GBA Zona Sur">
-            <option>Avellaneda</option>
-            <option>Lanús</option>
-            <option>Lomas de Zamora</option>
-            <option>Almirante Brown</option>
-            <option>Esteban Echeverría</option>
-            <option>Ezeiza</option>
-            <option>Quilmes</option>
-            <option>Berazategui</option>
-            <option>Florencio Varela</option>
-            <option>La Plata</option>
-            <option>Ensenada</option>
-            <option>Berisso</option>
+          <option>CABA — Zona Norte (Palermo, Belgrano, Núñez, Coghlan)</option>
+          <option>CABA — Zona Centro (Almagro, Caballito, Villa Crespo, Flores)</option>
+          <option>CABA — Zona Sur (Boca, Barracas, Pompeya, Parque Patricios)</option>
+          <option>CABA — Zona Oeste (Liniers, Mataderos, Villa Lugano, Versalles)</option>
         </select>
       </div>
       <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. Corrientes 1234"></div>
@@ -233,8 +166,8 @@
       </div>
     </div>
   </div>
-
 </main>
+
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
 <div id="ws-chat" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
@@ -243,29 +176,20 @@
       <strong style="font-size:13px;">🏗 Red de Cobertura</strong>
       <button type="button" onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
     </div>
-    <p style="margin:0 0 6px; font-size:11px; color:#666;">Corralones activos en tu zona:</p>
-    
-    <div id="map"></div>
-    
     <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px;">
       <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:11px;font-weight:500;text-align:center;">💬 Soporte / Sumar mi Corralón</a>
     </div>
   </div>
   <button type="button" onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 166px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z\"/></svg>
   </button>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
-// Recuerda poner aquí la nueva URL generada por el Apps Script al actualizar la implementación
-const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
-
+const URL_API = \"https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec\";
 let catalogoData = [];
 let listaMaterialesGlobal = [];
 let catActivaIdx = 0;
-let map, markersLayer;
 
 function toggleBubble() {
   const b = document.getElementById('ws-bubble');
@@ -283,187 +207,34 @@ function irPaso2() {
   const zona = document.getElementById('cli-zona').value;
   if(!nombre) { alert('Ingresá tu nombre para continuar.'); return; }
   if(!zona) { alert('Seleccioná tu zona para continuar.'); return; }
-
   document.getElementById('paso1').style.display = 'none';
   document.getElementById('paso2').style.display = 'block';
   document.getElementById('paso3').style.display = 'none';
 }
 
-function inicializarMapa() {
-  map = L.map('map', { attributionControl: false }).setView([-34.66, -58.37], 10);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-  markersLayer = L.layerGroup().addTo(map);
-}
-
-async function cargarMapaDesdeSheets() {
-  try {
-    // Buscamos los corralones activos en tu Apps Script
-    const res = await fetch(`${URL_API}?accion=listarCorralones&t=${Date.now()}`);
-    const data = await res.json();
-    
-    if(data && data.status === "success" && data.corralones) {
-      markersLayer.clearLayers(); // Limpiamos pines viejos
-      
-      data.corralones.forEach(corralon => {
-        // Limpiamos el texto de la zona por si tiene guiones como "CABA — Zona Norte..."
-        let zonaLimpia = corralon.zona.split('—').pop().split('(')[0].trim();
-        
-        // Le sumamos Buenos Aires, Argentina para que el mapa no se vaya a otro país
-        const consultaQuery = `${zonaLimpia}, Buenos Aires, Argentina`;
-
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(consultaQuery)}`)
-          .then(r => r.json())
-          .then(geo => {
-            if(geo && geo.length > 0) {
-              const lat = geo[0].lat;
-              const lon = geo[0].lon;
-              
-              // Dibujamos el pin en el mapita flotante con los datos del Sheets
-              L.marker([lat, lon]).addTo(markersLayer)
-               .bindPopup(`<b>🏢 ${corralon.nombre}</b><br>📍 ${corralon.zona}`);
-            }
-          }).catch(e => console.log("Error ubicando comercio en mapa:", e));
-      });
-    }
-  } catch(err) {
-    console.log("No se pudieron sincronizar los comercios con el mapa:", err);
-  }
-}
-async function cargarCatalogo() {
-  try {
-    const res = await fetch('materiales.json');
-    const data = await res.json();
-    catalogoData = data.categorias || [];
-  } catch(e) {
-    catalogoData = [{
-      nombre:'Obra Gruesa', icono:'🏗',
-      subcategorias:[{
-        nombre:'Áridos',
-        materiales:[{nombre:'Cemento Portland 25kg', unidad:'bolsas'}]
-      }]
-    }];
-  }
-  renderNivel1();
-  selectCat(0);
-
-  try {
-    const resSheets = await fetch(`${URL_API}?accion=listarMateriales&t=${Date.now()}`);
-    const dataSheets = await resSheets.json();
-    if(dataSheets && dataSheets.status === "success" && dataSheets.materiales) {
-      listaMaterialesGlobal = dataSheets.materiales;
-    }
-  } catch(err) {
-    let materialesSet = new Set();
-    catalogoData.forEach(cat => {
-      if(cat.subcategorias) {
-        cat.subcategorias.forEach(sub => {
-          if(sub.materiales) sub.materiales.forEach(m => materialesSet.add(m.nombre));
-        });
-      }
-    });
-    listaMaterialesGlobal = Array.from(materialesSet);
-  }
-  actualizarDatalistHTML();
-}
-
-function actualizarDatalistHTML() {
-  let datalist = document.getElementById('lista-mats');
-  if (!datalist) {
-    datalist = document.createElement('datalist');
-    datalist.id = 'lista-mats';
-    document.body.appendChild(datalist);
-  }
-  datalist.innerHTML = listaMaterialesGlobal.map(m => `<option value="${m}"></option>`).join('');
-  vincularInputs();
-}
-
-function renderNivel1() {
-  const c = document.getElementById('cats-nivel1');
-  if(c) c.innerHTML = catalogoData.map((cat, i) => `<button type="button" class="pill-cat ${i===0?'active':''}" onclick="selectCat(${i}, this)">${cat.icono} ${cat.nombre}</button>`).join('');
-}
-
-function selectCat(idx, btn) {
-  catActivaIdx = idx;
-  document.querySelectorAll('.pill-cat').forEach(b => b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  
-  const subContainer = document.getElementById('cats-nivel2');
-  const subs = catalogoData[idx]?.subcategorias || [];
-  if(subContainer) {
-    subContainer.innerHTML = subs.map((s, i) => `<button type="button" class="pill-sub ${i===0?'active':''}" onclick="selectSub(${i}, this)">${s.nombre}</button>`).join('');
-  }
-  renderMats(0);
-}
-
-function selectSub(idx, btn) {
-  document.querySelectorAll('.pill-sub').forEach(b => b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  renderMats(idx);
-}
-
-function renderMats(subIdx) {
-  const grid = document.getElementById('mats-grid');
-  const mats = catalogoData[catActivaIdx]?.subcategorias[subIdx]?.materiales || [];
-  if(grid) {
-    grid.innerHTML = mats.map(m => `<button type="button" class="pill-mat" onclick="agregarMaterial('${m.nombre}','${m.unidad}')">${m.nombre}</button>`).join('');
-  }
-}
-
-function agregarMaterial(nombre, unidad) {
-  const rows = document.querySelectorAll('.item-row');
-  for(let row of rows) {
-    const inputs = row.querySelectorAll('input');
-    if(inputs[0] && !inputs[0].value.trim()) {
-      inputs[0].value = nombre;
-      if(inputs[2]) inputs[2].value = unidad;
-      return;
-    }
-  }
-  addItem(nombre, '1', unidad);
-}
-
+function cargarCatalogo() { catalogoData = []; }
 function addItem(mat='', cant='1', u='unidades') {
   const container = document.getElementById('items-container');
   if(!container) return;
   const row = document.createElement('div');
   row.className = 'item-row';
-  row.innerHTML = `
-    <input type="text" placeholder="Material..." value="${mat}">
-    <input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center">
-    <input type="text" placeholder="Unidad" value="${u}">
-    <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
-  `;
+  row.innerHTML = `<input type="text" placeholder="Material..." value="${mat}"><input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center"><input type="text" placeholder="Unidad" value="${u}"><button type="button" class="btn-remove" onclick="removeItem(this)">×</button>`;
   container.appendChild(row);
-  vincularInputs();
 }
 
 function removeItem(btn) {
   const rows = document.querySelectorAll('.item-row');
   if(rows.length > 1) btn.closest('.item-row').remove();
-  else {
-    const inputs = btn.closest('.item-row').querySelectorAll('input');
-    inputs[0].value = ''; inputs[1].value = '1'; inputs[2].value = 'unidades';
-  }
-}
-
-function vincularInputs() {
-  document.querySelectorAll('input[placeholder="Material..."]').forEach(inp => inp.setAttribute('list', 'lista-mats'));
+  else { const inputs = btn.closest('.item-row').querySelectorAll('input'); inputs[0].value=''; inputs[1].value='1'; inputs[2].value='unidades'; }
 }
 
 function enviarPedido() {
   const rows = document.querySelectorAll('.item-row');
   const items = [];
-  rows.forEach(row => {
-    const inputs = row.querySelectorAll('input');
-    const mat = inputs[0]?.value.trim();
-    if(mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
-  });
-
+  rows.forEach(row => { const inputs = row.querySelectorAll('input'); const mat = inputs[0]?.value.trim(); if(mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' }); });
   if(items.length === 0) { alert('Agregá al menos un material.'); return; }
-
   const codigo = 'MAT-' + Date.now().toString().slice(-6);
   document.getElementById('codigo-pedido').textContent = codigo;
-
   const nombre = document.getElementById('cli-nombre').value;
   const tel = document.getElementById('cli-tel').value;
   const zona = document.getElementById('cli-zona').value;
@@ -471,19 +242,16 @@ function enviarPedido() {
   const urgSel = document.getElementById('cli-urgencia');
   const urgencia = urgSel ? urgSel.options[urgSel.selectedIndex].text : '';
   const obs = document.getElementById('cli-obs').value;
-
-  let msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n`;
-  msg += `👤 *Cliente:* ${nombre}\n`;
-  if(tel) msg += `📱 *WhatsApp:* ${tel}\n`;
-  msg += `📍 *Zona:* ${zona}${dir?' — '+dir:''}\n`;
-  msg += `⏰ *Urgencia:* ${urgencia}\n\n`;
-  msg += `📦 *Materiales:*\n`;
-  items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
-  if(obs) msg += `\n📝 *Obs:* ${obs}`;
-
-  const TEL_ADMIN = "5491112345678"; 
+  let msg = `🏗 *NUEVO PEDIDO ${codigo}*\\n\\n`;
+  msg += `👤 *Cliente:* ${nombre}\\n`;
+  if(tel) msg += `📱 *WhatsApp:* ${tel}\\n`;
+  msg += `📍 *Zona:* ${zona}${dir?' — '+dir:''}\\n`;
+  msg += `⏰ *Urgencia:* ${urgencia}\\n\\n`;
+  msg += `📦 *Materiales:*\\n`;
+  items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\\n`; });
+  if(obs) msg += `\\n📝 *Obs:* ${obs}`;
+  const TEL_ADMIN = '5491112345678';
   document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
-
   document.getElementById('paso1').style.display = 'none';
   document.getElementById('paso2').style.display = 'none';
   document.getElementById('paso3').style.display = 'block';
@@ -497,39 +265,9 @@ function nuevoPedido() {
   irPaso1();
 }
 
-// ARRANQUE SEGURO: Carga las funciones principales primero y aísla el mapa
 document.addEventListener('DOMContentLoaded', () => {
   cargarCatalogo();
   addItem();
-  
-  const datos = sessionStorage.getItem('pedido_precargado');
-  if(datos) {
-    try {
-      const items = JSON.parse(datos);
-      sessionStorage.removeItem('pedido_precargado');
-      document.getElementById('items-container').innerHTML = '';
-      items.forEach(i => addItem(i.mat, i.cant, i.u));
-      document.getElementById('banner-calculador').innerHTML = `<div class="banner-verde">✅ Materiales cargados desde el calculador.</div>`;
-    } catch(e){}
-  }
-
-  // Encapsulamos el mapa para que corra de fondo sin congelar los botones
-  setTimeout(() => {
-    try {
-      inicializarMapa();
-      cargarMapaDesdeSheets();
-    } catch(err) {
-      console.log("El mapa cargará al desplegarse la burbuja flotante", err);
-    }
-  }, 500);
-
-  setTimeout(() => {
-    const b = document.getElementById('ws-bubble');
-    if (b) {
-      b.style.display = 'block';
-      if(typeof map !== 'undefined' && map) map.invalidateSize();
-    }
-  }, 4000);
 });
 </script>
 </body>
