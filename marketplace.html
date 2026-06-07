@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Materiales Ya — Marketplace</title>
-  <link rel="icon" type="image/gif" href="favicon.gif">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
@@ -13,7 +12,7 @@
     header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
     .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
     .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
-    main { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
+    main { max-width: 920px; margin: 2rem auto; padding: 0 1rem; }
     .steps { display: flex; margin-bottom: 2rem; }
     .step { flex: 1; text-align: center; position: relative; }
     .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #d0dcea; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
@@ -61,6 +60,7 @@
     .cat-btn.active, .mat-btn.active { background: #1a2744; color: #fff; border-color: #1a2744; }
     .mats-grid { padding: 10px; background: #f5f8fc; border-radius: 8px; min-height: 44px; margin-bottom: 1rem; }
     .pill-mat:hover { background: #1a2744; color: #fff; }
+
     .item-header, .item-row { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; align-items: center; }
     .item-header { margin-bottom: 4px; padding: 0 2px; }
     .item-header span { font-size: 11px; color: #aaa; }
@@ -143,34 +143,10 @@
         <div class="select-wrap">
           <select id="cli-zona" class="zona-select">
             <option value="">Seleccioná tu zona...</option>
-            <optgroup label="CABA">
-              <option>Palermo</option><option>Belgrano</option><option>Núñez</option><option>Coghlan</option>
-              <option>Almagro</option><option>Caballito</option><option>Villa Crespo</option><option>Flores</option>
-              <option>Liniers</option><option>Mataderos</option><option>Villa Lugano</option><option>Versalles</option>
-              <option>Boca</option><option>Barracas</option><option>Pompeya</option><option>Parque Patricios</option>
-              <option>San Telmo</option><option>Recoleta</option><option>Saavedra</option>
-            </optgroup>
-            <optgroup label="Zona Norte GBA">
-              <option>Vicente López</option><option>Olivos</option><option>La Lucila</option><option>Florida</option>
-              <option>Munro</option><option>Villa Adelina</option><option>Martínez</option><option>Acassuso</option>
-              <option>San Isidro</option><option>Beccar</option><option>San Fernando</option><option>Tigre</option>
-              <option>Don Torcuato</option><option>General Pacheco</option><option>Rincón de Milberg</option>
-              <option>Del Viso</option><option>Pilar</option><option>Escobar</option><option>Ingeniero Maschwitz</option>
-            </optgroup>
-            <optgroup label="Zona Sur GBA">
-              <option>Avellaneda</option><option>Sarandí</option><option>Wilde</option><option>Dock Sud</option>
-              <option>Lanús</option><option>Valentín Alsina</option><option>Banfield</option><option>Temperley</option>
-              <option>Lomas de Zamora</option><option>Adrogué</option><option>Burzaco</option><option>Quilmes</option>
-              <option>Bernal</option><option>Ezpeleta</option><option>Berazategui</option><option>Florencio Varela</option>
-              <option>Almirante Brown</option><option>Glew</option><option>Longchamps</option><option>Claypole</option>
-            </optgroup>
-            <optgroup label="Zona Oeste GBA">
-              <option>Morón</option><option>Haedo</option><option>Castelar</option><option>Ituzaingó</option>
-              <option>Hurlingham</option><option>El Palomar</option><option>Ciudadela</option><option>Caseros</option>
-              <option>Ramos Mejía</option><option>San Justo</option><option>Gregorio de Laferrere</option><option>Isidro Casanova</option>
-              <option>La Tablada</option><option>Merlo</option><option>Padua</option><option>Moreno</option>
-              <option>Francisco Álvarez</option><option>Trujui</option><option>González Catán</option>
-            </optgroup>
+            <option>CABA</option>
+            <option>Zona Norte GBA</option>
+            <option>Zona Sur GBA</option>
+            <option>Zona Oeste GBA</option>
           </select>
         </div>
       </div>
@@ -194,22 +170,30 @@
       <div class="step active"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
       <div class="step"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
     </div>
+
     <div class="card">
       <h2>¿Qué materiales necesitás?</h2>
       <h3>Catálogo</h3>
       <div class="cat-tabs" id="cats-nivel1"></div>
       <div class="mat-tabs" id="cats-nivel2"></div>
       <div class="mats-grid" id="mats-grid"></div>
+
       <hr class="divider">
+
       <h3>Lista de materiales</h3>
-      <div class="item-header"><span>Material</span><span>Cantidad</span><span>Unidad</span><span></span></div>
+      <div class="item-header">
+        <span>Material</span><span>Cantidad</span><span>Unidad</span><span></span>
+      </div>
       <div id="items-container"></div>
       <button type="button" class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
+
       <hr class="divider">
+
       <div class="field">
         <label>Observaciones (opcional)</label>
         <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta..."></textarea>
       </div>
+
       <button type="button" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
       <button type="button" class="btn-secondary" onclick="irPaso1()">← Volver</button>
     </div>
@@ -278,7 +262,7 @@
     document.getElementById('paso3').style.display = 'none';
   }
 
-  function addItem(mat = '', cant = '1', u = 'unidades', precio = '') {
+  function addItem(mat = '', cant = '1', u = 'unidades') {
     const container = document.getElementById('items-container');
     const row = document.createElement('div');
     row.className = 'item-row';
@@ -288,7 +272,6 @@
       <input type="text" placeholder="Unidad" value="${u}">
       <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
     `;
-    row.dataset.precio = precio;
     container.appendChild(row);
   }
 
@@ -333,14 +316,14 @@
       b.type = 'button';
       b.className = 'cat-btn' + (idx === 0 ? ' active' : '');
       b.textContent = cat;
-      b.onclick = () => renderSubcategorias(cat, b);
+      b.onclick = () => renderMateriales(cat, b);
       cats1.appendChild(b);
     });
 
-    renderSubcategorias(categorias[0], cats1.querySelector('.cat-btn.active') || cats1.firstChild);
+    renderMateriales(categorias[0], cats1.querySelector('.cat-btn.active') || cats1.firstChild);
   }
 
-  function renderSubcategorias(cat, btn) {
+  function renderMateriales(cat, btn) {
     document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
     if (btn) btn.classList.add('active');
 
@@ -350,32 +333,33 @@
     grid.innerHTML = '';
 
     const items = materialesData.filter(m => String(m.categoria || '').trim() === cat);
-    const subcats = [...new Set(items.map(m => String(m.nombre || '').trim()).filter(Boolean))];
-
-    if (!subcats.length) {
+    if (!items.length) {
       grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales para esta categoría.</div>';
       return;
     }
 
-    subcats.forEach((sub, idx) => {
+    items.forEach((item, idx) => {
+      const name = String(item.nombre || '').trim();
+      const id = String(item.id || '').trim();
+      if (!name) return;
+
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'mat-btn' + (idx === 0 ? ' active' : '');
-      b.textContent = sub;
+      b.textContent = id ? `${id} — ${name}` : name;
       b.onclick = () => {
         document.querySelectorAll('.mat-btn').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
         grid.innerHTML = '';
 
-        const match = items.find(m => String(m.nombre || '').trim() === sub);
-        const unidad = match && match.unidad ? String(match.unidad) : 'unidades';
-        const precio = match && match.precio ? String(match.precio) : '';
+        const unidad = item.unidad ? String(item.unidad) : 'unidades';
+        const precio = item.precio ? String(item.precio) : '';
 
         const p = document.createElement('button');
         p.type = 'button';
         p.className = 'pill-mat';
-        p.textContent = precio ? `${sub} (${unidad}) - $${precio}` : `${sub} (${unidad})`;
-        p.onclick = () => addItem(sub, '1', unidad, precio);
+        p.textContent = precio ? `${name} (${unidad}) - $${precio}` : `${name} (${unidad})`;
+        p.onclick = () => addItem(name, '1', unidad);
         grid.appendChild(p);
       };
       cats2.appendChild(b);
