@@ -182,9 +182,11 @@
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
 <script>
+<script>
   const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
   const TEL_ADMIN = '5491112345678';
   let materialesData = [];
+  let localidadesData = [];
 
   function irPaso1() {
     document.getElementById('paso1').style.display = 'block';
@@ -229,10 +231,18 @@
   async function cargarCatalogo() {
     try {
       const res = await fetch(`${URL_API}?t=${Date.now()}`);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
+
       materialesData = Array.isArray(data.materiales) ? data.materiales : [];
+      localidadesData = Array.isArray(data.localidades) ? data.localidades : [];
+
       renderCatalogo();
+      cargarLocalidades();
     } catch (e) {
+      console.error(e);
+      document.getElementById('cats-nivel1').innerHTML = '';
+      document.getElementById('cats-nivel2').innerHTML = '';
       document.getElementById('mats-grid').innerHTML = '<div style="font-size:13px;color:#666;">No se pudo cargar el catálogo.</div>';
     }
   }
@@ -246,8 +256,9 @@
     grid.innerHTML = '';
 
     const categorias = [...new Set(materialesData.map(m => String(m.categoria || '').trim()).filter(Boolean))];
+
     if (!categorias.length) {
-      grid.innerHTML = '<div style="font-size:13px;color:#666;">No se encontraron materiales en la hoja.</div>';
+      grid.innerHTML = '<div style="font-size:13px;color:#666;">No se encontraron categorías.</div>';
       return;
     }
 
@@ -273,6 +284,7 @@
     grid.innerHTML = '';
 
     const items = materialesData.filter(m => String(m.categoria || '').trim() === cat);
+
     if (!items.length) {
       grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales para esta categoría.</div>';
       return;
@@ -280,13 +292,12 @@
 
     items.forEach((item, idx) => {
       const name = String(item.nombre || '').trim();
-      const id = String(item.id || '').trim();
       if (!name) return;
 
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'mat-btn' + (idx === 0 ? ' active' : '');
-      b.textContent = id ? `${id} — ${name}` : name;
+      b.textContent = name;
       b.onclick = () => {
         document.querySelectorAll('.mat-btn').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
@@ -307,6 +318,15 @@
 
     const first = cats2.querySelector('.mat-btn.active') || cats2.firstChild;
     if (first) first.click();
+  }
+
+  function cargarLocalidades() {
+    const sel = document.getElementById('cli-zona');
+    if (!sel || !localidadesData.length) return;
+
+    const opciones = [...new Set(localidadesData.map(x => String(x.zona || x.localidad || x.provincia || '').trim()).filter(Boolean))];
+    const base = '<option value="">Seleccioná tu zona...</option>';
+    sel.innerHTML = base + opciones.map(z => `<option value="${z}">${z}</option>`).join('');
   }
 
   function enviarPedido() {
@@ -359,6 +379,7 @@
     cargarCatalogo();
     irPaso1();
   });
+</script>
 </script>
 
 </body>
