@@ -12,7 +12,6 @@
     header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
     .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
     .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
-
     main { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
     .steps { display: flex; margin-bottom: 2rem; }
     .step { flex: 1; text-align: center; position: relative; }
@@ -23,7 +22,6 @@
     .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
     .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #d0dcea; z-index: 0; }
     .step:last-child::after { display: none; }
-
     .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; margin-bottom: 1rem; }
     .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; }
     .card h3 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; color: #555; text-transform: uppercase; letter-spacing: .05em; }
@@ -82,6 +80,7 @@
       align-items: flex-end;
       gap: 8px;
     }
+    #ws-chat.open { display: flex; }
     #ws-bubble {
       background:#fff;
       border-radius:12px;
@@ -108,6 +107,7 @@
       font-size:28px;
       cursor:pointer;
       box-shadow:0 4px 16px rgba(0,0,0,.25);
+      user-select:none;
     }
   </style>
 </head>
@@ -262,24 +262,30 @@
   let materialesData = [];
 
   function toggleWsChat() {
-    const chat = document.getElementById('ws-chat');
-    chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
+    document.getElementById('ws-chat').classList.toggle('open');
   }
 
   document.addEventListener('click', function(e) {
     const chat = document.getElementById('ws-chat');
     const launcher = document.getElementById('ws-launcher');
     if (!chat || !launcher) return;
-    if (!chat.contains(e.target) && !launcher.contains(e.target)) chat.style.display = 'none';
+    if (!chat.contains(e.target) && !launcher.contains(e.target)) chat.classList.remove('open');
   });
 
-  function irPaso1() { document.getElementById('paso1').style.display = 'block'; document.getElementById('paso2').style.display = 'none'; document.getElementById('paso3').style.display = 'none'; }
+  function irPaso1() {
+    document.getElementById('paso1').style.display = 'block';
+    document.getElementById('paso2').style.display = 'none';
+    document.getElementById('paso3').style.display = 'none';
+  }
+
   function irPaso2() {
     const nombre = document.getElementById('cli-nombre').value.trim();
     const zona = document.getElementById('cli-zona').value;
     if (!nombre) { alert('Ingresá tu nombre para continuar.'); return; }
     if (!zona) { alert('Seleccioná tu zona para continuar.'); return; }
-    document.getElementById('paso1').style.display = 'none'; document.getElementById('paso2').style.display = 'block'; document.getElementById('paso3').style.display = 'none';
+    document.getElementById('paso1').style.display = 'none';
+    document.getElementById('paso2').style.display = 'block';
+    document.getElementById('paso3').style.display = 'none';
   }
 
   function addItem(mat = '', cant = '1', u = 'unidades') {
@@ -289,10 +295,16 @@
     row.innerHTML = `<input type="text" placeholder="Material..." value="${mat}"><input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center"><input type="text" placeholder="Unidad" value="${u}"><button type="button" class="btn-remove" onclick="removeItem(this)">×</button>`;
     container.appendChild(row);
   }
+
   function removeItem(btn) {
     const rows = document.querySelectorAll('.item-row');
     if (rows.length > 1) btn.closest('.item-row').remove();
-    else { const inputs = btn.closest('.item-row').querySelectorAll('input'); inputs[0].value = ''; inputs[1].value = '1'; inputs[2].value = 'unidades'; }
+    else {
+      const inputs = btn.closest('.item-row').querySelectorAll('input');
+      inputs[0].value = '';
+      inputs[1].value = '1';
+      inputs[2].value = 'unidades';
+    }
   }
 
   async function cargarCatalogo() {
@@ -301,44 +313,76 @@
       const data = await res.json();
       materialesData = Array.isArray(data.materiales) ? data.materiales : [];
       renderCatalogo();
-    } catch (e) { materialesData = []; }
+    } catch (e) {
+      materialesData = [];
+    }
   }
 
   function renderCatalogo() {
     const cats1 = document.getElementById('cats-nivel1');
     const cats2 = document.getElementById('cats-nivel2');
     const grid = document.getElementById('mats-grid');
-    cats1.innerHTML = ''; cats2.innerHTML = ''; grid.innerHTML = '';
+    cats1.innerHTML = '';
+    cats2.innerHTML = '';
+    grid.innerHTML = '';
     const categorias = [...new Set(materialesData.map(m => String(m.categoria || '').trim()).filter(Boolean))];
-    if (!categorias.length) { grid.innerHTML = '<div style="font-size:13px;color:#666;">No se encontraron materiales en la hoja.</div>'; return; }
+    if (!categorias.length) {
+      grid.innerHTML = '<div style="font-size:13px;color:#666;">No se encontraron materiales en la hoja.</div>';
+      return;
+    }
     categorias.forEach((cat, idx) => {
       const b = document.createElement('button');
-      b.type = 'button'; b.className = 'cat-btn' + (idx === 0 ? ' active' : '');
-      b.textContent = cat; b.onclick = () => renderSubcategorias(cat, b); cats1.appendChild(b);
+      b.type = 'button';
+      b.className = 'cat-btn' + (idx === 0 ? ' active' : '');
+      b.textContent = cat;
+      b.onclick = () => renderSubcategorias(cat, b);
+      cats1.appendChild(b);
     });
     renderSubcategorias(categorias[0], cats1.querySelector('.cat-btn.active') || cats1.firstChild);
   }
 
   function renderSubcategorias(cat, btn) {
-    document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active')); if (btn) btn.classList.add('active');
-    const cats2 = document.getElementById('cats-nivel2'); const grid = document.getElementById('mats-grid');
-    cats2.innerHTML = ''; grid.innerHTML = '';
+    document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const cats2 = document.getElementById('cats-nivel2');
+    const grid = document.getElementById('mats-grid');
+    cats2.innerHTML = '';
+    grid.innerHTML = '';
     const subcats = [...new Set(materialesData.filter(m => String(m.categoria || '').trim() === cat).map(m => String(m.nombre || '').trim()).filter(Boolean))];
-    if (!subcats.length) { grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales para esta categoría.</div>'; return; }
+    if (!subcats.length) {
+      grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales para esta categoría.</div>';
+      return;
+    }
     subcats.forEach((sub, idx) => {
       const b = document.createElement('button');
-      b.type = 'button'; b.className = 'mat-btn' + (idx === 0 ? ' active' : '');
+      b.type = 'button';
+      b.className = 'mat-btn' + (idx === 0 ? ' active' : '');
       b.textContent = sub;
-      b.onclick = () => { document.querySelectorAll('.mat-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); grid.innerHTML = ''; const p = document.createElement('button'); p.type = 'button'; p.className = 'pill-mat'; p.textContent = sub; p.onclick = () => addItem(sub, '1', 'unidades'); grid.appendChild(p); };
+      b.onclick = () => {
+        document.querySelectorAll('.mat-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        grid.innerHTML = '';
+        const p = document.createElement('button');
+        p.type = 'button';
+        p.className = 'pill-mat';
+        p.textContent = sub;
+        p.onclick = () => addItem(sub, '1', 'unidades');
+        grid.appendChild(p);
+      };
       cats2.appendChild(b);
     });
-    const first = cats2.querySelector('.mat-btn.active') || cats2.firstChild; if (first) first.click();
+    const first = cats2.querySelector('.mat-btn.active') || cats2.firstChild;
+    if (first) first.click();
   }
 
   function enviarPedido() {
     const rows = document.querySelectorAll('.item-row');
     const items = [];
-    rows.forEach(row => { const inputs = row.querySelectorAll('input'); const mat = inputs[0]?.value.trim(); if (mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' }); });
+    rows.forEach(row => {
+      const inputs = row.querySelectorAll('input');
+      const mat = inputs[0]?.value.trim();
+      if (mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
+    });
     if (!items.length) { alert('Agregá al menos un material.'); return; }
     const codigo = 'MAT-' + Date.now().toString().slice(-6);
     document.getElementById('codigo-pedido').textContent = codigo;
@@ -361,7 +405,9 @@
     if (obs) msg += `\\n📝 *Obs:* ${obs}`;
 
     document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
-    document.getElementById('paso1').style.display = 'none'; document.getElementById('paso2').style.display = 'none'; document.getElementById('paso3').style.display = 'block';
+    document.getElementById('paso1').style.display = 'none';
+    document.getElementById('paso2').style.display = 'none';
+    document.getElementById('paso3').style.display = 'block';
   }
 
   function nuevoPedido() {
@@ -373,7 +419,11 @@
     irPaso1();
   }
 
-  document.addEventListener('DOMContentLoaded', () => { addItem(); cargarCatalogo(); irPaso1(); });
+  document.addEventListener('DOMContentLoaded', () => {
+    addItem();
+    cargarCatalogo();
+    irPaso1();
+  });
 </script>
 
 </body>
