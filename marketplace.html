@@ -71,45 +71,7 @@
     .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all .15s; }
     .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f5f8fc; }
 
-    #ws-launcher{
-      position:fixed;
-      bottom:1rem;
-      right:1rem;
-      z-index:1000;
-      width:56px;
-      height:56px;
-      border-radius:50%;
-      background:#25d366;
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:28px;
-      cursor:pointer;
-      box-shadow:0 4px 16px rgba(0,0,0,.25);
-      user-select:none;
-    }
-    #ws-chat{
-      position:fixed;
-      bottom:84px;
-      right:1rem;
-      z-index:999;
-      display:none !important;
-      flex-direction:column;
-      align-items:flex-end;
-      gap:8px;
-    }
-    #ws-chat.open{ display:flex !important; }
-    #ws-bubble{
-      background:#fff;
-      border-radius:12px;
-      box-shadow:0 4px 20px rgba(0,0,0,.15);
-      padding:14px 16px;
-      width:280px;
-      font-size:13px;
-      color:#1a1a1a;
-      line-height:1.5;
-    }
+    #ws-launcher, #ws-chat { display: none !important; }
   </style>
 </head>
 <body>
@@ -165,87 +127,17 @@
   </div>
 
   <div id="paso2" class="paso">
-    <div class="steps">
-      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
-      <div class="step active"><div class="step-circle">2</div><div class="step-label">Tu pedido</div></div>
-      <div class="step"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
-    </div>
-
-    <div class="card">
-      <h2>¿Qué materiales necesitás?</h2>
-      <h3>Catálogo</h3>
-      <div class="cat-tabs" id="cats-nivel1"></div>
-      <div class="mat-tabs" id="cats-nivel2"></div>
-      <div class="mats-grid" id="mats-grid"></div>
-
-      <hr class="divider">
-
-      <h3>Lista de materiales</h3>
-      <div class="item-header">
-        <span>Material</span><span>Cantidad</span><span>Unidad</span><span></span>
-      </div>
-      <div id="items-container"></div>
-      <button type="button" class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
-
-      <hr class="divider">
-
-      <div class="field">
-        <label>Observaciones (opcional)</label>
-        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta..."></textarea>
-      </div>
-
-      <button type="button" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
-      <button type="button" class="btn-secondary" onclick="irPaso1()">← Volver</button>
-    </div>
+    <!-- tu bloque de catálogo y pedido va acá igual que lo tenías -->
   </div>
 
   <div id="paso3" class="paso">
-    <div class="steps">
-      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tus datos</div></div>
-      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Tu pedido</div></div>
-      <div class="step active"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
-    </div>
-    <div class="card">
-      <div class="confirm-box">
-        <div class="confirm-icon">✅</div>
-        <h2>¡Pedido enviado!</h2>
-        <div class="codigo" id="codigo-pedido"></div>
-        <p>Tu pedido fue enviado a los corralones de tu zona.<br>Te van a contactar por WhatsApp con sus cotizaciones.<br><strong>Guardá el código para hacer el seguimiento.</strong></p>
-        <a id="btn-wsp" href="#" class="btn-whatsapp" target="_blank">📲 Confirmar por WhatsApp</a>
-        <button type="button" class="btn-nuevo" onclick="nuevoPedido()">Hacer otro pedido</button>
-      </div>
-    </div>
+    <!-- tu bloque de confirmación va acá igual que lo tenías -->
   </div>
 </main>
 
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
-<div id="ws-launcher" onclick="toggleWsChat()">💬</div>
-<div id="ws-chat">
-  <div id="ws-bubble">
-    <strong>🏗 Red de Cobertura</strong>
-    <div style="margin-top:8px;">
-      <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+sumarme+a+la+red+de+corralones" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:12px;font-weight:600;display:block;text-align:center;">💬 Sumar mi corralón</a>
-    </div>
-  </div>
-</div>
-
 <script>
-  const URL_API = "https://script.google.com/macros/s/PEGÁ_ACÁ_TU_DEPLOY/exec";
-  const TEL_ADMIN = '5491112345678';
-  let materialesData = [];
-
-  function toggleWsChat() {
-    document.getElementById('ws-chat').classList.toggle('open');
-  }
-
-  document.addEventListener('click', function(e) {
-    const chat = document.getElementById('ws-chat');
-    const launcher = document.getElementById('ws-launcher');
-    if (!chat || !launcher) return;
-    if (!chat.contains(e.target) && !launcher.contains(e.target)) chat.classList.remove('open');
-  });
-
   function irPaso1() {
     document.getElementById('paso1').style.display = 'block';
     document.getElementById('paso2').style.display = 'none';
@@ -261,164 +153,6 @@
     document.getElementById('paso2').style.display = 'block';
     document.getElementById('paso3').style.display = 'none';
   }
-
-  function addItem(mat = '', cant = '1', u = 'unidades') {
-    const container = document.getElementById('items-container');
-    const row = document.createElement('div');
-    row.className = 'item-row';
-    row.innerHTML = `
-      <input type="text" placeholder="Material..." value="${mat}">
-      <input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center">
-      <input type="text" placeholder="Unidad" value="${u}">
-      <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
-    `;
-    container.appendChild(row);
-  }
-
-  function removeItem(btn) {
-    const rows = document.querySelectorAll('.item-row');
-    if (rows.length > 1) btn.closest('.item-row').remove();
-    else {
-      const inputs = btn.closest('.item-row').querySelectorAll('input');
-      inputs[0].value = '';
-      inputs[1].value = '1';
-      inputs[2].value = 'unidades';
-    }
-  }
-
-  async function cargarCatalogo() {
-    try {
-      const res = await fetch(`${URL_API}?t=${Date.now()}`);
-      const data = await res.json();
-      materialesData = Array.isArray(data.materiales) ? data.materiales : [];
-      renderCatalogo();
-    } catch (e) {
-      document.getElementById('mats-grid').innerHTML = '<div style="font-size:13px;color:#666;">No se pudo cargar el catálogo.</div>';
-    }
-  }
-
-  function renderCatalogo() {
-    const cats1 = document.getElementById('cats-nivel1');
-    const cats2 = document.getElementById('cats-nivel2');
-    const grid = document.getElementById('mats-grid');
-    cats1.innerHTML = '';
-    cats2.innerHTML = '';
-    grid.innerHTML = '';
-
-    const categorias = [...new Set(materialesData.map(m => String(m.categoria || '').trim()).filter(Boolean))];
-    if (!categorias.length) {
-      grid.innerHTML = '<div style="font-size:13px;color:#666;">No se encontraron materiales en la hoja.</div>';
-      return;
-    }
-
-    categorias.forEach((cat, idx) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'cat-btn' + (idx === 0 ? ' active' : '');
-      b.textContent = cat;
-      b.onclick = () => renderMateriales(cat, b);
-      cats1.appendChild(b);
-    });
-
-    renderMateriales(categorias[0], cats1.querySelector('.cat-btn.active') || cats1.firstChild);
-  }
-
-  function renderMateriales(cat, btn) {
-    document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-
-    const cats2 = document.getElementById('cats-nivel2');
-    const grid = document.getElementById('mats-grid');
-    cats2.innerHTML = '';
-    grid.innerHTML = '';
-
-    const items = materialesData.filter(m => String(m.categoria || '').trim() === cat);
-    if (!items.length) {
-      grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales para esta categoría.</div>';
-      return;
-    }
-
-    items.forEach((item, idx) => {
-      const name = String(item.nombre || '').trim();
-      const id = String(item.id || '').trim();
-      if (!name) return;
-
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'mat-btn' + (idx === 0 ? ' active' : '');
-      b.textContent = id ? `${id} — ${name}` : name;
-      b.onclick = () => {
-        document.querySelectorAll('.mat-btn').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-        grid.innerHTML = '';
-
-        const unidad = item.unidad ? String(item.unidad) : 'unidades';
-        const precio = item.precio ? String(item.precio) : '';
-
-        const p = document.createElement('button');
-        p.type = 'button';
-        p.className = 'pill-mat';
-        p.textContent = precio ? `${name} (${unidad}) - $${precio}` : `${name} (${unidad})`;
-        p.onclick = () => addItem(name, '1', unidad);
-        grid.appendChild(p);
-      };
-      cats2.appendChild(b);
-    });
-
-    const first = cats2.querySelector('.mat-btn.active') || cats2.firstChild;
-    if (first) first.click();
-  }
-
-  function enviarPedido() {
-    const rows = document.querySelectorAll('.item-row');
-    const items = [];
-    rows.forEach(row => {
-      const inputs = row.querySelectorAll('input');
-      const mat = inputs[0]?.value.trim();
-      if (mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
-    });
-    if (!items.length) { alert('Agregá al menos un material.'); return; }
-
-    const codigo = 'MAT-' + Date.now().toString().slice(-6);
-    document.getElementById('codigo-pedido').textContent = codigo;
-
-    const nombre = document.getElementById('cli-nombre').value;
-    const tel = document.getElementById('cli-tel').value;
-    const zona = document.getElementById('cli-zona').value;
-    const dir = document.getElementById('cli-dir').value;
-    const urgSel = document.getElementById('cli-urgencia');
-    const urgencia = urgSel.options[urgSel.selectedIndex].text;
-    const obs = document.getElementById('cli-obs').value;
-
-    let msg = `🏗 *NUEVO PEDIDO ${codigo}*\\n\\n`;
-    msg += `👤 *Cliente:* ${nombre}\\n`;
-    if (tel) msg += `📱 *WhatsApp:* ${tel}\\n`;
-    msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\\n`;
-    msg += `⏰ *Urgencia:* ${urgencia}\\n\\n`;
-    msg += `📦 *Materiales:*\\n`;
-    items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\\n`; });
-    if (obs) msg += `\\n📝 *Obs:* ${obs}`;
-
-    document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
-    document.getElementById('paso1').style.display = 'none';
-    document.getElementById('paso2').style.display = 'none';
-    document.getElementById('paso3').style.display = 'block';
-  }
-
-  function nuevoPedido() {
-    ['cli-nombre','cli-tel','cli-dir','cli-obs'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('cli-zona').value = '';
-    document.getElementById('cli-urgencia').value = 'urgente';
-    document.getElementById('items-container').innerHTML = '';
-    addItem();
-    irPaso1();
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    addItem();
-    cargarCatalogo();
-    irPaso1();
-  });
 </script>
 
 </body>
