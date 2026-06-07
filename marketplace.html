@@ -1,142 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
- <style>
-.select-wrap{
-  position: relative;
-  width: 100%;
-  margin-top: 4px;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materiales Ya — Marketplace</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
+    header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    header h1 { font-size: 1.3rem; font-weight: 600; }
+    header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
+    .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
+    .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
 
-.zona-select{
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  border: 1px solid #d6deea;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%);
-  color: #1f2a37;
-  padding: 13px 46px 13px 14px;
-  font-size: 14px;
-  line-height: 1.2;
-  box-shadow: 0 1px 2px rgba(16,24,40,.06);
-  outline: none;
-  transition: all .18s ease;
-}
+    main { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
 
-.select-wrap::after{
-  content: "▾";
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #5b6b7f;
-  pointer-events: none;
-  font-size: 14px;
-}
+    .steps { display: flex; margin-bottom: 2rem; }
+    .step { flex: 1; text-align: center; position: relative; }
+    .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #d0dcea; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
+    .step.active .step-circle { background: #1a2744; color: #fff; }
+    .step.done .step-circle { background: #1a6a3e; color: #fff; }
+    .step-label { font-size: 11px; color: #888; }
+    .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
+    .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #d0dcea; z-index: 0; }
+    .step:last-child::after { display: none; }
 
-.zona-select:hover{
-  border-color: #b3c2d6;
-  background: #fff;
-}
+    .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; margin-bottom: 1rem; }
+    .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; }
+    .card h3 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; color: #555; text-transform: uppercase; letter-spacing: .05em; }
 
-.zona-select:focus{
-  border-color: #1a2744;
-  box-shadow: 0 0 0 4px rgba(26,39,68,.12);
-  background: #fff;
-}
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+    .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: #fafbfd; outline: none; transition: border .15s; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a2744; background: #fff; }
 
-.zona-select optgroup{
-  font-weight: 700;
-  color: #1a2744;
-}
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
 
-.zona-select option{
-  color: #1f2a37;
-}
-</style>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Materiales Ya — Pedí cotización a corralones</title>
-<link rel="icon" type="image/gif" href="favicon.gif">
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
-  header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
-  header h1 { font-size: 1.3rem; font-weight: 600; }
-  header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
-  .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
-  .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
+    .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
+    .btn-primary:hover { opacity: .85; }
+    .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
+    .btn-secondary:hover { background: #eef2f7; }
 
-  main { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
+    .confirm-box { text-align: center; padding: 2rem 1rem; }
+    .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
+    .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
+    .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #eef2f7; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
+    .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; text-align: center; }
+    .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
 
-  .steps { display: flex; margin-bottom: 2rem; }
-  .step { flex: 1; text-align: center; position: relative; }
-  .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #d0dcea; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
-  .step.active .step-circle { background: #1a2744; color: #fff; }
-  .step.done .step-circle { background: #1a6a3e; color: #fff; }
-  .step-label { font-size: 11px; color: #888; }
-  .step.active .step-label, .step.done .step-label { color: #1a1a1a; font-weight: 500; }
-  .step::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 1px; background: #d0dcea; z-index: 0; transition: all .3s; }
-  .step:last-child::after { display: none; }
+    .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
+    .paso { display: none; }
+    .paso.active { display: block; }
 
-  .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; margin-bottom: 1rem; }
-  .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1.25rem; }
-  .card h3 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; color: #555; text-transform: uppercase; letter-spacing: .05em; }
+    footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
 
-  .field { margin-bottom: 1rem; }
-  .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
-  .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; color: #1a1a2e; background: #fafbfd; outline: none; transition: border .15s; resize: vertical; }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: #1a2744; background: #fff; }
+    #ws-chat { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    #ws-bubble { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.15); padding:14px 16px; width:280px; font-size:13px; color:#1a1a1a; line-height:1.5; display:none; }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
-
-  .cat-nivel1 { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-  .cat-nivel2 { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; min-height: 30px; }
-  .pill-cat { padding: 6px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 13px; color: #444; cursor: pointer; transition: all .15s; font-weight: 500; }
-  .pill-cat.active { background: #1a2744; color: #fff; border-color: #1a1a1a; }
-  .pill-sub { padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #eef2f7; font-size: 12px; color: #555; cursor: pointer; transition: all .15s; }
-  .pill-sub.active { background: #1a3a6e; color: #fff; border-color: #444; }
-  .pill-sub:hover:not(.active) { border-color: #999; background: #fff; }
-  .mats-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; min-height: 36px; padding: 8px; background: #f5f8fc; border-radius: 8px; border: 1px solid #eee; }
-  .pill-mat { padding: 5px 12px; border-radius: 6px; border: 1px solid #d0dcea; background: #fff; font-size: 12px; color: #333; cursor: pointer; transition: all .15s; }
-  .pill-mat:hover { border-color: #1a1a1a; background: #1a2744; color: #fff; }
-
-  .item-header { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; margin-bottom: 4px; padding: 0 2px; }
-  .item-header span { font-size: 11px; color: #aaa; }
-  .item-row { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
-  @media(max-width:480px) { .item-row, .item-header { grid-template-columns: 1fr 55px 75px 28px; } }
-  .item-row input { padding: 7px 10px; border: 1px solid #ddd; border-radius: 7px; font-size: 13px; width: 100%; background: #fafafa; outline: none; }
-  .item-row input:focus { border-color: #1a2744; background: #fff; }
-  .btn-remove { background: none; border: none; color: #ddd; font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 5px; line-height: 1; }
-  .btn-remove:hover { color: #e53e3e; background: #fff0f0; }
-  .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all .15s; }
-  .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f5f8fc; }
-
-  .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
-  .btn-primary:hover { opacity: .85; }
-  .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
-  .btn-secondary:hover { background: #eef2f7; }
-
-  .confirm-box { text-align: center; padding: 2rem 1rem; }
-  .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
-  .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
-  .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
-  .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #eef2f7; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
-  .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; text-align: center; }
-  .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
-
-  .divider { border: none; border-top: 1px solid #f0f0ea; margin: 1.2rem 0; }
-  .paso { display: none; }
-  .paso.active { display: block; }
-
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
-
-  #ws-chat { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-  #ws-bubble { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.15); padding:14px 16px; width:280px; font-size:13px; color:#1a1a1a; line-height:1.5; display:none; }
-</style>
+    .select-wrap{ position: relative; width: 100%; margin-top: 4px; }
+    .zona-select{ width: 100%; appearance: none; -webkit-appearance: none; -moz-appearance: none; border: 1px solid #d6deea; border-radius: 12px; background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%); color: #1f2a37; padding: 13px 46px 13px 14px; font-size: 14px; line-height: 1.2; box-shadow: 0 1px 2px rgba(16,24,40,.06); outline: none; transition: all .18s ease; }
+    .select-wrap::after{ content: "▾"; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #5b6b7f; pointer-events: none; font-size: 14px; }
+    .zona-select:hover{ border-color: #b3c2d6; background: #fff; }
+    .zona-select:focus{ border-color: #1a2744; box-shadow: 0 0 0 4px rgba(26,39,68,.12); background: #fff; }
+    .zona-select optgroup{ font-weight: 700; color: #1a2744; }
+    .zona-select option{ color: #1f2a37; }
+  </style>
 </head>
 <body>
 
@@ -159,60 +89,123 @@
       <div class="step"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
     </div>
 
-    .select-wrap{
-  position: relative;
-  width: 100%;
-  margin-top: 4px;
-}
+    <div class="card">
+      <h2>¿Dónde entregamos?</h2>
 
-.zona-select{
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  border: 1px solid #d6deea;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%);
-  color: #1f2a37;
-  padding: 13px 46px 13px 14px;
-  font-size: 14px;
-  line-height: 1.2;
-  box-shadow: 0 1px 2px rgba(16,24,40,.06);
-  outline: none;
-  transition: all .18s ease;
-}
+      <div class="grid-2">
+        <div class="field">
+          <label>Tu nombre</label>
+          <input type="text" id="cli-nombre" placeholder="Juan García">
+        </div>
 
-.select-wrap::after{
-  content: "▾";
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #5b6b7f;
-  pointer-events: none;
-  font-size: 14px;
-}
+        <div class="field">
+          <label>WhatsApp</label>
+          <input type="tel" id="cli-tel" placeholder="11 1234-5678">
+        </div>
+      </div>
 
-.zona-select:hover{
-  border-color: #b3c2d6;
-  background: #fff;
-}
+      <div class="field">
+        <label>Barrio / Zona</label>
+        <div class="select-wrap">
+          <select id="cli-zona" class="zona-select">
+            <option value="">Seleccioná tu zona...</option>
 
-.zona-select:focus{
-  border-color: #1a2744;
-  box-shadow: 0 0 0 4px rgba(26,39,68,.12);
-  background: #fff;
-}
+            <optgroup label="CABA">
+              <option>Palermo</option>
+              <option>Belgrano</option>
+              <option>Núñez</option>
+              <option>Coghlan</option>
+              <option>Almagro</option>
+              <option>Caballito</option>
+              <option>Villa Crespo</option>
+              <option>Flores</option>
+              <option>Liniers</option>
+              <option>Mataderos</option>
+              <option>Villa Lugano</option>
+              <option>Versalles</option>
+              <option>Boca</option>
+              <option>Barracas</option>
+              <option>Pompeya</option>
+              <option>Parque Patricios</option>
+              <option>San Telmo</option>
+              <option>Recoleta</option>
+              <option>Saavedra</option>
+            </optgroup>
 
-.zona-select optgroup{
-  font-weight: 700;
-  color: #1a2744;
-}
+            <optgroup label="Zona Norte GBA">
+              <option>Vicente López</option>
+              <option>Olivos</option>
+              <option>La Lucila</option>
+              <option>Florida</option>
+              <option>Munro</option>
+              <option>Villa Adelina</option>
+              <option>Martínez</option>
+              <option>Acassuso</option>
+              <option>San Isidro</option>
+              <option>Beccar</option>
+              <option>San Fernando</option>
+              <option>Tigre</option>
+              <option>Don Torcuato</option>
+              <option>General Pacheco</option>
+              <option>Rincón de Milberg</option>
+              <option>Del Viso</option>
+              <option>Pilar</option>
+              <option>Escobar</option>
+              <option>Ingeniero Maschwitz</option>
+            </optgroup>
 
-.zona-select option{
-  color: #1f2a37;
-}
-      <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. Corrientes 1234"></div>
+            <optgroup label="Zona Sur GBA">
+              <option>Avellaneda</option>
+              <option>Sarandí</option>
+              <option>Wilde</option>
+              <option>Dock Sud</option>
+              <option>Lanús</option>
+              <option>Valentín Alsina</option>
+              <option>Banfield</option>
+              <option>Temperley</option>
+              <option>Lomas de Zamora</option>
+              <option>Adrogué</option>
+              <option>Burzaco</option>
+              <option>Quilmes</option>
+              <option>Bernal</option>
+              <option>Ezpeleta</option>
+              <option>Berazategui</option>
+              <option>Florencio Varela</option>
+              <option>Almirante Brown</option>
+              <option>Glew</option>
+              <option>Longchamps</option>
+              <option>Claypole</option>
+            </optgroup>
+
+            <optgroup label="Zona Oeste GBA">
+              <option>Morón</option>
+              <option>Haedo</option>
+              <option>Castelar</option>
+              <option>Ituzaingó</option>
+              <option>Hurlingham</option>
+              <option>El Palomar</option>
+              <option>Ciudadela</option>
+              <option>Caseros</option>
+              <option>Ramos Mejía</option>
+              <option>San Justo</option>
+              <option>Gregorio de Laferrere</option>
+              <option>Isidro Casanova</option>
+              <option>La Tablada</option>
+              <option>Merlo</option>
+              <option>Padua</option>
+              <option>Moreno</option>
+              <option>Francisco Álvarez</option>
+              <option>Trujui</option>
+              <option>González Catán</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Dirección de entrega</label>
+        <input type="text" id="cli-dir" placeholder="Av. Corrientes 1234">
+      </div>
 
       <div class="field">
         <label>¿Cuándo necesitás los materiales?</label>
@@ -235,151 +228,10 @@
       <div class="step"><div class="step-circle">3</div><div class="step-label">Confirmación</div></div>
     </div>
 
-    <!-- BLOQUE FORMULARIO CLIENTE -->
-<div class="card">
-  <h2>¿Dónde entregamos?</h2>
+    <div class="card">
+      <h2>Acá va tu bloque de pedido</h2>
+      <p style="font-size:14px;color:#666;line-height:1.6;">Si querés, ahora te integro también el bloque de carga de materiales y el envío completo para que quede la versión final de Marketplace.</p>
 
-  <div class="grid-2">
-    <div class="field">
-      <label>Tu nombre</label>
-      <input type="text" id="cli-nombre" placeholder="Juan García">
-    </div>
-
-    <div class="field">
-      <label>WhatsApp</label>
-      <input type="tel" id="cli-tel" placeholder="11 1234-5678">
-    </div>
-  </div>
-
-  <div class="field">
-    <label>Barrio / Zona</label>
-    <div class="select-wrap">
-      <select id="cli-zona" class="zona-select">
-        <option value="">Seleccioná tu zona...</option>
-
-        <optgroup label="CABA">
-          <option>Palermo</option>
-          <option>Belgrano</option>
-          <option>Núñez</option>
-          <option>Coghlan</option>
-          <option>Almagro</option>
-          <option>Caballito</option>
-          <option>Villa Crespo</option>
-          <option>Flores</option>
-          <option>Liniers</option>
-          <option>Mataderos</option>
-          <option>Villa Lugano</option>
-          <option>Versalles</option>
-          <option>Boca</option>
-          <option>Barracas</option>
-          <option>Pompeya</option>
-          <option>Parque Patricios</option>
-          <option>San Telmo</option>
-          <option>Recoleta</option>
-          <option>Saavedra</option>
-        </optgroup>
-
-        <optgroup label="Zona Norte GBA">
-          <option>Vicente López</option>
-          <option>Olivos</option>
-          <option>La Lucila</option>
-          <option>Florida</option>
-          <option>Munro</option>
-          <option>Villa Adelina</option>
-          <option>Martínez</option>
-          <option>Acassuso</option>
-          <option>San Isidro</option>
-          <option>Beccar</option>
-          <option>San Fernando</option>
-          <option>Tigre</option>
-          <option>Don Torcuato</option>
-          <option>General Pacheco</option>
-          <option>Rincón de Milberg</option>
-          <option>Del Viso</option>
-          <option>Pilar</option>
-          <option>Escobar</option>
-          <option>Ingeniero Maschwitz</option>
-        </optgroup>
-
-        <optgroup label="Zona Sur GBA">
-          <option>Avellaneda</option>
-          <option>Sarandí</option>
-          <option>Wilde</option>
-          <option>Dock Sud</option>
-          <option>Lanús</option>
-          <option>Valentín Alsina</option>
-          <option>Banfield</option>
-          <option>Temperley</option>
-          <option>Lomas de Zamora</option>
-          <option>Adrogué</option>
-          <option>Burzaco</option>
-          <option>Quilmes</option>
-          <option>Bernal</option>
-          <option>Ezpeleta</option>
-          <option>Berazategui</option>
-          <option>Florencio Varela</option>
-          <option>Almirante Brown</option>
-          <option>Glew</option>
-          <option>Longchamps</option>
-          <option>Claypole</option>
-        </optgroup>
-
-        <optgroup label="Zona Oeste GBA">
-          <option>Morón</option>
-          <option>Haedo</option>
-          <option>Castelar</option>
-          <option>Ituzaingó</option>
-          <option>Hurlingham</option>
-          <option>El Palomar</option>
-          <option>Ciudadela</option>
-          <option>Caseros</option>
-          <option>Ramos Mejía</option>
-          <option>San Justo</option>
-          <option>Gregorio de Laferrere</option>
-          <option>Isidro Casanova</option>
-          <option>La Tablada</option>
-          <option>Merlo</option>
-          <option>Padua</option>
-          <option>Moreno</option>
-          <option>Francisco Álvarez</option>
-          <option>Trujui</option>
-          <option>González Catán</option>
-        </optgroup>
-      </select>
-    </div>
-  </div>
-
-  <div class="field">
-    <label>Dirección de entrega</label>
-    <input type="text" id="cli-dir" placeholder="Av. Corrientes 1234">
-  </div>
-
-  <div class="field">
-    <label>¿Cuándo necesitás los materiales?</label>
-    <select id="cli-urgencia">
-      <option value="urgente">Lo antes posible (24-48hs)</option>
-      <option value="semana">Esta semana</option>
-      <option value="quincena">Esta quincena</option>
-      <option value="mes">Este mes</option>
-    </select>
-  </div>
-</div>
-
-      <h3>Lista de materiales</h3>
-      <div class="item-header">
-        <span>Material</span><span>Cantidad</span><span>Unidad</span><span></span>
-      </div>
-      <div id="items-container"></div>
-      <button type="button" class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
-
-      <hr class="divider">
-
-      <div class="field">
-        <label>Observaciones (opcional)</label>
-        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta..."></textarea>
-      </div>
-
-      <button type="button" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
       <button type="button" class="btn-secondary" onclick="irPaso1()">← Volver</button>
     </div>
   </div>
@@ -396,7 +248,7 @@
         <div class="confirm-icon">✅</div>
         <h2>¡Pedido enviado!</h2>
         <div class="codigo" id="codigo-pedido"></div>
-        <p>Tu pedido fue enviado a los corralones de tu zona.<br>Te van a contactar por WhatsApp con sus cotizaciones.<br><strong>Guardá el código para hacer el seguimiento.</strong></p>
+        <p>Tu pedido fue enviado a los corralones de tu zona.</p>
         <a id="btn-wsp" href="#" class="btn-whatsapp" target="_blank">📲 Confirmar por WhatsApp</a>
         <button type="button" class="btn-nuevo" onclick="nuevoPedido()">Hacer otro pedido</button>
       </div>
@@ -406,150 +258,34 @@
 
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
-<div id="ws-chat">
-  <div id="ws-bubble">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-      <strong style="font-size:13px;">🏗 Red de Cobertura</strong>
-      <button type="button" onclick="document.getElementById('ws-bubble').style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:#888;padding:0 0 0 8px;">×</button>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px;">
-      <a href="https://wa.me/5491112345678?text=Hola%2C+quiero+pedir+una+cotizaci%C3%B3n+de+materiales" target="_blank" style="background:#eef2f7;border-radius:8px;padding:8px 10px;text-decoration:none;color:#1a2744;font-size:11px;font-weight:500;text-align:center;">💬 Soporte / Sumar mi Corralón</a>
-    </div>
-  </div>
-  <button type="button" onclick="toggleBubble()" style="width:56px;height:56px;border-radius:50%;background:#25d366;border:none;cursor:pointer;box-shadow:0 4px 166px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  </button>
-</div>
-
-<datalist id="lista-mats"></datalist>
-
 <script>
-const URL_API = "https://script.google.com/macros/s/AKfycbzN4rgXHP02RxAXHYZrNq7iO7dmUcJdLlHxYFeRk8vtm4qH6C3vA97PVxh3ZfRD3QyE/exec";
-let materialesData = [];
-let corralonesData = [];
-
-function toggleBubble() {
-  const b = document.getElementById('ws-bubble');
-  b.style.display = b.style.display === 'none' ? 'block' : 'none';
-}
-
-function irPaso1() {
-  document.getElementById('paso1').style.display = 'block';
-  document.getElementById('paso2').style.display = 'none';
-  document.getElementById('paso3').style.display = 'none';
-}
-
-function irPaso2() {
-  const nombre = document.getElementById('cli-nombre').value.trim();
-  const zona = document.getElementById('cli-zona').value;
-  if (!nombre) { alert('Ingresá tu nombre para continuar.'); return; }
-  if (!zona) { alert('Seleccioná tu zona para continuar.'); return; }
-  document.getElementById('paso1').style.display = 'none';
-  document.getElementById('paso2').style.display = 'block';
-  document.getElementById('paso3').style.display = 'none';
-}
-
-function addItem(mat = '', cant = '1', u = 'unidades') {
-  const container = document.getElementById('items-container');
-  const row = document.createElement('div');
-  row.className = 'item-row';
-  row.innerHTML = `
-    <input type="text" placeholder="Material..." value="${mat}" list="lista-mats">
-    <input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center">
-    <input type="text" placeholder="Unidad" value="${u}">
-    <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
-  `;
-  container.appendChild(row);
-}
-
-function removeItem(btn) {
-  const rows = document.querySelectorAll('.item-row');
-  if (rows.length > 1) btn.closest('.item-row').remove();
-  else {
-    const inputs = btn.closest('.item-row').querySelectorAll('input');
-    inputs[0].value = '';
-    inputs[1].value = '1';
-    inputs[2].value = 'unidades';
+  function irPaso1() {
+    document.getElementById('paso1').style.display = 'block';
+    document.getElementById('paso2').style.display = 'none';
+    document.getElementById('paso3').style.display = 'none';
   }
-}
 
-function asegurarDatalist() {
-  const dl = document.getElementById('lista-mats');
-  dl.innerHTML = '';
-  const unicos = [...new Set(materialesData.map(x => String(x).trim()).filter(Boolean))];
-  unicos.forEach(txt => {
-    const opt = document.createElement('option');
-    opt.value = txt;
-    dl.appendChild(opt);
-  });
-}
-
-async function cargarCatalogo() {
-  try {
-    const res = await fetch(`${URL_API}?t=${Date.now()}`);
-    const data = await res.json();
-    corralonesData = Array.isArray(data.corralones) ? data.corralones : [];
-    const mats = Array.isArray(data.materiales) ? data.materiales : [];
-    materialesData = mats.map(m => m.material || m.nombre || m.Material || m.Nombre || '').filter(Boolean);
-    if (!materialesData.length) throw new Error('sin materiales');
-  } catch (e) {
-    try {
-      const resLocal = await fetch('materiales.json');
-      const local = await resLocal.json();
-      const arr = Array.isArray(local) ? local : (local.materiales || []);
-      materialesData = arr.map(m => m.material || m.nombre || m.Material || m.Nombre || m).filter(Boolean);
-    } catch (err) {
-      materialesData = [];
-    }
+  function irPaso2() {
+    const nombre = document.getElementById('cli-nombre').value.trim();
+    const zona = document.getElementById('cli-zona').value;
+    if (!nombre) { alert('Ingresá tu nombre para continuar.'); return; }
+    if (!zona) { alert('Seleccioná tu zona para continuar.'); return; }
+    document.getElementById('paso1').style.display = 'none';
+    document.getElementById('paso2').style.display = 'block';
+    document.getElementById('paso3').style.display = 'none';
   }
-  asegurarDatalist();
-}
 
-function enviarPedido() {
-  const rows = document.querySelectorAll('.item-row');
-  const items = [];
-  rows.forEach(row => {
-    const inputs = row.querySelectorAll('input');
-    const mat = inputs[0]?.value.trim();
-    if (mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
+  function nuevoPedido() {
+    ['cli-nombre','cli-tel','cli-dir'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('cli-zona').value = '';
+    document.getElementById('cli-urgencia').value = 'urgente';
+    irPaso1();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    irPaso1();
   });
-  if (!items.length) { alert('Agregá al menos un material.'); return; }
-  const codigo = 'MAT-' + Date.now().toString().slice(-6);
-  document.getElementById('codigo-pedido').textContent = codigo;
-  const nombre = document.getElementById('cli-nombre').value;
-  const tel = document.getElementById('cli-tel').value;
-  const zona = document.getElementById('cli-zona').value;
-  const dir = document.getElementById('cli-dir').value;
-  const urgSel = document.getElementById('cli-urgencia');
-  const urgencia = urgSel ? urgSel.options[urgSel.selectedIndex].text : '';
-  const obs = document.getElementById('cli-obs').value;
-  let msg = `🏗 *NUEVO PEDIDO ${codigo}*\\n\\n`;
-  msg += `👤 *Cliente:* ${nombre}\\n`;
-  if (tel) msg += `📱 *WhatsApp:* ${tel}\\n`;
-  msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\\n`;
-  msg += `⏰ *Urgencia:* ${urgencia}\\n\\n`;
-  msg += `📦 *Materiales:*\\n`;
-  items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\\n`; });
-  if (obs) msg += `\\n📝 *Obs:* ${obs}`;
-  const TEL_ADMIN = '5491112345678';
-  document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
-  document.getElementById('paso1').style.display = 'none';
-  document.getElementById('paso2').style.display = 'none';
-  document.getElementById('paso3').style.display = 'block';
-}
-
-function nuevoPedido() {
-  ['cli-nombre','cli-tel','cli-dir','cli-obs'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('cli-zona').value = '';
-  document.getElementById('items-container').innerHTML = '';
-  addItem();
-  irPaso1();
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  addItem();
-  cargarCatalogo();
-});
 </script>
+
 </body>
 </html>
