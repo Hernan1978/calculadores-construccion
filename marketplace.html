@@ -33,8 +33,13 @@
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
     .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
+    .btn-primary:hover { opacity: .85; }
     .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
+    .btn-secondary:hover { background: #eef2f7; }
     .confirm-box { text-align: center; padding: 2rem 1rem; }
+    .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
+    .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
     .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #eef2f7; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
     .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; text-align: center; }
     .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
@@ -118,7 +123,7 @@
       <button type="button" class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
       <hr class="divider">
       <div class="field"><label>Observaciones (opcional)</label><textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta..."></textarea></div>
-      <button type="button" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
+      <button type="button" id="btn-enviar-pedido" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
       <button type="button" class="btn-secondary" onclick="irPaso1()">← Volver</button>
     </div>
   </div>
@@ -145,7 +150,7 @@
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
 <script>
-  const URL_API = 'https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec';
+  const URL_API = 'https://script.google.com/macros/s/AKfycbzstn5HFmWYNCGnX5Smllrbj_KwN_BGR3R6xyaoXcXcvuNGQ0IoNf-Umt6DNGfbV5Y-AQ/exec';
   const TEL_ADMIN = '5491112345678';
   let materialesData = [];
   let corralonesData = [];
@@ -192,7 +197,6 @@
       const res = await fetch(`${URL_API}?mode=api&t=${Date.now()}`);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      console.log('API data:', data);
       materialesData = Array.isArray(data.materiales) ? data.materiales : [];
       corralonesData = Array.isArray(data.corralones) ? data.corralones : [];
       if (!materialesData.length) {
@@ -281,7 +285,7 @@
     sel.innerHTML = '<option value="">Seleccioná tu zona...</option>' + opciones.map(z => `<option value="${z}">${z}</option>`).join('');
   }
 
-  function enviarPedido() {
+  async function enviarPedido() {
     const rows = document.querySelectorAll('.item-row');
     const items = [];
     rows.forEach(row => {
@@ -289,38 +293,81 @@
       const mat = inputs[0]?.value.trim();
       if (mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
     });
-    if (!items.length) { alert('Agregá al menos un material.'); return; }
+    if (!items.length) {
+      alert('Agregá al menos un material.');
+      return;
+    }
 
     const codigo = 'MAT-' + Date.now().toString().slice(-6);
     document.getElementById('codigo-pedido').textContent = codigo;
 
-    const nombre = document.getElementById('cli-nombre').value;
-    const tel = document.getElementById('cli-tel').value;
-    const zona = document.getElementById('cli-zona').value;
-    const dir = document.getElementById('cli-dir').value;
+    const nombre = document.getElementById('cli-nombre').value.trim();
+    const tel = document.getElementById('cli-tel').value.trim();
+    const zona = document.getElementById('cli-zona').value.trim();
+    const dir = document.getElementById('cli-dir').value.trim();
     const urgSel = document.getElementById('cli-urgencia');
     const urgencia = urgSel.options[urgSel.selectedIndex].text;
-    const obs = document.getElementById('cli-obs').value;
-    const payload = { codigo, nombre, tel, zona, dir, urgencia, obs, items: JSON.stringify(items), fecha: new Date().toISOString() };
+    const obs = document.getElementById('cli-obs').value.trim();
 
-    fetch(URL_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'savePedido', data: payload })
-    }).catch(() => {});
+    const payload = {
+      codigo,
+      nombre,
+      tel,
+      zona,
+      dir,
+      urgencia,
+      obs,
+      items: JSON.stringify(items),
+      fecha: new Date().toISOString()
+    };
 
-    let msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n`;
-    msg += `👤 *Cliente:* ${nombre}\n`;
-    if (tel) msg += `📱 *WhatsApp:* ${tel}\n`;
-    msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\n`;
-    msg += `⏰ *Urgencia:* ${urgencia}\n\n`;
-    msg += `📦 *Materiales:*\n`;
-    items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
-    if (obs) msg += `\n📝 *Obs:* ${obs}`;
-    document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
-    document.getElementById('paso1').style.display = 'none';
-    document.getElementById('paso2').style.display = 'none';
-    document.getElementById('paso3').style.display = 'block';
+    const btn = document.getElementById('btn-enviar-pedido');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Enviando pedido...';
+    }
+
+    try {
+      const res = await fetch(URL_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'savePedido', data: payload })
+      });
+
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error('La respuesta no fue JSON: ' + text.slice(0, 120));
+      }
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+
+      let msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n`;
+      msg += `👤 *Cliente:* ${nombre}\n`;
+      if (tel) msg += `📱 *WhatsApp:* ${tel}\n`;
+      msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\n`;
+      msg += `⏰ *Urgencia:* ${urgencia}\n\n`;
+      msg += `📦 *Materiales:*\n`;
+      items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
+      if (obs) msg += `\n📝 *Obs:* ${obs}`;
+
+      document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
+      document.getElementById('paso1').style.display = 'none';
+      document.getElementById('paso2').style.display = 'none';
+      document.getElementById('paso3').style.display = 'block';
+    } catch (err) {
+      alert('No se pudo enviar el pedido: ' + err.message);
+      console.error('Error enviando pedido:', err);
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Enviar pedido a corralones →';
+      }
+    }
   }
 
   function nuevoPedido() {
