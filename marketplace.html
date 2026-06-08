@@ -189,21 +189,46 @@
     }
   }
 
+  <script>
   async function cargarCatalogo() {
+    const cats1 = document.getElementById('cats-nivel1');
+    const cats2 = document.getElementById('cats-nivel2');
+    const grid = document.getElementById('mats-grid');
+    const zona = document.getElementById('cli-zona');
+
     try {
+      cats1.innerHTML = '<div style="font-size:13px;color:#666;">Sincronizando datos...</div>';
+      cats2.innerHTML = '';
+      grid.innerHTML = '<div style="font-size:13px;color:#666;">Cargando catálogo...</div>';
+
       const res = await fetch(`${URL_API}?mode=api&t=${Date.now()}`);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
       const data = await res.json();
+      console.log('API data:', data);
+
       materialesData = Array.isArray(data.materiales) ? data.materiales : [];
       corralonesData = Array.isArray(data.corralones) ? data.corralones : [];
-      renderCatalogo();
+
+      if (!materialesData.length) {
+        cats1.innerHTML = '';
+        cats2.innerHTML = '';
+        grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales cargados en la hoja.</div>';
+      } else {
+        renderCatalogo();
+      }
+
       cargarCorralones();
+
+      if (!corralonesData.length) {
+        zona.innerHTML = '<option value="">No hay corralones cargados</option>';
+      }
     } catch (e) {
-      console.error(e);
-      document.getElementById('cats-nivel1').innerHTML = '';
-      document.getElementById('cats-nivel2').innerHTML = '';
-      document.getElementById('mats-grid').innerHTML = '<div style="font-size:13px;color:#666;">No se pudo cargar el catálogo.</div>';
-      document.getElementById('cli-zona').innerHTML = '<option value="">No se pudieron cargar los corralones</option>';
+      console.error('Error cargando catálogo:', e);
+      cats1.innerHTML = '';
+      cats2.innerHTML = '';
+      grid.innerHTML = `<div style="font-size:13px;color:#b00020;">Error de conexión: ${e.message}</div>`;
+      zona.innerHTML = '<option value="">No se pudieron cargar los corralones</option>';
     }
   }
 
