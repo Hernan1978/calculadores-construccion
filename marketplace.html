@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Materiales Ya — Marketplace</title>
-  <link rel="icon" type="image/gif" href="favicon.gif">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
@@ -16,7 +15,7 @@
     main { max-width: 920px; margin: 2rem auto; padding: 0 1rem; }
     .steps { display: flex; margin-bottom: 2rem; }
     .step { flex: 1; text-align: center; position: relative; }
-    .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #d0dcea; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; transition: all .3s; }
+    .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #d0dcea; color: #888; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; position: relative; z-index: 1; }
     .step.active .step-circle { background: #1a2744; color: #fff; }
     .step.done .step-circle { background: #1a6a3e; color: #fff; }
     .step-label { font-size: 11px; color: #888; }
@@ -47,21 +46,16 @@
     .paso { display: none; }
     .paso.active { display: block; }
     footer { text-align: center; padding: 2rem; font-size: 12px; color: #aaa; }
-
     .select-wrap{ position: relative; width: 100%; margin-top: 4px; }
     .zona-select{ width: 100%; appearance: none; -webkit-appearance: none; -moz-appearance: none; border: 1px solid #d6deea; border-radius: 12px; background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%); color: #1f2a37; padding: 13px 46px 13px 14px; font-size: 14px; line-height: 1.2; box-shadow: 0 1px 2px rgba(16,24,40,.06); outline: none; transition: all .18s ease; }
     .select-wrap::after{ content: "▾"; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #5b6b7f; pointer-events: none; font-size: 14px; }
     .zona-select:hover{ border-color: #b3c2d6; background: #fff; }
     .zona-select:focus{ border-color: #1a2744; box-shadow: 0 0 0 4px rgba(26,39,68,.12); background: #fff; }
-    .zona-select optgroup{ font-weight: 700; color: #1a2744; }
-    .zona-select option{ color: #1f2a37; }
-
     .cat-tabs, .mat-tabs, .mats-grid { display: flex; gap: 8px; flex-wrap: wrap; }
     .cat-btn, .mat-btn, .pill-mat { padding: 8px 14px; border: 1px solid #d0dcea; border-radius: 8px; background: #fff; cursor: pointer; font-size: 13px; }
     .cat-btn.active, .mat-btn.active { background: #1a2744; color: #fff; border-color: #1a2744; }
     .mats-grid { padding: 10px; background: #f5f8fc; border-radius: 8px; min-height: 44px; margin-bottom: 1rem; }
     .pill-mat:hover { background: #1a2744; color: #fff; }
-
     .item-header, .item-row { display: grid; grid-template-columns: 2fr 70px 90px 32px; gap: 6px; align-items: center; }
     .item-header { margin-bottom: 4px; padding: 0 2px; }
     .item-header span { font-size: 11px; color: #aaa; }
@@ -71,12 +65,9 @@
     .btn-remove:hover { color: #e53e3e; background: #fff0f0; }
     .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all .15s; }
     .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f5f8fc; }
-
-    #ws-launcher, #ws-chat { display: none !important; }
   </style>
 </head>
 <body>
-
 <header>
   <div>
     <h1>🏗 Materiales Ya</h1>
@@ -103,32 +94,10 @@
       </div>
       <div class="field">
         <label>Barrio / Zona</label>
-        <div class="select-wrap">
-          <select id="cli-zona" class="zona-select">
-            <option value="">Seleccioná tu zona...</option>
-            <option value="CABA">CABA</option>
-            <option value="Zona Norte GBA">Zona Norte GBA</option>
-            <option value="Zona Sur GBA">Zona Sur GBA</option>
-            <option value="Zona Oeste GBA">Zona Oeste GBA</option>
-            <option value="La Plata">La Plata</option>
-            <option value="Mar del Plata">Mar del Plata</option>
-            <option value="Rosario">Rosario</option>
-            <option value="Córdoba">Córdoba</option>
-            <option value="Mendoza">Mendoza</option>
-            <option value="Santa Fe">Santa Fe</option>
-          </select>
-        </div>
+        <div class="select-wrap"><select id="cli-zona" class="zona-select"><option value="">Cargando localidades...</option></select></div>
       </div>
       <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. Corrientes 1234"></div>
-      <div class="field">
-        <label>¿Cuándo necesitás los materiales?</label>
-        <select id="cli-urgencia">
-          <option value="urgente">Lo antes posible (24-48hs)</option>
-          <option value="semana">Esta semana</option>
-          <option value="quincena">Esta quincena</option>
-          <option value="mes">Este mes</option>
-        </select>
-      </div>
+      <div class="field"><label>¿Cuándo necesitás los materiales?</label><select id="cli-urgencia"><option value="urgente">Lo antes posible (24-48hs)</option><option value="semana">Esta semana</option><option value="quincena">Esta quincena</option><option value="mes">Este mes</option></select></div>
       <button type="button" class="btn-primary" onclick="irPaso2()">Continuar → Cargar pedido</button>
     </div>
   </div>
@@ -151,10 +120,7 @@
       <div id="items-container"></div>
       <button type="button" class="btn-add" onclick="addItem()">+ Agregar manualmente</button>
       <hr class="divider">
-      <div class="field">
-        <label>Observaciones (opcional)</label>
-        <textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta..."></textarea>
-      </div>
+      <div class="field"><label>Observaciones (opcional)</label><textarea id="cli-obs" rows="2" placeholder="Ej: necesito entrega en planta alta..."></textarea></div>
       <button type="button" class="btn-primary" onclick="enviarPedido()">Enviar pedido a corralones →</button>
       <button type="button" class="btn-secondary" onclick="irPaso1()">← Volver</button>
     </div>
@@ -182,8 +148,7 @@
 <footer>Materiales Ya — conectando clientes con corralones de tu zona</footer>
 
 <script>
-<script>
-  const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
+  const URL_API = 'PEGÁ_ACÁ_TU_URL_DEL_WEBAPP?mode=api';
   const TEL_ADMIN = '5491112345678';
   let materialesData = [];
   let localidadesData = [];
@@ -208,12 +173,7 @@
     const container = document.getElementById('items-container');
     const row = document.createElement('div');
     row.className = 'item-row';
-    row.innerHTML = `
-      <input type="text" placeholder="Material..." value="${mat}">
-      <input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center">
-      <input type="text" placeholder="Unidad" value="${u}">
-      <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
-    `;
+    row.innerHTML = `<input type="text" placeholder="Material..." value="${mat}"><input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center"><input type="text" placeholder="Unidad" value="${u}"><button type="button" class="btn-remove" onclick="removeItem(this)">×</button>`;
     container.appendChild(row);
   }
 
@@ -230,13 +190,11 @@
 
   async function cargarCatalogo() {
     try {
-      const res = await fetch(`${URL_API}?t=${Date.now()}`);
+      const res = await fetch(`${URL_API}&t=${Date.now()}`);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-
       materialesData = Array.isArray(data.materiales) ? data.materiales : [];
       localidadesData = Array.isArray(data.localidades) ? data.localidades : [];
-
       renderCatalogo();
       cargarLocalidades();
     } catch (e) {
@@ -254,14 +212,11 @@
     cats1.innerHTML = '';
     cats2.innerHTML = '';
     grid.innerHTML = '';
-
     const categorias = [...new Set(materialesData.map(m => String(m.categoria || '').trim()).filter(Boolean))];
-
     if (!categorias.length) {
       grid.innerHTML = '<div style="font-size:13px;color:#666;">No se encontraron categorías.</div>';
       return;
     }
-
     categorias.forEach((cat, idx) => {
       const b = document.createElement('button');
       b.type = 'button';
@@ -270,30 +225,24 @@
       b.onclick = () => renderMateriales(cat, b);
       cats1.appendChild(b);
     });
-
     renderMateriales(categorias[0], cats1.querySelector('.cat-btn.active') || cats1.firstChild);
   }
 
   function renderMateriales(cat, btn) {
     document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
     if (btn) btn.classList.add('active');
-
     const cats2 = document.getElementById('cats-nivel2');
     const grid = document.getElementById('mats-grid');
     cats2.innerHTML = '';
     grid.innerHTML = '';
-
     const items = materialesData.filter(m => String(m.categoria || '').trim() === cat);
-
     if (!items.length) {
       grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales para esta categoría.</div>';
       return;
     }
-
     items.forEach((item, idx) => {
       const name = String(item.nombre || '').trim();
       if (!name) return;
-
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'mat-btn' + (idx === 0 ? ' active' : '');
@@ -302,31 +251,25 @@
         document.querySelectorAll('.mat-btn').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
         grid.innerHTML = '';
-
         const unidad = item.unidad ? String(item.unidad) : 'unidades';
-        const precio = item.precio ? String(item.precio) : '';
-
         const p = document.createElement('button');
         p.type = 'button';
         p.className = 'pill-mat';
-        p.textContent = precio ? `${name} (${unidad}) - $${precio}` : `${name} (${unidad})`;
+        p.textContent = `${name} (${unidad})`;
         p.onclick = () => addItem(name, '1', unidad);
         grid.appendChild(p);
       };
       cats2.appendChild(b);
     });
-
     const first = cats2.querySelector('.mat-btn.active') || cats2.firstChild;
     if (first) first.click();
   }
 
   function cargarLocalidades() {
     const sel = document.getElementById('cli-zona');
-    if (!sel || !localidadesData.length) return;
-
-    const opciones = [...new Set(localidadesData.map(x => String(x.zona || x.localidad || x.provincia || '').trim()).filter(Boolean))];
-    const base = '<option value="">Seleccioná tu zona...</option>';
-    sel.innerHTML = base + opciones.map(z => `<option value="${z}">${z}</option>`).join('');
+    if (!sel) return;
+    const opciones = [...new Set(localidadesData.map(x => String(x.zona || x.localidad || x.provincia || '').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
+    sel.innerHTML = '<option value="">Seleccioná tu zona...</option>' + opciones.map(z => `<option value="${z}">${z}</option>`).join('');
   }
 
   function enviarPedido() {
@@ -338,10 +281,8 @@
       if (mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
     });
     if (!items.length) { alert('Agregá al menos un material.'); return; }
-
     const codigo = 'MAT-' + Date.now().toString().slice(-6);
     document.getElementById('codigo-pedido').textContent = codigo;
-
     const nombre = document.getElementById('cli-nombre').value;
     const tel = document.getElementById('cli-tel').value;
     const zona = document.getElementById('cli-zona').value;
@@ -349,16 +290,16 @@
     const urgSel = document.getElementById('cli-urgencia');
     const urgencia = urgSel.options[urgSel.selectedIndex].text;
     const obs = document.getElementById('cli-obs').value;
-
-    let msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n`;
-    msg += `👤 *Cliente:* ${nombre}\n`;
-    if (tel) msg += `📱 *WhatsApp:* ${tel}\n`;
-    msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\n`;
-    msg += `⏰ *Urgencia:* ${urgencia}\n\n`;
-    msg += `📦 *Materiales:*\n`;
-    items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
-    if (obs) msg += `\n📝 *Obs:* ${obs}`;
-
+    const payload = { codigo, nombre, tel, zona, dir, urgencia, obs, items: JSON.stringify(items), fecha: new Date().toISOString() };
+    fetch(URL_API.replace('?mode=api',''), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'savePedido', data: payload }) }).catch(()=>{});
+    let msg = `🏗 *NUEVO PEDIDO ${codigo}*\\n\\n`;
+    msg += `👤 *Cliente:* ${nombre}\\n`;
+    if (tel) msg += `📱 *WhatsApp:* ${tel}\\n`;
+    msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\\n`;
+    msg += `⏰ *Urgencia:* ${urgencia}\\n\\n`;
+    msg += `📦 *Materiales:*\\n`;
+    items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\\n`; });
+    if (obs) msg += `\\n📝 *Obs:* ${obs}`;
     document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
     document.getElementById('paso1').style.display = 'none';
     document.getElementById('paso2').style.display = 'none';
@@ -380,7 +321,5 @@
     irPaso1();
   });
 </script>
-</script>
-
 </body>
 </html>
