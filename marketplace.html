@@ -33,13 +33,8 @@
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media(max-width:520px) { .grid-2 { grid-template-columns: 1fr; } }
     .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
-    .btn-primary:hover { opacity: .85; }
     .btn-secondary { width: 100%; padding: 11px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #555; font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 8px; }
-    .btn-secondary:hover { background: #eef2f7; }
     .confirm-box { text-align: center; padding: 2rem 1rem; }
-    .confirm-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .confirm-box h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .5rem; }
-    .confirm-box p { font-size: 14px; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
     .codigo { font-family: monospace; font-size: 1.5rem; font-weight: 700; background: #eef2f7; padding: 10px 24px; border-radius: 8px; display: inline-block; letter-spacing: 3px; margin-bottom: 1.5rem; }
     .btn-whatsapp { display: block; padding: 13px 24px; border-radius: 8px; background: #25d366; color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; margin-top: .5rem; text-align: center; }
     .btn-nuevo { display: block; padding: 11px 24px; border-radius: 8px; background: #fff; color: #555; font-size: 14px; border: 1px solid #ddd; cursor: pointer; margin-top: 8px; width: 100%; text-align: center; }
@@ -50,8 +45,6 @@
     .select-wrap{ position: relative; width: 100%; margin-top: 4px; }
     .zona-select{ width: 100%; appearance: none; -webkit-appearance: none; -moz-appearance: none; border: 1px solid #d6deea; border-radius: 12px; background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%); color: #1f2a37; padding: 13px 46px 13px 14px; font-size: 14px; line-height: 1.2; box-shadow: 0 1px 2px rgba(16,24,40,.06); outline: none; transition: all .18s ease; }
     .select-wrap::after{ content: "▾"; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #5b6b7f; pointer-events: none; font-size: 14px; }
-    .zona-select:hover{ border-color: #b3c2d6; background: #fff; }
-    .zona-select:focus{ border-color: #1a2744; box-shadow: 0 0 0 4px rgba(26,39,68,.12); background: #fff; }
     .cat-tabs, .mat-tabs, .mats-grid { display: flex; gap: 8px; flex-wrap: wrap; }
     .cat-btn, .mat-btn, .pill-mat { padding: 8px 14px; border: 1px solid #d0dcea; border-radius: 8px; background: #fff; cursor: pointer; font-size: 13px; }
     .cat-btn.active, .mat-btn.active { background: #1a2744; color: #fff; border-color: #1a2744; }
@@ -66,6 +59,8 @@
     .btn-remove:hover { color: #e53e3e; background: #fff0f0; }
     .btn-add { background: none; border: 1px dashed #ccc; color: #888; font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 6px; transition: all .15s; }
     .btn-add:hover { border-color: #1a1a1a; color: #1a1a1a; background: #f5f8fc; }
+    .status { font-size: 13px; color: #666; margin: 6px 0 10px; }
+    .error { color: #b00020; }
   </style>
 </head>
 <body>
@@ -111,6 +106,7 @@
     </div>
     <div class="card">
       <h2>¿Qué materiales necesitás?</h2>
+      <div id="api-status" class="status">Sincronizando datos...</div>
       <h3>Catálogo</h3>
       <div class="cat-tabs" id="cats-nivel1"></div>
       <div class="mat-tabs" id="cats-nivel2"></div>
@@ -174,7 +170,7 @@
     const container = document.getElementById('items-container');
     const row = document.createElement('div');
     row.className = 'item-row';
-    row.innerHTML = `<input type="text" placeholder="Material..." value="${mat}"><input type="number" placeholder="Cant." value="${cant}" min="1" style="text-align:center"><input type="text" placeholder="Unidad" value="${u}"><button type="button" class="btn-remove" onclick="removeItem(this)">×</button>`;
+    row.innerHTML = `<input type="text" placeholder="Material..." value="${mat}"><input type="number" value="${cant}" min="1" style="text-align:center"><input type="text" value="${u}"><button type="button" class="btn-remove" onclick="removeItem(this)">×</button>`;
     container.appendChild(row);
   }
 
@@ -189,46 +185,32 @@
     }
   }
 
-  <script>
   async function cargarCatalogo() {
-    const cats1 = document.getElementById('cats-nivel1');
-    const cats2 = document.getElementById('cats-nivel2');
-    const grid = document.getElementById('mats-grid');
-    const zona = document.getElementById('cli-zona');
-
+    const s = document.getElementById('api-status');
     try {
-      cats1.innerHTML = '<div style="font-size:13px;color:#666;">Sincronizando datos...</div>';
-      cats2.innerHTML = '';
-      grid.innerHTML = '<div style="font-size:13px;color:#666;">Cargando catálogo...</div>';
-
+      s.textContent = 'Sincronizando datos...';
       const res = await fetch(`${URL_API}?mode=api&t=${Date.now()}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       console.log('API data:', data);
-
       materialesData = Array.isArray(data.materiales) ? data.materiales : [];
       corralonesData = Array.isArray(data.corralones) ? data.corralones : [];
-
       if (!materialesData.length) {
-        cats1.innerHTML = '';
-        cats2.innerHTML = '';
-        grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales cargados en la hoja.</div>';
+        document.getElementById('cats-nivel1').innerHTML = '';
+        document.getElementById('cats-nivel2').innerHTML = '';
+        document.getElementById('mats-grid').innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales cargados en la hoja.</div>';
       } else {
         renderCatalogo();
       }
-
       cargarCorralones();
-
-      if (!corralonesData.length) {
-        zona.innerHTML = '<option value="">No hay corralones cargados</option>';
-      }
+      s.textContent = `OK: ${materialesData.length} materiales, ${corralonesData.length} corralones.`;
     } catch (e) {
       console.error('Error cargando catálogo:', e);
-      cats1.innerHTML = '';
-      cats2.innerHTML = '';
-      grid.innerHTML = `<div style="font-size:13px;color:#b00020;">Error de conexión: ${e.message}</div>`;
-      zona.innerHTML = '<option value="">No se pudieron cargar los corralones</option>';
+      s.innerHTML = `<span class="error">Error de conexión: ${e.message}</span>`;
+      document.getElementById('cats-nivel1').innerHTML = '';
+      document.getElementById('cats-nivel2').innerHTML = '';
+      document.getElementById('mats-grid').innerHTML = '<div style="font-size:13px;color:#666;">No se pudo cargar el catálogo.</div>';
+      document.getElementById('cli-zona').innerHTML = '<option value="">No se pudieron cargar los corralones</option>';
     }
   }
 
@@ -308,8 +290,10 @@
       if (mat) items.push({ mat, cant: inputs[1]?.value || '1', u: inputs[2]?.value || 'unidades' });
     });
     if (!items.length) { alert('Agregá al menos un material.'); return; }
+
     const codigo = 'MAT-' + Date.now().toString().slice(-6);
     document.getElementById('codigo-pedido').textContent = codigo;
+
     const nombre = document.getElementById('cli-nombre').value;
     const tel = document.getElementById('cli-tel').value;
     const zona = document.getElementById('cli-zona').value;
@@ -319,20 +303,20 @@
     const obs = document.getElementById('cli-obs').value;
     const payload = { codigo, nombre, tel, zona, dir, urgencia, obs, items: JSON.stringify(items), fecha: new Date().toISOString() };
 
-    fetch(URL_API.replace('/exec', '/exec'), {
+    fetch(URL_API, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'savePedido', data: payload })
     }).catch(() => {});
 
-    let msg = `🏗 *NUEVO PEDIDO ${codigo}*\\n\\n`;
-    msg += `👤 *Cliente:* ${nombre}\\n`;
-    if (tel) msg += `📱 *WhatsApp:* ${tel}\\n`;
-    msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\\n`;
-    msg += `⏰ *Urgencia:* ${urgencia}\\n\\n`;
-    msg += `📦 *Materiales:*\\n`;
-    items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\\n`; });
-    if (obs) msg += `\\n📝 *Obs:* ${obs}`;
+    let msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n`;
+    msg += `👤 *Cliente:* ${nombre}\n`;
+    if (tel) msg += `📱 *WhatsApp:* ${tel}\n`;
+    msg += `📍 *Zona:* ${zona}${dir ? ' — ' + dir : ''}\n`;
+    msg += `⏰ *Urgencia:* ${urgencia}\n\n`;
+    msg += `📦 *Materiales:*\n`;
+    items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\n`; });
+    if (obs) msg += `\n📝 *Obs:* ${obs}`;
     document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
     document.getElementById('paso1').style.display = 'none';
     document.getElementById('paso2').style.display = 'none';
