@@ -95,7 +95,7 @@
       </div>
       <div class="field">
         <label>Barrio / Zona</label>
-        <div class="select-wrap"><select id="cli-zona" class="zona-select"><option value="">Cargando localidades...</option></select></div>
+        <div class="select-wrap"><select id="cli-zona" class="zona-select"><option value="">Cargando corralones...</option></select></div>
       </div>
       <div class="field"><label>Dirección de entrega</label><input type="text" id="cli-dir" placeholder="Av. Corrientes 1234"></div>
       <div class="field"><label>¿Cuándo necesitás los materiales?</label><select id="cli-urgencia"><option value="urgente">Lo antes posible (24-48hs)</option><option value="semana">Esta semana</option><option value="quincena">Esta quincena</option><option value="mes">Este mes</option></select></div>
@@ -152,7 +152,7 @@
   const URL_API = 'https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec';
   const TEL_ADMIN = '5491112345678';
   let materialesData = [];
-  let localidadesData = [];
+  let corralonesData = [];
 
   function irPaso1() {
     document.getElementById('paso1').style.display = 'block';
@@ -191,18 +191,19 @@
 
   async function cargarCatalogo() {
     try {
-      const res = await fetch(`${URL_API}&t=${Date.now()}`);
+      const res = await fetch(`${URL_API}?mode=api&t=${Date.now()}`);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       materialesData = Array.isArray(data.materiales) ? data.materiales : [];
-      localidadesData = Array.isArray(data.localidades) ? data.localidades : [];
+      corralonesData = Array.isArray(data.corralones) ? data.corralones : [];
       renderCatalogo();
-      cargarLocalidades();
+      cargarCorralones();
     } catch (e) {
       console.error(e);
       document.getElementById('cats-nivel1').innerHTML = '';
       document.getElementById('cats-nivel2').innerHTML = '';
       document.getElementById('mats-grid').innerHTML = '<div style="font-size:13px;color:#666;">No se pudo cargar el catálogo.</div>';
+      document.getElementById('cli-zona').innerHTML = '<option value="">No se pudieron cargar los corralones</option>';
     }
   }
 
@@ -266,10 +267,10 @@
     if (first) first.click();
   }
 
-  function cargarLocalidades() {
+  function cargarCorralones() {
     const sel = document.getElementById('cli-zona');
     if (!sel) return;
-    const opciones = [...new Set(localidadesData.map(x => String(x.zona || x.localidad || x.provincia || '').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
+    const opciones = [...new Set(corralonesData.map(x => String(x.zona || x.localidad || x.corralon || '').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
     sel.innerHTML = '<option value="">Seleccioná tu zona...</option>' + opciones.map(z => `<option value="${z}">${z}</option>`).join('');
   }
 
@@ -292,7 +293,13 @@
     const urgencia = urgSel.options[urgSel.selectedIndex].text;
     const obs = document.getElementById('cli-obs').value;
     const payload = { codigo, nombre, tel, zona, dir, urgencia, obs, items: JSON.stringify(items), fecha: new Date().toISOString() };
-    fetch(URL_API.replace('?mode=api',''), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'savePedido', data: payload }) }).catch(()=>{});
+
+    fetch(URL_API.replace('/exec', '/exec'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'savePedido', data: payload })
+    }).catch(() => {});
+
     let msg = `🏗 *NUEVO PEDIDO ${codigo}*\\n\\n`;
     msg += `👤 *Cliente:* ${nombre}\\n`;
     if (tel) msg += `📱 *WhatsApp:* ${tel}\\n`;
