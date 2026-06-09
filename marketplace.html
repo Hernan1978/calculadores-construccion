@@ -299,27 +299,69 @@
   }
 
   function renderCatalogo() {
-    const cats1 = document.getElementById('cats-nivel1');
-    const cats2 = document.getElementById('cats-nivel2');
-    const grid = document.getElementById('mats-grid');
-    cats1.innerHTML = '';
-    cats2.innerHTML = '';
-    grid.innerHTML = '';
+  const cats1 = document.getElementById('cats-nivel1');
+  const cats2 = document.getElementById('cats-nivel2');
+  const grid = document.getElementById('mats-grid');
+  
+  cats1.innerHTML = '';
+  cats2.innerHTML = '';
+  grid.innerHTML = '';
 
-    const categorias = [...new Set(materialesData.map(m => String(m.categoria || '').trim()).filter(Boolean))];
-    if (!categorias.length) {
-      grid.innerHTML = '<div style="font-size:13px;color:#666;">No se encontraron materiales en la hoja.</div>';
-      return;
-    }
+  // 1. Extraemos las categorías únicas de tu columna "categoria" del Sheets
+  const categorias = [...new Set(materialesData.map(m => String(m.categoria || '').trim()).filter(Boolean))];
+  
+  if (!categorias.length) {
+    grid.innerHTML = '<div style="font-size:13px;color:#666;">No se encontraron materiales en la hoja.</div>';
+    return;
+  }
 
-    categorias.forEach((cat, idx) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'cat-btn' + (idx === 0 ? ' active' : '');
-      b.textContent = cat;
-      b.onclick = () => renderSubcategorias(cat, b);
-      cats1.appendChild(b);
-    });
+  // 2. Creamos los botones de las Categorías Principales (Fila de arriba)
+  categorias.forEach((cat, idx) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cat-btn' + (idx === 0 ? ' active' : '');
+    b.textContent = cat;
+    b.onclick = () => renderSubcategorias(cat, b);
+    cats1.appendChild(b);
+  });
+
+  // Cargamos por defecto la primera categoría
+  renderSubcategorias(categorias[0], cats1.querySelector('.cat-btn.active') || cats1.firstChild);
+}
+
+function renderSubcategorias(catSeleccionada, btn) {
+  // Desactivamos el botón anterior y activamos el nuevo
+  document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const cats2 = document.getElementById('cats-nivel2');
+  const grid = document.getElementById('mats-grid');
+  
+  // Ocultamos el nivel 2 ya que tu Sheets es directo de 1 nivel (Categoría -> Materiales)
+  cats2.style.display = 'none'; 
+  grid.innerHTML = '';
+
+  // 3. Filtramos los materiales que pertenecen a la categoría seleccionada
+  const materialesFiltrados = materialesData.filter(m => String(m.categoria || '').trim() === catSeleccionada);
+
+  if (!materialesFiltrados.length) {
+    grid.innerHTML = '<div style="font-size:13px;color:#666;">No hay materiales para esta categoría.</div>';
+    return;
+  }
+
+  // 4. Dibujamos cada material como un botón interactivo (Pill)
+  materialesFiltrados.forEach(mat => {
+    const p = document.createElement('button');
+    p.type = 'button';
+    p.className = 'pill-mat';
+    p.textContent = mat.nombre; // Columna 'nombre' de tu Sheets (Ej: "Arena x M3")
+    
+    // Al hacerle clic, se agrega automáticamente abajo a la lista de cotización
+    p.onclick = () => addItem(mat.nombre, '1', 'unidades');
+    
+    grid.appendChild(p);
+  });
+}
 
     renderSubcategorias(categorias[0], cats1.querySelector('.cat-btn.active') || cats1.firstChild);
   }
