@@ -1,324 +1,354 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Materiales Ya</title>
-  <link rel="icon" type="image/gif" href="favicon.gif">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materiales Ya — Todo para tu obra</title>
+ <link rel="icon" type="image/gif" href="favicon.gif">
+<meta name="description" content="Calculá materiales, pedí cotización a corralones de tu zona y leé guías de construcción. Todo en un solo lugar.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
 
-  <style>
-    body{font-family:Arial,sans-serif;background:#eef2f7;color:#1a1a2e;margin:0}
-    header,footer{background:#1a2744;color:#fff;padding:16px 20px}
-    main{max-width:1000px;margin:24px auto;padding:0 16px}
-    .card{background:#fff;border:1px solid #d0dcea;border-radius:12px;padding:20px;margin-bottom:16px}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:700px){.grid-2{grid-template-columns:1fr}}
-    label{display:block;font-size:12px;color:#666;margin-bottom:6px}
-    input,select,textarea,button{font:inherit}
-    input,select,textarea{width:100%;padding:10px 12px;border:1px solid #d0dcea;border-radius:8px;background:#fafbfd}
-    button{cursor:pointer;border:0}
-    .btn{width:100%;padding:12px;border-radius:8px;background:#1a2744;color:#fff;font-weight:600;margin-top:10px}
-    .btn2{width:100%;padding:11px;border-radius:8px;background:#fff;border:1px solid #ddd;color:#444;margin-top:8px}
-    .status{font-size:13px;color:#666;margin:8px 0 12px}
-    .error{color:#b00020}
-    .row{display:grid;grid-template-columns:2fr 80px 100px 34px;gap:8px;align-items:center;margin-bottom:8px}
-    .row input{padding:8px 10px}
-    .small{font-size:12px;color:#666}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap}
-    .tab{padding:8px 12px;border:1px solid #d0dcea;background:#fff;border-radius:8px}
-    .tab.active{background:#1a2744;color:#fff;border-color:#1a2744}
-    .pill{padding:8px 12px;border:1px solid #d0dcea;background:#f5f8fc;border-radius:999px}
-    .hidden{display:none}
-    .okbox{text-align:center;padding:20px 10px}
-    .code{font-family:monospace;font-size:28px;font-weight:700;letter-spacing:3px;background:#eef2f7;display:inline-block;padding:10px 20px;border-radius:10px;margin:12px 0}
-    a.whatsapp{display:block;background:#25d366;color:#fff;text-decoration:none;padding:13px 16px;border-radius:8px;font-weight:700;text-align:center}
-    .wsp-wrap{position:relative}
-    .wsp-trigger{padding:10px 12px;border:1px solid #d0dcea;border-radius:8px;background:#fafbfd;color:#666;cursor:pointer}
-    .wsp-input{margin-top:8px}
-    .debug{
-      background:#0f172a;color:#e2e8f0;border-radius:10px;padding:10px 12px;
-      font-family:monospace;font-size:12px;white-space:pre-wrap;min-height:42px;margin-top:10px
-    }
-  </style>
+  /* NAV */
+  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
+  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
+  .nav-links { display: flex; gap: 8px; }
+  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
+  .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, #1a2744 0%, #1e3a6e 60%, #1a4a8a 100%); color: #fff; padding: 5rem 2rem 4rem; text-align: center; }
+  .hero-content { max-width: 620px; margin: 0 auto; }
+  .hero-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; border: 1px solid #2e5a9a; color: #90afd4; font-size: 12px; margin-bottom: 1.5rem; }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 span { color: #90afd4; }
+  .hero p { font-size: 1.05rem; color: #b0c8e8; margin-bottom: 2rem; line-height: 1.6; }
+  .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-hero-primary { padding: 13px 28px; border-radius: 8px; background: #fff; color: #1a2744; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity .15s; }
+  .btn-hero-primary:hover { opacity: .9; }
+  .btn-hero-secondary { padding: 13px 28px; border-radius: 8px; border: 1px solid #2e5a9a; color: #b0c8e8; font-size: 14px; text-decoration: none; transition: all .15s; }
+  .btn-hero-secondary:hover { border-color: #fff; color: #fff; }
+
+  /* STATS */
+  .stats { background: #fff; border-bottom: 1px solid #d0dcea; padding: 1.5rem 2rem; }
+  .stats-inner { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; text-align: center; }
+  .stat-value { font-size: 1.8rem; font-weight: 700; color: #1a2744; }
+  .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+
+  /* MAIN */
+  main { max-width: 960px; margin: 3rem auto; padding: 0 1rem; }
+  .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; color: #1a2744; }
+  .section-sub { font-size: 14px; color: #666; margin-bottom: 2rem; }
+
+  /* CARDS PRINCIPALES */
+  .cards-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+  .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; }
+  .card-main:hover { box-shadow: 0 8px 30px rgba(26,39,68,.12); transform: translateY(-3px); }
+  .card-main-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+  .card-main-img.bg1 { background: linear-gradient(135deg, #1a2744, #1e3a6e); }
+  .card-main-img.bg2 { background: linear-gradient(135deg, #1a3a5c, #1e5a8e); }
+  .card-main-img.bg3 { background: linear-gradient(135deg, #1a4060, #1e6090); }
+  .card-main-body { padding: 1.5rem; }
+  .card-main-tag { font-size: 11px; font-weight: 600; color: #5a8abf; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+  .card-main-titulo { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #1a2744; }
+  .card-main-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
+  .card-main-link { font-size: 13px; font-weight: 600; color: #1a4a8a; }
+
+  /* CÓMO FUNCIONA */
+  .como-funciona { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2rem; margin-bottom: 4rem; }
+  .como-funciona h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: #1a2744; }
+  .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
+  .paso { text-align: center; }
+  .paso-num { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #1a2744, #1e4a8a); color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+  .paso-titulo { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #1a2744; }
+  .paso-desc { font-size: 12px; color: #888; line-height: 1.5; }
+
+  /* ARTÍCULOS */
+  .articulos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .art-card { background: #fff; border-radius: 10px; border: 1px solid #d0dcea; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow .2s; }
+  .art-card:hover { box-shadow: 0 4px 16px rgba(26,39,68,.1); }
+  .art-card-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: #eef2f7; overflow: hidden; }
+  .art-card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .art-card-body { padding: .875rem; }
+  .art-card-cat { font-size: 11px; color: #5a8abf; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+  .art-card-titulo { font-size: 13px; font-weight: 600; line-height: 1.3; color: #1a2744; }
+
+  /* CTA CONTAINER */
+  .cta-final { background: linear-gradient(135deg, #1a2744, #1e4a8a); color: #fff; border-radius: 16px; padding: 3rem 2rem; text-align: center; margin-bottom: 3rem; }
+  .cta-final h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: .75rem; }
+  .cta-final p { font-size: 14px; color: #b0c8e8; margin-bottom: 1.5rem; }
+  .cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-cta-w { padding: 12px 24px; border-radius: 8px; background: #fff; color: #1a2744; font-size: 14px; font-weight: 600; text-decoration: none; }
+  .btn-cta-o { padding: 12px 24px; border-radius: 8px; border: 1px solid #2e5a9a; color: #b0c8e8; font-size: 14px; text-decoration: none; }
+  .btn-cta-o:hover { border-color: #fff; color: #fff; }
+
+  /* SEARCH BAR ABOVE MAP */
+  .search-container { display: flex; gap: 8px; padding: 10px 1.25rem; background: #f8fafc; border-bottom: 1px solid #d0dcea; }
+  .search-input { flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px; }
+  .search-btn { padding: 8px 16px; background: #1a2744; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .search-btn:hover { background: #141f36; }
+
+  /* MAP CONTAINER */
+  #home-map { height: 380px; background: #cbd5e1; width: 100%; position: relative; }
+  
+  /* POPUP CUSTOM BUTTON */
+  .popup-wa-btn { display: inline-block; background: #25d366; color: white; text-decoration: none; padding: 6px 12px; font-size: 11px; font-weight: bold; border-radius: 4px; margin-top: 6px; }
+
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: #888; }
+  footer a { color: #5a8abf; text-decoration: none; margin: 0 8px; }
+  footer a:hover { color: #1a2744; }
+
+  /* MENÚ MÓVIL ELEMENTOS */
+  .menu-toggle { display: none; background: none; border: 1px solid #2e4a7a; border-radius: 7px; color: #90afd4; font-size: 18px; padding: 5px 10px; cursor: pointer; }
+  .nav-links.open { display: flex !important; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: #1a2744; padding: 1rem; gap: 8px; z-index: 100; border-top: 1px solid #2e4a7a; }
+  .nav-links.open .nav-link { width: 100%; text-align: center; padding: 10px; }
+
+  @media(max-width:600px) {
+    nav { padding: .875rem 1rem; position: relative; }
+    nav .logo span { display: none; }
+    .nav-links { display: none !important; }
+    .menu-toggle { display: flex !important; }
+    .hero { padding: 2.5rem 1.25rem 2rem; }
+    .hero h1 { font-size: 1.8rem; }
+    .hero p { font-size: 0.9rem; }
+    .hero-btns { flex-direction: column; }
+    .btn-hero-primary, .btn-hero-secondary { width: 100%; text-align: center; padding: 12px; }
+    .stats-inner { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .cards-main { grid-template-columns: 1fr; }
+    .pasos { grid-template-columns: 1fr 1fr; }
+    .articulos-grid { grid-template-columns: 1fr 1fr; }
+    .cta-btns { flex-direction: column; }
+    .btn-cta-w, .btn-cta-o { text-align: center; }
+    main { margin: 1.5rem auto; padding: 0 1rem; }
+  }
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
-<header><strong>Materiales Ya</strong></header>
+
+<nav>
+  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="calculadores.html" class="nav-link">Calculadores</a>
+    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
+    <a href="mapa.html" class="nav-link">📍 Mapa</a>
+    <a href="registro.html" class="nav-link" style="background:#1a4a8a;border-color:#1a4a8a;">+ Sumá tu negocio</a>
+  </div>
+  <button class="menu-toggle" id="menuToggle">&#9776;</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🏗 Plataforma de materiales de construcción</div>
+    <h1>Todo para tu obra<br><span>en un solo lugar</span></h1>
+    <p>Calculá los materiales que necesitás, pedí cotización a corralones de tu zona y aprendé con guías y fotos.</p>
+    <div class="hero-btns">
+      <a href="marketplace.html" class="btn-hero-primary">Pedir materiales →</a>
+      <a href="calculadores.html" class="btn-hero-secondary">Ver calculadores</a>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div><div class="stat-value">24</div><div class="stat-label">Calculadores</div></div>
+    <div><div class="stat-value">120+</div><div class="stat-label">Materiales en catálogo</div></div>
+    <div><div class="stat-value">6</div><div class="stat-label">Artículos publicados</div></div>
+    <div><div class="stat-value">100%</div><div class="stat-label">Gratis para clientes</div></div>
+  </div>
+</div>
 
 <main>
-  <div id="step1" class="card">
-    <h2>Datos del cliente</h2>
-    <div class="grid-2">
-      <div><label>Nombre</label><input id="cli-nombre" type="text" placeholder="Juan Pérez"></div>
-      <div>
-        <label>WhatsApp</label>
-        <div id="wsp-wrap" class="wsp-wrap">
-          <div id="wsp-trigger" class="wsp-trigger">Tocá para ingresar tu WhatsApp</div>
-          <input type="tel" id="cli-tel" class="wsp-input hidden" placeholder="11 1234-5678">
-        </div>
+  <div style="margin-bottom:1rem">
+    <div class="section-title">¿Qué podés hacer acá?</div>
+    <div class="section-sub">Tres herramientas pensadas para facilitar tu obra</div>
+  </div>
+
+  <div class="cards-main">
+    <a href="calculadores.html" class="card-main">
+      <div class="card-main-img bg1">🧮</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Herramienta</div>
+        <div class="card-main-titulo">Calculadores de materiales</div>
+        <div class="card-main-desc">24 calculadores para saber exactamente cuánto material necesitás: ladrillos, cemento, hormigón, hierros, Durlock, pintura y más.</div>
+        <div class="card-main-link">Abrir calculadores →</div>
       </div>
-    </div>
-    <div style="margin-top:12px"><label>Localidad</label><select id="cli-zona"><option value="">Cargando...</option></select></div>
-    <div style="margin-top:12px"><label>Dirección</label><input id="cli-dir" type="text" placeholder="Av. Corrientes 1234"></div>
-    <div style="margin-top:12px"><label>Urgencia</label>
-      <select id="cli-urgencia">
-        <option value="urgente">Lo antes posible</option>
-        <option value="semana">Esta semana</option>
-        <option value="quincena">Esta quincena</option>
-        <option value="mes">Este mes</option>
-      </select>
-    </div>
-    <button class="btn" onclick="irPaso2()">Continuar</button>
+    </a>
+    <a href="marketplace.html" class="card-main">
+      <div class="card-main-img bg2">🏗</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Marketplace</div>
+        <div class="card-main-titulo">Pedí cotización a corralones</div>
+        <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones de corralones de tu zona. Comparás precios y elegís el mejor.</div>
+        <div class="card-main-link">Pedir materiales →</div>
+      </div>
+    </a>
+    <a href="mapa.html" class="card-main">
+      <div class="card-main-img bg3">📍</div>
+      <div class="card-main-body">
+        <div class="card-main-tag">Mapa</div>
+        <div class="card-main-titulo">Corralones y ferreterías</div>
+        <div class="card-main-desc">Encontrá corralones, ferreterías, casas de Durlock y maderas cerca tuyo. Contacto directo por WhatsApp.</div>
+        <div class="card-main-link">Ver mapa →</div>
+      </div>
+    </a>
   </div>
 
-  <div id="step2" class="card hidden">
-    <h2>Pedido</h2>
-    <div id="api-status" class="status">Sincronizando datos...</div>
-    <div id="debug" class="debug">Esperando carga...</div>
-
-    <h3>Categorías</h3>
-    <div id="cats-nivel1" class="tabs"></div>
-
-    <h3 style="margin-top:14px">Materiales</h3>
-    <div id="cats-nivel2" class="tabs"></div>
-
-    <div id="mats-grid" class="tabs" style="margin-top:10px"></div>
-
-    <hr style="margin:16px 0;border:none;border-top:1px solid #eee">
-
-    <div class="small" style="margin-bottom:8px">Lista de materiales</div>
-    <div class="row" style="font-size:12px;color:#999;font-weight:700">
-      <div>Material</div><div>Cant.</div><div>Unidad</div><div></div>
-    </div>
-    <div id="items-container"></div>
-    <button type="button" class="btn2" onclick="addItem()">+ Agregar manualmente</button>
-
-    <div style="margin-top:14px">
-      <label>Observaciones</label>
-      <textarea id="cli-obs" rows="3" placeholder="Entrega, horario, acceso, etc."></textarea>
-    </div>
-
-    <button id="btn-enviar-pedido" class="btn" onclick="enviarPedido()">Enviar pedido</button>
-    <button class="btn2" onclick="irPaso1()">Volver</button>
+  <div style="margin-bottom:1rem">
+    <div class="section-title">📍 Corralones y ferreterías cerca tuyo</div>
+    <div class="section-sub">Encontrá negocios de materiales en tu zona desde nuestra base centralizada</div>
   </div>
+  
+  <div style="background:#fff;border-radius:16px;border:1px solid #d0dcea;overflow:hidden;margin-bottom:4rem;">
+    <div style="padding:.75rem 1.25rem;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:1px solid #d0dcea;background:#fff;">
+      <span style="font-size:12px;color:#888;">Filtrar por rubro:</span>
+      <button onclick="filtrarHome('todos',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #1a2744;background:#1a2744;color:#fff;font-size:12px;cursor:pointer;" id="hf-todos">Todos</button>
+      <button onclick="filtrarHome('corralon',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-corralon">🏗 Corralones</button>
+      <button onclick="filtrarHome('ferreteria',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-ferreteria">🔩 Ferreterías</button>
+      <button onclick="filtrarHome('durlock',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-durlock">📐 Durlock/Yeso</button>
+      <button onclick="filtrarHome('maderera',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-maderera">🪵 Maderas</button>
+    </div>
 
-  <div id="step3" class="card hidden">
-    <div class="okbox">
-      <div style="font-size:42px">✅</div>
-      <h2>¡Pedido enviado!</h2>
-      <div id="codigo-pedido" class="code"></div>
-      <p>Se guardó en Sheets y ya podés enviar el WhatsApp.</p>
-      <a id="btn-wsp" class="whatsapp" target="_blank">Enviar por WhatsApp</a>
-      <button class="btn2" onclick="nuevoPedido()">Hacer otro pedido</button>
+    <div class="search-container">
+      <input type="text" id="geo-search-input" class="search-input" placeholder="Ingresá una dirección, barrio o localidad (Ej: Wilde, Avellaneda, San Martin...)">
+      <button onclick="buscarZonaGeografica()" class="search-btn">Buscar zona</button>
+    </div>
+
+    <div id="home-map"></div>
+
+    <div style="padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #d0dcea;flex-wrap:wrap;gap:10px;">
+      <div>
+        <div style="font-size:14px;font-weight:600;color:#1a2744;">Sincronización Automática Activa</div>
+        <div style="font-size:12px;color:#888;margin-top:2px;">Los pines se actualizan directamente desde tu Google Sheets central.</div>
+      </div>
+      <a href="mapa.html" style="padding:10px 20px;border-radius:8px;background:#1a2744;color:#fff;font-size:13px;font-weight:500;text-decoration:none;">Ver mapa completo →</a>
     </div>
   </div>
 </main>
 
-<footer>Materiales Ya</footer>
+<footer>
+  <p>© 2026 Materiales Ya</p>
+</footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  const URL_API = 'https://script.google.com/macros/s/AKfycbymxkGY-J6A_wXMTTvUoPqTyXFj4FbGo0qhx9flzDILLx5gcHQJb2n1kYQLOZ2G15Rdzg/exec';
-  const TEL_ADMIN = '5491112345678';
-  let materialesData = [];
-  let corralonesData = [];
+// Menú Hamburguesa móvil
+document.getElementById('menuToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
 
-  function logDebug(msg){
-    const el = document.getElementById('debug');
-    el.textContent = String(msg);
-  }
+// CONFIGURACIÓN DE ENLACE DE CONEXIÓN
+// ⚠️ REEMPLAZÁ ESTA URL POR LA QUE TE DA EL BOTÓN IMPLEMENTAR DE TU EXCEL ⚠️
+const URL_API = "https://script.google.com/macros/s/AKfycbymxkGY-J6A_wXMTTvUoPqTyXFj4FbGo0qhx9flzDILLx5gcHQJb2n1kYQLOZ2G15Rdzg/exec";
 
-  function irPaso1(){ step1.classList.remove('hidden'); step2.classList.add('hidden'); step3.classList.add('hidden'); }
-  function irPaso2(){ if(!cli_nombre.value.trim()){ alert('Ingresá tu nombre'); return; } if(!cli_zona.value){ alert('Seleccioná tu localidad'); return; } step1.classList.add('hidden'); step2.classList.remove('hidden'); step3.classList.add('hidden'); }
+let homeMap;
+let homeMarkers = [];
+let homeNegocios = [];
 
-  function addItem(mat='', cant='1', u='unidades'){
-    const c = document.getElementById('items-container');
-    const d = document.createElement('div');
-    d.className = 'row';
-    d.innerHTML = `<input type="text" value="${mat}" placeholder="Material"><input type="number" min="1" value="${cant}"><input type="text" value="${u}"><button type="button" onclick="removeItem(this)" style="border-radius:6px;background:#fff;border:1px solid #ddd;height:34px">×</button>`;
-    c.appendChild(d);
-  }
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializamos el mapa centrado en Buenos Aires por defecto
+  homeMap = L.map('home-map').setView([-34.62, -58.44], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+    attribution: '© OpenStreetMap' 
+  }).addTo(homeMap);
 
-  function removeItem(btn){
-    const rows = document.querySelectorAll('.row');
-    if(rows.length>1) btn.closest('.row').remove();
-    else{
-      const inputs = btn.closest('.row').querySelectorAll('input');
-      inputs[0].value=''; inputs[1].value='1'; inputs[2].value='unidades';
-    }
-  }
+  // Consulta asíncrona optimizada para tus columnas en mayúsculas
+  fetch(URL_API)
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.status === "success" && Array.isArray(data.corralones)) {
+        // Filtramos solo los registros que contengan latitud y longitud numéricas válidas
+        homeNegocios = data.corralones.filter(n => {
+          let lat = parseFloat(n.lat);
+          let lng = parseFloat(n.lng);
+          return !isNaN(lat) && !isNaN(lng);
+        });
 
-  function setupWhatsAppField() {
-    const trigger = document.getElementById('wsp-trigger');
-    const input = document.getElementById('cli-tel');
-    const showInput = () => { trigger.classList.add('hidden'); input.classList.remove('hidden'); input.focus(); };
-    trigger.addEventListener('click', showInput);
-    trigger.addEventListener('touchstart', showInput, { passive: true });
-  }
+        if(homeNegocios.length === 0) {
+          document.getElementById('home-map').innerHTML = `<div style="padding:4rem 1rem; text-align:center; color:#555; font-size:13px;">📍 Sincronizado correctamente, pero no se encontraron coordenadas válidas en tu Sheets.</div>`;
+          return;
+        }
 
-  async function cargarCatalogo(){
-    const s = document.getElementById('api-status');
-    try{
-      s.textContent = 'Sincronizando datos...';
-      logDebug('Cargando API...');
-      const res = await fetch(`${URL_API}?mode=api&t=${Date.now()}`);
-      const txt = await res.text();
-      logDebug(txt.slice(0, 400));
-
-      if(!res.ok) throw new Error('HTTP '+res.status);
-
-      const data = JSON.parse(txt);
-      if (!data.ok) throw new Error(data.error || 'Respuesta inválida');
-
-      materialesData = Array.isArray(data.materiales) ? data.materiales : [];
-      corralonesData = Array.isArray(data.corralones) ? data.corralones : [];
-
-      logDebug(`materiales=${materialesData.length}\ncorralones=${corralonesData.length}`);
-
-      cargarCorralones();
-      renderCatalogo();
-      s.textContent = `OK: ${materialesData.length} materiales, ${corralonesData.length} localidades.`;
-    }catch(e){
-      s.innerHTML = `<span class="error">Error de conexión con Sheets: ${e.message}</span>`;
-      logDebug('ERROR: ' + e.message);
-      document.getElementById('cli-zona').innerHTML = '<option value="">No se pudieron cargar las localidades</option>';
-    }
-  }
-
-  function cargarCorralones(){
-    const sel = document.getElementById('cli-zona');
-    const opciones = [...new Set(corralonesData.map(x => String(x.localidad || x.zona || x.corralon || '').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
-    sel.innerHTML = '<option value="">Seleccioná tu localidad...</option>' + opciones.map(z => `<option value="${z}">${z}</option>`).join('');
-  }
-
-  function renderCatalogo(){
-    const cats1 = document.getElementById('cats-nivel1');
-    const cats2 = document.getElementById('cats-nivel2');
-    const grid = document.getElementById('mats-grid');
-    cats1.innerHTML=''; cats2.innerHTML=''; grid.innerHTML='';
-    const categorias = [...new Set(materialesData.map(m => String(m.categoria || '').trim()).filter(Boolean))];
-    if(!categorias.length){ grid.innerHTML = '<div class="small">No hay materiales cargados.</div>'; return; }
-
-    categorias.forEach((cat, idx)=>{
-      const b = document.createElement('button');
-      b.className = 'tab' + (idx===0 ? ' active' : '');
-      b.textContent = cat;
-      b.onclick = ()=>renderMateriales(cat, b);
-      cats1.appendChild(b);
+        renderMarkers(homeNegocios);
+      }
+    }).catch(err => {
+      document.getElementById('home-map').innerHTML = `<div style="padding:4rem 1rem; text-align:center; color:#dc2626; font-size:13px;">⚠️ Error de conexión con Sheets. Revisá los permisos de ejecución de la Web App en Apps Script.</div>`;
     });
-    renderMateriales(categorias[0], cats1.firstChild);
-  }
+});
 
-  function renderMateriales(cat, btnTab){
-    const cats2 = document.getElementById('cats-nivel2');
-    const grid = document.getElementById('mats-grid');
-    document.querySelectorAll('#cats-nivel1 .tab').forEach(b => b.classList.remove('active'));
-    if (btnTab) btnTab.classList.add('active');
-    cats2.innerHTML=''; grid.innerHTML='';
-    const items = materialesData.filter(m => String(m.categoria || '').trim() === cat);
+function renderMarkers(lista) {
+  // Limpiamos marcadores viejos
+  homeMarkers.forEach(m => homeMap.removeLayer(m));
+  homeMarkers = [];
+  
+  lista.forEach(n => {
+    let lat = parseFloat(n.lat);
+    let lng = parseFloat(n.lng);
+    
+    // Filtro estricto para validar el estado Activo según tu columna "ESTADO"
+    if (n.estado && n.estado.toString().toUpperCase() === "ACTIVO") {
+      let textoPopup = `
+        <div style="font-family:sans-serif; min-width:140px;">
+          <strong style="color:#1a2744;font-size:13px;">${n.nombre}</strong><br>
+          <small style="color:#555;">📍 Zona: ${n.zona || 'No especificada'}</small><br>
+          <small style="color:#777;text-transform:capitalize;">🛠 Rubro: ${n.tipo || 'General'}</small><br>
+          ${n.whatsapp ? `<a href="https://wa.me/${n.whatsapp}?text=Hola!+Vi+tu+corralon+en+MaterialesYa" target="_blank" class="popup-wa-btn">💬 WhatsApp</a>` : ''}
+        </div>
+      `;
 
-    items.forEach((item, idx)=>{
-      const name = String(item.nombre || '').trim();
-      if(!name) return;
-      const b = document.createElement('button');
-      b.className = 'tab' + (idx===0 ? ' active' : '');
-      b.textContent = name;
-      b.onclick = ()=>{
-        grid.innerHTML = '';
-        const unidad = item.unidad ? String(item.unidad) : 'unidades';
-        const p = document.createElement('button');
-        p.className = 'pill';
-        p.textContent = `${name} (${unidad})`;
-        p.onclick = ()=>addItem(name,'1',unidad);
-        grid.appendChild(p);
-      };
-      cats2.appendChild(b);
-    });
-
-    const first = cats2.querySelector('.tab');
-    if(first) first.click();
-  }
-
-  async function enviarPedido(){
-    const rows = document.querySelectorAll('#items-container .row');
-    const items = [];
-    rows.forEach(row=>{
-      const i = row.querySelectorAll('input');
-      const mat = i[0].value.trim();
-      if(mat) items.push({ mat, cant: i[1].value || '1', u: i[2].value || 'unidades' });
-    });
-    if(!items.length){ alert('Agregá al menos un material'); return; }
-
-    const codigo = 'MAT-' + Date.now().toString().slice(-6);
-    document.getElementById('codigo-pedido').textContent = codigo;
-
-    const payload = {
-      codigo,
-      nombre: cli_nombre.value.trim(),
-      tel: cli_tel.value.trim(),
-      zona: cli_zona.value.trim(),
-      dir: cli_dir.value.trim(),
-      urgencia: cli_urgencia.options[cli_urgencia.selectedIndex].text,
-      obs: cli_obs.value.trim(),
-      items: JSON.stringify(items),
-      fecha: new Date().toISOString()
-    };
-
-    const btn = document.getElementById('btn-enviar-pedido');
-    btn.disabled = true; btn.textContent = 'Enviando...';
-
-    try{
-      const res = await fetch(URL_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'savePedido', data: payload })
-      });
-      const txt = await res.text();
-      let data;
-      try { data = JSON.parse(txt); } catch (e) { throw new Error('Respuesta no JSON: ' + txt.slice(0,120)); }
-      if(!res.ok || !data.ok) throw new Error(data.error || 'Error al guardar');
-
-      const msg = `🏗 *NUEVO PEDIDO ${codigo}*\n\n👤 *Cliente:* ${payload.nombre}\n${payload.tel ? `📱 *WhatsApp:* ${payload.tel}\n` : ''}📍 *Localidad:* ${payload.zona}${payload.dir ? ' — ' + payload.dir : ''}\n⏰ *Urgencia:* ${payload.urgencia}\n\n📦 *Materiales:*\n` + items.map(i=>`• ${i.mat}: ${i.cant} ${i.u}`).join('\n') + (payload.obs ? `\n\n📝 *Obs:* ${payload.obs}` : '');
-
-      document.getElementById('btn-wsp').href = `https://wa.me/${TEL_ADMIN}?text=${encodeURIComponent(msg)}`;
-      step1.classList.add('hidden'); step2.classList.add('hidden'); step3.classList.remove('hidden');
-      logDebug('Pedido guardado OK');
-    }catch(e){
-      alert('No se pudo guardar el pedido: ' + e.message);
-      logDebug('POST ERROR: ' + e.message);
-      console.error(e);
-    }finally{
-      btn.disabled = false; btn.textContent = 'Enviar pedido';
+      let m = L.marker([lat, lng]).addTo(homeMap).bindPopup(textoPopup);
+      homeMarkers.push(m);
     }
-  }
-
-  function nuevoPedido(){
-    document.getElementById('cli-nombre').value = '';
-    document.getElementById('cli-tel').value = '';
-    document.getElementById('cli-dir').value = '';
-    document.getElementById('cli-obs').value = '';
-    document.getElementById('cli-zona').value = '';
-    document.getElementById('cli-urgencia').value = 'urgente';
-    document.getElementById('items-container').innerHTML = '';
-    document.getElementById('cli-tel').classList.add('hidden');
-    document.getElementById('wsp-trigger').classList.remove('hidden');
-    addItem();
-    irPaso1();
-  }
-
-  document.addEventListener('DOMContentLoaded', ()=>{
-    window.step1 = document.getElementById('step1');
-    window.step2 = document.getElementById('step2');
-    window.step3 = document.getElementById('step3');
-    window.cli_nombre = document.getElementById('cli-nombre');
-    window.cli_tel = document.getElementById('cli-tel');
-    window.cli_zona = document.getElementById('cli-zona');
-    window.cli_dir = document.getElementById('cli-dir');
-    window.cli_urgencia = document.getElementById('cli-urgencia');
-    window.cli_obs = document.getElementById('cli-obs');
-    addItem();
-    setupWhatsAppField();
-    cargarCatalogo();
-    irPaso1();
   });
+
+  // Encuadre dinámico automático si existen marcadores
+  if(homeMarkers.length > 0) {
+    let group = L.featureGroup(homeMarkers);
+    homeMap.fitBounds(group.getBounds().pad(0.2));
+  }
+}
+
+// FILTROS EN TIEMPO REAL
+window.filtrarHome = function(tipo, btn) {
+  document.querySelectorAll('[id^="hf-"]').forEach(b => { 
+    b.style.background='#fff'; b.style.color='#555'; b.style.borderColor='#cbd5e1'; 
+  });
+  btn.style.background='#1a2744'; btn.style.color='#fff'; btn.style.borderColor='#1a2744';
+  
+  let lista = (tipo === 'todos') ? homeNegocios : homeNegocios.filter(n => (n.tipo || '').toLowerCase().includes(tipo));
+  renderMarkers(lista);
+};
+
+// MOTOR DE BUSQUEDA INTELIGENTE GEOGRÁFICA (OpenStreetMap Nominatim)
+window.buscarZonaGeografica = function() {
+  const query = document.getElementById('geo-search-input').value;
+  if (!query) return;
+
+  // Añadimos contexto de Argentina para refinar la precisión del buscador gratuito
+  const urlBusqueda = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ", Argentina")}&limit=1`;
+
+  fetch(urlBusqueda)
+    .then(response => response.json())
+    .then(results => {
+      if (results && results.length > 0) {
+        const targetLat = parseFloat(results[0].lat);
+        const targetLng = parseFloat(results[0].lon);
+        
+        // El mapa vuela suavemente hacia la localidad o dirección ingresada por el usuario
+        homeMap.flyTo([targetLat, targetLng], 13, {
+          animate: true,
+          duration: 1.5
+        });
+      } else {
+        alert("No pudimos localizar esa zona. Probá escribiendo el nombre de la localidad o barrio de otra forma.");
+      }
+    })
+    .catch(() => {
+      alert("Hubo un inconveniente al conectar con el motor de mapas. Intentá de nuevo.");
+    });
+};
 </script>
 </body>
 </html>
