@@ -172,7 +172,7 @@
   </div>
 
 <script>
-const URL_API = "https://script.google.com/macros/s/AKfycby9moG4iYAxApENvEO5zdR6UQFNCopdB_BYbQPip45rECzXhBZF2mfSdOk4BYNR_pbNag/exec";
+const URL_API = "https://script.google.com/macros/s/AKfycbxrjCSgZ81bOaCnnUch1IOQHqqcJ2XnxmYvjtYUSY3lVmiBSf8RJfJAu82XRXp91n_WyQ/exec";
 let registrosLocales = [];
 
 // 1. Control de accesos administrador
@@ -236,9 +236,14 @@ function procesarMetricasYTablas() {
     let tieneDeuda = c.deuda === "true" || c.deuda === true || (index % 3 === 0 && index > 0); 
     if(tieneDeuda) conDeuda++; else sinDeuda++;
 
-    let badgeDeuda = tieneDeuda ? 
-      `<span class="badge badge-danger">CON DEUDA</span>` : 
-      `<span class="badge badge-success">AL DÍA</span>`;
+    // Limpiamos el valor por si viene con puntos de miles o comas decimales
+let valorDeuda = parseFloat((n.deuda || "0").toString().replace(/\./g, "").replace(",", "."));
+if (isNaN(valorDeuda)) valorDeuda = 0;
+
+// Evaluamos: si es mayor a 0, realmente tiene deuda. Si es 0 o menos, está al día.
+let badgeDeuda = (valorDeuda > 0) ? 
+  `<span class="badge badge-danger">CON DEUDA</span>` : 
+  `<span class="badge badge-success">AL DÍA</span>`;
 
     tbody.innerHTML += `
       <tr>
