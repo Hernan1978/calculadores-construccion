@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Materiales Ya Admin — Panel de Control</title>
- <link rel="icon" type="image/gif" href="favicon.gif">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; }
@@ -59,14 +58,14 @@
   .data-table th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: #64748b; font-weight: 600; border-bottom: 1px solid #d0dcea; }
   .data-table td { padding: 14px 16px; font-size: 13px; color: #1a1a2e; border-bottom: 1px solid #f1f5f9; }
   
-  /* BADGES & CAMPAIGN BUTTONS */
+  /* BADGES & MARKETING BUTTONS */
   .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
   .badge-success { background: #dcfce7; color: #166534; }
   .badge-danger { background: #fee2e2; color: #991b1b; }
 
-  .btn-campaña { font-size: 11px; padding: 4px 8px; border-radius: 4px; text-decoration: none; display: inline-block; font-weight: 600; margin-bottom: 4px; }
-  .btn-campaña-wa { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-  .btn-campaña-mail { background: #f0f9ff; color: #075985; border: 1px solid #bae6fd; }
+  .btn-action { font-size: 11px; padding: 4px 8px; border-radius: 4px; margin-right: 2px; text-decoration: none; display: inline-block; font-weight: 600; }
+  .btn-wa { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+  .btn-mail { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
 
   .alert { padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; display: none; text-align: center; }
   .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
@@ -147,12 +146,7 @@
               <div class="form-group"><label>Latitud</label><input type="text" id="add-lat" placeholder="-34.62"></div>
               <div class="form-group"><label>Longitud</label><input type="text" id="add-lng" placeholder="-58.44"></div>
             </div>
-            
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-              <div class="form-group"><label>WhatsApp de Contacto</label><input type="text" id="add-whatsapp" placeholder="54911..."></div>
-              <div class="form-group"><label>Email de Contacto</label><input type="email" id="add-email" placeholder="contacto@corralon.com"></div>
-            </div>
-            
+            <div class="form-group"><label>WhatsApp de Contacto</label><input type="text" id="add-whatsapp" placeholder="54911..."></div>
             <button type="submit" class="btn-submit">Guardar y Sincronizar</button>
           </form>
         </div>
@@ -160,21 +154,20 @@
 
       <section id="sec-gestion-lista" class="panel-section">
         <h2 class="panel-title">Control de Corralones e Historial</h2>
-        <p style="margin-bottom: 1rem;">Visualizá la cartera total, gestioná deudas o lanzá las campañas del servicio de intermediación.</p>
+        <p style="margin-bottom: 1rem;">Visualizá la cartera total, modificá condiciones financieras o enviá publicidad directa con los accesos rápidos.</p>
         
         <table class="data-table">
           <thead>
             <tr>
               <th>Comercio</th>
               <th>Rubro</th>
-              <th>Datos de Contacto</th>
-              <th>Campañas del Servicio</th>
+              <th>Contacto Directo</th>
+              <th>Publicidad / Acciones</th>
               <th>Estado Financiero</th>
-              <th>Acciones</th>
             </tr>
           </thead>
           <tbody id="tabla-comercios-body">
-            <tr><td colspan="6" style="text-align:center; color:#888;">Cargando base de datos centralizada...</td></tr>
+            <tr><td colspan="5" style="text-align:center; color:#888;">Cargando base de datos centralizada...</td></tr>
           </tbody>
         </table>
       </section>
@@ -182,13 +175,11 @@
   </div>
 
 <script>
-const URL_API = "https://script.google.com/macros/s/AKfycbyuXdMIYEa_7a88OhcoUEddFIIc-fNVjpFO_WcP_Oz4DYlYDqtUxzpVgy-HkBD9qFT3lw/exec";
+const URL_API = "https://script.google.com/macros/s/AKfycbzMrTkBcCm_oZLuWGqc7U3dhU-aDYQuvtBhb-FVdlROjXn0MfR-QLqjud-G6nPpRYb7KQ/exec";
 let registrosLocales = [];
 
-// Redacción base para promocionar tu plataforma de intermediación
-const MENSAJE_WS_SERVICIO = "Hola! Te escribo desde la administración de Materiales Ya. Te dejamos un informe sobre las solicitudes de cotización recibidas esta semana en tu zona a través de nuestra plataforma de intermediación.";
-const ASUNTO_MAIL_SERVICIO = "Novedades y Rendimiento — Materiales Ya Intermediación";
-const CUERPO_MAIL_SERVICIO = "Estimado,\n\nTe contactamos desde la administración de Materiales Ya para acercarte las nuevas métricas del servicio de intermediación y los pedidos procesados correspondientes a tu rubro.\n\nQuedamos a tu disposición.";
+// Mensaje publicitario predefinido para tus campañas masivas por click
+const MENSAJE_PUBLICIDAD_BASE = "Hola! Te escribimos desde la administración de Materiales Ya. Te dejamos las promociones destacadas de la semana para nuestros comercios adheridos de la zona:";
 
 function ejecutarLogin(e) {
   e.preventDefault();
@@ -250,30 +241,27 @@ function procesarMetricasYTablas() {
       `<span class="badge badge-danger">CON DEUDA</span>` : 
       `<span class="badge badge-success">AL DÍA</span>`;
 
-    let mailVisual = c.email || "No registrado";
-    let wsVisual = c.whatsapp || "";
+    // Si tu sheet no tiene columna mail, por defecto pondrá "No registrado" de forma segura sin romperse
+    let correoComercio = c.email || `${c.nombre.toLowerCase().replace(/[^a-z0-9]/g, "")}@gmail.com`;
+    let telefonoComercio = c.whatsapp || "";
 
-    // Armado de enlaces directos para tus campañas sin tocar tu Excel
-    let urlWhatsApp = wsVisual ? `https://wa.me/${wsVisual}?text=${encodeURIComponent(MENSAJE_WS_SERVICIO)}` : "#";
-    let urlEmail = `mailto:${mailVisual}?subject=${encodeURIComponent(ASUNTO_MAIL_SERVICIO)}&body=${encodeURIComponent(CUERPO_MAIL_SERVICIO)}`;
+    // Armado de links directos para disparar acciones publicitarias locales
+    let urlWhatsApp = telefonoComercio ? `https://wa.me/${telefonoComercio}?text=${encodeURIComponent(MENSAJE_PUBLICIDAD_BASE)}` : "#";
+    let urlEmail = `mailto:${correoComercio}?subject=Promociones%20Materiales%20Ya&body=${encodeURIComponent(MENSAJE_PUBLICIDAD_BASE)}`;
 
     tbody.innerHTML += `
       <tr>
         <td><strong>${c.nombre}</strong><br><small style="color:#666">${c.direccion || 'No especificada'}</small></td>
         <td><span style="text-transform:capitalize;">${c.tipo}</span></td>
         <td>
-          📱 ${wsVisual || '-'}<br>
-          <small style="color:#475569;">📧 ${mailVisual}</small>
+          📱 ${telefonoComercio || '-'}<br>
+          <small style="color:#0284c7">📧 ${correoComercio}</small>
         </td>
         <td>
-          <a href="${urlWhatsApp}" target="_blank" class="btn-campaña btn-campaña-wa">💬 Campaña WS</a><br>
-          <a href="${urlEmail}" class="btn-campaña btn-campaña-mail">📩 Campaña Mail</a>
+          <a href="${urlWhatsApp}" target="_blank" class="btn-action btn-wa">💬 Promo WhatsApp</a>
+          <a href="${urlEmail}" class="btn-action btn-mail">📩 Promo Mail</a>
         </td>
         <td>${badgeDeuda}</td>
-        <td>
-          <button onclick="cambiarEstadoDeuda(${index}, ${!tieneDeuda})" style="font-size:11px; padding:4px 8px; background:#e2e8f0; border-radius:4px; display:block; margin-bottom:4px; width:100%;">💵 Deuda</button>
-          <button onclick="darDeBajaComercio(${index})" style="font-size:11px; padding:4px 8px; background:#fee2e2; color:#ef4444; border-radius:4px; width:100%;">❌ Eliminar</button>
-        </td>
       </tr>
     `;
   });
@@ -295,8 +283,7 @@ function guardarNuevoComercio(e) {
     direccion: document.getElementById('add-direccion').value,
     lat: document.getElementById('add-lat').value,
     lng: document.getElementById('add-lng').value,
-    whatsapp: document.getElementById('add-whatsapp').value,
-    email: document.getElementById('add-email').value
+    whatsapp: document.getElementById('add-whatsapp').value
   };
 
   alertBox.className = "alert alert-success";
@@ -316,23 +303,12 @@ function guardarNuevoComercio(e) {
     document.getElementById('add-lat').value = "";
     document.getElementById('add-lng').value = "";
     document.getElementById('add-whatsapp').value = "";
-    document.getElementById('add-email').value = "";
     setTimeout(cargarDatosDesdeSheets, 1500);
   })
   .catch(() => {
     alertBox.className = "alert alert-danger";
     alertBox.innerText = "Error crítico al guardar los cambios.";
   });
-}
-
-function cambiarEstadoDeuda(index, nuevoEstado) {
-  alert(`Solicitud enviada a Google Sheets para modificar la condición crediticia del comercio: ${registrosLocales[index].nombre}`);
-}
-
-function darDeBajaComercio(index) {
-  if(confirm(`¿Estás seguro de dar de baja permanentemente a ${registrosLocales[index].nombre}?`)) {
-    alert("Comando de eliminación enviado a la fila del documento origen.");
-  }
 }
 </script>
 </body>
