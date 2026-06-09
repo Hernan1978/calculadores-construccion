@@ -207,22 +207,33 @@ function cambiarSeccion(target, element) {
 function cargarDatosDesdeSheets() {
   const statusAlert = document.getElementById('status-sheet-alert');
   
-  fetch(URL_API)
-    .then(r => r.json())
-    .then(data => {
-      if(data && data.status === "success") {
-        registrosLocales = data.corralones || [];
-        procesarMetricasYTablas();
-        statusAlert.className = "alert alert-success";
-        statusAlert.innerText = "🔌 Conexión en tiempo real activa con Google Sheets. Datos sincronizados.";
-      }
-    })
-    .catch(err => {
-      statusAlert.className = "alert alert-danger";
-      statusAlert.innerText = "❌ Error de conexión con Sheets. Revisá los permisos de ejecución de la Web App.";
-    });
-}
+ // Llamamos a tu única URL de Google Sheets
+fetch(URL_API)
+  .then(response => response.json())
+  .then(data => {
+    if (data && data.status === "success") {
+      
+      // Acá guardás tu lista directa desde Sheets
+      const misMateriales = data.materiales; 
+      
+      // Ejemplo de cómo dibujarlos en pantalla de manera automática:
+      let contenedor = document.getElementById("contenedor-materiales"); 
+      contenedor.innerHTML = ""; // Limpiamos la carga inicial
+      
+      misMateriales.forEach(mat => {
+        contenedor.innerHTML += `
+          <div class="item-material" data-categoria="${mat.categoria}">
+            <small style="color:#888;">${mat.categoria}</small>
+            <h4 style="margin:2px 0; color:#1a2744;">${mat.nombre}</h4>
+            <input type="number" placeholder="Cantidad" id="cant-${mat.id}" style="width:70px; padding:4px;">
+          </div>
+        `;
+      });
 
+    }
+  })
+  .catch(err => console.error("Error conectando con la lista de Sheets:", err));
+ 
 // 4. Renderizado dinámico de métricas y estados (Deudas, bajas, activos)
 function procesarMetricasYTablas() {
   let activos = 0, conDeuda = 0, sinDeuda = 0;
