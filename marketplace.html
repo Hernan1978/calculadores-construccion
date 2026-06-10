@@ -213,7 +213,7 @@
 </main>
 
 <script>
-  const URL_API = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec";
+  const URL_API = "https://script.google.com/macros/s/AKfycbxD8b7sU8kjYFAiAHX_PdjJ66SQtEI4It0-jT6cO71YoxAUvBx4hwSHQ29LHWLekNLvVg/exec";
   let materialesData = [];
 
   function irPaso1() {
@@ -301,10 +301,13 @@
     const codigo = 'MAT-' + Date.now().toString().slice(-6);
     document.getElementById('codigo-pedido').textContent = codigo;
     
-    let msg = `🏗 *NUEVO PEDIDO ${codigo}*\\n\\n📦 *Materiales:*\\n`;
-    items.forEach(i => { msg += `• ${i.mat}: ${i.cant} ${i.u}\\n`; });
+    // CORRECCIÓN ACÁ: Cambiados los saltos de línea literales por codificación segura de URL
+    let msg = "🏗 *NUEVO PEDIDO " + codigo + "*\n\n📦 *Materiales:*\n";
+    items.forEach(function(i) { 
+      msg += "• " + i.mat + ": " + i.cant + " " + i.u + "\n"; 
+    });
 
-    document.getElementById('btn-wsp').href = `https://wa.me/5491112345678?text=${encodeURIComponent(msg)}`;
+    document.getElementById('btn-wsp').href = "https://wa.me/5491112345678?text=" + encodeURIComponent(msg);
     document.getElementById('paso2').style.display = 'none';
     document.getElementById('paso3').style.display = 'block';
   }
