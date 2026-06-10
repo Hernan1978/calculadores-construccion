@@ -8,7 +8,6 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* FONDO GENERAL EN AZUL OSCURO CORPORATIVO */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
       background: #141d33; 
@@ -18,7 +17,7 @@
       flex-direction: column; 
     }
     
-    /* ENCABEZADO LIMPIO */
+    /* ENCABEZADO */
     header { 
       background: #1a2744; 
       padding: 1.2rem 2rem; 
@@ -35,11 +34,58 @@
     .btn-interno { padding: 8px 16px; border-radius: 8px; background: #2e4a7a; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .15s; }
     .btn-interno:hover { background: #3b5d9c; }
 
-    /* CONTENEDOR CENTRAL DE LA PÁGINA */
+    /* 🎬 CARÁTULA DE PRESENTACIÓN ACTUALIZADA */
+    .welcome-caratula {
+      position: relative;
+      background: linear-gradient(rgba(20, 29, 51, 0.8), #141d33), 
+                  url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      padding: 6.5rem 1.5rem 5.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .welcome-caratula h2 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+      text-shadow: 0 2px 14px rgba(0,0,0,0.6);
+    }
+    .welcome-caratula p {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      max-width: 750px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    }
+    .btn-caratula {
+      display: inline-block;
+      background: #ffffff;
+      color: #1a2744;
+      padding: 15px 36px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: all .2s;
+    }
+    .btn-caratula:hover {
+      transform: translateY(-3px);
+      background: #f1f5f9;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    /* CONTENEDOR CENTRAL */
     main { max-width: 1000px; margin: 0 auto 4rem; padding: 0 1.5rem; width: 100%; }
 
-    /* TÍTULOS DE SECCIONES */
-    .section-title { text-align: center; font-size: 1.7rem; font-weight: 700; color: #ffffff; margin: 3rem 0 1.5rem; letter-spacing: -0.5px; }
+    .section-title { text-align: center; font-size: 1.8rem; font-weight: 700; color: #ffffff; margin: 3.5rem 0 1.5rem; letter-spacing: -0.5px; }
     
     /* 1. SECCIÓN ACCESOS RÁPIDOS */
     .grid-accesos-bloque { 
@@ -74,7 +120,7 @@
     .card-directa .icon { font-size: 2.4rem; margin-bottom: 12px; }
     .card-directa h3 { font-size: 16px; font-weight: 700; letter-spacing: 0.3px; }
 
-    /* 2. SECCIÓN PASOS RÁPIDOS EXPLICATIVOS */
+    /* 2. SECCIÓN PASOS RÁPIDOS */
     .steps-box { 
       background: #1a2744; 
       border-radius: 16px; 
@@ -88,12 +134,12 @@
     
     .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
     .step-card { text-align: center; }
-    .step-icon-wrap { font-size: 2.8rem; margin-bottom: 15px; display: block; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
-    .step-num-badge { display: inline-block; background: #25d366; color: #1a2744; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .step-icon-wrap { font-size: 2.8rem; margin-bottom: 15px; display: block; }
+    .step-num-badge { display: inline-block; background: #25d366; color: #1a2744; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; margin-bottom: 10px; text-transform: uppercase; }
     .step-card h4 { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
     .step-card p { font-size: 13px; color: #cbd5e1; line-height: 1.6; }
 
-    /* 3. CONTADORES ABAJO DE TODO */
+    /* 3. CONTADORES INFERIORES */
     .stats-bar { 
       display: grid; 
       grid-template-columns: repeat(4, 1fr); 
@@ -103,9 +149,9 @@
       text-align: center; 
     }
     .stat-item h4 { font-size: 1.8rem; font-weight: 800; color: #ffffff; }
-    .stat-item p { font-size: 11px; color: #90afd4; text-transform: uppercase; margin-top: 4px; font-weight: 600; letter-spacing: 0.5px; }
+    .stat-item p { font-size: 11px; color: #90afd4; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-    /* 🟢 GLOBITO FLOTANTE WHATSAPP INDEPENDIENTE */
+    /* 🟢 GLOBITO FLOTANTE WHATSAPP */
     .wsp-home {
       position: fixed;
       bottom: 25px;
@@ -126,12 +172,13 @@
     }
     .wsp-home:hover { transform: scale(1.1); background: #20ba5a; }
 
-    /* ADAPTACIÓN PARA CELULARES */
+    /* RESPONSIVE */
     @media(max-width: 768px) {
+      .welcome-caratula h2 { font-size: 1.8rem; }
+      .welcome-caratula p { font-size: 1rem; }
       .grid-accesos-bloque, .steps-grid { grid-template-columns: 1fr; gap: 2rem; padding: 1.2rem; }
       .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
       .wsp-home { bottom: 15px; right: 15px; width: 52px; height: 52px; font-size: 26px; }
-      .section-title { font-size: 1.4rem; margin: 2rem 0 1rem; }
     }
   </style>
 </head>
@@ -146,6 +193,12 @@
     <a href="registro.html" class="btn-interno">Control Interno</a>
   </div>
 </header>
+
+<section class="welcome-caratula">
+  <h2>Materiales Ya<br>Tu puente directo a la red de comercios más completa.</h2>
+  <p>Encuentra corralones, ferreterías, proveedores de materiales secos, electricidad y cañerías cerca de tu obra en un clic.</p>
+  <a href="mapa.html" class="btn-caratula">Ver Guía de Comercios →</a>
+</section>
 
 <main>
   <h2 class="section-title">Accesos Rápidos</h2>
@@ -185,7 +238,7 @@
         <span class="step-icon-wrap">💬</span>
         <div class="step-num-badge">3. Contacta</div>
         <h4>Directo por WhatsApp</h4>
-        <p>Escribiles con un solo clic directamente a su chat comercial para coordinar sin intermediarios.</p>
+        <p>Escribiles con un solo clic directamente a su chat comercial para coordinar tu pedido sin intermediarios.</p>
       </div>
     </div>
   </section>
