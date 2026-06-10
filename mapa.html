@@ -9,26 +9,56 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; }
+    
     header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
     header h1 { font-size: 1.3rem; font-weight: 600; }
     header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
     .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
     .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
 
-    #map-container { flex: 1; width: 100%; position: relative; background: #cbd5e1; }
-    #map { width: 100%; height: 100%; min-height: calc(100vh - 75px); z-index: 1; }
+    /* Contenedor Principal Partido */
+    #main-container { flex: 1; display: flex; flex-direction: row; height: calc(100vh - 75px); overflow: hidden; }
+
+    /* Barra Lateral Izquierda */
+    #sidebar { width: 320px; background: #fff; border-right: 1px solid #cbd5e1; display: flex; flex-direction: column; padding: 1.2rem; gap: 1rem; overflow-y: auto; z-index: 10; }
+    #sidebar h2 { font-size: 15px; font-weight: 600; color: #1a2744; }
     
+    /* Buscador */
+    .search-box { position: relative; }
+    .search-box input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; background: #fafbfd; }
+    .search-box input:focus { border-color: #1a2744; background: #fff; }
+
+    /* Lista de corralones */
+    #corralones-list { display: flex; flex-direction: column; gap: 8px; }
+    .list-item { padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fdfdfd; cursor: pointer; transition: all .15s; text-align: left; }
+    .list-item:hover { background: #f1f5f9; border-color: #cbd5e1; transform: translateY(-1px); }
+    .list-item h4 { font-size: 13px; font-weight: 600; color: #1a2744; margin-bottom: 2px; }
+    .list-item p { font-size: 11px; color: #666; }
+    .badge { display: inline-block; margin-top: 5px; padding: 2px 5px; font-size: 9px; font-weight: 600; background: #e2e8f0; color: #4a5568; border-radius: 4px; text-transform: uppercase; }
+
+    /* Contenedor del Mapa */
+    #map-container { flex: 1; height: 100%; position: relative; }
+    #map { width: 100%; height: 100%; }
+    
+    /* Globitos del mapa */
     .popup-content h4 { font-size: 14px; font-weight: 600; color: #1a2744; margin-bottom: 4px; }
     .popup-content p { font-size: 12px; color: #555; margin-bottom: 6px; }
     .popup-content a { display: inline-block; font-size: 11px; color: #fff; background: #25d366; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-weight: 600; }
+
+    /* Adaptación para Celulares */
+    @media(max-width: 768px) {
+      #main-container { flex-direction: column; overflow: y-scroll; }
+      #sidebar { width: 100%; height: 250px; border-right: none; border-bottom: 1px solid #cbd5e1; order: 2; }
+      #map-container { height: calc(100vh - 325px); order: 1; }
+    }
   </style>
 </head>
 <body>
 
 <header>
   <div>
-    <h1>🗺 Mapa de Cobertura</h1>
-    <p>Ubica los corralones más cercanos con stock disponible</p>
+    <h1>🗺️ Mapa de Cobertura</h1>
+    <p>Encuentra los corralones autorizados más cercanos</p>
   </div>
   <div>
     <a href="index.html" class="hbtn">← Inicio</a>
@@ -36,17 +66,29 @@
   </div>
 </header>
 
-<div id="map-container">
-  <div id="map"></div>
+<div id="main-container">
+  <div id="sidebar">
+    <h2>🏢 Comercios de la Red</h2>
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Buscar por localidad o nombre..." oninput="filtrarLista()">
+    </div>
+    <div id="corralones-list">
+      <p style="font-size:12px; color:#aaa; text-align:center;">Cargando red...</p>
+    </div>
+  </div>
+
+  <div id="map-container">
+    <div id="map"></div>
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // URL de tu Google Apps Script unificada
   const URL_API = "https://script.google.com/macros/s/AKfycbxD8b7sU8kjYFAiAHX_PdjJ66SQtEI4It0-jT6cO71YoxAUvBx4hwSHQ29LHWLekNLvVg/exec";
   
-  // Inicializamos el mapa centrado en Buenos Aires
   const map = L.map('map').setView([-34.6037, -58.3816], 11);
+  let marcadoresGuardados = [];
+  let listaCorralonesCache = [];
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
@@ -54,36 +96,89 @@
 
   async function plotMapPoints() {
     try {
-      // Hacemos la consulta al Sheets saltando el caché del navegador (?t=...)
       const res = await fetch(`${URL_API}?t=${Date.now()}`);
       const data = await res.json();
       
-      // Tomamos la lista de corralones del JSON unificado
-      const corralones = Array.isArray(data.corralones) ? data.corralones : [];
-
-      corralones.forEach(c => {
-        // Forzamos la lectura de coordenadas sin importar si se llama 'latitud', 'lat', 'longitud' o 'lng'
-        const lat = parseFloat(c.latitud || c.lat);
-        const lng = parseFloat(c.longitud || c.lng);
-
-        // Si encontró números válidos, dibuja el marcador en el mapa
-        if (!isNaN(lat) && !isNaN(lng)) {
-          const htmlInfo = `
-            <div class="popup-content">
-              <h4>🏢 ${c.nombre || 'Corralón'}</h4>
-              <p>📍 ${c.direccion || 'Sin dirección'}</p>
-              <p>🏙 Zona: <strong>${c.zona || 'No definida'}</strong></p>
-              ${c.telefono ? `<a href="https://wa.me/${String(c.telefono).replace(/[^0-9]/g, '')}" target="_blank">📲 Consultar directo</a>` : ''}
-            </div>
-          `;
-          L.marker([lat, lng]).addTo(map).bindPopup(htmlInfo);
-        } else {
-          console.warn("Corralón omitido por coordenadas inválidas:", c);
-        }
-      });
+      listaCorralonesCache = Array.isArray(data.corralones) ? data.corralones : [];
+      renderizarComponentes();
     } catch (e) {
-      console.error("Error ploteando puntos en el mapa:", e);
+      console.error("Error ploteando componentes:", e);
     }
+  }
+
+  function renderizarComponentes() {
+    const listContainer = document.getElementById('corralones-list');
+    listContainer.innerHTML = '';
+
+    // Limpiar marcadores viejos si los hubiera
+    marcadoresGuardados.forEach(m => map.removeLayer(m));
+    marcadoresGuardados = [];
+
+    if (!listaCorralonesCache.length) {
+      listContainer.innerHTML = '<p style="font-size:12px;color:#888;text-align:center;">No hay corralones registrados.</p>';
+      return;
+    }
+
+    listaCorralonesCache.forEach((c, index) => {
+      const lat = parseFloat(c.latitud || c.lat);
+      const lng = parseFloat(c.longitud || c.lng);
+
+      if (!isNaN(lat) && !isNaN(lng)) {
+        // 1. Crear el Marcador en el Mapa
+        const htmlInfo = `
+          <div class="popup-content">
+            <h4>🏢 ${c.nombre || 'Corralón'}</h4>
+            <p>📍 ${c.direccion || 'Sin dirección'}</p>
+            <p>🏙️ Zona: <strong>${c.zona || 'No definida'}</strong></p>
+            ${c.telefono ? `<a href="https://wa.me/${String(c.telefono).replace(/[^0-9]/g, '')}" target="_blank">📲 Consultar directo</a>` : ''}
+          </div>
+        `;
+        
+        const marker = L.marker([lat, lng]).addTo(map).bindPopup(htmlInfo);
+        
+        // Guardamos la referencia del marcador indexado
+        marcadoresGuardados.push({ id: index, marker: marker, nombre: String(c.nombre).toLowerCase(), zona: String(c.zona).toLowerCase() });
+
+        // 2. Crear la tarjeta en la barra lateral
+        const card = document.createElement('div');
+        card.className = 'list-item';
+        card.setAttribute('data-id', index);
+        card.innerHTML = `
+          <h4>${c.nombre || 'Corralón'}</h4>
+          <p>📍 ${c.direccion || 'Sin dirección'}</p>
+          <span class="badge">${c.zona || 'General'}</span>
+        `;
+        
+        // Acción al hacer clic en la tarjeta de la lista: enfocar en el mapa
+        card.onclick = () => {
+          map.setView([lat, lng], 14);
+          marker.openPopup();
+        };
+
+        listContainer.appendChild(card);
+      }
+    });
+  }
+
+  // Función interactiva para el buscador
+  function filtrarLista() {
+    const texto = document.getElementById('search-input').value.toLowerCase();
+    const items = document.querySelectorAll('.list-item');
+
+    items.forEach(item => {
+      const id = item.getAttribute('data-id');
+      const marcadorObj = marcadoresGuardados.find(m => m.id == id);
+      
+      if (marcadorObj) {
+        if (marcadorObj.nombre.includes(texto) || marcadorObj.zona.includes(texto)) {
+          item.style.display = 'block';
+          marcadorObj.marker.addTo(map); // Muestra el pin en el mapa si coincide
+        } else {
+          item.style.display = 'none';
+          map.removeLayer(marcadorObj.marker); // Oculta el pin en el mapa si no coincide
+        }
+      }
+    });
   }
 
   document.addEventListener('DOMContentLoaded', plotMapPoints);
