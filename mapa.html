@@ -1,142 +1,87 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mapa Completo — Materiales Ya</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; height: 100vh; display: flex; flex-direction: column; }
-  
-  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; }
-  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
-  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
-  .nav-links { display: flex; gap: 8px; }
-  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
-  .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materiales Ya — Mapa de Cobertura</title>
+  <link rel="icon" type="image/gif" href="favicon.gif">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    header h1 { font-size: 1.3rem; font-weight: 600; }
+    header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
+    .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
+    .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
 
-  .layout { display: flex; flex: 1; height: calc(100vh - 54px); overflow: hidden; }
-  .sidebar { width: 320px; background: white; border-right: 1px solid #d0dcea; display: flex; flex-direction: column; padding: 1rem; gap: 12px; overflow-y: auto; }
-  .map-container { flex: 1; height: 100%; position: relative; }
-  #map { width: 100%; height: 100%; }
-
-  .search-box { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px; }
-  .filter-btn { width: 100%; padding: 8px; background: #1a2744; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
-  .filter-btn:hover { background: #141f36; }
-
-  /* Estilos para el Popup Avanzado */
-  .custom-popup { font-family: sans-serif; max-width: 220px; }
-  .custom-popup h3 { color: #1a2744; font-size: 14px; margin-bottom: 4px; font-weight: 700; }
-  .popup-status { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-top: 5px; }
-  .status-deuda { background: #fde8e8; color: #e02424; }
-  .status-aldia { background: #def7ec; color: #03543f; }
-  .popup-btn { display: block; text-align: center; background: #1a2744; color: white !important; text-decoration: none; padding: 8px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 8px; }
-  .popup-btn:hover { background: #141f36; }
-</style>
+    #map-container { flex: 1; width: 100%; position: relative; background: #cbd5e1; }
+    #map { width: 100%; height: 100%; min-height: calc(100vh - 75px); z-index: 1; }
+    
+    .popup-content h4 { font-size: 14px; font-weight: 600; color: #1a2744; margin-bottom: 4px; }
+    .popup-content p { font-size: 12px; color: #555; margin-bottom: 6px; }
+    .popup-content a { display: inline-block; font-size: 11px; color: #fff; background: #25d366; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-weight: 600; }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
-  <div class="nav-links">
-    <a href="calculadores.html" class="nav-link">Calculadores</a>
-    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
-    <a href="index.html" class="nav-link">🏠 Inicio</a>
+<header>
+  <div>
+    <h1>🗺 Mapa de Cobertura</h1>
+    <p>Ubica los corralones más cercanos con stock disponible</p>
   </div>
-</nav>
+  <div>
+    <a href="index.html" class="hbtn">← Inicio</a>
+    <a href="marketplace.html" class="hbtn">🛒 Cargar Pedido</a>
+  </div>
+</header>
 
-<div class="layout">
-  <div class="sidebar">
-    <h3 style="font-size:15px; color:#1a2744;">Buscador Geográfico</h3>
-    <input type="text" id="sidebar-search" class="search-box" placeholder="Ej: Wilde, Avellaneda...">
-    <button onclick="buscarEnMapa()" class="filter-btn">Buscar zona</button>
-    <hr style="border:0; border-top:1px solid #e2e8f0; margin:5px 0;">
-    <div id="lista-negocios" style="display:flex; flex-direction:column; gap:8px;">
-      </div>
-  </div>
-  <div class="map-container">
-    <div id="map"></div>
-  </div>
+<div id="map-container">
+  <div id="map"></div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// ⚠️ TU URL REAL DE GOOGLE APPS SCRIPT ⚠️
-const URL_API = "https://script.google.com/macros/s/AKfycbymxkGY-J6A_wXMTTvUoPqTyXFj4FbGo0qhx9flzDILLx5gcHQJb2n1kYQLOZ2G15Rdzg/exec";
+  // Cambiá esto por tu URL de Google Apps Script unificada
+  const URL_API = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec";
+  
+  // Inicializamos el mapa centrado en Buenos Aires
+  const map = L.map('map').setView([-34.6037, -58.3816], 11);
 
-let mainMap;
-let mapaMarkers = [];
-
-document.addEventListener('DOMContentLoaded', function() {
-  mainMap = L.map('map').setView([-34.66, -58.34], 12); // Centrado inicial en Zona Sur
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(mainMap);
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
 
-  cargarDatosMapa();
-});
+  async function plotMapPoints() {
+    try {
+      const res = await fetch(`${URL_API}?t=${Date.now()}`);
+      const data = await res.json();
+      const corralones = Array.isArray(data.corralones) ? data.corralones : [];
 
-function cargarDatosMapa() {
-  fetch(URL_API)
-    .then(r => r.json())
-    .then(data => {
-      if (data && data.status === "success" && Array.isArray(data.corralones)) {
-        renderizarPinesMapa(data.corralones);
-      }
-    })
-    .catch(err => console.error("Error cargando mapa:", err));
-}
+      corralones.forEach(c => {
+        // Buscamos columnas 'latitud' y 'longitud' o 'lat', 'lng' en minúsculas debido al script de Google
+        const lat = parseFloat(c.latitud || c.lat);
+        const lng = parseFloat(c.longitud || c.lng);
 
-function renderizarPinesMapa(lista) {
-  mapaMarkers.forEach(m => mainMap.removeLayer(m));
-  mapaMarkers = [];
-
-  lista.forEach(n => {
-    let lat = parseFloat(n.lat);
-    let lng = parseFloat(n.lng);
-    if (isNaN(lat) || !n.estado || n.estado.toString().toUpperCase() !== "ACTIVO") return;
-
-    // Calcular estado financiero igual que en el panel administrativo
-    let deudaValor = parseFloat((n.deuda || "0").toString().replace(/\./g, "").replace(",", "."));
-    if (isNaN(deudaValor)) deudaValor = 0;
-
-    let etiquetaEstado = (deudaValor > 0) 
-      ? `<span class="popup-status status-deuda">CON DEUDA ❌</span>` 
-      : `<span class="popup-status status-aldia">AL DÍA ✔️</span>`;
-
-    // Diseño del popup avanzado con datos dinámicos del Sheets
-    let htmlPopup = `
-      <div class="custom-popup">
-        <h3>${n.nombre}</h3>
-        <p style="font-size:12px; color:#555; margin-top:2px;">📍 Rubro: ${n.tipo || 'General'}</p>
-        <p style="font-size:12px; color:#555;">🏡 Zona: ${n.zona || 'No especificada'}</p>
-        ${etiquetaEstado}
-        <a href="https://wa.me/${n.whatsapp}" target="_blank" class="popup-btn">💬 Contactar WhatsApp</a>
-      </div>
-    `;
-
-    let marker = L.marker([lat, lng]).addTo(mainMap).bindPopup(htmlPopup);
-    mapaMarkers.push(marker);
-  });
-
-  if (mapaMarkers.length > 0) {
-    let group = L.featureGroup(mapaMarkers);
-    mainMap.fitBounds(group.getBounds().pad(0.1));
+        if (!isNaN(lat) && !isNaN(lng)) {
+          const htmlInfo = `
+            <div class="popup-content">
+              <h4>🏢 ${c.nombre || 'Corralón'}</h4>
+              <p>📍 ${c.direccion || 'Sin dirección'}</p>
+              <p>🏙 Zona: <strong>${c.zona || 'No definida'}</strong></p>
+              ${c.telefono ? `<a href="https://wa.me/${c.telefono.replace(/[^0-9]/g, '')}" target="_blank">📲 Consultar directo</a>` : ''}
+            </div>
+          `;
+          L.marker([lat, lng]).addTo(map).bindPopup(htmlInfo);
+        }
+      });
+    } catch (e) {
+      console.error("Error ploteando puntos en el mapa:", e);
+    }
   }
-}
 
-function buscarEnMapa() {
-  const query = document.getElementById('sidebar-search').value;
-  if (!query) return;
-  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ", Argentina")}&limit=1`)
-    .then(r => r.json())
-    .then(res => {
-      if (res && res.length > 0) {
-        mainMap.flyTo([parseFloat(res[0].lat), parseFloat(res[0].lon)], 14);
-      }
-    });
-}
+  document.addEventListener('DOMContentLoaded', plotMapPoints);
 </script>
+
 </body>
 </html>
