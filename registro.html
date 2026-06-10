@@ -78,11 +78,11 @@
 </main>
 
 <script>
-  // Cambiá esto por la URL que te dio Google Apps Script al actualizar la implementación
+  // Tu enlace de Google Apps Script unificado
   const URL_API = "https://script.google.com/macros/s/AKfycbxD8b7sU8kjYFAiAHX_PdjJ66SQtEI4It0-jT6cO71YoxAUvBx4hwSHQ29LHWLekNLvVg/exec";
 
-  // ACÁ ESTÁ TU CONTRASEÑA LOCAL ORIGINAL
-  const PASS_CORRECTA = "1234"; 
+  // Tu contraseña fijada para que no falle
+  const PASS_CORRECTA = "admin1234"; 
 
   function verificarPassword() {
     const input = document.getElementById('pass-input').value;
@@ -107,9 +107,9 @@
     };
 
     try {
-      const res = await fetch(URL_API, {
+      await fetch(URL_API, {
         method: 'POST',
-        mode: 'no-cors', // Evita problemas de políticas CORS con Google
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
       });
