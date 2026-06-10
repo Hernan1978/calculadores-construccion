@@ -10,17 +10,17 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; }
     
-    header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; height: 75px; }
     header h1 { font-size: 1.3rem; font-weight: 600; }
     header p { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
     .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; transition: all .15s; }
     .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
 
     /* Contenedor Principal Partido */
-    #main-container { flex: 1; display: flex; flex-direction: row; height: calc(100vh - 75px); overflow: hidden; position: relative; }
+    #main-container { flex: 1; display: flex; flex-direction: row; height: calc(100vh - 75px); min-height: calc(100vh - 75px); overflow: hidden; position: relative; }
 
     /* Barra Lateral Izquierda */
-    #sidebar { width: 320px; background: #fff; border-right: 1px solid #cbd5e1; display: flex; flex-direction: column; padding: 1.2rem; gap: 1rem; overflow-y: auto; z-index: 10; }
+    #sidebar { width: 320px; min-width: 320px; background: #fff; border-right: 1px solid #cbd5e1; display: flex; flex-direction: column; padding: 1.2rem; gap: 1rem; overflow-y: auto; z-index: 10; height: 100%; }
     #sidebar h2 { font-size: 15px; font-weight: 600; color: #1a2744; }
     
     /* Buscador */
@@ -36,16 +36,16 @@
     .list-item p { font-size: 11px; color: #666; }
     .badge { display: inline-block; margin-top: 5px; padding: 2px 5px; font-size: 9px; font-weight: 600; background: #e2e8f0; color: #4a5568; border-radius: 4px; text-transform: uppercase; }
 
-    /* Contenedor del Mapa Fijo */
-    #map-container { flex: 1; height: 100%; position: relative; background: #cbd5e1; }
-    #map { width: 100%; height: 100%; z-index: 1; }
+    /* Contenedor del Mapa Fijo Garantizado */
+    #map-container { flex: 1; height: 100%; position: relative; background: #eef2f7; display: block; }
+    #map { width: 100%; height: 100%; min-height: 100%; position: relative; z-index: 1; }
     
     /* Globitos internos del mapa */
     .popup-content h4 { font-size: 14px; font-weight: 600; color: #1a2744; margin-bottom: 4px; }
     .popup-content p { font-size: 12px; color: #555; margin-bottom: 6px; }
     .popup-content a { display: inline-block; font-size: 11px; color: #fff; background: #25d366; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-weight: 600; }
 
-    /* Globito Flotante WhatsApp */
+    /* 🟢 GLOBITO FLOTANTE DE WHATSAPP */
     .wsp-float {
       position: absolute;
       bottom: 25px;
@@ -67,10 +67,10 @@
     .wsp-float:hover { transform: scale(1.08); background: #20ba5a; }
 
     @media(max-width: 768px) {
-      #main-container { flex-direction: column; overflow: y-scroll; }
-      #sidebar { width: 100%; height: 250px; border-right: none; border-bottom: 1px solid #cbd5e1; order: 2; }
-      #map-container { height: calc(100vh - 325px); order: 1; }
-      .wsp-float { bottom: 270px; right: 15px; width: 50px; height: 50px; font-size: 26px; }
+      #main-container { flex-direction: column; overflow-y: auto; height: auto; }
+      #sidebar { width: 100%; height: 280px; min-height: 280px; border-right: none; border-bottom: 1px solid #cbd5e1; order: 2; }
+      #map-container { height: 400px; min-height: 400px; flex: none; order: 1; }
+      .wsp-float { bottom: 305px; right: 15px; width: 50px; height: 50px; font-size: 26px; }
     }
   </style>
 </head>
@@ -94,7 +94,7 @@
       <input type="text" id="search-input" placeholder="Buscar por localidad o nombre..." oninput="filtrarLista()">
     </div>
     <div id="corralones-list">
-      <p style="font-size:12px; color:#aaa; text-align:center;" id="loading-msg">Cargando red...</p>
+      <p style="font-size:12px; color:#aaa; text-align:center;">Cargando red...</p>
     </div>
   </div>
 
@@ -121,7 +121,6 @@
       const res = await fetch(`${URL_API}?t=${Date.now()}`);
       const data = await res.json();
       
-      // Auto-detección del formato: si viene empaquetado en .corralones lo extrae, sino lee la data directo
       if (data && data.corralones) {
         listaCorralonesCache = data.corralones;
       } else if (Array.isArray(data)) {
@@ -133,7 +132,6 @@
       renderizarComponentes();
     } catch (e) {
       console.error("Error cargando la API:", e);
-      document.getElementById('loading-msg').textContent = "Error al conectar con la base de datos.";
     }
   }
 
@@ -145,22 +143,20 @@
     marcadoresGuardados = [];
 
     if (!listaCorralonesCache || !listaCorralonesCache.length) {
-      listContainer.innerHTML = '<p style="font-size:12px;color:#888;text-align:center;">No hay corralones registrados en este momento.</p>';
+      listContainer.innerHTML = '<p style="font-size:12px;color:#888;text-align:center;">No hay corralones registrados.</p>';
       return;
     }
 
     listaCorralonesCache.forEach((c, index) => {
-      // TOLERANCIA DE SINTAXIS: Mapea cualquier variante que venga de tu Excel
-      const nombre = c.nombre || c.nombre_corralon || c.establecimiento || 'Corralón';
-      const direccion = c.direccion || c.dir || c.ubicacion || 'Sin dirección';
-      const zona = c.zona || c.barrio || c.localidad || 'General';
-      const telefono = c.telefono || c.tel || c.whatsapp || '';
+      const nombre = c.nombre || c.nombre_corralon || 'Corralón';
+      const direccion = c.direccion || c.dir || 'Sin dirección';
+      const zona = c.zona || 'General';
+      const telefono = c.telefono || c.tel || '';
       
-      const lat = parseFloat(c.latitud || c.lat || c.coordenada_x);
-      const lng = parseFloat(c.longitud || c.lng || c.coordenada_y);
+      const lat = parseFloat(c.latitud || c.lat);
+      const lng = parseFloat(c.longitud || c.lng);
 
       if (!isNaN(lat) && !isNaN(lng)) {
-        // 1. Añadir el marcador al mapa
         const htmlInfo = `
           <div class="popup-content">
             <h4>🏢 ${nombre}</h4>
@@ -173,7 +169,6 @@
         const marker = L.marker([lat, lng]).addTo(map).bindPopup(htmlInfo);
         marcadoresGuardados.push({ id: index, marker: marker, nombre: String(nombre).toLowerCase(), zona: String(zona).toLowerCase() });
 
-        // 2. Crear la tarjeta en la barra lateral
         const card = document.createElement('div');
         card.className = 'list-item';
         card.setAttribute('data-id', index);
@@ -191,11 +186,9 @@
         listContainer.appendChild(card);
       }
     });
-
-    // Si pasaron por el filtro de coordenadas válidas y no se renderizó nada
-    if (listContainer.innerHTML === '') {
-      listContainer.innerHTML = '<p style="font-size:12px;color:#888;text-align:center;">Hay comercios pero tienen coordenadas inválidas.</p>';
-    }
+    
+    // Forzar el redibujado correcto por si Leaflet se desorientó con el tamaño
+    setTimeout(() => { map.invalidateSize(); }, 200);
   }
 
   function filtrarLista() {
@@ -220,6 +213,5 @@
 
   document.addEventListener('DOMContentLoaded', plotMapPoints);
 </script>
-
 </body>
 </html>
