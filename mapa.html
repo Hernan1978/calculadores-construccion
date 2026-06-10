@@ -45,7 +45,7 @@
     .popup-content p { font-size: 12px; color: #555; margin-bottom: 6px; }
     .popup-content a { display: inline-block; font-size: 11px; color: #fff; background: #25d366; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-weight: 600; }
 
-    /* 🟢 GLOBITO FLOTANTE DE WHATSAPP GENERAL */
+    /* Globito Flotante WhatsApp */
     .wsp-float {
       position: absolute;
       bottom: 25px;
@@ -64,12 +64,8 @@
       z-index: 9999;
       transition: transform .2s, background-color .2s;
     }
-    .wsp-float:hover {
-      transform: scale(1.08);
-      background: #20ba5a;
-    }
+    .wsp-float:hover { transform: scale(1.08); background: #20ba5a; }
 
-    /* Adaptación para Celulares */
     @media(max-width: 768px) {
       #main-container { flex-direction: column; overflow: y-scroll; }
       #sidebar { width: 100%; height: 250px; border-right: none; border-bottom: 1px solid #cbd5e1; order: 2; }
@@ -98,24 +94,20 @@
       <input type="text" id="search-input" placeholder="Buscar por localidad o nombre..." oninput="filtrarLista()">
     </div>
     <div id="corralones-list">
-      <p style="font-size:12px; color:#aaa; text-align:center;">Cargando red...</p>
+      <p style="font-size:12px; color:#aaa; text-align:center;" id="loading-msg">Cargando red...</p>
     </div>
   </div>
 
   <div id="map-container">
     <div id="map"></div>
-    
-    <a href="https://wa.me/5491112345678?text=Hola!%20Tengo%20una%20consulta%20sobre%20la%20red%20de%20corralones" class="wsp-float" target="_blank" title="Soporte WhatsApp">
-      💬
-    </a>
+    <a href="https://wa.me/5491112345678?text=Hola!%20Tengo%20una%20consulta%20sobre%20la%20red%20de%20corralones" class="wsp-float" target="_blank" title="Soporte WhatsApp">💬</a>
   </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  const URL_API = "https://script.google.com/macros/s/AKfycbxD8b7sU8kjYFAiAHX_PdjJ66SQtEI4It0-jT6cO71YoxAUvBx4hwSHQ29LHWLekNLvVg/exec";
+  const URL_API = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec";
   
-  // Inicializamos el mapa en el contenedor correcto
   const map = L.map('map').setView([-34.6037, -58.3816], 11);
   let marcadoresGuardados = [];
   let listaCorralonesCache = [];
@@ -129,10 +121,19 @@
       const res = await fetch(`${URL_API}?t=${Date.now()}`);
       const data = await res.json();
       
-      listaCorralonesCache = Array.isArray(data.corralones) ? data.corralones : [];
+      // Auto-detección del formato: si viene empaquetado en .corralones lo extrae, sino lee la data directo
+      if (data && data.corralones) {
+        listaCorralonesCache = data.corralones;
+      } else if (Array.isArray(data)) {
+        listaCorralonesCache = data;
+      } else {
+        listaCorralonesCache = [];
+      }
+      
       renderizarComponentes();
     } catch (e) {
-      console.error("Error ploteando componentes:", e);
+      console.error("Error cargando la API:", e);
+      document.getElementById('loading-msg').textContent = "Error al conectar con la base de datos.";
     }
   }
 
@@ -143,36 +144,43 @@
     marcadoresGuardados.forEach(m => map.removeLayer(m));
     marcadoresGuardados = [];
 
-    if (!listaCorralonesCache.length) {
-      listContainer.innerHTML = '<p style="font-size:12px;color:#888;text-align:center;">No hay corralones registrados.</p>';
+    if (!listaCorralonesCache || !listaCorralonesCache.length) {
+      listContainer.innerHTML = '<p style="font-size:12px;color:#888;text-align:center;">No hay corralones registrados en este momento.</p>';
       return;
     }
 
     listaCorralonesCache.forEach((c, index) => {
-      const lat = parseFloat(c.latitud || c.lat);
-      const lng = parseFloat(c.longitud || c.lng);
+      // TOLERANCIA DE SINTAXIS: Mapea cualquier variante que venga de tu Excel
+      const nombre = c.nombre || c.nombre_corralon || c.establecimiento || 'Corralón';
+      const direccion = c.direccion || c.dir || c.ubicacion || 'Sin dirección';
+      const zona = c.zona || c.barrio || c.localidad || 'General';
+      const telefono = c.telefono || c.tel || c.whatsapp || '';
+      
+      const lat = parseFloat(c.latitud || c.lat || c.coordenada_x);
+      const lng = parseFloat(c.longitud || c.lng || c.coordenada_y);
 
       if (!isNaN(lat) && !isNaN(lng)) {
+        // 1. Añadir el marcador al mapa
         const htmlInfo = `
           <div class="popup-content">
-            <h4>🏢 ${c.nombre || 'Corralón'}</h4>
-            <p>📍 ${c.direccion || 'Sin dirección'}</p>
-            <p>🏙️ Zona: <strong>${c.zona || 'No definida'}</strong></p>
-            ${c.telefono ? `<a href="https://wa.me/${String(c.telefono).replace(/[^0-9]/g, '')}" target="_blank">📲 Consultar directo</a>` : ''}
+            <h4>🏢 ${nombre}</h4>
+            <p>📍 ${direccion}</p>
+            <p>🏙️ Zona: <strong>${zona}</strong></p>
+            ${telefono ? `<a href="https://wa.me/${String(telefono).replace(/[^0-9]/g, '')}" target="_blank">📲 Consultar directo</a>` : ''}
           </div>
         `;
         
         const marker = L.marker([lat, lng]).addTo(map).bindPopup(htmlInfo);
-        
-        marcadoresGuardados.push({ id: index, marker: marker, nombre: String(c.nombre).toLowerCase(), zona: String(c.zona).toLowerCase() });
+        marcadoresGuardados.push({ id: index, marker: marker, nombre: String(nombre).toLowerCase(), zona: String(zona).toLowerCase() });
 
+        // 2. Crear la tarjeta en la barra lateral
         const card = document.createElement('div');
         card.className = 'list-item';
         card.setAttribute('data-id', index);
         card.innerHTML = `
-          <h4>${c.nombre || 'Corralón'}</h4>
-          <p>📍 ${c.direccion || 'Sin dirección'}</p>
-          <span class="badge">${c.zona || 'General'}</span>
+          <h4>${nombre}</h4>
+          <p>📍 ${direccion}</p>
+          <span class="badge">${zona}</span>
         `;
         
         card.onclick = () => {
@@ -183,8 +191,35 @@
         listContainer.appendChild(card);
       }
     });
+
+    // Si pasaron por el filtro de coordenadas válidas y no se renderizó nada
+    if (listContainer.innerHTML === '') {
+      listContainer.innerHTML = '<p style="font-size:12px;color:#888;text-align:center;">Hay comercios pero tienen coordenadas inválidas.</p>';
+    }
   }
 
   function filtrarLista() {
     const texto = document.getElementById('search-input').value.toLowerCase();
-    const items =
+    const items = document.querySelectorAll('.list-item');
+
+    items.forEach(item => {
+      const id = item.getAttribute('data-id');
+      const marcadorObj = marcadoresGuardados.find(m => m.id == id);
+      
+      if (marcadorObj) {
+        if (marcadorObj.nombre.includes(texto) || marcadorObj.zona.includes(texto)) {
+          item.style.display = 'block';
+          marcadorObj.marker.addTo(map);
+        } else {
+          item.style.display = 'none';
+          map.removeLayer(marcadorObj.marker);
+        }
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', plotMapPoints);
+</script>
+
+</body>
+</html>
