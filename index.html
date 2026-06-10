@@ -1,283 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Materiales Ya — Todo para tu obra</title>
- <link rel="icon" type="image/gif" href="favicon.gif">
-<meta name="description" content="Calculá materiales, pedí cotización a corralones de tu zona y leé guías de construcción. Todo en un solo lugar.">
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materiales Ya — Todo para tu obra</title>
+  <link rel="icon" type="image/gif" href="favicon.gif">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* FONDO GENERAL EN AZUL OSCURO CORPORATIVO */
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+      background: #141d33; 
+      color: #ffffff; 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    
+    /* ENCABEZADO LIMPIO */
+    header { 
+      background: #1a2744; 
+      padding: 1.2rem 2rem; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 1rem; 
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    header .logo-area h1 { font-size: 1.4rem; font-weight: 700; display: inline-block; color: #ffffff; }
+    header .logo-area span { font-size: 0.85rem; color: #90afd4; margin-left: 10px; }
+    
+    .btn-interno { padding: 8px 16px; border-radius: 8px; background: #2e4a7a; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .15s; }
+    .btn-interno:hover { background: #3b5d9c; }
 
-  /* NAV */
-  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
-  nav .logo span { color: #90afd4; font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
-  .nav-links { display: flex; gap: 8px; }
-  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
-  .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
+    /* CONTENEDOR CENTRAL DE LA PÁGINA */
+    main { max-width: 1000px; margin: 0 auto 4rem; padding: 0 1.5rem; width: 100%; }
 
-  /* HERO */
-  .hero { background: linear-gradient(135deg, #1a2744 0%, #1e3a6e 60%, #1a4a8a 100%); color: #fff; padding: 5rem 2rem 4rem; text-align: center; }
-  .hero-content { max-width: 620px; margin: 0 auto; }
-  .hero-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; border: 1px solid #2e5a9a; color: #90afd4; font-size: 12px; margin-bottom: 1.5rem; }
-  .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem; }
-  .hero h1 span { color: #90afd4; }
-  .hero p { font-size: 1.05rem; color: #b0c8e8; margin-bottom: 2rem; line-height: 1.6; }
-  .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .btn-hero-primary { padding: 13px 28px; border-radius: 8px; background: #fff; color: #1a2744; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity .15s; }
-  .btn-hero-primary:hover { opacity: .9; }
-  .btn-hero-secondary { padding: 13px 28px; border-radius: 8px; border: 1px solid #2e5a9a; color: #b0c8e8; font-size: 14px; text-decoration: none; transition: all .15s; }
-  .btn-hero-secondary:hover { border-color: #fff; color: #fff; }
+    /* TÍTULOS DE SECCIONES */
+    .section-title { text-align: center; font-size: 1.7rem; font-weight: 700; color: #ffffff; margin: 3rem 0 1.5rem; letter-spacing: -0.5px; }
+    
+    /* 1. SECCIÓN ACCESOS RÁPIDOS */
+    .grid-accesos-bloque { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 1.2rem; 
+      background: #1a2744; 
+      padding: 1.5rem; 
+      border-radius: 14px; 
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2); 
+    }
+    .card-directa { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      text-align: center; 
+      padding: 1.8rem 1rem; 
+      border-radius: 10px; 
+      text-decoration: none; 
+      color: #ffffff; 
+      background: #1f2e52; 
+      border: 1px solid rgba(255, 255, 255, 0.05); 
+      transition: all .2s; 
+    }
+    .card-directa:hover { 
+      background: #253763; 
+      border-color: #90afd4; 
+      transform: translateY(-4px); 
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3); 
+    }
+    .card-directa .icon { font-size: 2.4rem; margin-bottom: 12px; }
+    .card-directa h3 { font-size: 16px; font-weight: 700; letter-spacing: 0.3px; }
 
-  /* STATS */
-  .stats { background: #fff; border-bottom: 1px solid #d0dcea; padding: 1.5rem 2rem; }
-  .stats-inner { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; text-align: center; }
-  .stat-value { font-size: 1.8rem; font-weight: 700; color: #1a2744; }
-  .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+    /* 2. SECCIÓN PASOS RÁPIDOS EXPLICATIVOS */
+    .steps-box { 
+      background: #1a2744; 
+      border-radius: 16px; 
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      padding: 3rem 2rem; 
+      margin-top: 3rem; 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2); 
+    }
+    .steps-box h2 { font-size: 1.7rem; font-weight: 700; color: #ffffff; text-align: center; margin-bottom: 0.5rem; }
+    .steps-subtitle { text-align: center; margin-bottom: 3rem; color: #90afd4; font-size: 14px; }
+    
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+    .step-card { text-align: center; }
+    .step-icon-wrap { font-size: 2.8rem; margin-bottom: 15px; display: block; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+    .step-num-badge { display: inline-block; background: #25d366; color: #1a2744; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .step-card h4 { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
+    .step-card p { font-size: 13px; color: #cbd5e1; line-height: 1.6; }
 
-  /* MAIN */
-  main { max-width: 960px; margin: 3rem auto; padding: 0 1rem; }
-  .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; color: #1a2744; }
-  .section-sub { font-size: 14px; color: #666; margin-bottom: 2rem; }
+    /* 3. CONTADORES ABAJO DE TODO */
+    .stats-bar { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      margin-top: 3.5rem; 
+      padding-top: 2rem; 
+      border-top: 1px solid rgba(255, 255, 255, 0.1); 
+      text-align: center; 
+    }
+    .stat-item h4 { font-size: 1.8rem; font-weight: 800; color: #ffffff; }
+    .stat-item p { font-size: 11px; color: #90afd4; text-transform: uppercase; margin-top: 4px; font-weight: 600; letter-spacing: 0.5px; }
 
-  /* CARDS PRINCIPALES */
-  .cards-main { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
-  .card-main { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; overflow: hidden; transition: box-shadow .2s, transform .2s; text-decoration: none; color: inherit; display: block; }
-  .card-main:hover { box-shadow: 0 8px 30px rgba(26,39,68,.12); transform: translateY(-3px); }
-  .card-main-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
-  .card-main-img.bg1 { background: linear-gradient(135deg, #1a2744, #1e3a6e); }
-  .card-main-img.bg2 { background: linear-gradient(135deg, #1a3a5c, #1e5a8e); }
-  .card-main-img.bg3 { background: linear-gradient(135deg, #1a4060, #1e6090); }
-  .card-main-body { padding: 1.5rem; }
-  .card-main-tag { font-size: 11px; font-weight: 600; color: #5a8abf; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
-  .card-main-titulo { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #1a2744; }
-  .card-main-desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 1rem; }
-  .card-main-link { font-size: 13px; font-weight: 600; color: #1a4a8a; }
+    /* 🟢 GLOBITO FLOTANTE WHATSAPP INDEPENDIENTE */
+    .wsp-home {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      text-decoration: none;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      z-index: 99999;
+      transition: transform .2s, background-color .2s;
+    }
+    .wsp-home:hover { transform: scale(1.1); background: #20ba5a; }
 
-  /* SEARCH BAR ABOVE MAP */
-  .search-container { display: flex; gap: 8px; padding: 10px 1.25rem; background: #f8fafc; border-bottom: 1px solid #d0dcea; }
-  .search-input { flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px; }
-  .search-btn { padding: 8px 16px; background: #1a2744; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .search-btn:hover { background: #141f36; }
-
-  /* MAP CONTAINER */
-  #home-map { height: 380px; background: #cbd5e1; width: 100%; position: relative; }
-  .popup-wa-btn { display: inline-block; background: #25d366; color: white; text-decoration: none; padding: 6px 12px; font-size: 11px; font-weight: bold; border-radius: 4px; margin-top: 6px; }
-
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: #888; }
-  .menu-toggle { display: none; background: none; border: 1px solid #2e4a7a; border-radius: 7px; color: #90afd4; font-size: 18px; padding: 5px 10px; cursor: pointer; }
-  .nav-links.open { display: flex !important; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: #1a2744; padding: 1rem; gap: 8px; z-index: 100; border-top: 1px solid #2e4a7a; }
-
-  @media(max-width:600px) {
-    nav { padding: .875rem 1rem; position: relative; }
-    .nav-links { display: none !important; }
-    .menu-toggle { display: flex !important; }
-    .hero { padding: 2.5rem 1.25rem 2rem; }
-    .hero h1 { font-size: 1.8rem; }
-    .stats-inner { grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .cards-main { grid-template-columns: 1fr; }
-  }
-</style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    /* ADAPTACIÓN PARA CELULARES */
+    @media(max-width: 768px) {
+      .grid-accesos-bloque, .steps-grid { grid-template-columns: 1fr; gap: 2rem; padding: 1.2rem; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+      .wsp-home { bottom: 15px; right: 15px; width: 52px; height: 52px; font-size: 26px; }
+      .section-title { font-size: 1.4rem; margin: 2rem 0 1rem; }
+    }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="logo">🏗 Materiales Ya <span>Todo para tu obra</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="calculadores.html" class="nav-link">Calculadores</a>
-    <a href="marketplace.html" class="nav-link">Pedir materiales</a>
-    <a href="mapa.html" class="nav-link">Mapa</a>
-    <a href="registro.html" class="nav-link" style="background:#1a4a8a;border-color:#1a4a8a;">Control Interno</a>
+<header>
+  <div class="logo-area">
+    <h1>📦 Materiales Ya</h1>
+    <span>Todo para tu obra</span>
   </div>
-  <button class="menu-toggle" id="menuToggle">&#9776;</button>
-</nav>
-
-<div class="hero">
-  <div class="hero-content">
-    <div class="hero-badge">🏗 Plataforma de materiales de construcción</div>
-    <h1>Todo para tu obra<br><span>en un solo lugar</span></h1>
-    <p>Calculá los materiales que necesitás, pedí cotización a corralones de tu zona.</p>
-    <div class="hero-btns">
-      <a href="marketplace.html" class="btn-hero-primary">Pedir materiales →</a>
-      <a href="calculadores.html" class="btn-hero-secondary">Ver calculadores</a>
-    </div>
+  <div>
+    <a href="registro.html" class="btn-interno">Control Interno</a>
   </div>
-</div>
-
-<div class="stats">
-  <div class="stats-inner">
-    <div><div class="stat-value">24</div><div class="stat-label">Calculadores</div></div>
-    <div><div class="stat-value">120+</div><div class="stat-label">Materiales en catálogo</div></div>
-    <div><div class="stat-value">6</div><div class="stat-label">Artículos publicados</div></div>
-    <div><div class="stat-value">100%</div><div class="stat-label">Gratis para clientes</div></div>
-  </div>
-</div>
+</header>
 
 <main>
-  <div class="cards-main">
-    <a href="calculadores.html" class="card-main">
-      <div class="card-main-img bg1">🧮</div>
-      <div class="card-main-body">
-        <div class="card-main-tag">Herramienta</div>
-        <div class="card-main-titulo">Calculadores de materiales</div>
-        <div class="card-main-desc">24 calculadores para saber cuánto material necesitás.</div>
-        <div class="card-main-link">Abrir calculadores →</div>
-      </div>
+  <h2 class="section-title">Accesos Rápidos</h2>
+  <section class="grid-accesos-bloque">
+    <a href="calculadores.html" class="card-directa">
+      <span class="icon">🛠️</span>
+      <h3>Calculadores</h3>
     </a>
-    <a href="marketplace.html" class="card-main">
-      <div class="card-main-img bg2">🏗</div>
-      <div class="card-main-body">
-        <div class="card-main-tag">Marketplace</div>
-        <div class="card-main-titulo">Pedí cotización a corralones</div>
-        <div class="card-main-desc">Cargá tu lista de materiales y recibí cotizaciones.</div>
-        <div class="card-main-link">Pedir materiales →</div>
-      </div>
+    <a href="marketplace.html" class="card-directa">
+      <span class="icon">🚚</span>
+      <h3>Pedir Materiales</h3>
     </a>
-    <a href="mapa.html" class="card-main">
-      <div class="card-main-img bg3">📍</div>
-      <div class="card-main-body">
-        <div class="card-main-tag">Mapa</div>
-        <div class="card-main-titulo">Corralones y ferreterías</div>
-        <div class="card-main-desc">Encontrá negocios cerca tuyo con contacto de WhatsApp.</div>
-        <div class="card-main-link">Ver mapa →</div>
-      </div>
+    <a href="mapa.html" class="card-directa">
+      <span class="icon">📍</span>
+      <h3>Mapa</h3>
     </a>
-  </div>
+  </section>
 
-  <div style="margin-bottom:1rem">
-    <div class="section-title">📍 Corralones y ferreterías cerca tuyo</div>
-    <div class="section-sub">Encontrá negocios de materiales en tu zona desde nuestra base centralizada</div>
-  </div>
-  
-  <div style="background:#fff;border-radius:16px;border:1px solid #d0dcea;overflow:hidden;margin-bottom:4rem;">
-    <div style="padding:.75rem 1.25rem;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-bottom:1px solid #d0dcea;background:#fff;">
-      <span style="font-size:12px;color:#888;">Filtrar por rubro:</span>
-      <button onclick="filtrarHome('todos',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #1a2744;background:#1a2744;color:#fff;font-size:12px;cursor:pointer;" id="hf-todos">Todos</button>
-      <button onclick="filtrarHome('corralon',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-corralon">🏗 Corralones</button>
-      <button onclick="filtrarHome('ferreteria',this)" style="padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;background:#fff;color:#555;font-size:12px;cursor:pointer;" id="hf-ferreteria">🔩 Ferreterías</button>
-    </div>
-
-    <div class="search-container">
-      <input type="text" id="geo-search-input" class="search-input" placeholder="Ingresá una dirección, barrio o localidad (Ej: Wilde, Avellaneda...)">
-      <button onclick="buscarZonaGeografica()" class="search-btn">Buscar zona</button>
-    </div>
-
-    <div id="home-map"></div>
-
-    <div style="padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #d0dcea;flex-wrap:wrap;gap:10px;">
-      <div>
-        <div style="font-size:14px;font-weight:600;color:#1a2744;">Sincronización Automática Activa</div>
+  <section class="steps-box">
+    <h2>Pasos Rápidos</h2>
+    <p class="steps-subtitle">Conéctate con el comercio que necesitas en 3 pasos simples</p>
+    
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-icon-wrap">📖</span>
+        <div class="step-num-badge">1. Busca</div>
+        <h4>En la Guía de Rubros</h4>
+        <p>Encuentra especialistas en Corralones, Ferreterías, Materiales Secos, Cañerías o Electricidad.</p>
       </div>
-      <a href="mapa.html" style="padding:10px 20px;border-radius:8px;background:#1a2744;color:#fff;font-size:13px;font-weight:500;text-decoration:none;">Ver mapa completo →</a>
+      <div class="step-card">
+        <span class="step-icon-wrap">🗺️</span>
+        <div class="step-num-badge">2. Ubica</div>
+        <h4>En el Mapa</h4>
+        <p>Visualiza geográficamente qué comercios activos cubren la zona donde se encuentra tu obra.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-icon-wrap">💬</span>
+        <div class="step-num-badge">3. Contacta</div>
+        <h4>Directo por WhatsApp</h4>
+        <p>Escribiles con un solo clic directamente a su chat comercial para coordinar sin intermediarios.</p>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <section class="stats-bar">
+    <div class="stat-item"><h4>24</h4><p>Calculadores</p></div>
+    <div class="stat-item"><h4>120+</h4><p>Materiales en catálogo</p></div>
+    <div class="stat-item"><h4>6</h4><p>Artículos publicados</p></div>
+    <div class="stat-item"><h4>100%</h4><p>Gratis para clientes</p></div>
+  </section>
 </main>
 
-<footer>
-  <p>© 2026 Materiales Ya</p>
-</footer>
+<a href="https://wa.me/5491112345678?text=Hola!%20Entré%20a%20la%20página%20de%20Materiales%20Ya%20y%20tengo%20una%20consulta." class="wsp-home" target="_blank" title="Soporte WhatsApp">💬</a>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-document.getElementById('menuToggle').addEventListener('click', function() {
-  document.getElementById('navLinks').classList.toggle('open');
-});
-
-// ⚠️ REEMPLAZÁ CON TU URL REAL DE GOOGLE APPS SCRIPT GENERADA EN TU ÚLTIMO DESPLIEGUE ⚠️
-const URL_API = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec";
-
-let homeMap;
-let homeMarkers = [];
-let homeNegocios = [];
-
-document.addEventListener('DOMContentLoaded', function() {
-  homeMap = L.map('home-map').setView([-34.62, -58.44], 11);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-    attribution: '© OpenStreetMap' 
-  }).addTo(homeMap);
-
-  fetch(URL_API)
-    .then(r => r.json())
-    .then(data => {
-      if (data && data.status === "success" && Array.isArray(data.corralones)) {
-        homeNegocios = data.corralones.filter(n => {
-          let lat = parseFloat(n.lat);
-          let lng = parseFloat(n.lng);
-          return !isNaN(lat) && !isNaN(lng);
-        });
-        renderMarkers(homeNegocios);
-      }
-    }).catch(err => {
-      console.error(err);
-    });
-});
-
-function renderMarkers(lista) {
-  // Limpiamos los marcadores viejos
-  homeMarkers.forEach(m => homeMap.removeLayer(m));
-  homeMarkers = [];
-  
-  lista.forEach(n => {
-    let lat = parseFloat(n.lat);
-    let lng = parseFloat(n.lng);
-    
-    // Solo mostramos comercios con coordenadas válidas y que estén en estado ACTIVO
-    if (!isNaN(lat) && !isNaN(lng) && n.estado && n.estado.toString().toUpperCase() === "ACTIVO") {
-      
-      // Armamos la estructura del globo (Popup) 100% limpia para el público
-      let textoPopup = `
-        <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; width:200px; padding:2px;">
-          <strong style="color:#1a2744; font-size:14px; line-height:1.2; display:block; margin-bottom:4px;">
-            ${n.nombre}
-          </strong>
-          
-          <div style="font-size:12px; color:#555; margin-top:6px; line-height:1.4;">
-            <p style="margin-bottom:2px;">🏷️ <strong>Rubro:</strong> ${n.tipo || 'General'}</p>
-            <p>📍 <strong>Zona:</strong> ${n.zona || 'No especificada'}</p>
-          </div>
-          
-          <hr style="border:0; border-top:1px solid #e2e8f0; margin:8px 0;">
-          
-          ${n.whatsapp ? `
-            <a href="https://wa.me/${n.whatsapp}" target="_blank" style="display:block; text-align:center; background:#25d366; color:#fff !important; text-decoration:none; padding:8px; border-radius:6px; font-size:12px; font-weight:700; transition:background .15s;">
-              💬 Contactar por WhatsApp
-            </a>
-          ` : '<p style="font-size:11px; color:#999; text-align:center;">Sin WhatsApp disponible</p>'}
-        </div>
-      `;
-
-      // Dibujamos el marcador estándar en el mapa con su información pública
-      let m = L.marker([lat, lng]).addTo(homeMap).bindPopup(textoPopup);
-      homeMarkers.push(m);
-    }
-  });
-
-  // Ajuste automático del zoom del mapa para encuadrar los negocios cargados
-  if (homeMarkers.length > 0) {
-    let group = L.featureGroup(homeMarkers);
-    homeMap.fitBounds(group.getBounds().pad(0.2));
-  }
-}
-
-function filtrarHome(tipo, btn) {
-  let lista = (tipo === 'todos') ? homeNegocios : homeNegocios.filter(n => (n.tipo || '').toLowerCase().includes(tipo));
-  renderMarkers(lista);
-}
-
-function buscarZonaGeografica() {
-  const query = document.getElementById('geo-search-input').value;
-  if (!query) return;
-  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ", Argentina")}&limit=1`)
-    .then(r => r.json())
-    .then(res => {
-      if (res && res.length > 0) {
-        homeMap.flyTo([parseFloat(res[0].lat), parseFloat(res[0].lon)], 13);
-      }
-    });
-}
-</script>
 </body>
 </html>
