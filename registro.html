@@ -3,36 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Materiales Ya — Panel de Control</title>
+  <title>Materiales Ya — Panel Administrativo</title>
   <link rel="icon" type="image/gif" href="favicon.gif">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
+    
     header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
     header h1 { font-size: 1.3rem; font-weight: 600; }
-    .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; }
+    .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; transition: all .15s; }
+    .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
+
+    main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); margin-bottom: 1.5rem; }
     
-    main { max-width: 500px; margin: 3rem auto; padding: 0 1rem; }
-    .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-    .card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.25rem; color: #1a2744; text-align: center; }
+    /* Login */
+    #login-screen { max-width: 450px; margin: 4rem auto; text-align: center; }
+    #login-screen h2 { font-size: 1.2rem; margin-bottom: 1.25rem; color: #1a2744; }
     
+    /* Dashboard Grid y Contadores */
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: #fff; border: 1px solid #d0dcea; border-radius: 10px; padding: 1.2rem; display: flex; flex-direction: column; }
+    .stat-card .label { font-size: 12px; color: #666; font-weight: 500; text-transform: uppercase; }
+    .stat-card .number { font-size: 1.8rem; font-weight: 700; color: #1a2744; margin-top: 5px; }
+
+    /* Layout del Panel */
+    .admin-layout { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media (min-width: 768px) {
+      .admin-layout { grid-template-columns: 1.2fr 1.8fr; }
+    }
+
+    .panel-title { font-size: 1.1rem; font-weight: 600; color: #1a2744; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
+
+    /* Formulario */
     .field { margin-bottom: 1rem; }
     .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
-    .field input, .field select { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; outline: none; background: #fafbfd; }
+    .field input, .field select { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; outline: none; background: #fafbfd; transition: all .15s; }
     .field input:focus, .field select:focus { border-color: #1a2744; background: #fff; }
     
-    .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 1rem; }
+    .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
     .btn-primary:hover { opacity: .85; }
-    
-    #login-screen { display: block; }
-    #admin-panel { display: none; }
+
+    /* Tabla de registros */
+    .table-container { width: 100%; overflow-x: auto; margin-top: 0.5rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th { background: #f5f8fc; color: #4a5568; font-weight: 600; padding: 10px; border-bottom: 1px solid #cbd5e1; text-transform: uppercase; font-size: 11px; }
+    td { padding: 10px; border-bottom: 1px solid #e2e8f0; color: #1a1a2e; }
+    tr:hover { background: #f8fafc; }
+    .badge { display: inline-block; padding: 2px 6px; font-size: 10px; font-weight: 600; background: #e2e8f0; color: #4a5568; border-radius: 4px; }
+
+    #admin-interface { display: none; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🏗 Panel Interno Administrativo</h1>
-  <a href="index.html" class="hbtn">Ir a la Web →</a>
+  <h1>🏗 Materiales Ya — Gestión Interna</h1>
+  <a href="index.html" class="hbtn">Ir a la Web Pública →</a>
 </header>
 
 <main>
@@ -40,57 +67,139 @@
     <h2>Ingreso Autorizado</h2>
     <div class="field">
       <label>Contraseña del Sistema</label>
-      <input type="password" id="pass-input" placeholder="••••••••">
+      <input type="password" id="pass-input" placeholder="••••••••" onkeypress="if(event.key==='Enter') verificarPassword()">
     </div>
-    <button class="btn-primary" onclick="verificarPassword()">Entrar al Panel</button>
+    <button class="btn-primary" onclick="verificarPassword()">Entrar al Dashboard</button>
   </div>
 
-  <div id="admin-panel" class="card">
-    <h2>Alta de Nuevo Corralón</h2>
-    <form id="form-corralon" onsubmit="guardarCorralon(event)">
-      <div class="field">
-        <label>Nombre del Corralón</label>
-        <input type="text" id="c-nombre" required placeholder="Ej: Corralón San Martín">
+  <div id="admin-interface">
+    
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <span class="label">Total Corralones</span>
+        <span class="number" id="count-corralones">0</span>
       </div>
-      <div class="field">
-        <label>Dirección</label>
-        <input type="text" id="c-dir" required placeholder="Ej: Av. Mitre 2341">
+      <div class="stat-card">
+        <span class="label">Materiales en Lista</span>
+        <span class="number" id="count-materiales">0</span>
       </div>
-      <div class="field">
-        <label>Barrio / Zona</label>
-        <input type="text" id="c-zona" required placeholder="Ej: Avellaneda">
+      <div class="stat-card">
+        <span class="label">Zonas Activas</span>
+        <span class="number" id="count-zonas">0</span>
       </div>
-      <div class="field">
-        <label>Teléfono (WhatsApp)</label>
-        <input type="text" id="c-tel" placeholder="Ej: 5491112345678">
+    </div>
+
+    <div class="admin-layout">
+      
+      <div class="card">
+        <h3 class="panel-title">➕ Alta de Corralón</h3>
+        <form id="form-corralon" onsubmit="guardarCorralon(event)">
+          <div class="field">
+            <label>Nombre del Corralón</label>
+            <input type="text" id="c-nombre" required placeholder="Ej: Corralón San Martín">
+          </div>
+          <div class="field">
+            <label>Dirección</label>
+            <input type="text" id="c-dir" required placeholder="Ej: Av. Mitre 2341">
+          </div>
+          <div class="field">
+            <label>Barrio / Zona</label>
+            <input type="text" id="c-zona" required placeholder="Ej: Avellaneda">
+          </div>
+          <div class="field">
+            <label>Teléfono (WhatsApp)</label>
+            <input type="text" id="c-tel" placeholder="Ej: 5491112345678">
+          </div>
+          <div class="field">
+            <label>Latitud</label>
+            <input type="text" id="c-lat" placeholder="Ej: -34.6621">
+          </div>
+          <div class="field">
+            <label>Longitud</label>
+            <input type="text" id="c-lng" placeholder="Ej: -58.3645">
+          </div>
+          <button type="submit" class="btn-primary">Guardar en Google Sheets</button>
+        </form>
       </div>
-      <div class="field">
-        <label>Latitud</label>
-        <input type="text" id="c-lat" placeholder="Ej: -34.6621">
+
+      <div class="card">
+        <h3 class="panel-title">📋 Corralones Registrados</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Zona</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-corralones-body">
+              <tr>
+                <td colspan="3" style="text-align:center;color:#888;">Cargando registros...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="field">
-        <label>Longitud</label>
-        <input type="text" id="c-lng" placeholder="Ej: -58.3645">
-      </div>
-      <button type="submit" class="btn-primary">Guardar en Google Sheets</button>
-    </form>
+
+    </div>
   </div>
 </main>
 
 <script>
-  // Tu enlace de Google Apps Script unificado
+  // Tu conexión con Google Apps Script
   const URL_API = "https://script.google.com/macros/s/AKfycbxD8b7sU8kjYFAiAHX_PdjJ66SQtEI4It0-jT6cO71YoxAUvBx4hwSHQ29LHWLekNLvVg/exec";
 
-  // Tu contraseña fijada para que no falle
+  // Contraseña de acceso fijada
   const PASS_CORRECTA = "admin1234"; 
 
   function verificarPassword() {
     const input = document.getElementById('pass-input').value;
     if (input === PASS_CORRECTA) {
       document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('admin-panel').style.display = 'block';
+      document.getElementById('admin-interface').style.display = 'block';
+      cargarDatosDashboard();
     } else {
       alert('Contraseña incorrecta. Intente nuevamente.');
+    }
+  }
+
+  async function cargarDatosDashboard() {
+    try {
+      const res = await fetch(`${URL_API}?t=${Date.now()}`);
+      const data = await res.json();
+      
+      const listaCorralones = Array.isArray(data.corralones) ? data.corralones : [];
+      const listaMateriales = Array.isArray(data.materiales) ? data.materiales : [];
+
+      // Actualizar contadores del Dashboard
+      document.getElementById('count-corralones').textContent = listaCorralones.length;
+      document.getElementById('count-materiales').textContent = listaMateriales.length;
+      
+      const zonasUnicas = [...new Set(listaCorralones.map(c => String(c.zona || '').trim()).filter(Boolean))];
+      document.getElementById('count-zonas').textContent = zonasUnicas.length;
+
+      // Renderizar tabla de corralones
+      const tbody = document.getElementById('tabla-corralones-body');
+      tbody.innerHTML = '';
+
+      if (!listaCorralones.length) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#888;">No hay registros en la planilla.</td></tr>';
+        return;
+      }
+
+      listaCorralones.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${c.nombre || '—'}</strong></td>
+          <td>${c.direccion || '—'}</td>
+          <td><span class="badge">${c.zona || 'General'}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+    } catch (e) {
+      console.error("Error cargando el Dashboard:", e);
     }
   }
 
@@ -114,11 +223,14 @@
         body: JSON.stringify(datos)
       });
       
-      alert('¡Corralón enviado! Revisá tu Google Sheets en unos segundos.');
+      alert('¡Corralón enviado con éxito! Se actualizará la lista en unos segundos.');
       document.getElementById('form-corralon').reset();
+      
+      // Esperamos un momento y recargamos el dashboard para ver el nuevo reflejado
+      setTimeout(cargarDatosDashboard, 2000);
     } catch (e) {
       console.error(e);
-      alert('Error al conectar con la base de datos.');
+      alert('Error al conectar y guardar en la base de datos.');
     }
   }
 </script>
