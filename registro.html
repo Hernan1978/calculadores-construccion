@@ -1,331 +1,126 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Materiales Ya Admin — Panel de Control</title>
- <link rel="icon" type="image/gif" href="favicon.gif">
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; }
-
-  /* NAVIGATION */
-  nav { background: #1a2744; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-  nav .logo { color: #fff; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
-  .nav-links { display: flex; gap: 8px; }
-  .nav-link { padding: 6px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; text-decoration: none; transition: all .15s; }
-  .nav-link:hover { background: #fff; color: #1a2744; border-color: #fff; }
-
-  /* LOGIN BOX */
-  .login-container { max-width: 450px; margin: 5rem auto; padding: 0 1rem; width: 100%; }
-  .login-box { background: #fff; border-radius: 16px; border: 1px solid #d0dcea; padding: 2.5rem; box-shadow: 0 10px 25px rgba(26,39,68,0.05); text-align: center; }
-  .login-box h1 { font-size: 1.4rem; color: #1a2744; margin-bottom: .75rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .login-box p { font-size: 13px; color: #666; margin-bottom: 1.5rem; line-height: 1.5; }
-
-  /* DASHBOARD STRUCTURE */
-  .admin-wrapper { display: flex; flex: 1; min-height: calc(100vh - 56px); }
-  .sidebar { width: 240px; background: #1a2744; color: #fff; padding: 1.5rem 0; display: flex; flex-direction: column; justify-content: space-between; }
-  .sidebar-menu { display: flex; flex-direction: column; gap: 4px; }
-  .menu-item { padding: 12px 24px; color: #90afd4; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 10px; border-left: 4px solid transparent; cursor: pointer; }
-  .menu-item:hover, .menu-item.active { background: #141f36; color: #fff; border-left-color: #5a8abf; }
-  .sidebar-footer { padding: 1rem 24px; border-top: 1px solid #2e4a7a; }
-  .btn-logout { color: #f87171; text-decoration: none; font-size: 13px; cursor: pointer; background: none; border: none; display: flex; align-items: center; gap: 6px; }
-
-  /* MAIN CONTENT */
-  .content-panel { flex: 1; padding: 2rem; overflow-y: auto; }
-  .panel-section { display: none; }
-  .panel-section.active { display: block; }
-  .panel-title { font-size: 1.6rem; font-weight: 700; color: #1a2744; margin-bottom: 1.5rem; }
-
-  /* METRICS CARDS */
-  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
-  .metric-card { background: #fff; padding: 1.5rem; border-radius: 12px; border: 1px solid #d0dcea; border-top: 4px solid #cbd5e1; }
-  .metric-card.primary { border-top-color: #3b82f6; }
-  .metric-card.success { border-top-color: #10b981; }
-  .metric-card.danger { border-top-color: #ef4444; }
-  .metric-label { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; }
-  .metric-value { font-size: 2rem; font-weight: 700; color: #1a2744; margin-top: 4px; }
-
-  /* FORMS & TABLES */
-  .form-group { margin-bottom: 1.25rem; }
-  label { display: block; font-size: 13px; font-weight: 600; color: #1a2744; margin-bottom: 6px; }
-  input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 14px; background: #fff; }
-  input:focus, select:focus { outline: none; border-color: #1a2744; }
-  
-  button { padding: 10px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .btn-submit { background: #1a2744; color: #fff; width: 100%; }
-  
-  .data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; border: 1px solid #d0dcea; overflow: hidden; margin-top: 1rem; }
-  .data-table th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: #64748b; font-weight: 600; border-bottom: 1px solid #d0dcea; }
-  .data-table td { padding: 14px 16px; font-size: 13px; color: #1a1a2e; border-bottom: 1px solid #f1f5f9; }
-  
-  /* BADGES */
-  .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-  .badge-success { background: #dcfce7; color: #166534; }
-  .badge-danger { background: #fee2e2; color: #991b1b; }
-
-  .alert { padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; display: none; text-align: center; }
-  .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-  .alert-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-  
-  .hidden { display: none !important; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materiales Ya — Panel de Control</title>
+  <link rel="icon" type="image/gif" href="favicon.gif">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #eef2f7; color: #1a1a2e; min-height: 100vh; }
+    header { background: #1a2744; color: #fff; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 1.3rem; font-weight: 600; }
+    .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; }
+    
+    main { max-width: 500px; margin: 3rem auto; padding: 0 1rem; }
+    .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    .card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.25rem; color: #1a2744; text-align: center; }
+    
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+    .field input, .field select { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; outline: none; background: #fafbfd; }
+    .field input:focus, .field select:focus { border-color: #1a2744; background: #fff; }
+    
+    .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 1rem; }
+    .btn-primary:hover { opacity: .85; }
+    
+    #login-screen { display: block; }
+    #admin-panel { display: none; }
+  </style>
 </head>
 <body>
 
-  <nav>
-    <a href="index.html" class="logo">🏗 Materiales Ya <span>| Workspace Administrativo</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Volver al Sitio</a>
-    </div>
-  </nav>
+<header>
+  <h1>🏗 Panel Interno Administrativo</h1>
+  <a href="index.html" class="hbtn">Ir a la Web →</a>
+</header>
 
-  <div id="login-screen" class="login-container">
-    <div class="login-box">
-      <h1>🔐 Panel de Control Interno</h1>
-      <p>Área restringida para el administrador del sistema. Introducí tu credencial provisoria de acceso.</p>
-      
-      <div id="login-error-msg" class="alert alert-danger">⚠️ Clave incorrecta. Acceso denegado.</div>
-      
-      <form onsubmit="ejecutarLogin(event)">
-        <div class="form-group">
-          <input type="password" id="admin-pass" placeholder="Contraseña de administrador" style="text-align: center;" required>
-        </div>
-        <button type="submit" class="btn-submit" style="background:#1a2744;">Ingresar al Sistema</button>
-      </form>
+<main>
+  <div id="login-screen" class="card">
+    <h2>Ingreso Autorizado</h2>
+    <div class="field">
+      <label>Contraseña del Sistema</label>
+      <input type="password" id="pass-input" placeholder="••••••••">
     </div>
+    <button class="btn-primary" onclick="verificarPassword()">Entrar al Panel</button>
   </div>
 
-  <div id="admin-dashboard" class="admin-wrapper hidden">
-    <aside class="sidebar">
-      <div class="sidebar-menu">
-        <div class="menu-item active" onclick="cambiarSeccion('dashboard', this)">📊 Dashboard</div>
-        <div class="menu-item" onclick="cambiarSeccion('alta-comercio', this)">🏪 Dar de Alta</div>
-        <div class="menu-item" onclick="cambiarSeccion('gestion-lista', this)">🛠 Control de Corralones</div>
+  <div id="admin-panel" class="card">
+    <h2>Alta de Nuevo Corralón</h2>
+    <form id="form-corralon" onsubmit="guardarCorralon(event)">
+      <div class="field">
+        <label>Nombre del Corralón</label>
+        <input type="text" id="c-nombre" required placeholder="Ej: Corralón San Martín">
       </div>
-      <div class="sidebar-footer">
-        <button class="btn-logout" onclick="cerrarSesion()">🚪 Salir al Sitio</button>
+      <div class="field">
+        <label>Dirección</label>
+        <input type="text" id="c-dir" required placeholder="Ej: Av. Mitre 2341">
       </div>
-    </aside>
-
-    <main class="content-panel">
-      <section id="sec-dashboard" class="panel-section active">
-        <h2 class="panel-title">Panel Principal</h2>
-        
-        <div class="metrics-grid">
-          <div class="metric-card primary"><div class="metric-label">Total Comercios</div><div class="metric-value" id="count-total">0</div></div>
-          <div class="metric-card success"><div class="metric-label">Activos</div><div class="metric-value" id="count-activos">0</div></div>
-          <div class="metric-card danger"><div class="metric-label">Con Deuda</div><div class="metric-value" id="count-deuda">0</div></div>
-          <div class="metric-card"><div class="metric-label">Sin Deuda</div><div class="metric-value" id="count-sindeuda">0</div></div>
-        </div>
-
-        <h3 style="margin-bottom: 0.5rem; color: #1a2744;">Auditoría de Conexión</h3>
-        <div id="status-sheet-alert" class="alert alert-danger" style="display: block;">⏳ Sincronizando datos con la base de datos de Google Sheets...</div>
-      </section>
-
-      <section id="sec-alta-comercio" class="panel-section">
-        <h2 class="panel-title">Dar de Alta Nuevo Comercio</h2>
-        <div style="background:#fff; padding:2rem; border-radius:12px; border:1px solid #d0dcea; max-width:600px;">
-          <div id="alta-alert" class="alert"></div>
-          <form onsubmit="guardarNuevoComercio(event)">
-            <div class="form-group"><label>Nombre del Comercio</label><input type="text" id="add-nombre" required placeholder="Ej: Corralón Cacho"></div>
-            <div class="form-group">
-              <label>Rubro</label>
-              <select id="add-tipo">
-                <option value="corralon">Corralón</option>
-                <option value="ferreteria">Ferretería</option>
-                <option value="durlock">Yeso/Durlock</option>
-                <option value="maderera">Maderera</option>
-              </select>
-            </div>
-            <div class="form-group"><label>Dirección</label><input type="text" id="add-direccion" placeholder="Ej: Calle Falsa 123"></div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-              <div class="form-group"><label>Latitud</label><input type="text" id="add-lat" placeholder="-34.62"></div>
-              <div class="form-group"><label>Longitud</label><input type="text" id="add-lng" placeholder="-58.44"></div>
-            </div>
-            <div class="form-group"><label>WhatsApp de Contacto</label><input type="text" id="add-whatsapp" placeholder="54911..."></div>
-            <button type="submit" class="btn-submit">Guardar y Sincronizar</button>
-          </form>
-        </div>
-      </section>
-
-      <section id="sec-gestion-lista" class="panel-section">
-        <h2 class="panel-title">Control de Corralones e Historial</h2>
-        <p style="margin-bottom: 1rem;">Visualizá la cartera total, modificá condiciones financieras o dás de baja accesos directamente en las filas.</p>
-        
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Comercio</th>
-              <th>Rubro</th>
-              <th>WhatsApp</th>
-              <th>Estado Financiero</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-comercios-body">
-            <tr><td colspan="5" style="text-align:center; color:#888;">Cargando base de datos centralizada...</td></tr>
-          </tbody>
-        </table>
-      </section>
-    </main>
+      <div class="field">
+        <label>Barrio / Zona</label>
+        <input type="text" id="c-zona" required placeholder="Ej: Avellaneda">
+      </div>
+      <div class="field">
+        <label>Teléfono (WhatsApp)</label>
+        <input type="text" id="c-tel" placeholder="Ej: 5491112345678">
+      </div>
+      <div class="field">
+        <label>Latitud</label>
+        <input type="text" id="c-lat" placeholder="Ej: -34.6621">
+      </div>
+      <div class="field">
+        <label>Longitud</label>
+        <input type="text" id="c-lng" placeholder="Ej: -58.3645">
+      </div>
+      <button type="submit" class="btn-primary">Guardar en Google Sheets</button>
+    </form>
   </div>
+</main>
 
 <script>
-const URL_API = "https://script.google.com/macros/s/AKfycbwyDETWBOYfqd6VBD8jAV9sJKL34qZRTJqQNuwRDG5jgncvJReXPQ_HaOJf-uEd24aGOA/exec";
-let registrosLocales = [];
+  // Cambiá esto por la URL que te dio Google Apps Script al actualizar la implementación
+  const URL_API = "https://script.google.com/macros/s/AKfycbxD8b7sU8kjYFAiAHX_PdjJ66SQtEI4It0-jT6cO71YoxAUvBx4hwSHQ29LHWLekNLvVg/exec";
 
-// 1. Control de accesos administrador
-function ejecutarLogin(e) {
-  e.preventDefault();
-  const pass = document.getElementById('admin-pass').value;
-  if(pass === "1234") {
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('admin-dashboard').classList.remove('hidden');
-    cargarDatosDesdeSheets();
-  } else {
-    const err = document.getElementById('login-error-msg');
-    err.style.display = "block";
-    setTimeout(() => err.style.display = "none", 3000);
-  }
-}
+  // ACÁ ESTÁ TU CONTRASEÑA LOCAL ORIGINAL
+  const PASS_CORRECTA = "1234"; 
 
-function cerrarSesion() {
-  window.location.href = "index.html";
-}
-
-// 2. Sistema de navegación interna
-function cambiarSeccion(target, element) {
-  document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.panel-section').forEach(el => el.classList.remove('active'));
-  
-  element.classList.add('active');
-  document.getElementById(`sec-${target}`).classList.add('active');
-}
-
-// 3. Lectura e integración asíncrona con el backend (Google Sheets)
-function cargarDatosDesdeSheets() {
-  const statusAlert = document.getElementById('status-sheet-alert');
-  
- // Llamamos a tu única URL de Google Sheets
-fetch(URL_API)
-  .then(response => response.json())
-  .then(data => {
-    if (data && data.status === "success") {
-      
-      // Acá guardás tu lista directa desde Sheets
-      const misMateriales = data.materiales; 
-      
-      // Ejemplo de cómo dibujarlos en pantalla de manera automática:
-      let contenedor = document.getElementById("contenedor-materiales"); 
-      contenedor.innerHTML = ""; // Limpiamos la carga inicial
-      
-      misMateriales.forEach(mat => {
-        contenedor.innerHTML += `
-          <div class="item-material" data-categoria="${mat.categoria}">
-            <small style="color:#888;">${mat.categoria}</small>
-            <h4 style="margin:2px 0; color:#1a2744;">${mat.nombre}</h4>
-            <input type="number" placeholder="Cantidad" id="cant-${mat.id}" style="width:70px; padding:4px;">
-          </div>
-        `;
-      });
-
+  function verificarPassword() {
+    const input = document.getElementById('pass-input').value;
+    if (input === PASS_CORRECTA) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+    } else {
+      alert('Contraseña incorrecta. Intente nuevamente.');
     }
-  })
-  .catch(err => console.error("Error conectando con la lista de Sheets:", err));
- 
-// 4. Renderizado dinámico de métricas y estados (Deudas, bajas, activos)
-function procesarMetricasYTablas() {
-  let activos = 0, conDeuda = 0, sinDeuda = 0;
-  const tbody = document.getElementById('tabla-comercios-body');
-  tbody.innerHTML = "";
-
-  registrosLocales.forEach((c, index) => {
-    activos++;
-    
-    // Simulación basada en datos del sheet (si no existen columnas de deuda se autogestionan)
-    let tieneDeuda = c.deuda === "true" || c.deuda === true || (index % 3 === 0 && index > 0); 
-    if(tieneDeuda) conDeuda++; else sinDeuda++;
-
-    // Limpiamos el valor por si viene con puntos de miles o comas decimales
-let valorDeuda = parseFloat((n.deuda || "0").toString().replace(/\./g, "").replace(",", "."));
-if (isNaN(valorDeuda)) valorDeuda = 0;
-
-// Evaluamos: si es mayor a 0, realmente tiene deuda. Si es 0 o menos, está al día.
-let badgeDeuda = (valorDeuda > 0) ? 
-  `<span class="badge badge-danger">CON DEUDA</span>` : 
-  `<span class="badge badge-success">AL DÍA</span>`;
-
-    tbody.innerHTML += `
-      <tr>
-        <td><strong>${c.nombre}</strong><br><small style="color:#666">${c.direccion || 'No especificada'}</small></td>
-        <td><span style="text-transform:capitalize;">${c.tipo}</span></td>
-        <td>${c.whatsapp || '-'}</td>
-        <td>${badgeDeuda}</td>
-        <td>
-          <button onclick="cambiarEstadoDeuda(${index}, ${!tieneDeuda})" style="font-size:11px; padding:4px 8px; background:#e2e8f0; border-radius:4px;">💵 Alternar Pago</button>
-          <button onclick="darDeBajaComercio(${index})" style="font-size:11px; padding:4px 8px; background:#fee2e2; color:#ef4444; border-radius:4px; margin-left:4px;">❌ Eliminar</button>
-        </td>
-      </tr>
-    `;
-  });
-
-  document.getElementById('count-total').innerText = activos;
-  document.getElementById('count-activos').innerText = activos;
-  document.getElementById('count-deuda').innerText = conDeuda;
-  document.getElementById('count-sindeuda').innerText = sinDeuda;
-}
-
-// 5. Escritura: Alta de registros hacia el script
-function guardarNuevoComercio(e) {
-  e.preventDefault();
-  const alertBox = document.getElementById('alta-alert');
-  
-  const payload = {
-    action: "agregar",
-    nombre: document.getElementById('add-nombre').value,
-    tipo: document.getElementById('add-tipo').value,
-    direccion: document.getElementById('add-direccion').value,
-    lat: document.getElementById('add-lat').value,
-    lng: document.getElementById('add-lng').value,
-    whatsapp: document.getElementById('add-whatsapp').value
-  };
-
-  alertBox.className = "alert alert-success";
-  alertBox.innerText = "Enviando datos al Google Sheets...";
-  alertBox.style.display = "block";
-
-  fetch(URL_API, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    alertBox.innerText = "🎉 Comercio guardado exitosamente en el Excel central. Actualizando interfaz...";
-    document.getElementById('add-nombre').value = "";
-    document.getElementById('add-direccion').value = "";
-    document.getElementById('add-lat').value = "";
-    document.getElementById('add-lng').value = "";
-    document.getElementById('add-whatsapp').value = "";
-    setTimeout(cargarDatosDesdeSheets, 1500);
-  })
-  .catch(() => {
-    alertBox.className = "alert alert-danger";
-    alertBox.innerText = "Error crítico al guardar los cambios.";
-  });
-}
-
-function cambiarEstadoDeuda(index, nuevoEstado) {
-  alert(`Solicitud enviada a Google Sheets para modificar la condición crediticia del comercio: ${registrosLocales[index].nombre}`);
-  // Aquí se invoca la acción correspondiente en tu Apps Script extendido
-}
-
-function darDeBajaComercio(index) {
-  if(confirm(`¿Estás seguro de dar de baja permanentemente a ${registrosLocales[index].nombre}?`)) {
-    alert("Comando de eliminación enviado a la fila del documento origen.");
   }
-}
+
+  async function guardarCorralon(event) {
+    event.preventDefault();
+    
+    const datos = {
+      nombre: document.getElementById('c-nombre').value,
+      direccion: document.getElementById('c-dir').value,
+      zona: document.getElementById('c-zona').value,
+      telefono: document.getElementById('c-tel').value,
+      latitud: document.getElementById('c-lat').value,
+      longitud: document.getElementById('c-lng').value
+    };
+
+    try {
+      const res = await fetch(URL_API, {
+        method: 'POST',
+        mode: 'no-cors', // Evita problemas de políticas CORS con Google
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+      
+      alert('¡Corralón enviado! Revisá tu Google Sheets en unos segundos.');
+      document.getElementById('form-corralon').reset();
+    } catch (e) {
+      console.error(e);
+      alert('Error al conectar con la base de datos.');
+    }
+  }
 </script>
 </body>
 </html>
