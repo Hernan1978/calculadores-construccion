@@ -14,7 +14,7 @@
     .hbtn { padding: 7px 14px; border-radius: 7px; border: 1px solid #2e4a7a; color: #90afd4; font-size: 12px; cursor: pointer; text-decoration: none; transition: all .15s; }
     .hbtn:hover { background: #fff; color: #1a2744; border-color: #fff; }
 
-    main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+    main { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
     .card { background: #fff; border-radius: 12px; border: 1px solid #d0dcea; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); margin-bottom: 1.5rem; }
     
     /* Login */
@@ -30,7 +30,7 @@
     /* Layout del Panel */
     .admin-layout { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
     @media (min-width: 768px) {
-      .admin-layout { grid-template-columns: 1.2fr 1.8fr; }
+      .admin-layout { grid-template-columns: 1fr 2fr; }
     }
 
     .panel-title { font-size: 1.1rem; font-weight: 600; color: #1a2744; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
@@ -41,7 +41,7 @@
     .field input, .field select { width: 100%; padding: 9px 12px; border: 1px solid #d0dcea; border-radius: 8px; font-size: 14px; outline: none; background: #fafbfd; transition: all .15s; }
     .field input:focus, .field select:focus { border-color: #1a2744; background: #fff; }
     
-    .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
+    .btn-primary { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #1a2744; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; margin-top: 1rem; }
     .btn-primary:hover { opacity: .85; }
 
     /* Tabla de registros */
@@ -50,7 +50,11 @@
     th { background: #f5f8fc; color: #4a5568; font-weight: 600; padding: 10px; border-bottom: 1px solid #cbd5e1; text-transform: uppercase; font-size: 11px; }
     td { padding: 10px; border-bottom: 1px solid #e2e8f0; color: #1a1a2e; }
     tr:hover { background: #f8fafc; }
-    .badge { display: inline-block; padding: 2px 6px; font-size: 10px; font-weight: 600; background: #e2e8f0; color: #4a5568; border-radius: 4px; }
+    
+    /* Etiquetas de Deuda Customizadas */
+    .badge-deuda { display: inline-block; padding: 4px 8px; font-size: 11px; font-weight: 700; border-radius: 6px; text-transform: uppercase; }
+    .sin-deuda { background: #e6f4ea; color: #137333; }
+    .con-deuda { background: #fce8e6; color: #c5221f; }
 
     #admin-interface { display: none; }
   </style>
@@ -80,8 +84,8 @@
         <span class="number" id="count-corralones">0</span>
       </div>
       <div class="stat-card">
-        <span class="label">Materiales en Lista</span>
-        <span class="number" id="count-materiales">0</span>
+        <span class="label">Comercios con Deuda</span>
+        <span class="number" id="count-deudores" style="color: #c5221f;">0</span>
       </div>
       <div class="stat-card">
         <span class="label">Zonas Activas</span>
@@ -123,14 +127,14 @@
       </div>
 
       <div class="card">
-        <h3 class="panel-title">📋 Corralones Registrados</h3>
+        <h3 class="panel-title">📋 Corralones Registrados y Estado de Cuentas</h3>
         <div class="table-container">
           <table>
             <thead>
               <tr>
                 <th>Nombre</th>
-                <th>Dirección</th>
                 <th>Zona</th>
+                <th>Estado Financiero</th>
               </tr>
             </thead>
             <tbody id="tabla-corralones-body">
@@ -147,10 +151,7 @@
 </main>
 
 <script>
-  // Tu conexión con Google Apps Script
   const URL_API = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec";
-
-  // Contraseña de acceso fijada
   const PASS_CORRECTA = "admin1234"; 
 
   function verificarPassword() {
@@ -170,33 +171,48 @@
       const data = await res.json();
       
       const listaCorralones = Array.isArray(data.corralones) ? data.corralones : [];
-      const listaMateriales = Array.isArray(data.materiales) ? data.materiales : [];
 
       // Actualizar contadores del Dashboard
       document.getElementById('count-corralones').textContent = listaCorralones.length;
-      document.getElementById('count-materiales').textContent = listaMateriales.length;
       
       const zonasUnicas = [...new Set(listaCorralones.map(c => String(c.zona || '').trim()).filter(Boolean))];
       document.getElementById('count-zonas').textContent = zonasUnicas.length;
 
-      // Renderizar tabla de corralones
+      // Renderizar tabla de corralones y calcular deudores
       const tbody = document.getElementById('tabla-corralones-body');
       tbody.innerHTML = '';
 
       if (!listaCorralones.length) {
         tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#888;">No hay registros en la planilla.</td></tr>';
+        document.getElementById('count-deudores').textContent = 0;
         return;
       }
 
+      let deudoresContador = 0;
+
       listaCorralones.forEach(c => {
+        // Leemos el valor numérico de la columna deuda (limpiamos por las dudas si tiene algún signo $)
+        const valorDeuda = parseFloat(String(c.deuda || '0').replace(/[^0-9.-]/g, '')) || 0;
+        
+        let badgeHTML = '';
+        if (valorDeuda > 0) {
+          deudoresContador++;
+          badgeHTML = `<span class="badge-deuda con-deuda">CON DEUDA ($${valorDeuda})</span>`;
+        } else {
+          badgeHTML = `<span class="badge-deuda sin-deuda">SIN DEUDA</span>`;
+        }
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${c.nombre || '—'}</strong></td>
-          <td>${c.direccion || '—'}</td>
-          <td><span class="badge">${c.zona || 'General'}</span></td>
+          <td>${c.zona || 'General'}</td>
+          <td>${badgeHTML}</td>
         `;
         tbody.appendChild(tr);
       });
+
+      // Guardamos la cantidad total de deudores en la tarjeta superior de control
+      document.getElementById('count-deudores').textContent = deudoresContador;
 
     } catch (e) {
       console.error("Error cargando el Dashboard:", e);
@@ -226,7 +242,6 @@
       alert('¡Corralón enviado con éxito! Se actualizará la lista en unos segundos.');
       document.getElementById('form-corralon').reset();
       
-      // Esperamos un momento y recargamos el dashboard para ver el nuevo reflejado
       setTimeout(cargarDatosDashboard, 2000);
     } catch (e) {
       console.error(e);
