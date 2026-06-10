@@ -110,17 +110,47 @@
           <input type="tel" id="cli-tel" placeholder="11 1234-5678">
         </div>
       </div>
+      
       <div class="field">
         <label>Barrio / Zona</label>
         <div class="select-wrap">
           <select id="cli-zona" class="zona-select">
             <option value="">Seleccioná tu zona...</option>
+            
             <optgroup label="CABA">
-              <option>Palermo</option><option>Belgrano</option><option>Wilde</option>
+              <option>Palermo</option><option>Belgrano</option><option>Caballito</option>
+              <option>Flores</option><option>Villa Urquiza</option><option>Devoto</option>
+              <option>Mataderos</option><option>Barracas</option><option>Pompeya</option>
+              <option>Lugano</option><option>Constitución</option><option>San Telmo</option>
+            </optgroup>
+
+            <optgroup label="ZONA SUR">
+              <option>Wilde</option><option>Avellaneda</option><option>Gerli</option>
+              <option>Sarandí</option><option>Dominico</option><option>Lanús</option>
+              <option>Remedios de Escalada</option><option>Banfield</option><option>Lomas de Zamora</option>
+              <option>Temperley</option><option>Adrogué</option><option>Burzaco</option>
+              <option>Quilmes</option><option>Bernal</option><option>Berazategui</option>
+              <option>Florencio Varela</option><option>Ezeiza</option><option>Monte Grande</option>
+            </optgroup>
+
+            <optgroup label="ZONA OESTE">
+              <option>Ramos Mejía</option><option>San Justo</option><option>Ciudad Evita</option>
+              <option>Isidro Casanova</option><option>Morón</option><option>Castelar</option>
+              <option>Haedo</option><option>Ituzaingó</option><option>Merlo</option>
+              <option>Moreno</option><option>Paso del Rey</option><option>San Miguel</option>
+              <option>Caseros</option><option>Ciudadela</option><option>El Palomar</option>
+            </optgroup>
+
+            <optgroup label="ZONA NORTE">
+              <option>Vicente López</option><option>Olivos</option><option>Florida</option>
+              <option>Martínez</option><option>San Isidro</option><option>San Fernando</option>
+              <option>Tigre</option><option>Don Torcuato</option><option>Pilar</option>
+              <option>Escobar</option><option>San Martín</option><option>Ballester</option>
             </optgroup>
           </select>
         </div>
       </div>
+
       <div class="field">
         <label>Dirección de entrega</label>
         <input type="text" id="cli-dir" placeholder="Av. Corrientes 1234">
@@ -183,8 +213,7 @@
 </main>
 
 <script>
-  // Cambiá esto por la URL que te dio Google Apps Script en el Paso 1
-  const URL_API = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec";
+  const URL_API = "https://script.google.com/macros/s/AKfycbxD8b7sU8kjYFAiAHX_PdjJ66SQtEI4It0-jT6cO71YoxAUvBx4hwSHQ29LHWLekNLvVg/exec";
   let materialesData = [];
 
   function irPaso1() {
