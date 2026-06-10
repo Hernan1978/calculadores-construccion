@@ -42,8 +42,8 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // Cambiá esto por tu URL de Google Apps Script unificada
-  const URL_API = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec";
+  // URL de tu Google Apps Script unificada
+  const URL_API = "https://script.google.com/macros/s/AKfycbxD8b7sU8kjYFAiAHX_PdjJ66SQtEI4It0-jT6cO71YoxAUvBx4hwSHQ29LHWLekNLvVg/exec";
   
   // Inicializamos el mapa centrado en Buenos Aires
   const map = L.map('map').setView([-34.6037, -58.3816], 11);
@@ -54,25 +54,31 @@
 
   async function plotMapPoints() {
     try {
+      // Hacemos la consulta al Sheets saltando el caché del navegador (?t=...)
       const res = await fetch(`${URL_API}?t=${Date.now()}`);
       const data = await res.json();
+      
+      // Tomamos la lista de corralones del JSON unificado
       const corralones = Array.isArray(data.corralones) ? data.corralones : [];
 
       corralones.forEach(c => {
-        // Buscamos columnas 'latitud' y 'longitud' o 'lat', 'lng' en minúsculas debido al script de Google
+        // Forzamos la lectura de coordenadas sin importar si se llama 'latitud', 'lat', 'longitud' o 'lng'
         const lat = parseFloat(c.latitud || c.lat);
         const lng = parseFloat(c.longitud || c.lng);
 
+        // Si encontró números válidos, dibuja el marcador en el mapa
         if (!isNaN(lat) && !isNaN(lng)) {
           const htmlInfo = `
             <div class="popup-content">
               <h4>🏢 ${c.nombre || 'Corralón'}</h4>
               <p>📍 ${c.direccion || 'Sin dirección'}</p>
               <p>🏙 Zona: <strong>${c.zona || 'No definida'}</strong></p>
-              ${c.telefono ? `<a href="https://wa.me/${c.telefono.replace(/[^0-9]/g, '')}" target="_blank">📲 Consultar directo</a>` : ''}
+              ${c.telefono ? `<a href="https://wa.me/${String(c.telefono).replace(/[^0-9]/g, '')}" target="_blank">📲 Consultar directo</a>` : ''}
             </div>
           `;
           L.marker([lat, lng]).addTo(map).bindPopup(htmlInfo);
+        } else {
+          console.warn("Corralón omitido por coordenadas inválidas:", c);
         }
       });
     } catch (e) {
