@@ -139,7 +139,7 @@
     .step-card h4 { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
     .step-card p { font-size: 13px; color: #cbd5e1; line-height: 1.6; }
 
-    /* 📰 3. NUEVA SECCIÓN: ARTÍCULOS DINÁMICOS */
+    /* 3. SECCIÓN: ARTÍCULOS DINÁMICOS */
     .grid-articulos {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -174,7 +174,6 @@
     }
     .btn-articulo:hover { text-decoration: underline; }
     
-    /* Estado de carga */
     .loading-text { text-align: center; color: #90afd4; font-size: 14px; grid-column: 1 / -1; padding: 2rem; }
 
     /* 4. CONTADORES INFERIORES */
@@ -189,7 +188,7 @@
     .stat-item h4 { font-size: 1.8rem; font-weight: 800; color: #ffffff; }
     .stat-item p { font-size: 11px; color: #90afd4; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-    /* GLOBITO FLOTANTE WHATSAPP */
+    /* 🟢 GLOBITO FLOTANTE CON TU NUBECITA ORIGINAL */
     .wsp-home {
       position: fixed;
       bottom: 25px;
@@ -296,10 +295,8 @@
 <a href="https://wa.me/5491112345678?text=Hola!%20Entré%20a%20la%20página%20de%20Materiales%20Ya%20y%20tengo%20una%20consulta." class="wsp-home" target="_blank" title="Soporte WhatsApp">💬</a>
 
 <script>
-  // REEMPLAZÁ ESTA URL POR LA DE TU API DE SHEETS (LA MISMA QUE USÁS EN EL MAPA)
-  // Pero asegurate de que la API lea de la pestaña de "Articulos" o pasale el parámetro correcto.
   const URL_API_ARTICULOS = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec?=Articulos";
- 
+
   async function cargarArticulos() {
     const contenedor = document.getElementById('contenedor-articulos');
     const contadorNum = document.getElementById('contador-articulos-num').querySelector('h4');
@@ -307,22 +304,17 @@
     try {
       const respuesta = await fetch(URL_API_ARTICULOS);
       const datos = await respuesta.json();
-      
-      // Limpiamos el texto de carga
       contenedor.innerHTML = "";
       
       if(datos && datos.length > 0) {
-        // Actualiza el número del contador abajo con la cantidad real de filas encontradas
         contadorNum.innerText = datos.length;
-        
-        // Dibuja cada tarjeta de artículo
         datos.forEach(art => {
           const card = document.createElement('div');
           card.className = 'card-articulo';
           card.innerHTML = `
             <div>
               <h4>${art.titulo || 'Artículo de Obra'}</h4>
-              <p>${art.descripcion || 'Descubrí los mejores consejos y recomendaciones para optimizar la compra de materiales en tu construcción.'}</p>
+              <p>${art.descripcion || 'Descubrí los mejores consejos y recomendaciones para optimizar la compra de materiales.'}</p>
             </div>
             <a href="${art.enlace || '#'}" class="btn-articulo" target="_blank">Leer Guía →</a>
           `;
@@ -333,7 +325,6 @@
       }
     } catch (error) {
       console.error("Error al cargar los artículos:", error);
-      // Si falla la API por ahora, te dejo 3 artículos fijos de muestra para que no quede vacío
       contadorNum.innerText = "3";
       contenedor.innerHTML = `
         <div class="card-articulo">
@@ -361,7 +352,6 @@
     }
   }
 
-  // Ejecuta la carga cuando abre la página
   window.addEventListener('DOMContentLoaded', cargarArticulos);
 </script>
 
