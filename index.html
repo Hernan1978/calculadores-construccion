@@ -34,11 +34,11 @@
     .btn-interno { padding: 8px 16px; border-radius: 8px; background: #2e4a7a; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .15s; }
     .btn-interno:hover { background: #3b5d9c; }
 
-    /* 📸 CARÁTULA DE PRESENTACIÓN CON LA FOTO QUE TE GUSTA */
+    /* 📸 CARÁTULA DE PRESENTACIÓN CON FONDO ESTABLE */
     .welcome-caratula {
       position: relative;
-      background: linear-gradient(rgba(20, 29, 51, 0.82), #141d33), 
-                  url('https://images.unsplash.com/photo-1581094288338-2314dddb7ece?q=80&w=1200&auto=format&fit=crop');
+      background: linear-gradient(rgba(20, 29, 51, 0.85), #141d33), 
+                  url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
       padding: 6.5rem 1.5rem 5.5rem;
@@ -188,7 +188,7 @@
     .stat-item h4 { font-size: 1.8rem; font-weight: 800; color: #ffffff; }
     .stat-item p { font-size: 11px; color: #90afd4; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-    /* 🟢 GLOBITO FLOTANTE CON TU NUBECITA ORIGINAL */
+    /* 💬 GLOBITO FLOTANTE CON TU NUBECITA ORIGINAL */
     .wsp-home {
       position: fixed;
       bottom: 25px;
@@ -231,8 +231,8 @@
 </header>
 
 <section class="welcome-caratula">
-  <h2>Materiales Ya<br>Tu puente directo a la red de comercios más completa.</h2>
-  <p>Encuentra corralones, ferreterías, proveedores de materiales secos, electricity y cañerías cerca de tu obra en un clic.</p>
+  <h2>Guía de comercios<br>para tu obra</h2>
+  <p>Encuentra corralones, ferreterías, proveedores de materiales secos, electricidad y cañerías cerca de tu obra en un clic.</p>
   <a href="mapa.html" class="btn-caratula">Ver Guía de Comercios →</a>
 </section>
 
@@ -295,7 +295,7 @@
 <a href="https://wa.me/5491112345678?text=Hola!%20Entré%20a%20la%20página%20de%20Materiales%20Ya%20y%20tengo%20una%20consulta." class="wsp-home" target="_blank" title="Soporte WhatsApp">💬</a>
 
 <script>
-  // Poné tu URL de la Web App aquí para conectar las notas de Sheets
+  // Recordá cambiar "TU_ID_DE_API_AQUÍ" por tu enlace macro real del mapa
   const URL_API_ARTICULOS = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec?=Articulos";
 
   async function cargarArticulos() {
