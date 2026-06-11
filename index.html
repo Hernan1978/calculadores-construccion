@@ -34,10 +34,10 @@
     .btn-interno { padding: 8px 16px; border-radius: 8px; background: #2e4a7a; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .15s; }
     .btn-interno:hover { background: #3b5d9c; }
 
-    /* 📸 CARÁTULA DE PRESENTACIÓN CON FONDO ESTABLE */
+    /* 📸 CARÁTULA DE PRESENTACIÓN CON FONDO SÚPER VISIBLE (OPACIDAD DE CAPA EN 0.40) */
     .welcome-caratula {
       position: relative;
-      background: linear-gradient(rgba(20, 29, 51, 0.85), #141d33), 
+      background: linear-gradient(rgba(20, 29, 51, 0.40), #141d33), 
                   url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
@@ -52,15 +52,15 @@
       line-height: 1.2;
       margin-bottom: 1.2rem;
       text-transform: uppercase;
-      text-shadow: 0 2px 14px rgba(0,0,0,0.6);
+      text-shadow: 0 2px 18px rgba(0,0,0,0.85), 0 4px 6px rgba(0,0,0,0.85);
     }
     .welcome-caratula p {
       font-size: 1.2rem;
-      color: #cbd5e1;
+      color: #ffffff;
       max-width: 750px;
       margin: 0 auto 2.5rem;
       line-height: 1.6;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.9);
     }
     .btn-caratula {
       display: inline-block;
@@ -73,13 +73,13 @@
       text-decoration: none;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
       transition: all .2s;
     }
     .btn-caratula:hover {
       transform: translateY(-3px);
       background: #f1f5f9;
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
     }
 
     /* CONTENEDOR CENTRAL */
@@ -295,10 +295,10 @@
 <a href="https://wa.me/5491112345678?text=Hola!%20Entré%20a%20la%20página%20de%20Materiales%20Ya%20y%20tengo%20una%20consulta." class="wsp-home" target="_blank" title="Soporte WhatsApp">💬</a>
 
 <script>
-  
   // URL de la API de Google Sheets para traer los artículos
-const URL_API_ARTICULOS = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec?=Articulos";
-  
+  const URL_API_ARTICULOS = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec?=Articulos
+";
+
   async function cargarArticulos() {
     const contenedor = document.getElementById('contenedor-articulos');
     const contadorNum = document.getElementById('contador-articulos-num').querySelector('h4');
@@ -316,7 +316,7 @@ const URL_API_ARTICULOS = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfX
           card.innerHTML = `
             <div>
               <h4>${art.titulo || 'Artículo de Obra'}</h4>
-              <p>${art.descripcion || 'Descubrí los mejores consejos y recomendaciones para optimizar la compra de materiales.'}</p>
+              <p>${art.descripcion || 'Descubrí los mejores consejos y recommendations para optimizar la compra de materiales.'}</p>
             </div>
             <a href="${art.enlace || '#'}" class="btn-articulo" target="_blank">Leer Guía →</a>
           `;
