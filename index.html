@@ -295,9 +295,10 @@
 <a href="https://wa.me/5491112345678?text=Hola!%20Entré%20a%20la%20página%20de%20Materiales%20Ya%20y%20tengo%20una%20consulta." class="wsp-home" target="_blank" title="Soporte WhatsApp">💬</a>
 
 <script>
-  // Recordá cambiar "TU_ID_DE_API_AQUÍ" por tu enlace macro real del mapa
-  const URL_API_ARTICULOS = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec?=Articulos";
-
+  
+  // URL de la API de Google Sheets para traer los artículos
+const URL_API_ARTICULOS = "https://script.google.com/macros/s/AKfycbwKdALT_ZhdfXMX0EzHPQu4OR_X4EZu7YpjlAtqOxCb35Ce8gZKVnLale9Dlg8nQA2_Ww/exec?=Articulos";
+  
   async function cargarArticulos() {
     const contenedor = document.getElementById('contenedor-articulos');
     const contadorNum = document.getElementById('contador-articulos-num').querySelector('h4');
